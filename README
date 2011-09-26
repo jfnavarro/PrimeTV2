@@ -1,0 +1,39 @@
+Content :
+
+Source code files
+Images folder
+Libraries folder
+Examples folder
+
+KDevolop project configuration file
+
+Qt Designer configuration files
+
+Qt files
+
+Parameters configuration files
+
+TODO file
+
+INSTALL notes file
+
+README file
+
+/*********************************************************************/
+
+The utility of this program is to draw reconciled trees and it is well explained in the paper.
+
+the program can be run using an User Interface or the console/script version.
+
+Either way the input will be a species tree and the gene tree. If the tree is reconciled already
+a map file won't be needed where as if the tree is not reconciled the option "Reoncile" will have to 
+be activated and a map file will have to be given, the program will reconcile it by itself.
+
+The list of parameters and their functions can be seen running the script or including --help, /? ect..
+A list of parameters will be automatically loaded if they are included in the file config.cfg
+
+To launch User Interface the option --gui must be added.
+
+The UI also allows to save and load configuration, save the tree in a file (different formats), print the tree
+show/hide the parameters panel, modify the parameters in live, and load the trees to generate the drawing (generate tree 
+button)
