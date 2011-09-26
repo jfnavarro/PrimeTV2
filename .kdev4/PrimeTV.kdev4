@@ -1,0 +1,45 @@
+[Buildset]
+BuildItems=@Variant(\x00\x00\x00\t\x00\x00\x00\x00\x01\x00\x00\x00\x0b\x00\x00\x00\x00\x01\x00\x00\x00\x0e\x00P\x00r\x00i\x00m\x00e\x00T\x00V)
+
+[CMake]
+BuildDirs=/home/jose/projects/PrimeTV/build
+CMakeDir=/usr/share/cmake-2.8/Modules
+Current CMake Binary=file:///usr/bin/cmake
+CurrentBuildDir=file:///home/jose/projects/PrimeTV/build
+CurrentBuildType=Debug
+CurrentInstallDir=
+ProjectRootRelative=./
+
+[Launch]
+Launch Configurations=Launch Configuration 0
+
+[Launch][Launch Configuration 0]
+Configured Launch Modes=execute,debug
+Configured Launchers=nativeAppLauncher,gdb
+Name=New Native Application Configuration
+Type=Native Application
+
+[Launch][Launch Configuration 0][Data]
+Arguments=--gui
+Debugger Shell=
+Dependencies=@Variant(\x00\x00\x00\t\x00\x00\x00\x00\x00)
+Dependency Action=Install
+Display Demangle Names=true
+Display Static Members=false
+EnvironmentGroup=default
+Executable=file:///usr/local/bin/primetv
+External Terminal=gnome-terminal -e %exe
+GDB Path=file:///usr/bin/gdb
+Project Target=
+Remote GDB Config Script=
+Remote GDB Run Script=
+Remote GDB Shell Script=
+Try Setting Breakpoints On Loading Libraries=true
+Use External Terminal=false
+Working Directory=file:///home/jose/workspace/ReconciledPDF/src
+isExecutable=true
+
+[MakeBuilder]
+Install As Root=true
+Number Of Jobs=1
+Su Command=1

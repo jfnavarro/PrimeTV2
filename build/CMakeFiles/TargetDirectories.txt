@@ -1,0 +1,2 @@
+/home/jose/projects/PrimeTV/build/CMakeFiles/prime.dir
+/home/jose/projects/PrimeTV/build/CMakeFiles/primetv.dir

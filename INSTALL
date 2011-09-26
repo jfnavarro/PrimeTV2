@@ -1,0 +1,17 @@
+The program has only been tested in UBUNTU.
+
+It's compiled using CMAKE.
+
+The list of packages needed to compile it are :
+
+	BISON
+	FLEX
+	QT4
+	X11
+	Cairo
+	BOOST 1.42
+	LIBXML2
+
+As well as the C++ compiler and developer essentials.
+
+The exec file "primetv" will be placed in usr/bin

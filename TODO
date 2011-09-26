@@ -1,0 +1,26 @@
+
+Create an Event errors handler class
+
+Get rid/improve GammaEx and LambdaEx
+
+Separate Node class in two class with inheritance.
+
+Improve website.
+
+Add genome to nodes (branchlenght)
+
+List of scenarios to chose from
+
+Cmake cross plataform with automatic installation of packages.
+
+Make Cmake compatible to WIndows,Mac and other UNIX platforms
+
+Time of nodes a variable in the node.
+
+Separate ownertrees methods in node.
+
+add more feactures to nodes that can be changed by clicking on it, also the position.
+
+Conecction to trees database to use those trees.
+
+posibility to drag and drop nodes

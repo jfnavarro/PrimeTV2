@@ -1,0 +1,2 @@
+/scratch/newhome/projects/PrimeTV/CMakeFiles/prime.dir
+/scratch/newhome/projects/PrimeTV/CMakeFiles/primetv.dir

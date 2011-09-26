@@ -1,0 +1,8 @@
+# Hashes of file build rules.
+7d2f24c28cac50dfd89900990426dccd libraries/NHXparse.c
+ed7d81fc929c8bd4d5a36bb92d016f51 libraries/lexer.c
+4d975ac2f5f0ede562e3de24ce87cf21 moc_canvas.cxx
+d06d7bdd7673433a5cd427b8e51ccb25 moc_windows.cxx
+24272d720e247fca2fe8c0ac467d555a qrc_application.cxx
+0d51357097109ec19a4382d0208ea885 ui_parameters.h
+0abfb2dff6f85039245ece8893196307 ui_primetv.h
