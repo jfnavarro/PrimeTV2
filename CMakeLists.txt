@@ -36,14 +36,14 @@ endif(CAIRO_FOUND)
 
 set(Boost_USE_STATIC_LIBS   TRUE)
 set(Boost_USE_MULTITHREADED TRUE)
-SET(Boost_ADDITIONAL_VERSIONS "1.42" "1.42.0")
+SET(Boost_ADDITIONAL_VERSIONS "1.40" "1.42")
 
-find_package(Boost 1.42.0  COMPONENTS serialization program_options REQUIRED)
+find_package(Boost 1.40.0  COMPONENTS serialization program_options REQUIRED)
 if(NOT Boost_FOUND)
   message(FATAL_ERROR  "Boost not found" )
 endif(NOT Boost_FOUND)
 
-find_package(LibXml2 REQUIRED)
+#find_package(LibXml2 REQUIRED)
 
 
 ####PACKAGES##################################################
@@ -51,7 +51,7 @@ find_package(LibXml2 REQUIRED)
 ##DIRECTORIES#################################################
 include_directories(${QT_INCLUDES} ${CMAKE_CURRENT_BINARY_DIR})
 include_directories(${Boost_INCLUDE_DIRS})
-include_directories( ${LIBXML2_INCLUDE_DIR} )
+#include_directories( ${LIBXML2_INCLUDE_DIR} )
 include_directories("${PROJECT_BINARY_DIR}")
 include_directories( ${CMAKE_BINARY_DIR}  )
 include_directories( ${CAIRO_INCLUDE_DIRS})

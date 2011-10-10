@@ -68,7 +68,7 @@ main (int ac, char *av[])
 /* The boost progam options object is being used to capture all the parameters from console
  * it declares three types of parameters (generic, hidden and configuration) 
  * it loads all of them and checks their basic validity, it also loads 
- * a configuration file "config.cfg" to load all the information included in the file
+ * a configuration file "~/.primetv2.cfg" to load all the information included in the file
  * once the parameters have been read and captured they all processed, valided and
  * assigned to the object container (Parameters)
  */  
@@ -78,23 +78,36 @@ try
 {
   Parameters *parameters = new Parameters();
   string config_file;
+  string default_config_file;
   const char* reconciledtree;
   const char* speciestree;
   const char* genetree;
   const char* mapfile = "";
   string colorconfig;
+
+  // Create path to default config file
+  
+  char *homepath = getenv("HOME");
+  if (homepath) {
+    // Use this if there is home directory we can use
+    default_config_file = string(homepath) + "/.primetv2.cfg";
+  } else {
+    // If we don't find home, then create/look at a configuration in current dir.
+    default_config_file = "primetv2.cfg";
+  }
+
   
   // Declare a group of options that will be 
   // allowed only on command line
   po::options_description generic("Generic options");
   generic.add_options()
-    ("version,v", "print version string")
-    ("help,h", "produce help message") 
-    ("gui", po::bool_switch(&parameters->UI), "initiates the User Interface")
-    ("reconcile,R", po::bool_switch(&parameters->isreconciled)->default_value(false), 
-     "wheter the Guest tree is reconciled or not")
-    ("config,C", po::value<string>(&config_file)->default_value("config.cfg"),
-                  "name of a file of a configuration.");
+    ("version,v", "Print version string")
+    ("help,h", "Produce help message") 
+    ("gui", po::bool_switch(&parameters->UI), "Initiates a Graphical User Interface")
+    ("reconciled,r", po::bool_switch(&parameters->isreconciled)->default_value(false), 
+     "Indicates that the Guest tree is already reconciled. By default, a most parsimonous reconciliation is computed. This option requires a third input file which maps guest tree leaves to hsot tree leaves")
+    ("config,C", po::value<string>(&config_file)->default_value(default_config_file),
+                  "Name of a file of a configuration.");
     
     // Declare a group of options that will be 
     // allowed both on command line and in
@@ -102,27 +115,27 @@ try
   po::options_description config("Configuration");
   config.add_options()
     ("color,c",po::value<string>(&colorconfig)->default_value("1"),
-     "Set colors according to <spec> which can be 1, 2 or 3")
-    ("notimescale,t", "don't scale species edges by time")
+     "Set colors according to <spec> which can be 'blue', 'kth', 'su', 'grey', 'mono', or 'yellow'. You can also use integers 1, 2,... for shortcut.")
+    ("notimescale,t", "Don't scale host edges by time")
     ("timeex,e", po::bool_switch(&parameters->timeAtEdges),
-     "annotate species edges by their time extent")
-    ("notime,n", po::bool_switch(&parameters->noTimeAnnotation),"no time annotation at all")
+     "Annotate host edges by their time extent")
+    ("notime,n", po::bool_switch(&parameters->noTimeAnnotation),"No time annotation at all")
     ("format,f", po::value<string>(&parameters->format)->default_value("pdf"),
      "File format: pdf(Pdf) ps(PostScript) jpg(JPEG) svg png")
     ("nohost,y", po::bool_switch(&parameters->do_not_draw_species_tree)->default_value(false),
-     "no host tree is given nor shown")
+     "No host tree is given nor shown")
     ("noguest,g", po::bool_switch(&parameters->do_not_draw_guest_tree)->default_value(false),
-     "no guest tree is shown")
+     "No guest tree is shown")
     ("file,o", po::value<string>(&parameters->outfile)->default_value("image"), 
      "<string> name of the output file")
     ("inode,i", po::bool_switch(&parameters->ids_on_inner_nodes),
-     "put node numbers in the inner nodes")
+     "Put node numbers in the inner nodes")
     ("size,p", po::value<std::vector<float> >()->multitoken(),
-     "image size in pixels <width> <height>")
-    ("genefont,j", po::value<string>(&parameters->gene_font)->default_value("Times-Roman"),
-     "<string> use this font for gene labels (def. Times-Roman)")
-    ("speciefont,q", po::value<string>(&parameters->species_font)->default_value("Times-Italic"), 
-     "<string> use this font for specie labels (def. Times-Italic)")
+     "Image size in pixels <width> <height>")
+    ("guest-font,j", po::value<string>(&parameters->gene_font)->default_value("Times"),
+     "<string> use this font for guest tree labels (def. Times)")
+    ("host-font,q", po::value<string>(&parameters->species_font)->default_value("Times"), 
+     "<string> use this font for host node labels (def. Times)")
     ("fontscale,s", po::value<float>(&parameters->fontscale)->default_value(1.0), 
      "<float> scale fonts by this number")
     ("imagescale,S", po::value<float>(&parameters->imagescale)->default_value(1.0), 
@@ -130,19 +143,24 @@ try
     ("move,D", po::value<std::vector<float> >()->multitoken(), 
      "<float> <float> move the image x,y units")
     ("nomarkers,m", po::bool_switch(&parameters->markers), 
-     "draw gene lines WITHOUT markers for gene nodes") 
-    ("ladderize,l", po::value<char>(&parameters->ladd)->default_value('r'), 
+     "Draw guest tree lines WITHOUT markers for guest tree nodes") 
+    ("ladderize,a", po::value<char>(&parameters->ladd)->default_value('r'), 
      "<string> ladderize right (r) or left (l)")
-    ("legend,L", po::bool_switch(&parameters->legend), "activate the legend")
-    ("header,H", po::bool_switch(&parameters->header), "activate the header")
-    ("text,T", po::value<string>(&parameters->tittleText),
-     "<string> include the text on the top of the image")
+    ("legend,L", po::bool_switch(&parameters->legend), "Activate the legend")
+    ("header,H", po::bool_switch(&parameters->header), "Activate the header")
+    ("text,T", po::value<string>(&parameters->titleText),
+     "<string> include the text on the top of the image.")
     ("mark,x", po::value<std::vector<double> >(&parameters->uMarker)->multitoken(),
-     "<int>....<int> Highlight the nodes indicated")
-    ("marksize,z", po::value<int>(&parameters->markerscale), "<int> change the size of gene tree markers")
-    ("lateralT,P", po::value<std::vector<float> >()->multitoken(),
-       "<float>: [<min>] [<max>] [<dupli. cost>] [<trans. cost>] Whether to include lateral transfers or not (cost)")
-    ("vertical,V", po::bool_switch(&parameters->horiz)->default_value(true), "vertical orientation, horizontal by default");
+     "<int>....<int> Highlight the nodes indicated.")
+    ("marksize,z", po::value<int>(&parameters->markerscale), "<int> change the size of guest tree markers.")
+    ("lgt,l", po::bool_switch(&parameters->lattransfer),
+     "Allow lateral transfer (LGT) when reconciling.")
+    ("event-costs,P", po::value<std::vector<float> >()->multitoken(),
+     "<float>: [<min>] [<max>] [<dupli. cost>] [<trans. cost>] Parameters that give (1) minimum reconciliation cost, (2) maximum reconciliation, (3) duplication cost, and (4) LGT cost.")
+    ("show-event-count", po::bool_switch(&parameters->show_event_count),
+     "Show the number of duplications and transfers used in the computed reconciliation.")
+    ("vertical,V", po::bool_switch(&parameters->horiz)->default_value(false), 
+     "Vertical orientation, horizontal by default.");
 
   
   // Hidden options, will be allowed both on command line and
@@ -164,13 +182,12 @@ try
   p.add("input-file", -1);
        
   po::variables_map vm;
-  store(po::command_line_parser(ac, av).
-  options(cmdline_options).positional(p).run(), vm);
+  store(po::command_line_parser(ac, av).options(cmdline_options).positional(p).run(), vm);
   notify(vm);    
     
   ifstream ifs(config_file.c_str());
         
-  if (!ifs)
+  if (!ifs && config_file != default_config_file)
   {
       cout << "can not open config file: " << config_file << "\n";
   }
@@ -190,11 +207,11 @@ try
   }
 
   if (vm.count("version")) {
-      cout << "PrimeTV, version 1.0\n";
+      cout << "PrimeTV, version 2.0\n";
       return 0;
   }
   
-  if(vm.count("color") > 1)
+  if(vm.count("color") == 1)
   {
     parameters->colorConfig->setColors(vm["color"].as<string>().c_str());
   }
@@ -274,7 +291,7 @@ try
 
   if (vm.count("text"))
   {
-    parameters->tittle = true; 
+    parameters->title = true; 
   }
   
   if (vm.count("mark"))
@@ -282,13 +299,13 @@ try
     parameters->isMarkerColor = true;
     parameters->markers = true;
   }
-  
-  if (vm.count("lateralT"))
+
+  if (vm.count("event-costs"))
   {
-     parameters->lateralmincost = vm["lateralT"].as< vector<float> >().at(0);
-     parameters->lateralmaxcost = vm["lateralT"].as< vector<float> >().at(1);
-     parameters->lateralduplicost = vm["lateralT"].as< vector<float> >().at(2);
-     parameters->lateraltrancost = vm["lateralT"].as< vector<float> >().at(3);
+     parameters->lateralmincost = vm["event-costs"].as< vector<float> >().at(0);
+     parameters->lateralmaxcost = vm["event-costs"].as< vector<float> >().at(1);
+     parameters->lateralduplicost = vm["event-costs"].as< vector<float> >().at(2);
+     parameters->lateraltrancost = vm["event-costs"].as< vector<float> >().at(3);
      
      if(parameters->lateralmincost < 1.0 || parameters->lateralmincost > 10.0)
 	parameters->lateralmincost = 1.0;
@@ -384,17 +401,16 @@ try
       if(parameters->lattransfer)
       { 
  	if(parameters->lateralmincost == 1.0 && parameters->lateralmaxcost == 1.0) //do it with parameters
-	  main->lateralTransferDP(mapfile);
+	 main->lateralTransferDP(mapfile);
  	else
  	  main->lateralTransfer(mapfile);
       }
       
-      main->CalculateGanmma(); //calculation of gamma and lambda
+      main->CalculateGamma(); //calculation of gamma and lambda
       main->calculateCordinates(); //calculation of the drawing cordinates
       main->DrawTree();  //drawing the tree
       main->RenderImage(); // save the file
       delete(parameters);
-//       delete(main);
     }
   }
   catch (AnError e) {

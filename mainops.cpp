@@ -53,9 +53,8 @@ Mainops::~Mainops()
 
 }
 
-void Mainops::lateralTransferDP(string mapname)
+bool Mainops::lateralTransferDP(string mapname)
 {  
-
       late = new Phyltr();
       late->g_input.duplication_cost = parameters->lateralduplicost;
       late->g_input.transfer_cost = parameters->lateraltrancost;
@@ -81,22 +80,25 @@ void Mainops::lateralTransferDP(string mapname)
       
       if(late->scenarios.size() > 0 && thereAreLGT(late->scenarios))
       {
-	Scenario maxscenario = late->getMaxCostScenario(); 
-	lambda = maxscenario.cp.getLambda();
-	transferedges = maxscenario.transfer_edges;
+	Scenario optscenario = late->getMinCostScenario(); 
+	lambda = optscenario.cp.getLambda();
+	transferedges = optscenario.transfer_edges;
 	parameters->transferedges = transferedges;
 	sigma = late->g_input.sigma;
 	scenarios = late->scenarios;
-	late->printScenario(maxscenario);
+	late->printScenario(optscenario);
+	
+	return true;
       }
       else
       {
 	parameters->lattransfer = false;
+	return false;
       }
 
 }
 
-void Mainops::lateralTransfer(string mapname)
+bool Mainops::lateralTransfer(string mapname)
 {
       late = new Phyltr();
       late->g_input.duplication_cost = parameters->lateralduplicost;
@@ -120,16 +122,19 @@ void Mainops::lateralTransfer(string mapname)
       
       if(late->scenarios.size() > 0 && thereAreLGT(late->scenarios))
       {
-	Scenario maxscenario = late->getMaxCostScenario(); 
-	lambda = maxscenario.cp.getLambda();
-	transferedges = maxscenario.transfer_edges;
+	Scenario optscenario = late->getMinCostScenario(); 
+	lambda = optscenario.cp.getLambda();
+	transferedges = optscenario.transfer_edges;
 	parameters->transferedges = transferedges;
 	sigma = late->g_input.sigma;
 	scenarios = late->scenarios;
+	
+	return true;
       }
       else
       {
 	parameters->lattransfer = false;
+	return false;
       }
 }
 
@@ -184,7 +189,7 @@ void Mainops::OpenHost(const char* species)
     
 }
 
-void Mainops::CalculateGanmma()
+void Mainops::CalculateGamma()
 {
 
 
@@ -285,15 +290,15 @@ void Mainops::DrawTree(cairo_t *cr)
 	    dt->DrawTimeLabels();
 	}
       }
-      dt->DrawSpeciesEdges();
+      dt->DrawSpeciesEdgesWithContour();
       dt->DrawSpeciesNodes();
       dt->DrawSpeciesNodeLabels();
     }
     // gene tree
     if(!parameters->do_not_draw_guest_tree)
     {
-      dt->DrawGeneNodes();
       dt->DrawGeneEdges();
+      dt->DrawGeneNodes();
       dt->DrawGeneLabels();
       if(parameters->markers)
 	dt->GeneTreeMarkers();
@@ -303,9 +308,10 @@ void Mainops::DrawTree(cairo_t *cr)
       dt->createHeader();
     if(parameters->legend)
       dt->createLegend();
-    if(parameters->tittle)
-      dt->createTittle();
-    
+    if(parameters->title)
+      dt->createTitle();
+    if (parameters->show_event_count)
+      dt->writeEventCosts();
 }
 
 
@@ -332,13 +338,13 @@ bool Mainops::getValidityLGT()
   {
     sort(scenarios.begin(), scenarios.end());
   
-    BOOST_REVERSE_FOREACH (Scenario &sc, scenarios)
+    BOOST_FOREACH (Scenario &sc, scenarios)
     {
       transferedges = sc.transfer_edges;
       parameters->transferedges = sc.transfer_edges;
       parameters->duplications = sc.duplications;
       lambda = sc.cp.getLambda();
-      CalculateGanmma();
+      CalculateGamma();
       if(gamma->validLGT())
       { 
 	return true;

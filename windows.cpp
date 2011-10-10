@@ -31,7 +31,7 @@
 #define QUALITY 75  //0-100
 
 MainWindow::MainWindow(Parameters *p, QWidget *parent)
-        :QMainWindow(parent),ops(0),parameters(p),guestTree(false),
+  :QMainWindow(parent),lastVisitedDir(),ops(0),parameters(p),guestTree(false),
         hostTree(false),menuparameters(false),isPainted(false),cr_(0),mapfileStatus(false),config(0)
 {
 
@@ -197,16 +197,17 @@ void MainWindow::generateTree()
             {
                 ops->reconcileTrees(genetree,speciestree,mapfile);
             }
-            if (parameters->lattransfer)
-            {
-                if (parameters->lateralmincost == 1.0 && parameters->lateralmaxcost == 1.0) //do it with parameters
-                    ops->lateralTransferDP(mapfile);
-                else
-                    ops->lateralTransfer(mapfile);
-            }
-            ops->CalculateGanmma();
 
-            painTree();
+            if (parameters->lattransfer)
+	      {
+                if (parameters->lateralmincost == 1.0 && parameters->lateralmaxcost == 1.0) //do it with parameters
+		  ops->lateralTransferDP(mapfile);
+                else
+		  ops->lateralTransfer(mapfile);
+            }
+            ops->CalculateGamma();
+
+            paintTree();
 
             actionSave->setEnabled(true);
             pushButtonMoveDown->setEnabled(true);
@@ -229,7 +230,7 @@ void MainWindow::generateTree()
 
 }
 
-void MainWindow::painTree()
+void MainWindow::paintTree()
 {
 //     widget->paintCanvas();
     cr_ = widget->getCairoCanvas();
@@ -280,14 +281,14 @@ void MainWindow::update()
         parameters->xoffset++;
     }
 
-    parameters->tittle = checkBoxHeader->isChecked();
+    parameters->title = checkBoxHeader->isChecked();
     lineEditHeaderText->setEnabled(checkBoxHeader->isChecked());
 
     if (checkBoxHeader->isChecked())
     {
         QString text = lineEditHeaderText->text();
         QByteArray ba = text.toLocal8Bit();
-        parameters->tittleText = ba.data();
+        parameters->titleText = ba.data();
     }
     else
     {
@@ -356,7 +357,7 @@ void MainWindow::update()
 
     if (isPainted && hostTree && guestTree)
     {
-        painTree();
+        paintTree();
     }
 }
 
@@ -396,7 +397,7 @@ void MainWindow::loadParameters(Parameters *parameters)
     checkBoxHV->setChecked(parameters->horiz);
     checkBoxLogo->setChecked(parameters->header);
     checkBoxLegend->setChecked(parameters->legend);
-    checkBoxHeader->setChecked(parameters->tittle);
+    checkBoxHeader->setChecked(parameters->title);
     checkBoxLGT->setChecked(parameters->lattransfer);
     checkBoxHost->setChecked(parameters->do_not_draw_species_tree);
     checkBoxINodes->setChecked(parameters->ids_on_inner_nodes);
@@ -421,7 +422,7 @@ void MainWindow::loadParameters(Parameters *parameters)
         radioButtonColor1->setChecked(true);
     }
 
-    lineEditHeaderText->setText(QString::fromStdString(parameters->tittleText));
+    lineEditHeaderText->setText(QString::fromStdString(parameters->titleText));
     spinBoxVerticalSize->setValue(parameters->height);
     spinBoxHorizontalSize->setValue(parameters->width);
     spinBoxMaxCost->setValue(parameters->lateralmaxcost);
@@ -446,7 +447,7 @@ void MainWindow::save()
 {
 
     QString filename = QFileDialog::getSaveFileName(this, tr("Select file to save"), QDir::currentPath(),
-                       tr("Document files (*.jpg *.pdf *.png *.bmp *.riff *.xbm);;All files (*.*)"));
+                       tr("Document files (*.jpg *.pdf *.png *.bmp *.riff *.xbm);;All files (*)"));
     bool status = true;
 
     if ( !filename.isNull() )
@@ -534,11 +535,15 @@ void MainWindow::loadMap()
 
 QString MainWindow::openFile(QString header)
 {
-    QString filename = QFileDialog::getOpenFileName( this, header, QDir::currentPath(),
-                       tr("Document files (*.txt *.nhx);;All files (*.*)"), 0, QFileDialog::DontUseNativeDialog );
+    if (lastVisitedDir.isEmpty()) {
+        lastVisitedDir = QDir::currentPath();
+    }
+    QString filename = QFileDialog::getOpenFileName( this, header, lastVisitedDir,
+                       tr("All files (*);;Document files (*.txt *.nhx *.tree)"), 0, QFileDialog::DontUseNativeDialog );
 
     if ( !filename.isNull() )
     {
+        lastVisitedDir = QFileInfo(filename).dir().path();
         return filename;
     }
     else
@@ -571,14 +576,13 @@ void MainWindow::activateLGT()
 
     if (checkBoxLGT->isChecked() && hostTree && guestTree && isPainted)
     {
-
-        if (parameters->lateralmincost == 1.0 && parameters->lateralmaxcost == 1.0) //do it with parameters
-            ops->lateralTransferDP(mapfile);
-        else
-            ops->lateralTransfer(mapfile);
+      if (parameters->lateralmincost == 1.0 && parameters->lateralmaxcost == 1.0) //do it with parameters
+	ops->lateralTransferDP(mapfile);
+      else
+	ops->lateralTransfer(mapfile);
 	
-	ops->CalculateGanmma();
-        painTree();
+      ops->CalculateGamma();
+      paintTree();
     }
 
 }
@@ -657,8 +661,8 @@ void MainWindow::loadConfigFile()
 	    
 	    Parameters *parameters = new Parameters();
 	    
-            parameters->gene_font = config->read<string>((string)"genefont",(string)"Times-Roman");
-            parameters->species_font = config->read<string>((string)"speciefont",(string)"Times-Italic");
+            parameters->gene_font = config->read<string>((string)"genefont",(string)"Times");
+            parameters->species_font = config->read<string>((string)"speciefont",(string)"Times");
             parameters->fontscale = config->read<float>((string)"fontscale",(float)1);
             parameters->markers = config->read<bool>((string)"mark",false);
             parameters->ladd = config->read<char>((string)"ladderize",'n');
@@ -667,14 +671,14 @@ void MainWindow::loadConfigFile()
             parameters->horiz = config->read<bool>((string)"vertical",true);
             parameters->header = config->read<bool>((string)"header",false);
             parameters->legend = config->read<bool>((string)"legend",false);
-            parameters->tittle = config->read<bool>((string)"text",false);
-            parameters->lattransfer = config->read<bool>((string)"lateralT",false);
+            parameters->title = config->read<bool>((string)"text",false);
+            parameters->lattransfer = config->read<bool>((string)"lgt",false);
             parameters->do_not_draw_species_tree = config->read<bool>((string)"nohost",false);
             parameters->ids_on_inner_nodes = config->read<bool>((string)"inodes",false);
             string color;
             color = config->read<string>((string)"color",(string)"1");
             parameters->colorConfig->setColors(color.c_str());
-            parameters->tittleText = config->read<string>((string)"tittleText");
+            parameters->titleText = config->read<string>((string)"titleText");
             parameters->height = config->read<float>((string)"sizeW",(float)1200);
             parameters->width = config->read<float>((string)"sizeH",(float)1400);
             parameters->lateralmaxcost = config->read<float>((string)"lateralMax",(float)1);
@@ -724,18 +728,18 @@ void MainWindow::saveConfigFile()
             std::fstream out;
             out.open(filename.toStdString().c_str(),ios::out);
 
+	    //            out << "reconcile" << " = " << parameters->isreconciled << endl;
             out << "genefont" << " = " << parameters->gene_font << endl;
             out << "speciefont" << " = " << parameters->species_font << endl;
             out << "fontscale" << " = " << parameters->fontscale << endl;
             out << "mark" << " = " << parameters->markers << endl;
             out << "ladderize" << " = " << parameters->ladd << endl;
-            out << "reconcile" << " = " << parameters->isreconciled << endl;
             out << "noguest" << " = " << parameters->do_not_draw_guest_tree << endl;
             out << "vertical" << " = " << parameters->horiz << endl;
             out << "header" << " = " << parameters->header << endl;
             out << "legend" << " = " << parameters->legend << endl;
-            out << "text" << " = " << parameters->tittle << endl;
-            out << "lateralT" << " = " << parameters->lattransfer << endl;
+            out << "text" << " = " << parameters->title << endl;
+            out << "lgt" << " = " << parameters->lattransfer << endl;
             out << "lateralMax" << " = " << parameters->lateralmaxcost << endl;
             out << "lateralDupli" << " = " << parameters->lateralduplicost << endl;
             out << "lateralLGT" << " = " << parameters->lateraltrancost << endl;
@@ -743,7 +747,7 @@ void MainWindow::saveConfigFile()
             out << "nohost" << " = " << parameters->do_not_draw_species_tree << endl;
             out << "inodes" << " = " << parameters->ids_on_inner_nodes << endl;
             out << "color" << " = " << parameters->colorConfig->getSet() << endl;
-            out << "tittleText" << " = " << parameters->tittleText << endl;
+            out << "titleText" << " = " << parameters->titleText << endl;
             out << "sizeW" << " = " << parameters->width << endl;
             out << "sizeH" << " = " << parameters->height << endl;
             out << "notime" << " = " << parameters->noTimeAnnotation << endl;

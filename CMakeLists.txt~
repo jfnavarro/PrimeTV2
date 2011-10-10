@@ -13,6 +13,7 @@ include(CPack)
 #####CPACK###################################################
 
 ###PACKAGES######################################
+set (CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR})
 find_package(BISON REQUIRED)
 find_package(FLEX REQUIRED)
 
@@ -35,14 +36,14 @@ endif(CAIRO_FOUND)
 
 set(Boost_USE_STATIC_LIBS   TRUE)
 set(Boost_USE_MULTITHREADED TRUE)
-SET(Boost_ADDITIONAL_VERSIONS "1.42" "1.42.0")
+SET(Boost_ADDITIONAL_VERSIONS "1.40")
 
-find_package(Boost 1.42.0  COMPONENTS serialization program_options REQUIRED)
+find_package(Boost 1.40.0  COMPONENTS serialization program_options REQUIRED)
 if(NOT Boost_FOUND)
   message(FATAL_ERROR  "Boost not found" )
 endif(NOT Boost_FOUND)
 
-find_package(LibXml2 REQUIRED)
+#find_package(LibXml2 REQUIRED)
 
 
 ####PACKAGES##################################################

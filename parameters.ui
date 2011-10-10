@@ -755,7 +755,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Color Set 3</string>
+     <string>SU colors 3</string>
     </property>
    </widget>
    <widget class="QRadioButton" name="radioButtonColor2">
@@ -768,7 +768,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Color Set 2</string>
+     <string>KTH colors</string>
     </property>
    </widget>
    <widget class="QRadioButton" name="radioButtonColor4">
@@ -781,7 +781,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Color Set 4</string>
+     <string>Grey scale</string>
     </property>
    </widget>
    <widget class="QRadioButton" name="radioButtonColor1">
@@ -794,7 +794,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Color Set 1</string>
+     <string>Blue colors</string>
     </property>
     <property name="checked">
      <bool>true</bool>

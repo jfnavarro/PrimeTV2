@@ -1,20 +1,20 @@
 Determining if the Q_WS_WIN exist failed with the following output:
-Change Dir: /home/jose/projects/PrimeTV/build/CMakeFiles/CMakeTmp
+Change Dir: /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles/CMakeTmp
 
 Run Build Command:/usr/bin/make "cmTryCompileExec/fast"
 /usr/bin/make -f CMakeFiles/cmTryCompileExec.dir/build.make CMakeFiles/cmTryCompileExec.dir/build
-make[1]: Entering directory `/home/jose/projects/PrimeTV/build/CMakeFiles/CMakeTmp'
-/usr/bin/cmake -E cmake_progress_report /home/jose/projects/PrimeTV/build/CMakeFiles/CMakeTmp/CMakeFiles 1
+make[1]: Entering directory `/afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles/CMakeTmp/CMakeFiles 1
 Building C object CMakeFiles/cmTryCompileExec.dir/CheckSymbolExists.c.o
-/usr/bin/gcc   -I/usr/include/qt4   -o CMakeFiles/cmTryCompileExec.dir/CheckSymbolExists.c.o   -c /home/jose/projects/PrimeTV/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c
-/home/jose/projects/PrimeTV/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c: In function ‘main’:
-/home/jose/projects/PrimeTV/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:8:25: error: ‘Q_WS_WIN’ undeclared (first use in this function)
-/home/jose/projects/PrimeTV/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:8:25: note: each undeclared identifier is reported only once for each function it appears in
+/usr/bin/gcc   -I/usr/include/qt4   -o CMakeFiles/cmTryCompileExec.dir/CheckSymbolExists.c.o   -c /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+/afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c: In function 'main':
+/afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:8:25: error: 'Q_WS_WIN' undeclared (first use in this function)
+/afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:8:25: note: each undeclared identifier is reported only once for each function it appears in
 make[1]: *** [CMakeFiles/cmTryCompileExec.dir/CheckSymbolExists.c.o] Error 1
-make[1]: Leaving directory `/home/jose/projects/PrimeTV/build/CMakeFiles/CMakeTmp'
+make[1]: Leaving directory `/afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles/CMakeTmp'
 make: *** [cmTryCompileExec/fast] Error 2
 
-File /home/jose/projects/PrimeTV/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+File /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
 /* */
 #include <QtCore/qglobal.h>
 
@@ -28,22 +28,22 @@ int main()
 }
 
 Determining if the Q_WS_QWS exist failed with the following output:
-Change Dir: /home/jose/projects/PrimeTV/build/CMakeFiles/CMakeTmp
+Change Dir: /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles/CMakeTmp
 
 Run Build Command:/usr/bin/make "cmTryCompileExec/fast"
 /usr/bin/make -f CMakeFiles/cmTryCompileExec.dir/build.make CMakeFiles/cmTryCompileExec.dir/build
-make[1]: Entering directory `/home/jose/projects/PrimeTV/build/CMakeFiles/CMakeTmp'
-/usr/bin/cmake -E cmake_progress_report /home/jose/projects/PrimeTV/build/CMakeFiles/CMakeTmp/CMakeFiles 1
+make[1]: Entering directory `/afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles/CMakeTmp/CMakeFiles 1
 Building C object CMakeFiles/cmTryCompileExec.dir/CheckSymbolExists.c.o
-/usr/bin/gcc   -I/usr/include/qt4   -o CMakeFiles/cmTryCompileExec.dir/CheckSymbolExists.c.o   -c /home/jose/projects/PrimeTV/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c
-/home/jose/projects/PrimeTV/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c: In function ‘main’:
-/home/jose/projects/PrimeTV/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:8:25: error: ‘Q_WS_QWS’ undeclared (first use in this function)
-/home/jose/projects/PrimeTV/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:8:25: note: each undeclared identifier is reported only once for each function it appears in
-make[1]: Leaving directory `/home/jose/projects/PrimeTV/build/CMakeFiles/CMakeTmp'
+/usr/bin/gcc   -I/usr/include/qt4   -o CMakeFiles/cmTryCompileExec.dir/CheckSymbolExists.c.o   -c /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+/afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c: In function 'main':
+/afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:8:25: error: 'Q_WS_QWS' undeclared (first use in this function)
+/afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:8:25: note: each undeclared identifier is reported only once for each function it appears in
 make[1]: *** [CMakeFiles/cmTryCompileExec.dir/CheckSymbolExists.c.o] Error 1
+make[1]: Leaving directory `/afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles/CMakeTmp'
 make: *** [cmTryCompileExec/fast] Error 2
 
-File /home/jose/projects/PrimeTV/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+File /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
 /* */
 #include <QtCore/qglobal.h>
 
@@ -57,22 +57,22 @@ int main()
 }
 
 Determining if the Q_WS_MAC exist failed with the following output:
-Change Dir: /home/jose/projects/PrimeTV/build/CMakeFiles/CMakeTmp
+Change Dir: /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles/CMakeTmp
 
 Run Build Command:/usr/bin/make "cmTryCompileExec/fast"
 /usr/bin/make -f CMakeFiles/cmTryCompileExec.dir/build.make CMakeFiles/cmTryCompileExec.dir/build
-make[1]: Entering directory `/home/jose/projects/PrimeTV/build/CMakeFiles/CMakeTmp'
-/usr/bin/cmake -E cmake_progress_report /home/jose/projects/PrimeTV/build/CMakeFiles/CMakeTmp/CMakeFiles 1
+make[1]: Entering directory `/afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles/CMakeTmp'
+/usr/bin/cmake -E cmake_progress_report /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles/CMakeTmp/CMakeFiles 1
 Building C object CMakeFiles/cmTryCompileExec.dir/CheckSymbolExists.c.o
-/usr/bin/gcc   -I/usr/include/qt4   -o CMakeFiles/cmTryCompileExec.dir/CheckSymbolExists.c.o   -c /home/jose/projects/PrimeTV/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c
-/home/jose/projects/PrimeTV/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c: In function ‘main’:
-/home/jose/projects/PrimeTV/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:8:25: error: ‘Q_WS_MAC’ undeclared (first use in this function)
-/home/jose/projects/PrimeTV/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:8:25: note: each undeclared identifier is reported only once for each function it appears in
-make[1]: Leaving directory `/home/jose/projects/PrimeTV/build/CMakeFiles/CMakeTmp'
+/usr/bin/gcc   -I/usr/include/qt4   -o CMakeFiles/cmTryCompileExec.dir/CheckSymbolExists.c.o   -c /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+/afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c: In function 'main':
+/afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:8:25: error: 'Q_WS_MAC' undeclared (first use in this function)
+/afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:8:25: note: each undeclared identifier is reported only once for each function it appears in
 make[1]: *** [CMakeFiles/cmTryCompileExec.dir/CheckSymbolExists.c.o] Error 1
+make[1]: Leaving directory `/afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles/CMakeTmp'
 make: *** [cmTryCompileExec/fast] Error 2
 
-File /home/jose/projects/PrimeTV/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+File /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
 /* */
 #include <QtCore/qglobal.h>
 

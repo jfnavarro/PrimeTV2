@@ -21,8 +21,8 @@
 
 Parameters::Parameters()
 {
-  species_font = "Times-Italic";
-  gene_font = "Times-Roman";
+  species_font = "Times";
+  gene_font = "Times";
   ids_on_inner_nodes = false;
   do_not_draw_species_tree = false;
   do_not_draw_guest_tree = false;
@@ -35,12 +35,16 @@ Parameters::Parameters()
   isMarkerColor = false;
   header = false;
   legend = false;
-  tittle = false;
+  title = false;
   lattransfer = false;
   lateralmincost = 1.0;
-  lateralmaxcost = 1.0;
+  lateralmaxcost = 10.0;
   lateralduplicost = 1.0;
-  lateraltrancost = 2.0;
+  lateraltrancost = 1.0;
+//   transferedges = NULL;
+//   duplications = ;
+
+  show_event_count = false;
   UI = false;
   scaleByTime = true;
   timeAtEdges = false;	
@@ -62,6 +66,7 @@ Parameters::Parameters()
   leafwidth = 25;
   equalTimes = true;
   linewidth = 1.0;
+  s_contour_width = 5.0;
   separation = 150.0;
   root_sep = 50.0;
   min_node_height = 3;
@@ -92,7 +97,7 @@ Parameters& Parameters::operator=(const Parameters& p)
 	isMarkerColor = p.isMarkerColor;
 	header = p.header;
 	legend = p.legend;
-	tittle = p.tittle;
+	title = p.title;
 	lattransfer = p.lattransfer;
 	lateralmincost = p.lateralmincost;
 	lateralmaxcost = p.lateralmaxcost;
@@ -107,7 +112,7 @@ Parameters& Parameters::operator=(const Parameters& p)
 	format = p.format; 
 	colorConfig = p.colorConfig;
 	outfile = p.outfile; 
-	tittleText = p.tittleText;
+	titleText = p.titleText;
 	uMarker = p.uMarker;
 	ladd = p.ladd;  
 	isreconciled = p.isreconciled;

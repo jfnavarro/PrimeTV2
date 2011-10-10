@@ -31,7 +31,7 @@ ELSE(UNIX)
 ENDIF(UNIX)
 
 # Save compiler ABI information.
-SET(CMAKE_Fortran_SIZEOF_DATA_PTR "")
+SET(CMAKE_Fortran_SIZEOF_DATA_PTR "8")
 SET(CMAKE_Fortran_COMPILER_ABI "")
 
 IF(CMAKE_Fortran_SIZEOF_DATA_PTR AND NOT CMAKE_SIZEOF_VOID_P)
@@ -43,4 +43,4 @@ IF(CMAKE_Fortran_COMPILER_ABI)
 ENDIF(CMAKE_Fortran_COMPILER_ABI)
 
 SET(CMAKE_Fortran_IMPLICIT_LINK_LIBRARIES "gfortran;m;c")
-SET(CMAKE_Fortran_IMPLICIT_LINK_DIRECTORIES "/usr/lib/i386-linux-gnu/gcc/i686-linux-gnu/4.5.2;/usr/lib/i386-linux-gnu")
+SET(CMAKE_Fortran_IMPLICIT_LINK_DIRECTORIES "/usr/lib/x86_64-linux-gnu/gcc/x86_64-linux-gnu/4.5.2;/usr/lib/x86_64-linux-gnu")

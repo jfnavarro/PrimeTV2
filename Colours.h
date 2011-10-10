@@ -13,12 +13,16 @@ class Colours
   public:
     
     Color default_foreground_color; // Draw the sequence names
-    Color genetree_color;  //circles and rectangules of species
-    Color species_edge_color; //color edge
-    Color snode_contour_color; //color node
+    Color gene_edge_color;
+    Color gene_lgt_color;	/* Not in use! */
+    Color gene_dupl_color;
+    Color gene_spec_color;
 
-    Color sedge_contour_color; //marker??
-    Color species_node_color; //for marker
+    Color species_edge_color;
+    Color species_edge_contour_color;
+    Color species_node_color; 
+    Color species_node_contour_color;
+
     Color markerColor; //marker color
     Color umColor;
 

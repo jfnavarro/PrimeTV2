@@ -112,7 +112,7 @@ private:
     /* the same for the left*/
     double LeftMostCoordinate(Node* o, Node *end_of_slice, int duplevel);
     
-    /* this function desplaces the species node if it is coliding with another node*/
+    /* this function displaces the species node if it is colliding with another node*/
     void CalcLegIntersection(Node *left, Node *right, Node *u);
     
     /* this function calculates the time intervals and the drawing parameters */

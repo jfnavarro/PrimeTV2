@@ -86,7 +86,10 @@ class DrawTree_time {
     
     /* this function draws the text given a parameter from the user on the 
      * top of the screen*/    
-    void createTittle();
+    void createTitle();
+
+    /* Add info about the cost of performed reconciliations (dupl + lgt cost) */
+    void writeEventCosts();
     
     /* this function draws the markers on the gene tree*/
     void GeneTreeMarkers();
@@ -95,6 +98,7 @@ class DrawTree_time {
     void DrawTimeEdges();
     
     /* this function draws the species edges */
+    void DrawSpeciesEdgesWithContour();
     void DrawSpeciesEdges();
     
     /* this function draws the time labels on the time edges */
@@ -176,7 +180,14 @@ class DrawTree_time {
     void addEdge(Node *spO,Node *spE,Node *gO,Node *gE,
 		double xo,double yo,double xe,double ye,Edge::category m);
     unsigned NumberLT(Node *son);
-    
+
+  /* Computer the intersection of two lines, given four points. */
+    void intersection(double x1, double y1,
+		      double x2, double y2,
+		      double x3, double y3,
+		      double x4, double y4,
+		      double &x5, double &y5);
+      
     
     std::map<Node*,unsigned> LGT; //map of lateral transfer
     std::vector<Edge*> geneEdges; //edges
@@ -198,9 +209,15 @@ class DrawTree_time {
     double pageheight;
     double fontsize;
     double linewidth;
+    double s_contour_width;
     Colours *config;
     bool image;
     double leafWidth;
     
+  /* During layout, the guest tree is traversed and the number 
+   * of duplications/transfers are counted and stored here:
+   */
+  int nDupl;
+  int nTrans;
 };
 #endif

@@ -1,2 +1,2 @@
-/home/jose/projects/PrimeTV/build/CMakeFiles/prime.dir
-/home/jose/projects/PrimeTV/build/CMakeFiles/primetv.dir
+/afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles/prime.dir
+/afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles/primetv.dir

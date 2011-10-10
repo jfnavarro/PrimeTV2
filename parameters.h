@@ -52,12 +52,13 @@ public:
   bool isMarkerColor;
   bool header;
   bool legend;
-  bool tittle;
+  bool title;
   bool lattransfer;
   float lateralmincost;
   float lateralmaxcost;
   float lateralduplicost;
   float lateraltrancost;
+  bool show_event_count;
   bool UI;
   bool scaleByTime;
   bool timeAtEdges;	
@@ -67,7 +68,7 @@ public:
   string format; 
   Colours *colorConfig;
   string outfile; 
-  string tittleText;
+  string titleText;
   std::vector<double> uMarker;
   char ladd;  
   bool isreconciled;
@@ -82,6 +83,7 @@ public:
   dynamic_bitset<> duplications;
   bool equalTimes;
   double linewidth;
+  double s_contour_width;
   double separation;
   double root_sep;
   double min_node_height;

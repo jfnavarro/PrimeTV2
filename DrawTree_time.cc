@@ -22,6 +22,7 @@
 
 #include <string>
 #include <sstream>
+#include <algorithm>
 #include "libraries/AnError.hh"
 #include "DrawTree_time.hh"
 #include "Colours.h"
@@ -41,7 +42,8 @@ static const double pi = 3.141516;
 
   DrawTree_time::DrawTree_time(const Parameters &p,TreeExtended &gene, TreeExtended &species, 
 			       const GammaMapEx<Node> &gamma, cairo_t *cr_)
-    :parameters(&p),gene(&gene),species(&species),gamma(&gamma),surface(0),surfaceBackground(0),config(0)
+    :parameters(&p),gene(&gene),species(&species),gamma(&gamma),surface(0),surfaceBackground(0),config(0),
+     nDupl(0),nTrans(0)
   {
     
     image = false;
@@ -109,8 +111,9 @@ static const double pi = 3.141516;
     fontsize = parameters->fontsize;
     fontsize = fontsize * parameters->fontscale;
     linewidth = parameters->linewidth;
+    s_contour_width = parameters->s_contour_width;
     
-    cairo_select_font_face (cr, "Times-Roman", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_BOLD);
+    cairo_select_font_face (cr, "Times", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_BOLD);
     cairo_set_font_size (cr, fontsize);
     cairo_set_source_rgba (cr, 1, 1, 1,1);
     cairo_set_line_width (cr, linewidth);
@@ -201,20 +204,48 @@ static const double pi = 3.141516;
   }
   
   
-  void DrawTree_time::createTittle()
+  void DrawTree_time::createTitle()
   { 
     cairo_save(cr);
     cairo_matrix_invert(&matrix);
     cairo_transform(cr,&matrix);
     cairo_set_source_rgba(cr,0,0,0,1);
     cairo_set_line_width(cr, 1);
-    cairo_select_font_face (cr, "Times-Roman", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_BOLD);
+    cairo_select_font_face (cr, "Times", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_BOLD);
     cairo_set_font_size (cr, fontsize);
-    cairo_text_extents (cr, "i", &extents);
-    cairo_move_to (cr, (pagewidth/2) - extents.width, extents.height*2);
-    cairo_show_text(cr,parameters->tittleText.c_str());
+
+    const char *str = parameters->titleText.c_str();
+    cairo_text_extents (cr, str, &extents);
+    cairo_move_to (cr, std::max(0.0,(pagewidth/2) - extents.width/2), extents.height*2);
+    cairo_show_text(cr, str);
     cairo_restore(cr);
+  }
   
+void DrawTree_time::writeEventCosts()
+  { 
+    cairo_save(cr);
+    cairo_matrix_invert(&matrix);
+    cairo_transform(cr,&matrix);
+    cairo_set_source_rgba(cr,0,0,0,1);
+    cairo_set_line_width(cr, 1);
+    cairo_select_font_face (cr, "Times", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_BOLD);
+    cairo_set_font_size (cr, fontsize);
+
+
+    ostringstream oss;
+    if (parameters->lattransfer) {
+      oss << "#duplications: " << nDupl
+	  << ", #transfers: " << nTrans << endl;
+    } else {
+      oss << "#duplications: " << nDupl
+	  << ", no transfers ";
+    }
+    const char *str = oss.str().c_str();
+    cerr << str << endl;
+    cairo_text_extents (cr, str, &extents);
+    cairo_move_to (cr, 0, extents.height*2);
+    cairo_show_text(cr,  str);
+    cairo_restore(cr);
   }
   
   void DrawTree_time::createLegend()
@@ -231,7 +262,7 @@ static const double pi = 3.141516;
     
     cairo_set_source_rgba(cr,0,0,0,1);
     cairo_set_line_width(cr, 1);
-    cairo_select_font_face (cr, "Times-Roman", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_BOLD);
+    cairo_select_font_face (cr, "Times", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_BOLD);
     cairo_set_font_size (cr, fontsize);
     cairo_move_to (cr, x, y);
     cairo_rel_line_to (cr, width, 0);
@@ -242,8 +273,8 @@ static const double pi = 3.141516;
     cairo_move_to(cr,width/2-x,y+10);
     cairo_show_text(cr,"Legend");
     
-    cairo_set_source_rgba(cr,config->genetree_color.red,
-			  config->genetree_color.green,config->genetree_color.blue,1);
+    cairo_set_source_rgba(cr,config->gene_edge_color.red,
+			  config->gene_edge_color.green,config->gene_edge_color.blue,1);
     cairo_move_to(cr,x+10,y+20);
     cairo_set_line_width(cr, 10);
     cairo_line_to(cr,x+15,y+20);
@@ -264,8 +295,8 @@ static const double pi = 3.141516;
     cairo_move_to(cr,x+30,y+35);
     cairo_show_text(cr,"Species Edge Color");
     
-    cairo_set_source_rgba(cr,config->snode_contour_color.red,
-			  config->snode_contour_color.green,config->snode_contour_color.blue,1);
+    cairo_set_source_rgba(cr,config->species_node_color.red,
+			  config->species_node_color.green,config->species_node_color.blue,1);
     cairo_move_to(cr,x+10,y+40);
     cairo_set_line_width(cr, 10);
     cairo_line_to(cr,x+15,y+40);
@@ -324,7 +355,7 @@ static const double pi = 3.141516;
   void
   DrawTree_time::GeneTreeMarkers()
   {
-    cairo_set_source_rgba(cr,config->genetree_color.red,config->genetree_color.green,config->genetree_color.blue,1);
+    cairo_set_source_rgba(cr,config->gene_edge_color.red,config->gene_edge_color.green,config->gene_edge_color.blue,1);
     
     if(parameters->isMarkerColor) 
 	cairo_set_source_rgba(cr,config->umColor.red,config->umColor.green,config->umColor.blue,0.80);
@@ -362,7 +393,7 @@ static const double pi = 3.141516;
 
    void DrawTree_time::DrawTimeEdges()
    {
-     cairo_set_line_width (cr, 2);
+     cairo_set_line_width (cr, linewidth);
      double midnode = leafWidth;
      cairo_set_font_size (cr, fontsize);
      cairo_set_source_rgba (cr, 0, 0, 0, 1);
@@ -383,11 +414,14 @@ static const double pi = 3.141516;
      cairo_set_dash(cr, dashed3, 0, 0);
    }
    
-   void DrawTree_time::DrawSpeciesEdges()
+   void DrawTree_time::DrawSpeciesEdgesWithContour()
    {
+     Color& cfill = config->species_edge_color;
+     Color& cline = config->species_edge_contour_color;
 
-     cairo_set_source_rgba(cr,config->species_edge_color.red,config->species_edge_color.green,config->species_edge_color.blue,1);
-     cairo_set_line_width(cr, 1);
+     cairo_set_line_width(cr, s_contour_width);
+     cairo_set_line_cap(cr, CAIRO_LINE_CAP_ROUND);
+     cairo_set_line_join(cr, CAIRO_LINE_JOIN_ROUND);
      double midnode = leafWidth;
      Node *root = species->getRootNode();
      cairo_move_to(cr,0,root->getY()+midnode);
@@ -395,36 +429,61 @@ static const double pi = 3.141516;
      cairo_rel_line_to(cr,0,-midnode*2);
      cairo_rel_line_to(cr,- root->getX(),0);
      cairo_close_path(cr);
+
+     cairo_set_source_rgba(cr, cline.red, cline.green, cline.blue, 1);
      cairo_stroke_preserve(cr);
+     cairo_set_source_rgba(cr, cfill.red, cfill.green, cfill.blue, 1);
      cairo_fill(cr);
      
      for ( Node *n = species->preorder_begin(); n != NULL; n = species->preorder_next(n) )
      {
        double x = n->getX();
        double y = n->getY();
-       cairo_set_source_rgba(cr,config->species_edge_color.red,config->species_edge_color.green,config->species_edge_color.blue,1);
+
        if(!n->isLeaf())
        { 
-	 cairo_move_to(cr,x,y + midnode);
-	 cairo_rel_line_to(cr,n->getLeftChild()->getX()-x,n->getLeftChild()->getY()-y);
-	 cairo_rel_line_to(cr,0,-midnode*2);
-	 cairo_rel_line_to(cr,x-n->getLeftChild()->getX(),(y) - (n->getLeftChild()->getY()));
-	 cairo_close_path(cr);
-	 cairo_stroke_preserve(cr);
-	 cairo_fill(cr);
-	 
-	 cairo_move_to(cr,x,y - midnode);
-	 cairo_rel_line_to(cr,n->getRightChild()->getX()-x,n->getRightChild()->getY()-y);
-	 cairo_rel_line_to(cr,0,midnode*2);
-	 cairo_rel_line_to(cr,x-n->getRightChild()->getX(),y - n->getRightChild()->getY());
-	 cairo_close_path(cr);
-	 cairo_stroke_preserve(cr);
-	 cairo_fill(cr);
+	 double pmidx, pmidy;
+	 intersection(x, y - midnode,
+		      n->getLeftChild()->getX(), n->getLeftChild()->getY()-midnode,		      
+		      x, y + midnode,
+		      n->getRightChild()->getX(), n->getRightChild()->getY()+midnode,
+		      pmidx, pmidy);
 
+	 cairo_move_to(cr,x,y + midnode); 
+ 	 cairo_rel_line_to(cr,n->getLeftChild()->getX()-x,n->getLeftChild()->getY()-y);
+ 	 cairo_rel_line_to(cr,0,-midnode*2);
+
+	 cairo_line_to(cr,pmidx, pmidy);
+	 
+ 	 cairo_line_to(cr,n->getRightChild()->getX(),n->getRightChild()->getY()+midnode);
+ 	 cairo_rel_line_to(cr,0,-midnode*2);
+ 	 cairo_line_to(cr,x,y - midnode);
+	 cairo_close_path(cr);
+
+	 cairo_set_source_rgba(cr, cline.red, cline.green, cline.blue, 1);
+	 cairo_stroke_preserve(cr);
+	 cairo_set_source_rgba(cr, cfill.red, cfill.green, cfill.blue, 1);
+	 cairo_fill(cr);
        }
-       cairo_stroke(cr); 
      }
    }
+
+// Find the intersection of lines (p1, p2) and (p3, p4), 
+// put result in p5.
+// Notation nicked from http://en.wikipedia.org/wiki/Line-line_intersection.
+void DrawTree_time::intersection(double x1, double y1,
+				 double x2, double y2,
+				 double x3, double y3,
+				 double x4, double y4,
+				 double &x5, double &y5)
+{
+  x5 = ((x1*y2-y1*x2)*(x3-x4) - (x1-x2)*(x3*y4 - y3*x4)) 
+    / ((x1-x2)*(y3-y4) - (y1-y2)*(x3-x4));
+  y5 = ((x1*y2-y1*x2)*(y3-y4) - (y1-y2)*(x3*y4 - y3*x4)) 
+    / ((x1-x2)*(y3-y4) - (y1-y2)*(x3-x4));
+
+}
+
    
    void DrawTree_time::DrawTimeLabels()
    {
@@ -465,7 +524,8 @@ static const double pi = 3.141516;
    
    void DrawTree_time::DrawSpeciesNodes()
    {
-     cairo_set_source_rgba(cr,config->snode_contour_color.red,config->snode_contour_color.green,config->snode_contour_color.blue,1);
+     Color& cfill = config->species_node_color;
+     Color& cline = config->species_node_contour_color;
      
      for ( Node *n = species->preorder_begin(); n != NULL; n = species->preorder_next(n) )
      {
@@ -475,7 +535,12 @@ static const double pi = 3.141516;
          cairo_translate (cr,n->getX(), n->getY());
          cairo_scale(cr, 0.3, 1);
          cairo_arc (cr, 0., 0.,leafWidth, 0., 2 * pi);
-         cairo_fill(cr);
+
+	 cairo_set_source_rgba(cr, cfill.red, cfill.green, cfill.blue, 1);
+         cairo_fill_preserve(cr);
+
+	 cairo_set_line_width(cr, s_contour_width);
+	 cairo_set_source_rgba(cr, cline.red, cline.green, cline.blue, 1);
          cairo_stroke(cr);
 	 cairo_restore(cr);
        }
@@ -485,7 +550,7 @@ static const double pi = 3.141516;
    
    void DrawTree_time::DrawSpeciesNodeLabels()
    {
-    cairo_select_font_face (cr, parameters->species_font.c_str(), CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_BOLD);
+    cairo_select_font_face (cr, parameters->species_font.c_str(), CAIRO_FONT_SLANT_ITALIC, CAIRO_FONT_WEIGHT_BOLD);
     cairo_set_source_rgba (cr, parameters->speciesFontColor.red, 
 			   parameters->speciesFontColor.green, parameters->speciesFontColor.blue, 1);
     cairo_set_font_size (cr, fontsize);
@@ -548,8 +613,9 @@ static const double pi = 3.141516;
   
   void DrawTree_time::DrawGeneNodes()
   {
+     Color& duplCol = config->gene_dupl_color;
+     Color& specCol = config->gene_spec_color;
       
-    cairo_set_source_rgba(cr,config->genetree_color.red,config->genetree_color.green,config->genetree_color.blue,1);
     cairo_set_line_width(cr,2);
       
     for ( Node *n = gene->preorder_begin(); n != NULL; n = gene->preorder_next(n) )
@@ -559,11 +625,22 @@ static const double pi = 3.141516;
        
 	if(n->getReconcilation() == Leaf || n->getReconcilation() == Speciation) //speciation or leaf
 	{
+	   cairo_set_source_rgba(cr, specCol.red, specCol.green, specCol.blue, 1);
 	   cairo_arc(cr,x, y, leafWidth/10,0.0,2*pi);
 	   cairo_fill(cr);
 	}
 	else if (n->getReconcilation() == Duplication) //duplication
 	{
+	  nDupl++;
+	   cairo_set_source_rgba(cr, duplCol.red, duplCol.green, duplCol.blue, 1);
+	   cairo_rectangle(cr,x-(leafWidth/5)/2,y-(leafWidth/5)/2,leafWidth/5,leafWidth/5);
+	   cairo_fill(cr);
+	     
+	 }
+	else if (n->getReconcilation() == LateralTransfer) //duplication
+	{
+	  nTrans++;
+	   cairo_set_source_rgba(cr, duplCol.red, duplCol.green, duplCol.blue, 1);
 	   cairo_rectangle(cr,x-(leafWidth/5)/2,y-(leafWidth/5)/2,leafWidth/5,leafWidth/5);
 	   cairo_fill(cr);
 	     
@@ -576,7 +653,10 @@ static const double pi = 3.141516;
   
   void DrawTree_time::DrawGeneEdges()
   {
-      cairo_set_source_rgba(cr,config->genetree_color.red,config->genetree_color.green,config->genetree_color.blue,1);
+      Color& regular = config->gene_edge_color;
+      //      Color& lgt = config->gene_lgt_color; // No support for special LGT color at this point
+
+      cairo_set_source_rgba(cr, regular.red, regular.green, regular.blue,1);
      
       cairo_set_line_width(cr,linewidth/2);
       
@@ -607,7 +687,7 @@ static const double pi = 3.141516;
 	    cairo_line_to(cr,0,species->getRootNode()->getY());
 	  }
       }
-      
+
       DrawLGT();
       cairo_stroke(cr);
 
@@ -633,7 +713,7 @@ static const double pi = 3.141516;
 	      os << n->getName() << " ";
 	    
 	    cairo_text_extents(cr, os.str().c_str(), &extents);
-	    double xpos = n->getX() + extents.height/2;
+	    double xpos = n->getX() + extents.height;
 	    double ypos = n->getY() + extents.height/2;
 	
 	    cairo_move_to(cr,xpos,ypos);

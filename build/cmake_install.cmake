@@ -1,4 +1,4 @@
-# Install script for directory: /home/jose/projects/PrimeTV
+# Install script for directory: /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2
 
 # Set the install prefix
 IF(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -39,7 +39,7 @@ IF(NOT CMAKE_INSTALL_COMPONENT OR "${CMAKE_INSTALL_COMPONENT}" STREQUAL "Unspeci
          FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/primetv"
          RPATH "")
   ENDIF()
-  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE EXECUTABLE FILES "/home/jose/projects/PrimeTV/build/primetv")
+  FILE(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" TYPE EXECUTABLE FILES "/afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/primetv")
   IF(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/primetv" AND
      NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/bin/primetv")
     IF(CMAKE_INSTALL_DO_STRIP)
@@ -54,7 +54,7 @@ ELSE(CMAKE_INSTALL_COMPONENT)
   SET(CMAKE_INSTALL_MANIFEST "install_manifest.txt")
 ENDIF(CMAKE_INSTALL_COMPONENT)
 
-FILE(WRITE "/home/jose/projects/PrimeTV/build/${CMAKE_INSTALL_MANIFEST}" "")
+FILE(WRITE "/afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/${CMAKE_INSTALL_MANIFEST}" "")
 FOREACH(file ${CMAKE_INSTALL_MANIFEST_FILES})
-  FILE(APPEND "/home/jose/projects/PrimeTV/build/${CMAKE_INSTALL_MANIFEST}" "${file}\n")
+  FILE(APPEND "/afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/${CMAKE_INSTALL_MANIFEST}" "${file}\n")
 ENDFOREACH(file)

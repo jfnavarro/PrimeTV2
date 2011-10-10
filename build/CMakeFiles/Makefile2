@@ -44,10 +44,10 @@ CMAKE_COMMAND = /usr/bin/cmake
 RM = /usr/bin/cmake -E remove -f
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/jose/projects/PrimeTV
+CMAKE_SOURCE_DIR = /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/jose/projects/PrimeTV/build
+CMAKE_BINARY_DIR = /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build
 
 #=============================================================================
 # Target rules for target CMakeFiles/prime.dir
@@ -56,7 +56,7 @@ CMAKE_BINARY_DIR = /home/jose/projects/PrimeTV/build
 CMakeFiles/prime.dir/all:
 	$(MAKE) -f CMakeFiles/prime.dir/build.make CMakeFiles/prime.dir/depend
 	$(MAKE) -f CMakeFiles/prime.dir/build.make CMakeFiles/prime.dir/build
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/jose/projects/PrimeTV/build/CMakeFiles  1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20
+	$(CMAKE_COMMAND) -E cmake_progress_report /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles  1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20
 	@echo "Built target prime"
 .PHONY : CMakeFiles/prime.dir/all
 
@@ -66,9 +66,9 @@ all: CMakeFiles/prime.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/prime.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/jose/projects/PrimeTV/build/CMakeFiles 20
+	$(CMAKE_COMMAND) -E cmake_progress_start /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles 20
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/prime.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/jose/projects/PrimeTV/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles 0
 .PHONY : CMakeFiles/prime.dir/rule
 
 # Convenience name for target.
@@ -91,7 +91,7 @@ clean: CMakeFiles/prime.dir/clean
 CMakeFiles/primetv.dir/all: CMakeFiles/prime.dir/all
 	$(MAKE) -f CMakeFiles/primetv.dir/build.make CMakeFiles/primetv.dir/depend
 	$(MAKE) -f CMakeFiles/primetv.dir/build.make CMakeFiles/primetv.dir/build
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/jose/projects/PrimeTV/build/CMakeFiles  21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40
+	$(CMAKE_COMMAND) -E cmake_progress_report /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles  21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40
 	@echo "Built target primetv"
 .PHONY : CMakeFiles/primetv.dir/all
 
@@ -101,9 +101,9 @@ all: CMakeFiles/primetv.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/primetv.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/jose/projects/PrimeTV/build/CMakeFiles 40
+	$(CMAKE_COMMAND) -E cmake_progress_start /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles 40
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/primetv.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/jose/projects/PrimeTV/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles 0
 .PHONY : CMakeFiles/primetv.dir/rule
 
 # Convenience name for target.

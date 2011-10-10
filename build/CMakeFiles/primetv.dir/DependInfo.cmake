@@ -4,21 +4,21 @@ SET(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 SET(CMAKE_DEPENDS_CHECK_CXX
-  "/home/jose/projects/PrimeTV/Color.cpp" "/home/jose/projects/PrimeTV/build/CMakeFiles/primetv.dir/Color.cpp.o"
-  "/home/jose/projects/PrimeTV/Colours.cpp" "/home/jose/projects/PrimeTV/build/CMakeFiles/primetv.dir/Colours.cpp.o"
-  "/home/jose/projects/PrimeTV/Coord.cc" "/home/jose/projects/PrimeTV/build/CMakeFiles/primetv.dir/Coord.cc.o"
-  "/home/jose/projects/PrimeTV/DrawTree_time.cc" "/home/jose/projects/PrimeTV/build/CMakeFiles/primetv.dir/DrawTree_time.cc.o"
-  "/home/jose/projects/PrimeTV/canvas.cpp" "/home/jose/projects/PrimeTV/build/CMakeFiles/primetv.dir/canvas.cpp.o"
-  "/home/jose/projects/PrimeTV/edge.cpp" "/home/jose/projects/PrimeTV/build/CMakeFiles/primetv.dir/edge.cpp.o"
-  "/home/jose/projects/PrimeTV/layoutrees.cpp" "/home/jose/projects/PrimeTV/build/CMakeFiles/primetv.dir/layoutrees.cpp.o"
-  "/home/jose/projects/PrimeTV/mainops.cpp" "/home/jose/projects/PrimeTV/build/CMakeFiles/primetv.dir/mainops.cpp.o"
-  "/home/jose/projects/PrimeTV/build/moc_canvas.cxx" "/home/jose/projects/PrimeTV/build/CMakeFiles/primetv.dir/moc_canvas.cxx.o"
-  "/home/jose/projects/PrimeTV/build/moc_windows.cxx" "/home/jose/projects/PrimeTV/build/CMakeFiles/primetv.dir/moc_windows.cxx.o"
-  "/home/jose/projects/PrimeTV/parameters.cpp" "/home/jose/projects/PrimeTV/build/CMakeFiles/primetv.dir/parameters.cpp.o"
-  "/home/jose/projects/PrimeTV/phyltr.cpp" "/home/jose/projects/PrimeTV/build/CMakeFiles/primetv.dir/phyltr.cpp.o"
-  "/home/jose/projects/PrimeTV/primetv.cc" "/home/jose/projects/PrimeTV/build/CMakeFiles/primetv.dir/primetv.cc.o"
-  "/home/jose/projects/PrimeTV/build/qrc_application.cxx" "/home/jose/projects/PrimeTV/build/CMakeFiles/primetv.dir/qrc_application.cxx.o"
-  "/home/jose/projects/PrimeTV/windows.cpp" "/home/jose/projects/PrimeTV/build/CMakeFiles/primetv.dir/windows.cpp.o"
+  "/afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/Color.cpp" "/afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles/primetv.dir/Color.cpp.o"
+  "/afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/Colours.cpp" "/afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles/primetv.dir/Colours.cpp.o"
+  "/afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/Coord.cc" "/afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles/primetv.dir/Coord.cc.o"
+  "/afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/DrawTree_time.cc" "/afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles/primetv.dir/DrawTree_time.cc.o"
+  "/afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/canvas.cpp" "/afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles/primetv.dir/canvas.cpp.o"
+  "/afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/edge.cpp" "/afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles/primetv.dir/edge.cpp.o"
+  "/afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/layoutrees.cpp" "/afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles/primetv.dir/layoutrees.cpp.o"
+  "/afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/mainops.cpp" "/afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles/primetv.dir/mainops.cpp.o"
+  "/afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/moc_canvas.cxx" "/afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles/primetv.dir/moc_canvas.cxx.o"
+  "/afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/moc_windows.cxx" "/afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles/primetv.dir/moc_windows.cxx.o"
+  "/afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/parameters.cpp" "/afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles/primetv.dir/parameters.cpp.o"
+  "/afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/phyltr.cpp" "/afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles/primetv.dir/phyltr.cpp.o"
+  "/afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/primetv.cc" "/afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles/primetv.dir/primetv.cc.o"
+  "/afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/qrc_application.cxx" "/afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles/primetv.dir/qrc_application.cxx.o"
+  "/afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/windows.cpp" "/afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles/primetv.dir/windows.cpp.o"
   )
 SET(CMAKE_CXX_COMPILER_ID "GNU")
 
@@ -33,5 +33,5 @@ SET(CMAKE_TARGET_DEFINITIONS
 
 # Targets to which this target links.
 SET(CMAKE_TARGET_LINKED_INFO_FILES
-  "/home/jose/projects/PrimeTV/build/CMakeFiles/prime.dir/DependInfo.cmake"
+  "/afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles/prime.dir/DependInfo.cmake"
   )

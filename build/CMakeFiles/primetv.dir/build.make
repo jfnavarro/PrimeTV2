@@ -32,10 +32,10 @@ CMAKE_COMMAND = /usr/bin/cmake
 RM = /usr/bin/cmake -E remove -f
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/jose/projects/PrimeTV
+CMAKE_SOURCE_DIR = /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/jose/projects/PrimeTV/build
+CMAKE_BINARY_DIR = /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build
 
 # Include any dependencies generated for this target.
 include CMakeFiles/primetv.dir/depend.make
@@ -48,17 +48,17 @@ include CMakeFiles/primetv.dir/flags.make
 
 CMakeFiles/primetv.dir/windows.cpp.o: CMakeFiles/primetv.dir/flags.make
 CMakeFiles/primetv.dir/windows.cpp.o: ../windows.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/jose/projects/PrimeTV/build/CMakeFiles $(CMAKE_PROGRESS_1)
+	$(CMAKE_COMMAND) -E cmake_progress_report /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles $(CMAKE_PROGRESS_1)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/primetv.dir/windows.cpp.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/primetv.dir/windows.cpp.o -c /home/jose/projects/PrimeTV/windows.cpp
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/primetv.dir/windows.cpp.o -c /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/windows.cpp
 
 CMakeFiles/primetv.dir/windows.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/primetv.dir/windows.cpp.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/jose/projects/PrimeTV/windows.cpp > CMakeFiles/primetv.dir/windows.cpp.i
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/windows.cpp > CMakeFiles/primetv.dir/windows.cpp.i
 
 CMakeFiles/primetv.dir/windows.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/primetv.dir/windows.cpp.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/jose/projects/PrimeTV/windows.cpp -o CMakeFiles/primetv.dir/windows.cpp.s
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/windows.cpp -o CMakeFiles/primetv.dir/windows.cpp.s
 
 CMakeFiles/primetv.dir/windows.cpp.o.requires:
 .PHONY : CMakeFiles/primetv.dir/windows.cpp.o.requires
@@ -72,17 +72,17 @@ CMakeFiles/primetv.dir/windows.cpp.o.provides.build: CMakeFiles/primetv.dir/wind
 
 CMakeFiles/primetv.dir/edge.cpp.o: CMakeFiles/primetv.dir/flags.make
 CMakeFiles/primetv.dir/edge.cpp.o: ../edge.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/jose/projects/PrimeTV/build/CMakeFiles $(CMAKE_PROGRESS_2)
+	$(CMAKE_COMMAND) -E cmake_progress_report /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles $(CMAKE_PROGRESS_2)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/primetv.dir/edge.cpp.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/primetv.dir/edge.cpp.o -c /home/jose/projects/PrimeTV/edge.cpp
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/primetv.dir/edge.cpp.o -c /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/edge.cpp
 
 CMakeFiles/primetv.dir/edge.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/primetv.dir/edge.cpp.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/jose/projects/PrimeTV/edge.cpp > CMakeFiles/primetv.dir/edge.cpp.i
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/edge.cpp > CMakeFiles/primetv.dir/edge.cpp.i
 
 CMakeFiles/primetv.dir/edge.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/primetv.dir/edge.cpp.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/jose/projects/PrimeTV/edge.cpp -o CMakeFiles/primetv.dir/edge.cpp.s
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/edge.cpp -o CMakeFiles/primetv.dir/edge.cpp.s
 
 CMakeFiles/primetv.dir/edge.cpp.o.requires:
 .PHONY : CMakeFiles/primetv.dir/edge.cpp.o.requires
@@ -96,17 +96,17 @@ CMakeFiles/primetv.dir/edge.cpp.o.provides.build: CMakeFiles/primetv.dir/edge.cp
 
 CMakeFiles/primetv.dir/layoutrees.cpp.o: CMakeFiles/primetv.dir/flags.make
 CMakeFiles/primetv.dir/layoutrees.cpp.o: ../layoutrees.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/jose/projects/PrimeTV/build/CMakeFiles $(CMAKE_PROGRESS_3)
+	$(CMAKE_COMMAND) -E cmake_progress_report /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles $(CMAKE_PROGRESS_3)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/primetv.dir/layoutrees.cpp.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/primetv.dir/layoutrees.cpp.o -c /home/jose/projects/PrimeTV/layoutrees.cpp
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/primetv.dir/layoutrees.cpp.o -c /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/layoutrees.cpp
 
 CMakeFiles/primetv.dir/layoutrees.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/primetv.dir/layoutrees.cpp.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/jose/projects/PrimeTV/layoutrees.cpp > CMakeFiles/primetv.dir/layoutrees.cpp.i
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/layoutrees.cpp > CMakeFiles/primetv.dir/layoutrees.cpp.i
 
 CMakeFiles/primetv.dir/layoutrees.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/primetv.dir/layoutrees.cpp.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/jose/projects/PrimeTV/layoutrees.cpp -o CMakeFiles/primetv.dir/layoutrees.cpp.s
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/layoutrees.cpp -o CMakeFiles/primetv.dir/layoutrees.cpp.s
 
 CMakeFiles/primetv.dir/layoutrees.cpp.o.requires:
 .PHONY : CMakeFiles/primetv.dir/layoutrees.cpp.o.requires
@@ -120,17 +120,17 @@ CMakeFiles/primetv.dir/layoutrees.cpp.o.provides.build: CMakeFiles/primetv.dir/l
 
 CMakeFiles/primetv.dir/mainops.cpp.o: CMakeFiles/primetv.dir/flags.make
 CMakeFiles/primetv.dir/mainops.cpp.o: ../mainops.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/jose/projects/PrimeTV/build/CMakeFiles $(CMAKE_PROGRESS_4)
+	$(CMAKE_COMMAND) -E cmake_progress_report /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles $(CMAKE_PROGRESS_4)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/primetv.dir/mainops.cpp.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/primetv.dir/mainops.cpp.o -c /home/jose/projects/PrimeTV/mainops.cpp
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/primetv.dir/mainops.cpp.o -c /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/mainops.cpp
 
 CMakeFiles/primetv.dir/mainops.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/primetv.dir/mainops.cpp.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/jose/projects/PrimeTV/mainops.cpp > CMakeFiles/primetv.dir/mainops.cpp.i
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/mainops.cpp > CMakeFiles/primetv.dir/mainops.cpp.i
 
 CMakeFiles/primetv.dir/mainops.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/primetv.dir/mainops.cpp.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/jose/projects/PrimeTV/mainops.cpp -o CMakeFiles/primetv.dir/mainops.cpp.s
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/mainops.cpp -o CMakeFiles/primetv.dir/mainops.cpp.s
 
 CMakeFiles/primetv.dir/mainops.cpp.o.requires:
 .PHONY : CMakeFiles/primetv.dir/mainops.cpp.o.requires
@@ -144,17 +144,17 @@ CMakeFiles/primetv.dir/mainops.cpp.o.provides.build: CMakeFiles/primetv.dir/main
 
 CMakeFiles/primetv.dir/parameters.cpp.o: CMakeFiles/primetv.dir/flags.make
 CMakeFiles/primetv.dir/parameters.cpp.o: ../parameters.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/jose/projects/PrimeTV/build/CMakeFiles $(CMAKE_PROGRESS_5)
+	$(CMAKE_COMMAND) -E cmake_progress_report /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles $(CMAKE_PROGRESS_5)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/primetv.dir/parameters.cpp.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/primetv.dir/parameters.cpp.o -c /home/jose/projects/PrimeTV/parameters.cpp
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/primetv.dir/parameters.cpp.o -c /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/parameters.cpp
 
 CMakeFiles/primetv.dir/parameters.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/primetv.dir/parameters.cpp.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/jose/projects/PrimeTV/parameters.cpp > CMakeFiles/primetv.dir/parameters.cpp.i
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/parameters.cpp > CMakeFiles/primetv.dir/parameters.cpp.i
 
 CMakeFiles/primetv.dir/parameters.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/primetv.dir/parameters.cpp.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/jose/projects/PrimeTV/parameters.cpp -o CMakeFiles/primetv.dir/parameters.cpp.s
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/parameters.cpp -o CMakeFiles/primetv.dir/parameters.cpp.s
 
 CMakeFiles/primetv.dir/parameters.cpp.o.requires:
 .PHONY : CMakeFiles/primetv.dir/parameters.cpp.o.requires
@@ -168,17 +168,17 @@ CMakeFiles/primetv.dir/parameters.cpp.o.provides.build: CMakeFiles/primetv.dir/p
 
 CMakeFiles/primetv.dir/phyltr.cpp.o: CMakeFiles/primetv.dir/flags.make
 CMakeFiles/primetv.dir/phyltr.cpp.o: ../phyltr.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/jose/projects/PrimeTV/build/CMakeFiles $(CMAKE_PROGRESS_6)
+	$(CMAKE_COMMAND) -E cmake_progress_report /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles $(CMAKE_PROGRESS_6)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/primetv.dir/phyltr.cpp.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/primetv.dir/phyltr.cpp.o -c /home/jose/projects/PrimeTV/phyltr.cpp
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/primetv.dir/phyltr.cpp.o -c /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/phyltr.cpp
 
 CMakeFiles/primetv.dir/phyltr.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/primetv.dir/phyltr.cpp.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/jose/projects/PrimeTV/phyltr.cpp > CMakeFiles/primetv.dir/phyltr.cpp.i
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/phyltr.cpp > CMakeFiles/primetv.dir/phyltr.cpp.i
 
 CMakeFiles/primetv.dir/phyltr.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/primetv.dir/phyltr.cpp.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/jose/projects/PrimeTV/phyltr.cpp -o CMakeFiles/primetv.dir/phyltr.cpp.s
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/phyltr.cpp -o CMakeFiles/primetv.dir/phyltr.cpp.s
 
 CMakeFiles/primetv.dir/phyltr.cpp.o.requires:
 .PHONY : CMakeFiles/primetv.dir/phyltr.cpp.o.requires
@@ -192,17 +192,17 @@ CMakeFiles/primetv.dir/phyltr.cpp.o.provides.build: CMakeFiles/primetv.dir/phylt
 
 CMakeFiles/primetv.dir/Color.cpp.o: CMakeFiles/primetv.dir/flags.make
 CMakeFiles/primetv.dir/Color.cpp.o: ../Color.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/jose/projects/PrimeTV/build/CMakeFiles $(CMAKE_PROGRESS_7)
+	$(CMAKE_COMMAND) -E cmake_progress_report /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles $(CMAKE_PROGRESS_7)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/primetv.dir/Color.cpp.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/primetv.dir/Color.cpp.o -c /home/jose/projects/PrimeTV/Color.cpp
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/primetv.dir/Color.cpp.o -c /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/Color.cpp
 
 CMakeFiles/primetv.dir/Color.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/primetv.dir/Color.cpp.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/jose/projects/PrimeTV/Color.cpp > CMakeFiles/primetv.dir/Color.cpp.i
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/Color.cpp > CMakeFiles/primetv.dir/Color.cpp.i
 
 CMakeFiles/primetv.dir/Color.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/primetv.dir/Color.cpp.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/jose/projects/PrimeTV/Color.cpp -o CMakeFiles/primetv.dir/Color.cpp.s
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/Color.cpp -o CMakeFiles/primetv.dir/Color.cpp.s
 
 CMakeFiles/primetv.dir/Color.cpp.o.requires:
 .PHONY : CMakeFiles/primetv.dir/Color.cpp.o.requires
@@ -216,17 +216,17 @@ CMakeFiles/primetv.dir/Color.cpp.o.provides.build: CMakeFiles/primetv.dir/Color.
 
 CMakeFiles/primetv.dir/Colours.cpp.o: CMakeFiles/primetv.dir/flags.make
 CMakeFiles/primetv.dir/Colours.cpp.o: ../Colours.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/jose/projects/PrimeTV/build/CMakeFiles $(CMAKE_PROGRESS_8)
+	$(CMAKE_COMMAND) -E cmake_progress_report /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles $(CMAKE_PROGRESS_8)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/primetv.dir/Colours.cpp.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/primetv.dir/Colours.cpp.o -c /home/jose/projects/PrimeTV/Colours.cpp
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/primetv.dir/Colours.cpp.o -c /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/Colours.cpp
 
 CMakeFiles/primetv.dir/Colours.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/primetv.dir/Colours.cpp.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/jose/projects/PrimeTV/Colours.cpp > CMakeFiles/primetv.dir/Colours.cpp.i
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/Colours.cpp > CMakeFiles/primetv.dir/Colours.cpp.i
 
 CMakeFiles/primetv.dir/Colours.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/primetv.dir/Colours.cpp.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/jose/projects/PrimeTV/Colours.cpp -o CMakeFiles/primetv.dir/Colours.cpp.s
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/Colours.cpp -o CMakeFiles/primetv.dir/Colours.cpp.s
 
 CMakeFiles/primetv.dir/Colours.cpp.o.requires:
 .PHONY : CMakeFiles/primetv.dir/Colours.cpp.o.requires
@@ -240,17 +240,17 @@ CMakeFiles/primetv.dir/Colours.cpp.o.provides.build: CMakeFiles/primetv.dir/Colo
 
 CMakeFiles/primetv.dir/Coord.cc.o: CMakeFiles/primetv.dir/flags.make
 CMakeFiles/primetv.dir/Coord.cc.o: ../Coord.cc
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/jose/projects/PrimeTV/build/CMakeFiles $(CMAKE_PROGRESS_9)
+	$(CMAKE_COMMAND) -E cmake_progress_report /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles $(CMAKE_PROGRESS_9)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/primetv.dir/Coord.cc.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/primetv.dir/Coord.cc.o -c /home/jose/projects/PrimeTV/Coord.cc
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/primetv.dir/Coord.cc.o -c /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/Coord.cc
 
 CMakeFiles/primetv.dir/Coord.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/primetv.dir/Coord.cc.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/jose/projects/PrimeTV/Coord.cc > CMakeFiles/primetv.dir/Coord.cc.i
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/Coord.cc > CMakeFiles/primetv.dir/Coord.cc.i
 
 CMakeFiles/primetv.dir/Coord.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/primetv.dir/Coord.cc.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/jose/projects/PrimeTV/Coord.cc -o CMakeFiles/primetv.dir/Coord.cc.s
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/Coord.cc -o CMakeFiles/primetv.dir/Coord.cc.s
 
 CMakeFiles/primetv.dir/Coord.cc.o.requires:
 .PHONY : CMakeFiles/primetv.dir/Coord.cc.o.requires
@@ -264,17 +264,17 @@ CMakeFiles/primetv.dir/Coord.cc.o.provides.build: CMakeFiles/primetv.dir/Coord.c
 
 CMakeFiles/primetv.dir/primetv.cc.o: CMakeFiles/primetv.dir/flags.make
 CMakeFiles/primetv.dir/primetv.cc.o: ../primetv.cc
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/jose/projects/PrimeTV/build/CMakeFiles $(CMAKE_PROGRESS_10)
+	$(CMAKE_COMMAND) -E cmake_progress_report /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles $(CMAKE_PROGRESS_10)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/primetv.dir/primetv.cc.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/primetv.dir/primetv.cc.o -c /home/jose/projects/PrimeTV/primetv.cc
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/primetv.dir/primetv.cc.o -c /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/primetv.cc
 
 CMakeFiles/primetv.dir/primetv.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/primetv.dir/primetv.cc.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/jose/projects/PrimeTV/primetv.cc > CMakeFiles/primetv.dir/primetv.cc.i
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/primetv.cc > CMakeFiles/primetv.dir/primetv.cc.i
 
 CMakeFiles/primetv.dir/primetv.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/primetv.dir/primetv.cc.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/jose/projects/PrimeTV/primetv.cc -o CMakeFiles/primetv.dir/primetv.cc.s
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/primetv.cc -o CMakeFiles/primetv.dir/primetv.cc.s
 
 CMakeFiles/primetv.dir/primetv.cc.o.requires:
 .PHONY : CMakeFiles/primetv.dir/primetv.cc.o.requires
@@ -288,17 +288,17 @@ CMakeFiles/primetv.dir/primetv.cc.o.provides.build: CMakeFiles/primetv.dir/prime
 
 CMakeFiles/primetv.dir/DrawTree_time.cc.o: CMakeFiles/primetv.dir/flags.make
 CMakeFiles/primetv.dir/DrawTree_time.cc.o: ../DrawTree_time.cc
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/jose/projects/PrimeTV/build/CMakeFiles $(CMAKE_PROGRESS_11)
+	$(CMAKE_COMMAND) -E cmake_progress_report /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles $(CMAKE_PROGRESS_11)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/primetv.dir/DrawTree_time.cc.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/primetv.dir/DrawTree_time.cc.o -c /home/jose/projects/PrimeTV/DrawTree_time.cc
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/primetv.dir/DrawTree_time.cc.o -c /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/DrawTree_time.cc
 
 CMakeFiles/primetv.dir/DrawTree_time.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/primetv.dir/DrawTree_time.cc.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/jose/projects/PrimeTV/DrawTree_time.cc > CMakeFiles/primetv.dir/DrawTree_time.cc.i
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/DrawTree_time.cc > CMakeFiles/primetv.dir/DrawTree_time.cc.i
 
 CMakeFiles/primetv.dir/DrawTree_time.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/primetv.dir/DrawTree_time.cc.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/jose/projects/PrimeTV/DrawTree_time.cc -o CMakeFiles/primetv.dir/DrawTree_time.cc.s
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/DrawTree_time.cc -o CMakeFiles/primetv.dir/DrawTree_time.cc.s
 
 CMakeFiles/primetv.dir/DrawTree_time.cc.o.requires:
 .PHONY : CMakeFiles/primetv.dir/DrawTree_time.cc.o.requires
@@ -312,17 +312,17 @@ CMakeFiles/primetv.dir/DrawTree_time.cc.o.provides.build: CMakeFiles/primetv.dir
 
 CMakeFiles/primetv.dir/canvas.cpp.o: CMakeFiles/primetv.dir/flags.make
 CMakeFiles/primetv.dir/canvas.cpp.o: ../canvas.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/jose/projects/PrimeTV/build/CMakeFiles $(CMAKE_PROGRESS_12)
+	$(CMAKE_COMMAND) -E cmake_progress_report /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles $(CMAKE_PROGRESS_12)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/primetv.dir/canvas.cpp.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/primetv.dir/canvas.cpp.o -c /home/jose/projects/PrimeTV/canvas.cpp
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/primetv.dir/canvas.cpp.o -c /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/canvas.cpp
 
 CMakeFiles/primetv.dir/canvas.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/primetv.dir/canvas.cpp.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/jose/projects/PrimeTV/canvas.cpp > CMakeFiles/primetv.dir/canvas.cpp.i
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/canvas.cpp > CMakeFiles/primetv.dir/canvas.cpp.i
 
 CMakeFiles/primetv.dir/canvas.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/primetv.dir/canvas.cpp.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/jose/projects/PrimeTV/canvas.cpp -o CMakeFiles/primetv.dir/canvas.cpp.s
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/canvas.cpp -o CMakeFiles/primetv.dir/canvas.cpp.s
 
 CMakeFiles/primetv.dir/canvas.cpp.o.requires:
 .PHONY : CMakeFiles/primetv.dir/canvas.cpp.o.requires
@@ -336,17 +336,17 @@ CMakeFiles/primetv.dir/canvas.cpp.o.provides.build: CMakeFiles/primetv.dir/canva
 
 CMakeFiles/primetv.dir/moc_windows.cxx.o: CMakeFiles/primetv.dir/flags.make
 CMakeFiles/primetv.dir/moc_windows.cxx.o: moc_windows.cxx
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/jose/projects/PrimeTV/build/CMakeFiles $(CMAKE_PROGRESS_13)
+	$(CMAKE_COMMAND) -E cmake_progress_report /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles $(CMAKE_PROGRESS_13)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/primetv.dir/moc_windows.cxx.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/primetv.dir/moc_windows.cxx.o -c /home/jose/projects/PrimeTV/build/moc_windows.cxx
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/primetv.dir/moc_windows.cxx.o -c /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/moc_windows.cxx
 
 CMakeFiles/primetv.dir/moc_windows.cxx.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/primetv.dir/moc_windows.cxx.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/jose/projects/PrimeTV/build/moc_windows.cxx > CMakeFiles/primetv.dir/moc_windows.cxx.i
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/moc_windows.cxx > CMakeFiles/primetv.dir/moc_windows.cxx.i
 
 CMakeFiles/primetv.dir/moc_windows.cxx.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/primetv.dir/moc_windows.cxx.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/jose/projects/PrimeTV/build/moc_windows.cxx -o CMakeFiles/primetv.dir/moc_windows.cxx.s
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/moc_windows.cxx -o CMakeFiles/primetv.dir/moc_windows.cxx.s
 
 CMakeFiles/primetv.dir/moc_windows.cxx.o.requires:
 .PHONY : CMakeFiles/primetv.dir/moc_windows.cxx.o.requires
@@ -360,17 +360,17 @@ CMakeFiles/primetv.dir/moc_windows.cxx.o.provides.build: CMakeFiles/primetv.dir/
 
 CMakeFiles/primetv.dir/moc_canvas.cxx.o: CMakeFiles/primetv.dir/flags.make
 CMakeFiles/primetv.dir/moc_canvas.cxx.o: moc_canvas.cxx
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/jose/projects/PrimeTV/build/CMakeFiles $(CMAKE_PROGRESS_14)
+	$(CMAKE_COMMAND) -E cmake_progress_report /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles $(CMAKE_PROGRESS_14)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/primetv.dir/moc_canvas.cxx.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/primetv.dir/moc_canvas.cxx.o -c /home/jose/projects/PrimeTV/build/moc_canvas.cxx
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/primetv.dir/moc_canvas.cxx.o -c /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/moc_canvas.cxx
 
 CMakeFiles/primetv.dir/moc_canvas.cxx.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/primetv.dir/moc_canvas.cxx.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/jose/projects/PrimeTV/build/moc_canvas.cxx > CMakeFiles/primetv.dir/moc_canvas.cxx.i
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/moc_canvas.cxx > CMakeFiles/primetv.dir/moc_canvas.cxx.i
 
 CMakeFiles/primetv.dir/moc_canvas.cxx.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/primetv.dir/moc_canvas.cxx.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/jose/projects/PrimeTV/build/moc_canvas.cxx -o CMakeFiles/primetv.dir/moc_canvas.cxx.s
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/moc_canvas.cxx -o CMakeFiles/primetv.dir/moc_canvas.cxx.s
 
 CMakeFiles/primetv.dir/moc_canvas.cxx.o.requires:
 .PHONY : CMakeFiles/primetv.dir/moc_canvas.cxx.o.requires
@@ -384,17 +384,17 @@ CMakeFiles/primetv.dir/moc_canvas.cxx.o.provides.build: CMakeFiles/primetv.dir/m
 
 CMakeFiles/primetv.dir/qrc_application.cxx.o: CMakeFiles/primetv.dir/flags.make
 CMakeFiles/primetv.dir/qrc_application.cxx.o: qrc_application.cxx
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/jose/projects/PrimeTV/build/CMakeFiles $(CMAKE_PROGRESS_15)
+	$(CMAKE_COMMAND) -E cmake_progress_report /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles $(CMAKE_PROGRESS_15)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/primetv.dir/qrc_application.cxx.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/primetv.dir/qrc_application.cxx.o -c /home/jose/projects/PrimeTV/build/qrc_application.cxx
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/primetv.dir/qrc_application.cxx.o -c /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/qrc_application.cxx
 
 CMakeFiles/primetv.dir/qrc_application.cxx.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/primetv.dir/qrc_application.cxx.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/jose/projects/PrimeTV/build/qrc_application.cxx > CMakeFiles/primetv.dir/qrc_application.cxx.i
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/qrc_application.cxx > CMakeFiles/primetv.dir/qrc_application.cxx.i
 
 CMakeFiles/primetv.dir/qrc_application.cxx.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/primetv.dir/qrc_application.cxx.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/jose/projects/PrimeTV/build/qrc_application.cxx -o CMakeFiles/primetv.dir/qrc_application.cxx.s
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/qrc_application.cxx -o CMakeFiles/primetv.dir/qrc_application.cxx.s
 
 CMakeFiles/primetv.dir/qrc_application.cxx.o.requires:
 .PHONY : CMakeFiles/primetv.dir/qrc_application.cxx.o.requires
@@ -407,24 +407,24 @@ CMakeFiles/primetv.dir/qrc_application.cxx.o.provides.build: CMakeFiles/primetv.
 .PHONY : CMakeFiles/primetv.dir/qrc_application.cxx.o.provides.build
 
 moc_windows.cxx: ../windows.h
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/jose/projects/PrimeTV/build/CMakeFiles $(CMAKE_PROGRESS_16)
+	$(CMAKE_COMMAND) -E cmake_progress_report /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles $(CMAKE_PROGRESS_16)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold "Generating moc_windows.cxx"
-	/usr/bin/moc-qt4 -I/usr/include/qt4/QtXmlPatterns -I/usr/include/qt4/QtXml -I/usr/include/qt4/QtWebKit -I/usr/include/qt4/QtUiTools -I/usr/include/qt4/QtTest -I/usr/include/qt4/QtSvg -I/usr/include/qt4/QtSql -I/usr/include/qt4/QtScriptTools -I/usr/include/qt4/QtScript -I/usr/include/qt4/QtOpenGL -I/usr/include/qt4/QtNetwork -I/usr/include/qt4/QtHelp -I/usr/include/qt4/QtDesigner -I/usr/include/qt4/QtDeclarative -I/usr/include/qt4/QtDBus -I/usr/include/qt4/Qt3Support -I/usr/include/qt4/QtGui -I/usr/include/qt4/QtCore -I/usr/share/qt4/mkspecs/default -I/usr/include/qt4 -I/home/jose/projects/PrimeTV/build -I/usr/local/include -I/usr/include/libxml2 -I/usr/include/cairo -I/usr/include -DQT_DLL -DQT_THREAD_SUPPORT -o /home/jose/projects/PrimeTV/build/moc_windows.cxx /home/jose/projects/PrimeTV/windows.h
+	/usr/bin/moc-qt4 -I/usr/include/qt4/QtDesigner -I/usr/include/qt4/QtDeclarative -I/usr/include/qt4/QtScriptTools -I/usr/include/qt4/QtDBus -I/usr/include/qt4/QtXml -I/usr/include/qt4/QtSql -I/usr/include/qt4/QtOpenGL -I/usr/include/qt4/QtNetwork -I/usr/include/qt4/QtXmlPatterns -I/usr/include/qt4/QtWebKit -I/usr/include/qt4/QtHelp -I/usr/include/qt4/QtUiTools -I/usr/include/qt4/QtTest -I/usr/include/qt4/QtScript -I/usr/include/qt4/QtSvg -I/usr/include/qt4/Qt3Support -I/usr/include/qt4/QtGui -I/usr/share/qt4/mkspecs/default -I/usr/include/qt4 -I/usr/include/qt4/QtCore -I/afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build -I/usr/include -I/usr/include/cairo -DQT_DLL -DQT_THREAD_SUPPORT -o /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/moc_windows.cxx /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/windows.h
 
 moc_canvas.cxx: ../canvas.h
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/jose/projects/PrimeTV/build/CMakeFiles $(CMAKE_PROGRESS_17)
+	$(CMAKE_COMMAND) -E cmake_progress_report /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles $(CMAKE_PROGRESS_17)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold "Generating moc_canvas.cxx"
-	/usr/bin/moc-qt4 -I/usr/include/qt4/QtXmlPatterns -I/usr/include/qt4/QtXml -I/usr/include/qt4/QtWebKit -I/usr/include/qt4/QtUiTools -I/usr/include/qt4/QtTest -I/usr/include/qt4/QtSvg -I/usr/include/qt4/QtSql -I/usr/include/qt4/QtScriptTools -I/usr/include/qt4/QtScript -I/usr/include/qt4/QtOpenGL -I/usr/include/qt4/QtNetwork -I/usr/include/qt4/QtHelp -I/usr/include/qt4/QtDesigner -I/usr/include/qt4/QtDeclarative -I/usr/include/qt4/QtDBus -I/usr/include/qt4/Qt3Support -I/usr/include/qt4/QtGui -I/usr/include/qt4/QtCore -I/usr/share/qt4/mkspecs/default -I/usr/include/qt4 -I/home/jose/projects/PrimeTV/build -I/usr/local/include -I/usr/include/libxml2 -I/usr/include/cairo -I/usr/include -DQT_DLL -DQT_THREAD_SUPPORT -o /home/jose/projects/PrimeTV/build/moc_canvas.cxx /home/jose/projects/PrimeTV/canvas.h
+	/usr/bin/moc-qt4 -I/usr/include/qt4/QtDesigner -I/usr/include/qt4/QtDeclarative -I/usr/include/qt4/QtScriptTools -I/usr/include/qt4/QtDBus -I/usr/include/qt4/QtXml -I/usr/include/qt4/QtSql -I/usr/include/qt4/QtOpenGL -I/usr/include/qt4/QtNetwork -I/usr/include/qt4/QtXmlPatterns -I/usr/include/qt4/QtWebKit -I/usr/include/qt4/QtHelp -I/usr/include/qt4/QtUiTools -I/usr/include/qt4/QtTest -I/usr/include/qt4/QtScript -I/usr/include/qt4/QtSvg -I/usr/include/qt4/Qt3Support -I/usr/include/qt4/QtGui -I/usr/share/qt4/mkspecs/default -I/usr/include/qt4 -I/usr/include/qt4/QtCore -I/afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build -I/usr/include -I/usr/include/cairo -DQT_DLL -DQT_THREAD_SUPPORT -o /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/moc_canvas.cxx /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/canvas.h
 
 ui_primetv.h: ../primetv.ui
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/jose/projects/PrimeTV/build/CMakeFiles $(CMAKE_PROGRESS_18)
+	$(CMAKE_COMMAND) -E cmake_progress_report /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles $(CMAKE_PROGRESS_18)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold "Generating ui_primetv.h"
-	/usr/bin/uic-qt4 -o /home/jose/projects/PrimeTV/build/ui_primetv.h /home/jose/projects/PrimeTV/primetv.ui
+	/usr/bin/uic-qt4 -o /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/ui_primetv.h /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/primetv.ui
 
 ui_parameters.h: ../parameters.ui
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/jose/projects/PrimeTV/build/CMakeFiles $(CMAKE_PROGRESS_19)
+	$(CMAKE_COMMAND) -E cmake_progress_report /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles $(CMAKE_PROGRESS_19)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold "Generating ui_parameters.h"
-	/usr/bin/uic-qt4 -o /home/jose/projects/PrimeTV/build/ui_parameters.h /home/jose/projects/PrimeTV/parameters.ui
+	/usr/bin/uic-qt4 -o /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/ui_parameters.h /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/parameters.ui
 
 qrc_application.cxx: ../images/Zoom-Out-icon.png
 qrc_application.cxx: ../images/Zoom-In-icon.png
@@ -440,9 +440,9 @@ qrc_application.cxx: ../images/Actions-format-indent-more-icon.png
 qrc_application.cxx: ../images/print-printer-icone-7769-64.png
 qrc_application.cxx: ../images/select-by-color-icon.png
 qrc_application.cxx: ../application.qrc
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/jose/projects/PrimeTV/build/CMakeFiles $(CMAKE_PROGRESS_20)
+	$(CMAKE_COMMAND) -E cmake_progress_report /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles $(CMAKE_PROGRESS_20)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold "Generating qrc_application.cxx"
-	/usr/bin/rcc -name application -o /home/jose/projects/PrimeTV/build/qrc_application.cxx /home/jose/projects/PrimeTV/application.qrc
+	/usr/bin/rcc -name application -o /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/qrc_application.cxx /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/application.qrc
 
 # Object files for target primetv
 primetv_OBJECTS = \
@@ -481,16 +481,15 @@ primetv: CMakeFiles/primetv.dir/moc_windows.cxx.o
 primetv: CMakeFiles/primetv.dir/moc_canvas.cxx.o
 primetv: CMakeFiles/primetv.dir/qrc_application.cxx.o
 primetv: libprime.a
-primetv: /usr/lib/i386-linux-gnu/libSM.so
-primetv: /usr/lib/i386-linux-gnu/libICE.so
-primetv: /usr/lib/i386-linux-gnu/libX11.so
-primetv: /usr/lib/i386-linux-gnu/libXext.so
+primetv: /usr/lib/x86_64-linux-gnu/libSM.so
+primetv: /usr/lib/x86_64-linux-gnu/libICE.so
+primetv: /usr/lib/x86_64-linux-gnu/libX11.so
+primetv: /usr/lib/x86_64-linux-gnu/libXext.so
 primetv: /usr/lib/libQtGui.so
 primetv: /usr/lib/libQtCore.so
 primetv: /usr/lib/libcairo.so
-primetv: /usr/local/lib/libboost_serialization.a
-primetv: /usr/local/lib/libboost_program_options.a
-primetv: /usr/lib/libxml2.so
+primetv: /usr/lib/libboost_serialization-mt.a
+primetv: /usr/lib/libboost_program_options-mt.a
 primetv: CMakeFiles/primetv.dir/build.make
 primetv: CMakeFiles/primetv.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --red --bold "Linking CXX executable primetv"
@@ -526,6 +525,6 @@ CMakeFiles/primetv.dir/depend: moc_canvas.cxx
 CMakeFiles/primetv.dir/depend: ui_primetv.h
 CMakeFiles/primetv.dir/depend: ui_parameters.h
 CMakeFiles/primetv.dir/depend: qrc_application.cxx
-	cd /home/jose/projects/PrimeTV/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/jose/projects/PrimeTV /home/jose/projects/PrimeTV /home/jose/projects/PrimeTV/build /home/jose/projects/PrimeTV/build /home/jose/projects/PrimeTV/build/CMakeFiles/primetv.dir/DependInfo.cmake --color=$(COLOR)
+	cd /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2 /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2 /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build /afs/nada.kth.se/home/theory/arve/Projects/PDC7/PrimeTV2/build/CMakeFiles/primetv.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/primetv.dir/depend
 

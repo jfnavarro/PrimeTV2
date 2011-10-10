@@ -45,10 +45,14 @@ public:
   //destructor
   ~Mainops();
   
-  /* calculate the Lateral transfer scenarios using parameters */
-  void lateralTransfer(string mapname);
-  /* calculate the lateral transfer scenarios not using parameters, therefore dynamic programming*/
-  void lateralTransferDP(string mapname);
+  /* calculate the Lateral transfer scenarios using parameters,
+   * return true if there is a valid scenario. 
+   */
+  bool lateralTransfer(string mapname);
+  /* calculate the lateral transfer scenarios not using parameters, therefore 
+   * dynamic programming. Return true if there is a valid scenario.
+   */
+  bool lateralTransferDP(string mapname);
   
   /* load the reconciled gene tree and obtatins its information */
   void OpenReconciled(const char* reconciled);
@@ -60,7 +64,7 @@ public:
   void reconcileTrees(const char* gene, const char* species, const char* mapfile);
   
   /* calculate the gamma map and the lambda map of the trees loaded */
-  void CalculateGanmma();
+  void CalculateGamma();
   
   /* calculates the cordinates of the tree */
   void calculateCordinates();

@@ -116,7 +116,7 @@ private:
     virtual void paintEvent(QPaintEvent* event);
     
     /* paint the current tree on the canvas */
-    void painTree();
+    void paintTree();
     
     /* function that create all the actions and events asigned to the buttons*/
     void createActions();
@@ -132,6 +132,7 @@ private:
     QScrollArea *scrollArea;  //scroll area widget to implement the scrolling
     QWidget *params; //parameters panel
     Canvas *widget; //canvas where the tree will be painted
+    QString lastVisitedDir;
     Mainops *ops; // main operations
     Parameters *parameters;
     const char* reconciledtree;
