@@ -1,5 +1,5 @@
 [Buildset]
-BuildItems=@Variant(\x00\x00\x00\t\x00\x00\x00\x00\x01\x00\x00\x00\x0b\x00\x00\x00\x00\x01\x00\x00\x00\x0e\x00P\x00r\x00i\x00m\x00e\x00T\x00V)
+BuildItems=@Variant(\x00\x00\x00\t\x00\x00\x00\x00\x00)
 
 [CMake]
 BuildDirs=/home/jose/projects/PrimeTV/build
@@ -40,6 +40,10 @@ Working Directory=file:///home/jose/workspace/ReconciledPDF/src
 isExecutable=true
 
 [MakeBuilder]
+Default Make Environment Profile=0
 Install As Root=true
 Number Of Jobs=1
-Su Command=1
+Su Command=2
+
+[Project]
+VersionControlSupport=kdevgit

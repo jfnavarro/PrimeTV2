@@ -40,6 +40,7 @@ public:
   
   string species_font;
   string gene_font;
+  string all_font;
   bool ids_on_inner_nodes;
   bool do_not_draw_species_tree;
   bool do_not_draw_guest_tree;
@@ -48,6 +49,9 @@ public:
   float xoffset;
   float yoffset;
   float ufontsize;
+  float species_font_size;
+  float gene_font_size;
+  float all_font_size;
   int markerscale;
   bool isMarkerColor;
   bool header;
@@ -90,6 +94,7 @@ public:
   double maxLeafNameSize;
   Color speciesFontColor;
   Color geneFontColor;
+  Color allFontColor;
 };
 
 

@@ -312,7 +312,11 @@ void MainWindow::update()
     parameters->fontscale = doubleSpinBoxTextScale->value();
     parameters->width = spinBoxHorizontalSize->value();
     parameters->height = spinBoxVerticalSize->value();
-
+    
+    parameters->fontsize = spinBoxAllFontSize->value();
+    parameters->gene_font_size = spinBoxGeneFontSize->value();
+    parameters->species_font_size = spinBoxSpeciesFontSize->value();
+    
     if (parameters->horiz)
         widget->resize(parameters->height,parameters->width);
     else
@@ -345,6 +349,7 @@ void MainWindow::update()
     }
     parameters->species_font = QFontInfo(fontComboBoxSpecies->currentFont()).family().toUtf8().constData();
     parameters->gene_font = QFontInfo(fontComboBoxGene->currentFont()).family().toUtf8().constData();
+    parameters->all_font = QFontInfo(fontComboBoxAll->currentFont()).family().toUtf8().constData();
 
     if (radioButtonColor1->isChecked())
         parameters->colorConfig->setColors("1");
@@ -384,6 +389,7 @@ void MainWindow::loadParameters(Parameters *parameters)
 {
     fontComboBoxGene->setCurrentFont(QFont(QString::fromStdString(parameters->gene_font)));
     fontComboBoxSpecies->setCurrentFont(QFont(QString::fromStdString(parameters->species_font)));
+    fontComboBoxAll->setCurrentFont(QFont(QString::fromStdString(parameters->all_font)));
     doubleSpinBoxTextScale->setValue(parameters->fontscale);
     checkBoxMarkers->setChecked(parameters->markers);
 
@@ -429,6 +435,12 @@ void MainWindow::loadParameters(Parameters *parameters)
     spinBoxDupliCost->setValue(parameters->lateralduplicost);
     spinBoxSpeCost->setValue(parameters->lateraltrancost);
     spinBoxMinCost->setValue(parameters->lateralmincost);
+    
+    
+    spinBoxAllFontSize->setValue(parameters->fontsize);
+    spinBoxGeneFontSize->setValue(parameters->gene_font_size);
+    spinBoxSpeciesFontSize->setValue(parameters->species_font_size);
+    
     if (parameters->horiz)
         widget->resize(parameters->height,parameters->width);
     else
@@ -472,13 +484,13 @@ void MainWindow::save()
         {
             suffix = "pdf";
             parameters->format = suffix;
-            string fileRelname = fileinfo.baseName().toUtf8().constData();
+            string fileRelname = fileinfo.absoluteFilePath().toUtf8().constData();
             parameters->outfile = fileRelname;
-            status = widget->saveCanvasPDF(fileinfo.baseName() + "." + suffix);
+            status = widget->saveCanvasPDF(fileinfo.absoluteFilePath() + "." + suffix);
         }
         else
         {
-            status = widget->saveCanvas(fileinfo.baseName() + "." + suffix,suffix,QUALITY);
+            status = widget->saveCanvas(fileinfo.absoluteFilePath() + "." + suffix,suffix,QUALITY);
         }
 
         if (status)
@@ -638,6 +650,12 @@ void MainWindow::loadFontColor()
         parameters->speciesFontColor.red = color.redF();
         parameters->speciesFontColor.green = color.greenF();
     }
+    else if (QObject::sender() == allColor)
+    {
+        parameters->allFontColor.blue = color.blueF();
+        parameters->allFontColor.red = color.redF();
+        parameters->allFontColor.green = color.greenF();
+    }
     else
     {
         parameters->geneFontColor.blue = color.blueF();
@@ -663,6 +681,10 @@ void MainWindow::loadConfigFile()
 	    
             parameters->gene_font = config->read<string>((string)"genefont",(string)"Times");
             parameters->species_font = config->read<string>((string)"speciefont",(string)"Times");
+	    parameters->all_font = config->read<string>((string)"allfont",(string)"Times");
+	    parameters->fontsize = config->read<float>((string)"fontsize",(float)10.0);
+	    parameters->gene_font_size = config->read<float>((string)"genefontsize",(float)10.0);
+	    parameters->species_font_size = config->read<float>((string)"speciesfontsize",(float)10.0);
             parameters->fontscale = config->read<float>((string)"fontscale",(float)1);
             parameters->markers = config->read<bool>((string)"mark",false);
             parameters->ladd = config->read<char>((string)"ladderize",'n');
@@ -690,9 +712,12 @@ void MainWindow::loadConfigFile()
             parameters->speciesFontColor.blue = config->read<double>((string)"speciesfontcolorB",0.0);
             parameters->speciesFontColor.green = config->read<double>((string)"speciesfontcolorG",0.0);
             parameters->speciesFontColor.red = config->read<double>((string)"speciesfontcolorR",0.0);
-            parameters->geneFontColor.blue = config->read<double>((string)"speciesfontcolorB",0.0);
-            parameters->geneFontColor.green =  config->read<double>((string)"speciesfontcolorG",0.0);
-            parameters->geneFontColor.red = config->read<double>((string)"speciesfontcolorR",0.0);
+            parameters->geneFontColor.blue = config->read<double>((string)"genefontcolorB",0.0);
+            parameters->geneFontColor.green =  config->read<double>((string)"genefontcolorG",0.0);
+            parameters->geneFontColor.red = config->read<double>((string)"genefontcolorR",0.0);
+	    parameters->allFontColor.blue = config->read<double>((string)"allfontcolorB",0.0);
+            parameters->allFontColor.green =  config->read<double>((string)"allfontcolorG",0.0);
+            parameters->allFontColor.red = config->read<double>((string)"allfontcolorR",0.0);
 
             statusBar()->showMessage(tr("Configuration Loaded"));
 	    loadParameters(parameters);
@@ -731,6 +756,10 @@ void MainWindow::saveConfigFile()
 	    //            out << "reconcile" << " = " << parameters->isreconciled << endl;
             out << "genefont" << " = " << parameters->gene_font << endl;
             out << "speciefont" << " = " << parameters->species_font << endl;
+	    out << "allfont" << " = " << parameters->all_font << endl;
+	    out << "fontsize" << " = " << parameters->fontsize << endl;
+	    out << "genefontsize" << " = " << parameters->gene_font_size << endl;
+	    out << "speciesfontsize" << " = " << parameters->species_font_size << endl;
             out << "fontscale" << " = " << parameters->fontscale << endl;
             out << "mark" << " = " << parameters->markers << endl;
             out << "ladderize" << " = " << parameters->ladd << endl;
@@ -758,6 +787,9 @@ void MainWindow::saveConfigFile()
             out << "genefontcolorB" << " = " << parameters->geneFontColor.blue << endl;
             out << "genefontcolorG " << " = " << parameters->geneFontColor.green << endl;
             out << "genefontcolorR " << " = " << parameters->geneFontColor.red << endl;
+	    out << "allfontcolorB" << " = " << parameters->geneFontColor.blue << endl;
+            out << "allfontcolorG " << " = " << parameters->geneFontColor.green << endl;
+            out << "allfontcolorR " << " = " << parameters->geneFontColor.red << endl;
 
             out.close();
             statusBar()->showMessage(tr("Configuration saved"));
@@ -804,6 +836,7 @@ void MainWindow::createActions()
     connect(doubleSpinBoxTextScale, SIGNAL(valueChanged(double)), this, SLOT(update()));
     connect(fontComboBoxGene, SIGNAL(currentFontChanged(QFont)), this, SLOT(update()));
     connect(fontComboBoxSpecies, SIGNAL(currentFontChanged(QFont)), this, SLOT(update()));
+    connect(fontComboBoxAll, SIGNAL(currentFontChanged(QFont)), this, SLOT(update()));
     connect(lineEditHeaderText, SIGNAL(textEdited(QString)), this, SLOT(update()));
     connect(pushButtonMoveDown, SIGNAL(clicked()), this, SLOT(update()));
     connect(pushButtonMoveLeft, SIGNAL(clicked()), this, SLOT(update()));
@@ -821,8 +854,12 @@ void MainWindow::createActions()
     connect(spinBoxMinCost, SIGNAL(valueChanged(int)), this, SLOT(update()));
     connect(spinBoxSpeCost, SIGNAL(valueChanged(int)), this, SLOT(update()));
     connect(spinBoxVerticalSize, SIGNAL(valueChanged(int)), this, SLOT(update()));
+    connect(spinBoxSpeciesFontSize, SIGNAL(valueChanged(int)), this, SLOT(update()));
+    connect(spinBoxGeneFontSize, SIGNAL(valueChanged(int)), this, SLOT(update()));
+    connect(spinBoxAllFontSize, SIGNAL(valueChanged(int)), this, SLOT(update()));
     connect(speciesColor, SIGNAL(clicked(bool)), this, SLOT(loadFontColor()));
     connect(geneColor, SIGNAL(clicked(bool)), this, SLOT(loadFontColor()));
+    connect(allColor, SIGNAL(clicked(bool)), this, SLOT(loadFontColor()));
     connect(actionLoad_configuration, SIGNAL(triggered(bool)), this, SLOT(loadConfigFile()));
     connect(actionSave_configuration, SIGNAL(triggered(bool)), this, SLOT(saveConfigFile()));
 }

@@ -136,8 +136,16 @@ try
      "<string> use this font for guest tree labels (def. Times)")
     ("host-font,q", po::value<string>(&parameters->species_font)->default_value("Times"), 
      "<string> use this font for host node labels (def. Times)")
+    ("all-font,A", po::value<string>(&parameters->all_font)->default_value("Times"), 
+     "<string> use this font for the rest of text labels (def. Times)")
     ("fontscale,s", po::value<float>(&parameters->fontscale)->default_value(1.0), 
      "<float> scale fonts by this number")
+    ("genefontsize,G", po::value<float>(&parameters->gene_font_size)->default_value(10.0), 
+     "<float> Size of font for gene nodes (def. 10.0)")
+    ("speciesfontsize,Z", po::value<float>(&parameters->species_font_size)->default_value(10.0), 
+     "<float> Size of font for species nodes (def. 10.0)")
+    ("allfontsize,W", po::value<float>(&parameters->fontsize)->default_value(10.0), 
+     "<float> Size of font for the rest of the labels (def. 10.0)")
     ("imagescale,S", po::value<float>(&parameters->imagescale)->default_value(1.0), 
      "<float> scale image by this number")
     ("move,D", po::value<std::vector<float> >()->multitoken(), 

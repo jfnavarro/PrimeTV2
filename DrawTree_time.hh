@@ -208,6 +208,8 @@ class DrawTree_time {
     double pagewidth;
     double pageheight;
     double fontsize;
+    double genefontsize;
+    double speciesfontsize;
     double linewidth;
     double s_contour_width;
     Colours *config;

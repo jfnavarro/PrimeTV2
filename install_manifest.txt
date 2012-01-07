@@ -1,1 +1,2 @@
 /usr/local/bin/primetv
+/usr/share/primetv/header.png

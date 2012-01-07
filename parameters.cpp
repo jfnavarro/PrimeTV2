@@ -23,6 +23,7 @@ Parameters::Parameters()
 {
   species_font = "Times";
   gene_font = "Times";
+  all_font = "Times";
   ids_on_inner_nodes = false;
   do_not_draw_species_tree = false;
   do_not_draw_guest_tree = false;
@@ -41,9 +42,6 @@ Parameters::Parameters()
   lateralmaxcost = 10.0;
   lateralduplicost = 1.0;
   lateraltrancost = 1.0;
-//   transferedges = NULL;
-//   duplications = ;
-
   show_event_count = false;
   UI = false;
   scaleByTime = true;
@@ -58,6 +56,8 @@ Parameters::Parameters()
   ladd = 'n';  
   isreconciled = false;
   um_fontsize = 1.0;
+  species_font_size = 10.0;
+  gene_font_size = 10.0;
   ux_offset = 0.0;
   uy_offset = 0.0;
   width = 1200;
@@ -77,6 +77,9 @@ Parameters::Parameters()
   geneFontColor.blue = 0.0;
   geneFontColor.green = 0.0;
   geneFontColor.red = 0.0;
+  allFontColor.blue = 0.0;
+  allFontColor.green = 0.0;
+  allFontColor.red = 0.0;
 }
 
 Parameters& Parameters::operator=(const Parameters& p)
@@ -85,6 +88,7 @@ Parameters& Parameters::operator=(const Parameters& p)
       {
 	species_font = p.species_font;
 	gene_font = p.gene_font;
+	all_font = p.all_font;
 	ids_on_inner_nodes = p.ids_on_inner_nodes;
 	do_not_draw_species_tree = p.do_not_draw_species_tree;
 	do_not_draw_guest_tree = p.do_not_draw_guest_tree;
@@ -93,6 +97,8 @@ Parameters& Parameters::operator=(const Parameters& p)
 	xoffset = p.xoffset;
 	yoffset = p.yoffset;
 	ufontsize = p.ufontsize;
+	species_font_size = p.species_font_size;
+	gene_font_size = p.gene_font_size;
 	markerscale = p.markerscale;
 	isMarkerColor = p.isMarkerColor;
 	header = p.header;
@@ -133,6 +139,7 @@ Parameters& Parameters::operator=(const Parameters& p)
 	maxLeafNameSize = p.maxLeafNameSize;
 	speciesFontColor = p.speciesFontColor;
 	geneFontColor = p.geneFontColor;
+	allFontColor = p.allFontColor;
       }
     return *this;
 

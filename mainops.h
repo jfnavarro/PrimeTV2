@@ -86,7 +86,7 @@ private:
   /* check if there are scenarios with LGT in the set of scenarios given */
   bool thereAreLGT(std::vector<Scenario> scenarios);
   
-  /* the check whether there is a scenario valid on the vector of scenarios */
+  /* check whether there is a scenario valid on the vector of scenarios */
   bool getValidityLGT();
   
   TreeExtended *Guest;

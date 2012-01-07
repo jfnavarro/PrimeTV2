@@ -110,10 +110,14 @@ static const double pi = 3.141516;
     //font size and colour
     fontsize = parameters->fontsize;
     fontsize = fontsize * parameters->fontscale;
+    genefontsize = parameters->gene_font_size;
+    genefontsize = genefontsize * parameters->fontscale;
+    speciesfontsize = parameters->species_font_size;
+    speciesfontsize = speciesfontsize * parameters->fontscale;
     linewidth = parameters->linewidth;
     s_contour_width = parameters->s_contour_width;
     
-    cairo_select_font_face (cr, "Times", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_BOLD);
+    cairo_select_font_face (cr, parameters->all_font.c_str(), CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_BOLD);
     cairo_set_font_size (cr, fontsize);
     cairo_set_source_rgba (cr, 1, 1, 1,1);
     cairo_set_line_width (cr, linewidth);
@@ -138,7 +142,8 @@ static const double pi = 3.141516;
   
   void DrawTree_time::createHeader()
   { 
-    cairo_surface_t *image = cairo_image_surface_create_from_png("images/header.png");
+    //TODO make use of globals instead of absolute path
+    cairo_surface_t *image = cairo_image_surface_create_from_png("/usr/share/primetv/header.png");
     cairo_save(cr);
     cairo_set_source_surface(cr,image,pagewidth - cairo_image_surface_get_width(image),10);
     cairo_paint(cr);
@@ -209,9 +214,9 @@ static const double pi = 3.141516;
     cairo_save(cr);
     cairo_matrix_invert(&matrix);
     cairo_transform(cr,&matrix);
-    cairo_set_source_rgba(cr,0,0,0,1);
+    cairo_set_source_rgba(cr,parameters->allFontColor.red,parameters->allFontColor.green,parameters->allFontColor.blue,1);
     cairo_set_line_width(cr, 1);
-    cairo_select_font_face (cr, "Times", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_BOLD);
+    cairo_select_font_face (cr, parameters->all_font.c_str(), CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_BOLD);
     cairo_set_font_size (cr, fontsize);
 
     const char *str = parameters->titleText.c_str();
@@ -221,16 +226,15 @@ static const double pi = 3.141516;
     cairo_restore(cr);
   }
   
-void DrawTree_time::writeEventCosts()
+ void DrawTree_time::writeEventCosts()
   { 
     cairo_save(cr);
     cairo_matrix_invert(&matrix);
     cairo_transform(cr,&matrix);
-    cairo_set_source_rgba(cr,0,0,0,1);
+    cairo_set_source_rgba(cr,parameters->allFontColor.red,parameters->allFontColor.green,parameters->allFontColor.blue,1);
     cairo_set_line_width(cr, 1);
-    cairo_select_font_face (cr, "Times", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_BOLD);
+    cairo_select_font_face (cr, parameters->all_font.c_str(), CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_BOLD);
     cairo_set_font_size (cr, fontsize);
-
 
     ostringstream oss;
     if (parameters->lattransfer) {
@@ -260,9 +264,9 @@ void DrawTree_time::writeEventCosts()
     cairo_transform(cr,&matrix);
     cairo_set_font_size (cr, 10);
     
-    cairo_set_source_rgba(cr,0,0,0,1);
+    cairo_set_source_rgba(cr,parameters->allFontColor.red,parameters->allFontColor.green,parameters->allFontColor.blue,1);
     cairo_set_line_width(cr, 1);
-    cairo_select_font_face (cr, "Times", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_BOLD);
+    cairo_select_font_face (cr, parameters->all_font.c_str(), CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_BOLD);
     cairo_set_font_size (cr, fontsize);
     cairo_move_to (cr, x, y);
     cairo_rel_line_to (cr, width, 0);
@@ -279,7 +283,7 @@ void DrawTree_time::writeEventCosts()
     cairo_set_line_width(cr, 10);
     cairo_line_to(cr,x+15,y+20);
     cairo_stroke(cr);
-    cairo_set_source_rgba(cr,0,0,0,1);
+    cairo_set_source_rgba(cr,parameters->allFontColor.red,parameters->allFontColor.green,parameters->allFontColor.blue,1);
     cairo_set_line_width(cr, 1);
     cairo_move_to(cr,x+30,y+25);
     cairo_show_text(cr,"Gene Tree Color");
@@ -290,7 +294,7 @@ void DrawTree_time::writeEventCosts()
     cairo_set_line_width(cr, 10);
     cairo_line_to(cr,x+15,y+30);
     cairo_stroke(cr);
-    cairo_set_source_rgba(cr,0,0,0,1);
+    cairo_set_source_rgba(cr,parameters->allFontColor.red,parameters->allFontColor.green,parameters->allFontColor.blue,1);
     cairo_set_line_width(cr, 1);
     cairo_move_to(cr,x+30,y+35);
     cairo_show_text(cr,"Species Edge Color");
@@ -301,7 +305,7 @@ void DrawTree_time::writeEventCosts()
     cairo_set_line_width(cr, 10);
     cairo_line_to(cr,x+15,y+40);
     cairo_stroke(cr);
-    cairo_set_source_rgba(cr,0,0,0,1);
+    cairo_set_source_rgba(cr,parameters->allFontColor.red,parameters->allFontColor.green,parameters->allFontColor.blue,1);
     cairo_set_line_width(cr, 1);
     cairo_move_to(cr,x+30,y+45);
     cairo_show_text(cr,"Node Contour Color");
@@ -311,7 +315,7 @@ void DrawTree_time::writeEventCosts()
     cairo_set_line_width(cr, 10);
     cairo_line_to(cr,x+15,y+50);
     cairo_stroke(cr);
-    cairo_set_source_rgba(cr,0,0,0,1);
+    cairo_set_source_rgba(cr,parameters->allFontColor.red,parameters->allFontColor.green,parameters->allFontColor.blue,1);
     cairo_set_line_width(cr, 1);
     cairo_move_to(cr,x+30,y+55);
     cairo_show_text(cr,"Marker Color");
@@ -320,7 +324,7 @@ void DrawTree_time::writeEventCosts()
     cairo_set_line_width(cr, 10);
     cairo_line_to(cr,x+15,y+60);
     cairo_stroke(cr);
-    cairo_set_source_rgba(cr,0,0,0,1);
+    cairo_set_source_rgba(cr,parameters->allFontColor.red,parameters->allFontColor.green,parameters->allFontColor.blue,1);
     cairo_set_line_width(cr, 1);
     cairo_move_to(cr,x+30,y+65);
     cairo_show_text(cr,"Time and Axes Color");
@@ -333,7 +337,7 @@ void DrawTree_time::writeEventCosts()
     cairo_stroke(cr);
     cairo_set_line_width(cr, 1);
     cairo_move_to(cr,x+30,y+75);
-    cairo_set_source_rgba(cr,0,0,0,1);
+    cairo_set_source_rgba(cr,parameters->allFontColor.red,parameters->allFontColor.green,parameters->allFontColor.blue,1);
     cairo_show_text(cr,"Species Font Color");
     cairo_stroke(cr);
     
@@ -346,7 +350,7 @@ void DrawTree_time::writeEventCosts()
     cairo_stroke(cr);
     cairo_set_line_width(cr, 1);
     cairo_move_to(cr,x+30,y+85);
-    cairo_set_source_rgba(cr,0,0,0,1);
+    cairo_set_source_rgba(cr,parameters->allFontColor.red,parameters->allFontColor.green,parameters->allFontColor.blue,1);
     cairo_show_text(cr,"Gene Font Color");
     cairo_restore(cr);
   }
@@ -361,7 +365,7 @@ void DrawTree_time::writeEventCosts()
 	cairo_set_source_rgba(cr,config->umColor.red,config->umColor.green,config->umColor.blue,0.80);
 	
     cairo_select_font_face (cr, parameters->gene_font.c_str(), CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_BOLD);
-    cairo_set_font_size(cr,parameters->um_fontsize * parameters->fontscale);
+    cairo_set_font_size(cr,fontsize);
     cairo_text_extents (cr, "i", &extents);
     double offset = extents.width/2;
     
@@ -396,7 +400,7 @@ void DrawTree_time::writeEventCosts()
      cairo_set_line_width (cr, linewidth);
      double midnode = leafWidth;
      cairo_set_font_size (cr, fontsize);
-     cairo_set_source_rgba (cr, 0, 0, 0, 1);
+     cairo_set_source_rgba (cr,parameters->allFontColor.red,parameters->allFontColor.green,parameters->allFontColor.blue, 1);
      cairo_move_to(cr, 0,pageheight);  
      cairo_line_to(cr, pagewidth,pageheight);
      cairo_line_to(cr,pagewidth,0);
@@ -468,21 +472,21 @@ void DrawTree_time::writeEventCosts()
      }
    }
 
-// Find the intersection of lines (p1, p2) and (p3, p4), 
-// put result in p5.
-// Notation nicked from http://en.wikipedia.org/wiki/Line-line_intersection.
-void DrawTree_time::intersection(double x1, double y1,
-				 double x2, double y2,
-				 double x3, double y3,
-				 double x4, double y4,
-				 double &x5, double &y5)
-{
-  x5 = ((x1*y2-y1*x2)*(x3-x4) - (x1-x2)*(x3*y4 - y3*x4)) 
-    / ((x1-x2)*(y3-y4) - (y1-y2)*(x3-x4));
-  y5 = ((x1*y2-y1*x2)*(y3-y4) - (y1-y2)*(x3*y4 - y3*x4)) 
-    / ((x1-x2)*(y3-y4) - (y1-y2)*(x3-x4));
+ // Find the intersection of lines (p1, p2) and (p3, p4), 
+ // put result in p5.
+ // Notation nicked from http://en.wikipedia.org/wiki/Line-line_intersection.
+ void DrawTree_time::intersection(double x1, double y1,
+ 				 double x2, double y2,
+ 				 double x3, double y3,
+ 				 double x4, double y4,
+ 				 double &x5, double &y5)
+ {
+   x5 = ((x1*y2-y1*x2)*(x3-x4) - (x1-x2)*(x3*y4 - y3*x4)) 
+     / ((x1-x2)*(y3-y4) - (y1-y2)*(x3-x4));
+   y5 = ((x1*y2-y1*x2)*(y3-y4) - (y1-y2)*(x3*y4 - y3*x4)) 
+     / ((x1-x2)*(y3-y4) - (y1-y2)*(x3-x4));
 
-}
+ }
 
    
    void DrawTree_time::DrawTimeLabels()
@@ -553,7 +557,7 @@ void DrawTree_time::intersection(double x1, double y1,
     cairo_select_font_face (cr, parameters->species_font.c_str(), CAIRO_FONT_SLANT_ITALIC, CAIRO_FONT_WEIGHT_BOLD);
     cairo_set_source_rgba (cr, parameters->speciesFontColor.red, 
 			   parameters->speciesFontColor.green, parameters->speciesFontColor.blue, 1);
-    cairo_set_font_size (cr, fontsize);
+    cairo_set_font_size (cr, speciesfontsize);
     
     for(unsigned int u = 0; u < species->getNumberOfNodes(); u++)
     {
@@ -699,7 +703,7 @@ void DrawTree_time::intersection(double x1, double y1,
       cairo_select_font_face (cr, parameters->gene_font.c_str(), CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_BOLD);
       cairo_set_source_rgba (cr, parameters->geneFontColor.red, 
 			   parameters->geneFontColor.green, parameters->geneFontColor.blue, 1);
-      cairo_set_font_size (cr, fontsize);
+      cairo_set_font_size (cr, genefontsize);
       
       for ( Node *n = gene->preorder_begin(); n != NULL; n = gene->preorder_next(n) )
       {

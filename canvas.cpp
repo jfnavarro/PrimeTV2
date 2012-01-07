@@ -98,22 +98,25 @@ bool Canvas::saveCanvas(const QString& fileName, const char* format, int quality
     
 }
 
-/*This function cretes the printer object to capture the filename
- * and then print the Cairo Canvas on the pdf page that willl
+/*This function creates the printer object to capture the filename
+ * and then print the Cairo Canvas on the pdf page that will
  * have the same size
  */
 bool Canvas::saveCanvasPDF(const QString& fileName)
-{
+{   
    QPrinter printer(QPrinter::ScreenResolution);
    printer.setOutputFileName(fileName);
    printer.setOutputFormat(QPrinter::PdfFormat);
    printer.setFullPage(true);
-   printer.setPaperSize(QSizeF(QSize(width(),height())),QPrinter::DevicePixel);
+   printer.setPageSize(QPrinter::A4);
+   //TODO this is just a hack, the resolution should be calculated according to the size of the canvas
+   //TODO another solution would be to scale the painter to the size of A4
+   printer.setResolution(150);
+   QPixmap pixmap = QPixmap::grabWidget(this);
    QPainter painter;
    painter.begin(&printer);
-   QPixmap pm = QPixmap::grabWidget(this);
-   painter.drawPixmap(0, 0, pm);
-   painter.end(); 
+   painter.drawPixmap(0, 0, pixmap);
+   painter.end();
    return true;
 }
 
@@ -121,21 +124,24 @@ bool Canvas::saveCanvasPDF(const QString& fileName)
 and then send the canvas to the printer to be printed out*/
 bool Canvas::print()
 {
-
-   QPrinter *printer = new QPrinter;
-   QPrintDialog *printDialog = new QPrintDialog(printer, this);
-   
-   if (printDialog->exec() == QDialog::Accepted) {
-       printer->setFullPage(true);
-       printer->setPaperSize(QSizeF(QSize(width(),height())),QPrinter::DevicePixel);
-       QPainter p(printer);
-       QPixmap pm = QPixmap::grabWidget(this);
-       p.drawPixmap(0, 0, pm);
-       return true;
-   }
-   else
-     return false;
-
+  QPrinter printer;
+  printer.setPageSize(QPrinter::A4);
+  //TODO this is just a hack, the resolution should be calculated according to the size of the canvas
+  //TODO another solution would be to scale the painter to the size of A4
+  printer.setResolution(150);
+  printer.setFullPage(true);
+  QPrintDialog print(&printer , this);
+  if(print.exec()== QPrintDialog::Accepted)
+  {
+      QPixmap pixmap = QPixmap::grabWidget(this);
+      QPainter painter;
+      painter.begin(&printer);
+      painter.drawPixmap(0, 0, pixmap);
+      painter.end();
+      return true;
+  }
+  else
+    return false;
 }
 
 
