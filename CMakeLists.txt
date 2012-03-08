@@ -67,12 +67,6 @@ endif(${QT4_FOUND})
 find_package(X11 REQUIRED)
 
 find_package(Cairo REQUIRED)
-if(CAIRO_FOUND)
-	MESSAGE(STATUS "Found Cairo")
-	set(Cairo "${CAIRO_LIBRARY_DIRS}/libcairo.so")
-else(CAIRO_FOUND)
-	message(FATAL_ERROR "Cairo not found")
-endif(CAIRO_FOUND)
 
 set(Boost_USE_STATIC_LIBS   TRUE)
 set(Boost_USE_MULTITHREADED TRUE)
@@ -158,7 +152,7 @@ add_library(prime STATIC ${PARSER_SOURCES} ${Libraries} ${Utils})
 
 add_executable(primetv windows.cpp edge.cpp layoutrees.cpp mainops.cpp parameters.cpp phyltr.cpp Color.cpp Colours.cpp Coord.cc primetv.cc DrawTree_time.cc windows.cpp canvas.cpp  ${Qt4_Headers_Moc} ${QT4_FORMS_HEADERS} ${Qt4_Resources_Rcc})
 
-target_link_libraries(primetv prime ${X11_LIBRARIES} ${QT_LIBRARIES} ${Cairo}  ${Boost_LIBRARIES}  m )
+target_link_libraries(primetv prime ${X11_LIBRARIES} ${QT_LIBRARIES} ${CAIRO_LIBRARIES}  ${Boost_LIBRARIES}  m )
 
 #TODO : take into consideration when using windows, make use of globals
 install(TARGETS primetv DESTINATION bin)
