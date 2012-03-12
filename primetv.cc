@@ -197,7 +197,7 @@ try
         
   if (!ifs && config_file != default_config_file)
   {
-      cout << "can not open config file: " << config_file << "\n";
+      std::cerr << "can not open config file: " << config_file << "\n";
   }
   else
   {
@@ -231,7 +231,7 @@ try
      
     if(size <= 1)
     {
-	cout << "No trees given" << "\n";
+	std::cerr << "No trees given" << "\n";
 	return 0;
     }
     
@@ -239,20 +239,20 @@ try
     {
       if(!file_exist(s.c_str()))
       {
-	cout << "One/s of the filename given don't exist" <<"\n";
+	std::cerr << "The file name given : " << s.c_str() << " does not exist " << std::endl;
 	return 0;
       }
     }
    
-    if(!parameters->isreconciled && size == 2)
+    if(!parameters->isreconciled && (size == 1 || size == 2))
     {
       reconciledtree = vm["input-file"].as< vector<string> >().at(0).c_str();
       
-      if (vm["input-file"].as< vector<string> >().size() == 1)
+      if (size == 1)
       {
 	parameters->do_not_draw_species_tree = true;
       }
-      else if (vm["input-file"].as< vector<string> >().size() == 2)
+      else 
       {
 	speciestree = vm["input-file"].as< vector<string> >().at(1).c_str();
       }
@@ -265,7 +265,7 @@ try
       
     }else
     {
-      cout << "Incorrect number of arguments" << "\n";
+      std::cerr << "Incorrect number of arguments" << std::endl;
       return 0;
     }
     

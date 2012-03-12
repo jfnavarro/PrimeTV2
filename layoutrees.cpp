@@ -611,7 +611,7 @@ void LayoutTrees::CountGeneCoordinates(Node* n)
    
    for(unsigned i = 0; i < species->getNumberOfNodes(); i++)
    {
-      Node *n = gene->getNode(i);
+      Node *n = species->getNode(i);
       if(n->isLeaf())
       {
 	size = max(size,(double)n->getName().size()); 
