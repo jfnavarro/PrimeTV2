@@ -146,11 +146,7 @@ private:
     cairo_t* cr_; //cairo object
     bool mapfileStatus;
     ConfigFile *config;
-    
-
-    
-
-    
+   
 };
 
 #endif // WINDOWS_H

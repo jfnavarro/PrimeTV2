@@ -1,7 +1,7 @@
 project(PrimeTV)
 cmake_minimum_required(VERSION 2.6)
 #enable_language(Fortran)
-enable_language(C)
+#enable_language(C)
 
 ###CPACK####################################################
 SET(CPACK_PACKAGE_VERSION_MAJOR "1")
@@ -191,21 +191,42 @@ endforeach(FILE)
 
 #set up tree parsers
 set(PARSER_SOURCES libraries/NHXnode.c libraries/NHXtree.c libraries/NHXannotation.c ${FLEX_MyScanner_OUTPUTS} ${BISON_MyParser_OUTPUTS}  )
-
+set(MAIN_SOURCES_APPLE edge.cpp layoutrees.cpp mainops.cpp parameters.cpp phyltr.cpp Color.cpp Colours.cpp Coord.cc primetv.cc DrawTree_time.cc)
+set(MAIN_SOURCES_UNIX windows.cpp edge.cpp layoutrees.cpp mainops.cpp parameters.cpp phyltr.cpp Color.cpp Colours.cpp 
+		  Coord.cc primetv.cc DrawTree_time.cc canvas.cpp  ${Qt4_Headers_Moc} ${QT4_FORMS_HEADERS} ${Qt4_Resources_Rcc})
+		  
 foreach(i ${PARSER_SOURCES})
  set_source_files_properties(${i} PROPERTIES LANGUAGE C)
 endforeach(i)
 
-add_library(prime STATIC ${PARSER_SOURCES} ${Libraries} ${Utils})
+foreach(i ${Libraries})
+ set_source_files_properties(${i} PROPERTIES LANGUAGE CXX)
+endforeach(i)
+
+if(APPLE)
+  foreach(i ${MAIN_SOURCES_APPLE})
+    set_source_files_properties(${i} PROPERTIES LANGUAGE CXX)
+  endforeach(i)
+else(APPLE)
+  foreach(i ${MAIN_SOURCES_UNIX})
+    set_source_files_properties(${i} PROPERTIES LANGUAGE CXX)
+  endforeach(i)
+endif(APPLE)
+
+add_library(prime STATIC ${PARSER_SOURCES} ${Libraries})
 
 if(NOT APPLE)
-  add_executable(primetv windows.cpp edge.cpp layoutrees.cpp mainops.cpp parameters.cpp phyltr.cpp Color.cpp Colours.cpp 
-		  Coord.cc primetv.cc DrawTree_time.cc canvas.cpp  ${Qt4_Headers_Moc} ${QT4_FORMS_HEADERS} ${Qt4_Resources_Rcc})
+  add_executable(primetv ${MAIN_SOURCES_UNIX})
   target_link_libraries(primetv prime ${X11_LIBRARIES} ${QT_LIBRARIES} ${CAIRO_LIBRARIES}  ${Boost_LIBRARIES}  m )
 else(NOT APPLE)
-  add_executable(primetv edge.cpp layoutrees.cpp mainops.cpp parameters.cpp phyltr.cpp Color.cpp Colours.cpp Coord.cc primetv.cc DrawTree_time.cc)
+  add_executable(primetv ${MAIN_SOURCES_APPLE})
   target_link_libraries(primetv prime ${CAIRO_LIBRARIES}  ${Boost_LIBRARIES}  m )
 endif(NOT APPLE)
+
+if(APPLE)
+  set_property(TARGET primetv PROPERTY LINK_SEARCH_END_STATIC ON)
+endif(APPLE)
+
 #TODO : take into consideration when using windows, make use of globals
 install(TARGETS primetv DESTINATION bin)
 install(FILES ${PROJECT_SOURCE_DIR}/images/header.png DESTINATION /usr/share/primetv PERMISSIONS OWNER_READ GROUP_READ WORLD_READ)

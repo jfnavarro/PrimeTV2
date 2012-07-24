@@ -4,7 +4,6 @@
 #include <map>
 #include <string>
 #include <vector>
-// #include "Beep.hh"
 #include "PerturbationObservable.hh"
 
 
@@ -18,8 +17,6 @@
 //! all rights reserved
 //----------------------------------------------------------------------
 const unsigned DEF_NODE_VEC_SIZE = 100;
-
-  using namespace std;
 
   // Forward declarations.
   class Node;
