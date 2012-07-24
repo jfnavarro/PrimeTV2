@@ -86,7 +86,6 @@ bool Mainops::lateralTransferDP(string mapname)
 	parameters->transferedges = transferedges;
 	sigma = late->g_input.sigma;
 	scenarios = late->scenarios;
-	late->printScenario(optscenario);
 	
 	return true;
       }
