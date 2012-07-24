@@ -28,6 +28,8 @@
 
 #include "libraries/AnError.hh"
 #include "libraries/Tree.hh"
+#include <boost/multi_array.hpp>
+#include <boost/static_assert.hpp>
 
 using namespace beep;
 
