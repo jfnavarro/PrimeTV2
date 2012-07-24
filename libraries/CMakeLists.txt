@@ -1,9 +1,5 @@
 set (FILES
     AnError.cc
-    NHXannotation.c
-    NHXnode.c
-    NHXparse.c
-    NHXtree.c
     Node.cc
     NodeMap.cc
     NodeNodeMap.cc
@@ -14,6 +10,5 @@ set (FILES
     treeextended.cpp
     TreeIO.cc
     TreeIOTraits.cc
-    y.tab.c
     configfile.cpp
   )
