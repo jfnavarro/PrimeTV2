@@ -8,9 +8,8 @@
 #include "SetOfNodes.hh"
 #include "Tree.hh"
 
-//namespace beep
-//{
-  
+using namespace std;
+
   //--------------------------------------------------------------
   //
   //! Simple vector template, on top of vector template, indexed by Nodes
@@ -22,6 +21,7 @@
   //! Author: Bengt Sennblad, SBC, © the MCMC-club, SBC, all rights reserved
   //
   //--------------------------------------------------------------
+  
   template<typename Type>
   class BeepVector
   {
@@ -325,8 +325,6 @@
     unsigned theSize;
 
   };
-
-//}// end namespace beep
 
 
 #endif

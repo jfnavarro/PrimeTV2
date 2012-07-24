@@ -1,15 +1,11 @@
 #ifndef NODEMAP_H
 #define NODEMAP_H
-
 #include <cassert>
-
 #include "Node.hh"
 #include "Tree.hh"
 
-
-//namespace beep
-//{
-
+  using namespace std;
+  
   //-----------------------------------------------------------------
   //
   //! NodeMap is a class that offers a simple interface for mapping 
@@ -158,5 +154,5 @@
   }
 
 
-//}//end namespace beep
+
 #endif

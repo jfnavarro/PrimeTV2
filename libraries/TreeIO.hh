@@ -18,11 +18,8 @@
 // The size of a char buffer when reading gene-species info:
 #define LINELENGTH 10000   //1024
 
-//namespace beep
-//{
-//   class GammaMap;
+
   class Node;
-//   class SetOfNodesEx;
   class Tree;
   
   using namespace std;
@@ -1093,10 +1090,5 @@
     
     
   };
-  
-
-  
-//}//end namespace beep
-  
   
 #endif

@@ -21,7 +21,6 @@
 #include "treeextended.h"
 #include "libraries/Node.hh"
 
-//using namespace beep;
 using namespace std;
 
   TreeExtended::TreeExtended():
@@ -357,5 +356,3 @@ using namespace std;
     }
 
   }
-
-

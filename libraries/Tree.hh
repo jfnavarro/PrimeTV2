@@ -19,8 +19,7 @@
 //----------------------------------------------------------------------
 const unsigned DEF_NODE_VEC_SIZE = 100;
 
-//namespace beep 
-//{
+  using namespace std;
 
   // Forward declarations.
   class Node;
@@ -363,7 +362,5 @@ const unsigned DEF_NODE_VEC_SIZE = 100;
     mutable bool deleteLengths;
     //@}
   };
-
-//}// end namespace beep
 
 #endif

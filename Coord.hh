@@ -8,9 +8,6 @@
 
 // Class the abstracts the pair<double,double> as a Coord object
 
-//namespace beep 
-//{
-
   using namespace std;
   
   class Coord{
@@ -27,9 +24,6 @@
   };
 
 typedef BeepVector<Coord> CoordVector;
-
-
-//}
 
 
 #endif

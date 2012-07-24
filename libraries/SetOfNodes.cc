@@ -1,8 +1,7 @@
 #include "SetOfNodes.hh"
 
 // Author: LArs Arvestad, © the MCMC-club, SBC, all rights reserved
-//namespace beep
-//{
+
   using namespace std;
 
   SetOfNodes::SetOfNodes()
@@ -100,5 +99,3 @@
     return *iter;
       
   }
-
-//}//end namespace beep

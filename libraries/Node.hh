@@ -1,13 +1,10 @@
 #ifndef NODE_HH
 #define NODE_HH
-
 #include <iostream>
 #include <string>
-// #include "Beep.hh"
 #include "Color.h"
 
-//namespace beep
-//{
+    using namespace std;
     class Tree;
     class SetOfNodes;
     
@@ -394,9 +391,5 @@
     //!@}
 
   };
-
-//}// end namespace beep
-
-
 
 #endif

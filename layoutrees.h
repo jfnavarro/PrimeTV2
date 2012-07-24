@@ -32,8 +32,6 @@
 #include "libraries/gammamapex.h"
 #include "parameters.h"
 
-
-//using namespace beep;
 using namespace std;
 
 //helper function to clean the memory on a vector

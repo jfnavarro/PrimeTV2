@@ -20,8 +20,7 @@
 // Class Node
 //
 //---------------------------------------------------------------------
-//namespace beep
-//{
+
 
   using namespace std;
 
@@ -926,10 +925,3 @@
   {
     return visited;
   }
-
-
-//}// end namespace beep
-
-
-
-

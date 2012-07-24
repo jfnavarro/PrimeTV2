@@ -6,9 +6,8 @@
 #include <stdexcept>
 
 
-//namespace beep
-//{
-
+  using namespace std;
+  
   //---------------------------------------------------------------------
   //! Store maps of strings to other strings. (Think gene names to species
   //! names.) Strings in the interface are char pointers, but internally, 
@@ -127,8 +126,5 @@
     std::string s;
         
   };
-
-//}//end namespace beep
-
 
 #endif

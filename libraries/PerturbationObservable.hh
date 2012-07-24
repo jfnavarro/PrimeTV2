@@ -1,11 +1,8 @@
 #ifndef PERTURBATIONOBSERVER_HH
 #define PERTURBATIONOBSERVER_HH
-
 #include <set>
-
-//namespace beep
-//{
-
+  
+  using namespace std;
   // Forward declarations.
   class PerturbationEvent;
   class PerturbationObserver;
@@ -195,7 +192,4 @@
     }
   };
 
-//} // end namespace beep
-
 #endif /*PERTURBATIONOBSERVER_HH*/
-

@@ -11,8 +11,9 @@
 
   //! Author: Lars Arvestad, SBC, � the MCMC-club, SBC, all rights reserved
   //! Jose's version
-//namespace beep
-//{
+
+  using namespace std;
+  
   template <class T>
   class SetOfNodesEx
   {
@@ -41,11 +42,12 @@
     
      typename std::set<T*> theSet;
   };
-//}
+
+  
+  
   //************************************************************************************************///
   // IMPLEMENTATION //
-//namespace beep  
-//{
+
     template <class T>
     std::ostream& SetOfNodesEx<T>::operator<<(std::ostream& os)
     {
@@ -200,5 +202,5 @@
       
   }
 
-//}
+
 #endif

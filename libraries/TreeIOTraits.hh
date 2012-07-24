@@ -3,9 +3,8 @@
  
 #include <string>
 
-//namespace beep
-//{
-  //
+  using namespace std;
+  
   // TreeIOTraits
   //
   //! Store and manipulate tree attributes.
@@ -105,6 +104,5 @@
     bool traits[last_item_dont_use];
     
   };
-//} //end namespace beep
 
 #endif

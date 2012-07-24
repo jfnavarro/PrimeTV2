@@ -6,8 +6,7 @@
 
 
 // Author: Lars Arvestad, © the MCMC-club, SBC, all rights reserved
-//namespace beep 
-//{
+
 using namespace std;
 
 TreeIOTraits::TreeIOTraits() 
@@ -260,5 +259,3 @@ string TreeIOTraits::print()
 	<< (hasName()?"true":"false");
 	return oss.str();
 }
-
-//} //end namespace beep

@@ -1,11 +1,9 @@
 #include <string>
 #include <exception>
-
 #ifndef ANERROR_HH
 #define ANERROR_HH
 
-//namespace beep
-//{
+using namespace std;
 
   //! \name
   //! The following macro let you get file and lineno info in 
@@ -110,7 +108,5 @@
     std::string arg_str;
     int error_code;
   };
-
-//}//end namespace beep
 
 #endif

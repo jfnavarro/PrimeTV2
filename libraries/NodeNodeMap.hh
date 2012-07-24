@@ -1,13 +1,11 @@
-//
-//
 #ifndef NODENODEMAP_HH
 #define NODENODEMAP_HH
 
 #include <assert.h>
 #include "Tree.hh"
 #include "Node.hh"
-namespace beep
-{
+  
+  using namespace std;
 
   //! Author: Lars Arvestad, SBC, © the MCMC-club, SBC, all rights reserved
   template<class T> 
@@ -88,7 +86,5 @@ namespace beep
     std::vector<T> data;		// indexed by g->id * K + s->id for some K depending on S.
 
   };
-
-}//end namespace beep
 
 #endif

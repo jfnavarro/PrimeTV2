@@ -14,9 +14,8 @@
 #include <algorithm>
 
 // Author: Lars Arvestad, Bengt Sennblad, © the MCMC-club, SBC, all rights reserved
-//namespace beep
-//{
-  using namespace std;
+
+ using namespace std;
   
  TreeIO::TreeIO(enum TreeSource source, const std::string s)
     : source(source),
@@ -1404,5 +1403,3 @@
 // 	  }
 //       }
 //   }  
- 
-//} //end namespace beep 

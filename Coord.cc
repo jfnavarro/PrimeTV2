@@ -12,10 +12,6 @@
 //see the HTML-documentation
 //------------------------------------------
 
-
-//namespace beep 
-//{
-
   using namespace std;
 
   Coord::Coord()
@@ -50,7 +46,3 @@
   }
 
   typedef BeepVector<Coord> CoordVector;
-
-//}
-
-

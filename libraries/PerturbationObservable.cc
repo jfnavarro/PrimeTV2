@@ -1,11 +1,8 @@
 #include <iostream>
-
 #include "PerturbationObservable.hh"
 
 // Author: Joel Sjögren, © the MCMC-club, SBC, all rights reserved
 
-//namespace beep
-//{
   using namespace std;
 
   PerturbationObservable::PerturbationObservable() :
@@ -71,6 +68,3 @@
       }
     return m_notifyPertObservers;
   }
-
-//}  // end namespace beep
-

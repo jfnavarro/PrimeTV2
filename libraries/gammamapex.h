@@ -28,6 +28,8 @@
 #include <deque>
 #include <boost/dynamic_bitset.hpp>
 
+using namespace std;
+
 /* This class is an extension and modification of the original GammaMap class
 created by Lars Arvestad */
 /* Implement the map gamma : species node --> gene nodes */
@@ -859,6 +861,4 @@ private:
     return this->transfer_edges;
   }
 
-
-  
 #endif // GAMMAMAPEX_H

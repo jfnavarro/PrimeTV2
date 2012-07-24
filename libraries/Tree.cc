@@ -19,9 +19,8 @@
 //
 //----------------------------------------------------------------------
 
-//namespace beep
-//{
   using namespace std;
+  
   //Public
 
   //----------------------------------------------------------------------
@@ -1202,9 +1201,3 @@ void Tree::doDeleteRates()
   {
     return subtree4os(v, indent, true, true, false, false);
   }
-
-//}// end namespace beep
-
-
-
-

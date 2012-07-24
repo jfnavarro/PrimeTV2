@@ -15,8 +15,8 @@
 #include <sstream>
 #include "Node.hh"
 
-//namespace beep
-//{
+  using namespace std;
+   
   // forward declartations
   class SetOfNodes;
   bool operator==(const SetOfNodes &s1, const SetOfNodes &s2);
@@ -103,6 +103,5 @@
     std::set<Node* > theSet;
   };
 
-//}//end namespace beep
 
 #endif

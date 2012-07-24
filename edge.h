@@ -27,8 +27,6 @@
 #ifndef EDGE_H
 #define EDGE_H
 
-//using namespace beep;
-
 class Edge
 {
   
