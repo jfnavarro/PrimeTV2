@@ -1,7 +1,9 @@
 project(PrimeTV)
 cmake_minimum_required(VERSION 2.6)
+
 #enable_language(Fortran)
 #enable_language(C)
+#enable_language(CXX)
 
 ###CPACK####################################################
 SET(CPACK_PACKAGE_VERSION_MAJOR "1")
@@ -197,20 +199,20 @@ set(MAIN_SOURCES_UNIX windows.cpp edge.cpp layoutrees.cpp mainops.cpp parameters
 		  Coord.cc primetv.cc DrawTree_time.cc canvas.cpp  ${Qt4_Headers_Moc} ${QT4_FORMS_HEADERS} ${Qt4_Resources_Rcc})
 		  
 foreach(i ${PARSER_SOURCES})
- set_source_files_properties(${i} PROPERTIES LANGUAGE C)
+ set_source_files_properties(${i} PROPERTIES LANGUAGE C LINKER_LANGUAGE C)
 endforeach(i)
 
 foreach(i ${Libraries})
- set_source_files_properties(${i} PROPERTIES LANGUAGE CXX)
+ set_source_files_properties(${i} PROPERTIES LANGUAGE CXX LINKER_LANGUAGE CXX)
 endforeach(i)
 
 if(APPLE)
   foreach(i ${MAIN_SOURCES_APPLE})
-    set_source_files_properties(${i} PROPERTIES LANGUAGE CXX)
+    set_source_files_properties(${i} PROPERTIES LANGUAGE CXX LINKER_LANGUAGE CXX)
   endforeach(i)
 else(APPLE)
   foreach(i ${MAIN_SOURCES_UNIX})
-    set_source_files_properties(${i} PROPERTIES LANGUAGE CXX)
+    set_source_files_properties(${i} PROPERTIES LANGUAGE CXX LINKER_LANGUAGE CXX)
   endforeach(i)
 endif(APPLE)
 
