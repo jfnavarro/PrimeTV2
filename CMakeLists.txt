@@ -75,11 +75,11 @@ find_package(FLEX REQUIRED)
 
 if(NOT APPLE)
   find_package(Qt4 COMPONENTS QtCore QtGui REQUIRED)
-  if(${QT4_FOUND})
+  if(QT4_FOUND)
     message(STATUS "Qt4 found")
-  else(${QT4_FOUND})
+  else(QT4_FOUND)
     message(FATAL_ERROR "Qt4 not found")
-  endif(${QT4_FOUND})
+  endif(QT4_FOUND)
   find_package(X11 REQUIRED)
 else(NOT APPLE)
   message(STATUS "Building PrimeTV2 without the GUI, MAX OSX does not support qt4-x11 yet")
@@ -136,6 +136,13 @@ set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3 -funroll-loops -DNDE
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -fexceptions")
 set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG}")
 set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE}")
+
+if(APPLE)
+  OPTION(STATIC "build a static binaries. This is mainly intended for the win32-package and the MACOSX-bundle." ON )
+else(APPLE)
+  OPTION(STATIC "build a static binaries. This is mainly intended for the win32-package and the MACOSX-bundle." OFF )
+endif()
+
 ##FLAGS#############################################################
 
 #Profile
