@@ -1,6 +1,6 @@
 project(PrimeTV)
 cmake_minimum_required(VERSION 2.6)
-enable_language(Fortran)
+#enable_language(Fortran)
 enable_language(C)
 
 ###CPACK####################################################
@@ -146,10 +146,12 @@ endif()
 ##FLAGS#############################################################
 
 #Profile
-list(APPEND CMAKE_BUILD_TYPES Profile)
-set(CMAKE_C_FLAGS_PROFILE "-pg -g")
-set(CMAKE_CXX_FLAGS_PROFILE "-pg -g")
-set(CMAKE_EXE_LINKER_FLAGS_PROFILE "-pg")
+if(DEFINED ${PROFILE})
+  list(APPEND CMAKE_BUILD_TYPES Profile)
+  set(CMAKE_C_FLAGS_PROFILE "-pg -g")
+  set(CMAKE_CXX_FLAGS_PROFILE "-pg -g")
+  set(CMAKE_EXE_LINKER_FLAGS_PROFILE "-pg")
+endif(DEFINED ${PROFILE})
 
 flex_target(MyScanner ${PROJECT_SOURCE_DIR}/libraries/NHX.l ${PROJECT_SOURCE_DIR}/libraries/lexer.c COMPILE_FLAGS "-Pyytree_" )
 bison_target(MyParser ${PROJECT_SOURCE_DIR}/libraries/NHXparse.y ${PROJECT_SOURCE_DIR}/libraries/NHXparse.c COMPILE_FLAGS "-d -y -p yytree_" ) 
