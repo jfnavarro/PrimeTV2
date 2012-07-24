@@ -34,9 +34,11 @@
 #include <boost/token_functions.hpp>
 #include <boost/foreach.hpp>
 
-#include <QApplication>
-#include "windows.h"
-#include "ui_primetv.h"
+#if not defined __NOQTX11__
+  #include <QApplication>
+  #include "windows.h"
+  #include "ui_primetv.h"
+#endif
 
 using namespace boost;
 namespace po = boost::program_options;
@@ -380,13 +382,16 @@ try
     
     if(parameters->UI) //We start the User Interface
     {
-	
-      QApplication app(ac, av);
-      MainWindow *appWindow = new MainWindow(parameters);
-      appWindow->show();
-      return app.exec();
-      delete(appWindow);
-      delete(parameters);
+      #if not defined __NOQTX11__
+	QApplication app(ac, av);
+	MainWindow *appWindow = new MainWindow(parameters);
+	appWindow->show();
+	return app.exec();
+	delete(appWindow);
+	delete(parameters);
+      #else
+	std::cerr << "The QT based GUI of PrimeTV2 is not yet compatible with MAC based systems\n" << std::endl;
+      #endif
     }
     else // We start the script version
     { 
@@ -435,4 +440,3 @@ try
 
   return EXIT_SUCCESS;
 }
-

@@ -1,13 +1,29 @@
 project(PrimeTV)
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 2.6)
 enable_language(Fortran)
 enable_language(C)
+
 ###CPACK####################################################
 SET(CPACK_PACKAGE_VERSION_MAJOR "1")
 SET(CPACK_PACKAGE_VERSION_MINOR "0")
 SET(CPACK_PACKAGE_VERSION_PATCH "0")
 set(PACKAGE_VERSION ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH})
 set(CPACK_SOURCE_GENERATOR TGZ;ZIP)
+
+# Detect machine architecture, on UNIX:
+if(UNIX AND NOT APPLE AND NOT DEFINED ${TARGET_ARCH})
+	execute_process(COMMAND dpkg --print-architecture
+		OUTPUT_VARIABLE TARGET_ARCH
+                OUTPUT_STRIP_TRAILING_WHITESPACE)
+	message(STATUS "Architecture: ${TARGET_ARCH}")
+endif(UNIX AND NOT APPLE AND NOT DEFINED ${TARGET_ARCH})
+if(APPLE AND NOT DEFINED ${TARGET_ARCH})
+	execute_process(COMMAND uname -m
+		OUTPUT_VARIABLE TARGET_ARCH
+                OUTPUT_STRIP_TRAILING_WHITESPACE)
+	message(STATUS "Architecture: ${TARGET_ARCH}")
+endif(APPLE AND NOT DEFINED ${TARGET_ARCH})
+
 # PACKAGING OPTIONS: GENERAL
 set(PACKAGE_NICKNAME "primetv")
 set(CPACK_SET_DESTDIR TRUE) # Enabling absolute paths for CPack (important!)
@@ -28,7 +44,7 @@ IF(APPLE)
 elseif(UNIX)
 	set(CPACK_GENERATOR "DEB;RPM") # Distribution packaging formats ("make package"); RPM packaging can also be included later
         set(CPACK_PACKAGE_FILE_NAME "${PACKAGE_NICKNAME}-${PACKAGE_VERSION}-linux-${TARGET_ARCH}")
-        set(CPACK_SOURCE_PACKAGE_FILE_NAME  "${PACKAGE_NICKNAME}-${PACKAGE_VERSION}-mac-src")
+        set(CPACK_SOURCE_PACKAGE_FILE_NAME  "${PACKAGE_NICKNAME}-${PACKAGE_VERSION}-linux-src")
 endif()
 
 set(CPACK_PACKAGE_INSTALL_DIRECTORY "${PACKAGE_NICKNAME}-${PACKAGE_VERSION}")
@@ -57,19 +73,22 @@ set (CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR})
 find_package(BISON REQUIRED)
 find_package(FLEX REQUIRED)
 
-find_package(Qt4 COMPONENTS QtCore QtGui REQUIRED)
-if(${QT4_FOUND})
-  message(STATUS "Qt4 found")
-else(${QT4_FOUND})
-  message(FATAL_ERROR "Qt4 not found")
-endif(${QT4_FOUND})
-
-find_package(X11 REQUIRED)
+if(NOT APPLE)
+  find_package(Qt4 COMPONENTS QtCore QtGui REQUIRED)
+  if(${QT4_FOUND})
+    message(STATUS "Qt4 found")
+  else(${QT4_FOUND})
+    message(FATAL_ERROR "Qt4 not found")
+  endif(${QT4_FOUND})
+  find_package(X11 REQUIRED)
+else(NOT APPLE)
+  message(STATUS "Building PrimeTV2 without the GUI, MAX OSX does not support qt4-x11 yet")
+  add_definitions(-D__NOQTX11__)
+endif(NOT APPLE)
 
 find_package(Cairo REQUIRED)
 
 set(Boost_USE_STATIC_LIBS   TRUE)
-set(Boost_USE_MULTITHREADED TRUE)
 SET (Boost_ADDITIONAL_VERSIONS "1.36" "1.36.0" "1.41" "1.41.0" "1.39" "1.39.0" "1.42.0" "1.42" "1.43.0" 
 			       "1.43." "1.44.0" "1.44.0" "1.45.0" "1.45" "1.46.0" "1.46" "1.47.0" "1.47")
 find_package(Boost COMPONENTS serialization program_options REQUIRED)
@@ -80,13 +99,16 @@ endif(NOT Boost_FOUND)
 ####PACKAGES##################################################
 
 ##DIRECTORIES#################################################
-include_directories(${QT_INCLUDES} ${CMAKE_CURRENT_BINARY_DIR})
+if(NOT APPLE)
+  include_directories(${QT_INCLUDES}) 
+  include_directories( ${qt4_include_dir} )
+  include_directories( ${X11_INCLUDE_DIR} )
+endif(NOT APPLE)
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
 include_directories(${Boost_INCLUDE_DIRS})
 include_directories("${PROJECT_BINARY_DIR}")
 include_directories( ${CMAKE_BINARY_DIR}  )
 include_directories( ${CAIRO_INCLUDE_DIRS})
-include_directories( ${qt4_include_dir} )
-include_directories( ${X11_INCLUDE_DIR})
 ######DIRECTORIES#################################################
 
 
@@ -95,11 +117,12 @@ add_definitions( ${LIBXML2_DEFINITIONS} )
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/cmake/")
 set(DCMAKE_SKIP_RPATH:BOOL=ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
-add_definitions(-DQT_DLL)
-add_definitions(-DQT_THREAD_SUPPORT)
-add_definitions(${QT_DEFINITIONS})
+if(NOT APPLE)
+  add_definitions(-DQT_DLL)
+  add_definitions(-DQT_THREAD_SUPPORT)
+  add_definitions(${QT_DEFINITIONS})
+endif(NOT APPLE)
 ###DEFINITIONS###################################################
-
 
 ##FLAGS###
 set(CMAKE_BUILD_TYPE "Debug")
@@ -121,19 +144,20 @@ set(CMAKE_C_FLAGS_PROFILE "-pg -g")
 set(CMAKE_CXX_FLAGS_PROFILE "-pg -g")
 set(CMAKE_EXE_LINKER_FLAGS_PROFILE "-pg")
 
-
 flex_target(MyScanner ${PROJECT_SOURCE_DIR}/libraries/NHX.l ${PROJECT_SOURCE_DIR}/libraries/lexer.c COMPILE_FLAGS "-Pyytree_" )
 bison_target(MyParser ${PROJECT_SOURCE_DIR}/libraries/NHXparse.y ${PROJECT_SOURCE_DIR}/libraries/NHXparse.c COMPILE_FLAGS "-d -y -p yytree_" ) 
 add_flex_bison_dependency(MyScanner MyParser)
 
 #QT4 DIRECTIVES
-set(Qt_Headers windows.h canvas.h)
-set(Qt_Forms primetv.ui parameters.ui)
-set(Qt_Resources application.qrc)
-qt4_wrap_cpp(Qt4_Headers_Moc ${Qt_Headers})
-QT4_WRAP_UI(QT4_FORMS_HEADERS ${Qt_Forms})
-QT4_ADD_RESOURCES(Qt4_Resources_Rcc ${Qt_Resources})
-include(${QT_USE_FILE})
+if(NOT APPLE)
+  set(Qt_Headers windows.h canvas.h)
+  set(Qt_Forms primetv.ui parameters.ui)
+  set(Qt_Resources application.qrc)
+  qt4_wrap_cpp(Qt4_Headers_Moc ${Qt_Headers})
+  QT4_WRAP_UI(QT4_FORMS_HEADERS ${Qt_Forms})
+  QT4_ADD_RESOURCES(Qt4_Resources_Rcc ${Qt_Resources})
+  include(${QT_USE_FILE})
+endif(NOT APPLE)
 
 #Collect the files for libraries
 include (libraries/CMakeLists.txt)
@@ -150,10 +174,14 @@ endforeach(i)
 
 add_library(prime STATIC ${PARSER_SOURCES} ${Libraries} ${Utils})
 
-add_executable(primetv windows.cpp edge.cpp layoutrees.cpp mainops.cpp parameters.cpp phyltr.cpp Color.cpp Colours.cpp Coord.cc primetv.cc DrawTree_time.cc windows.cpp canvas.cpp  ${Qt4_Headers_Moc} ${QT4_FORMS_HEADERS} ${Qt4_Resources_Rcc})
-
-target_link_libraries(primetv prime ${X11_LIBRARIES} ${QT_LIBRARIES} ${CAIRO_LIBRARIES}  ${Boost_LIBRARIES}  m )
-
+if(NOT APPLE)
+  add_executable(primetv windows.cpp edge.cpp layoutrees.cpp mainops.cpp parameters.cpp phyltr.cpp Color.cpp Colours.cpp 
+		  Coord.cc primetv.cc DrawTree_time.cc canvas.cpp  ${Qt4_Headers_Moc} ${QT4_FORMS_HEADERS} ${Qt4_Resources_Rcc})
+  target_link_libraries(primetv prime ${X11_LIBRARIES} ${QT_LIBRARIES} ${CAIRO_LIBRARIES}  ${Boost_LIBRARIES}  m )
+else(NOT APPLE)
+  add_executable(primetv edge.cpp layoutrees.cpp mainops.cpp parameters.cpp phyltr.cpp Color.cpp Colours.cpp Coord.cc primetv.cc DrawTree_time.cc)
+  target_link_libraries(primetv prime ${CAIRO_LIBRARIES}  ${Boost_LIBRARIES}  m )
+endif(NOT APPLE)
 #TODO : take into consideration when using windows, make use of globals
 install(TARGETS primetv DESTINATION bin)
 install(FILES ${PROJECT_SOURCE_DIR}/images/header.png DESTINATION /usr/share/primetv PERMISSIONS OWNER_READ GROUP_READ WORLD_READ)
