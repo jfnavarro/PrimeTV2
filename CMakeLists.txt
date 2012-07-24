@@ -185,6 +185,12 @@ if(NOT APPLE)
   include(${QT_USE_FILE})
 endif(NOT APPLE)
 
+if(APPLE)
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -framework accelerate -bind_at_load")
+else()
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}")
+endif()
+
 #Collect the files for libraries
 include (libraries/CMakeLists.txt)
 foreach(FILE ${FILES})
@@ -192,8 +198,7 @@ foreach(FILE ${FILES})
 endforeach(FILE)
 
 #set up tree parsers
-set(PARSER_SOURCES libraries/NHXnode.c libraries/NHXtree.c libraries/NHXannotation.c libraries/y.tab.c libraries/NHXannotation.c 
-		    libraries/NHXnode.c libraries/NHXparse.c libraries/NHXtree.c ${FLEX_MyScanner_OUTPUTS} ${BISON_MyParser_OUTPUTS}  )
+set(PARSER_SOURCES libraries/NHXnode.c libraries/NHXtree.c libraries/NHXannotation.c ${FLEX_MyScanner_OUTPUTS} ${BISON_MyParser_OUTPUTS}  )
 set(MAIN_SOURCES_APPLE edge.cpp layoutrees.cpp mainops.cpp parameters.cpp phyltr.cpp Color.cpp Colours.cpp Coord.cc primetv.cc DrawTree_time.cc)
 set(MAIN_SOURCES_UNIX windows.cpp edge.cpp layoutrees.cpp mainops.cpp parameters.cpp phyltr.cpp Color.cpp Colours.cpp 
 		  Coord.cc primetv.cc DrawTree_time.cc canvas.cpp  ${Qt4_Headers_Moc} ${QT4_FORMS_HEADERS} ${Qt4_Resources_Rcc})
@@ -220,10 +225,10 @@ add_library(prime STATIC ${PARSER_SOURCES} ${Libraries})
 
 if(NOT APPLE)
   add_executable(primetv ${MAIN_SOURCES_UNIX})
-  target_link_libraries(primetv prime ${X11_LIBRARIES} ${QT_LIBRARIES} ${CAIRO_LIBRARIES}  ${Boost_LIBRARIES}  m )
+  target_link_libraries(primetv prime ${X11_LIBRARIES} ${QT_LIBRARIES} ${CAIRO_LIBRARIES}  ${Boost_LIBRARIES} )
 else(NOT APPLE)
   add_executable(primetv ${MAIN_SOURCES_APPLE})
-  target_link_libraries(primetv prime ${CAIRO_LIBRARIES}  ${Boost_LIBRARIES}  m )
+  target_link_libraries(primetv prime ${CAIRO_LIBRARIES}  ${Boost_LIBRARIES} )
 endif(NOT APPLE)
 
 if(APPLE)

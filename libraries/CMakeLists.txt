@@ -11,4 +11,6 @@ set (FILES
     TreeIO.cc
     TreeIOTraits.cc
     configfile.cpp
+    #y.tab.c
+    #NHXparse.c
   )
