@@ -7,10 +7,11 @@
 #include "Node.hh"
 #include "SetOfNodes.hh"
 #include "Tree.hh"
-
+#include <assert.h>
 
 namespace beep
 {
+  using namespace std;
   
   //--------------------------------------------------------------
   //
