@@ -8,10 +8,12 @@
 #include "SetOfNodes.hh"
 #include "Tree.hh"
 #include <assert.h>
+#include <algorithm>
+#include <iterator>
+#include <iostream>
 
 namespace beep
 {
-  using namespace std;
   
   //--------------------------------------------------------------
   //
@@ -151,16 +153,16 @@ namespace beep
 
 	
     //! Iterator for vector.
-    typedef typename std::vector<Type>::iterator iterator;
+    typedef typename ::std::vector<Type>::iterator iterator;
 	
     //! Const iterator for vector.
-    typedef typename std::vector<Type>::const_iterator const_iterator;
+    typedef typename ::std::vector<Type>::const_iterator const_iterator;
 	
     //! Reverse iterator for vector.
-    typedef typename std::vector<Type>::reverse_iterator reverse_iterator;
+    typedef typename ::std::vector<Type>::reverse_iterator reverse_iterator;
 		
     //! Const reverse iterator for vector.
-    typedef typename std::vector<Type>::const_reverse_iterator const_reverse_iterator;
+    typedef typename ::std::vector<Type>::const_reverse_iterator const_reverse_iterator;
 	
     //! Iterator to first element in vector.
     iterator begin() { return pv.begin(); };
@@ -194,7 +196,7 @@ namespace beep
     //! reset all values
     void clearValues()
     {
-      pv = std::vector<Type>(pv.size());
+      pv = ::std::vector<Type>(pv.size());
     }
 
     //--------------------------------------------------------------
@@ -203,7 +205,7 @@ namespace beep
     //
     //--------------------------------------------------------------
     //@{
-    friend std::ostream& operator<<(std::ostream &o, 
+    friend ::std::ostream& operator<<(std::ostream &o, 
 				    const BeepVector<Type>& e)
     {
       return o << e.print();
@@ -211,9 +213,9 @@ namespace beep
 
     //! \todo{This could perhaps be improved to give a table mapping
     //! a node to its content}
-    std::string print() const
+    ::std::string print() const
     {
-      std::ostringstream oss;
+      ::std::ostringstream oss;
       for(unsigned i = 0; i < size(); i++)
 	{
 	  oss << pv[i] << ";\t";
@@ -228,7 +230,7 @@ namespace beep
     // Attributes
     //
     //--------------------------------------------------------------
-    std::vector<Type> pv; //!< The storage
+    ::std::vector<Type> pv; //!< The storage
   };
 
 
@@ -309,7 +311,7 @@ namespace beep
     void rmElement(unsigned i)
     {
       // Copy last active element to the position of element to remove
-      std::copy(pv.begin() + size()-1, pv.begin() + size(), pv.begin() + i);
+      ::std::copy(pv.begin() + size()-1, pv.begin() + size(), pv.begin() + i);
       theSize--;
     }
 
