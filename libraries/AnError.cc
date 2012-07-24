@@ -5,7 +5,7 @@
 #include "AnError.hh"
 
 // Author: Lars Arvestad, © the MCMC-club, SBC, all rights reserved
-  using namespace beep;
+  //using namespace beep;
   using namespace std;
 
 

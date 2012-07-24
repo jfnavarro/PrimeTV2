@@ -27,7 +27,7 @@
 #include "libraries/StrStrMap.hh"
 #include "libraries/SetOfNodes.hh"
 #include <boost/dynamic_bitset.hpp>
-using namespace beep;
+//using namespace beep;
 using namespace std;
 using boost::dynamic_bitset;
 

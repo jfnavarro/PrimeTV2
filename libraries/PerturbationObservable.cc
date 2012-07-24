@@ -4,8 +4,8 @@
 
 // Author: Joel Sjögren, © the MCMC-club, SBC, all rights reserved
 
-namespace beep
-{
+//namespace beep
+//{
   using namespace std;
 
   PerturbationObservable::PerturbationObservable() :
@@ -72,5 +72,5 @@ namespace beep
     return m_notifyPertObservers;
   }
 
-}  // end namespace beep
+//}  // end namespace beep
 

@@ -62,7 +62,7 @@
 // 
 // }
 // 
-// NodeExtended::NodeExtended(const beep::Node& n) 
+// NodeExtended::NodeExtended(const Node& n) 
 //   : Node(n),
 //     color(),
 //     size(0.0),
@@ -117,7 +117,7 @@
 //   return this;
 // }
 // 
-// NodeExtended* NodeExtended::operator=(const beep::Node& n)
+// NodeExtended* NodeExtended::operator=(const Node& n)
 // {
 //   Node::operator=(n);
 //   return this;
@@ -139,7 +139,7 @@
 // 
 // }
 // 
-// NodeExtended* NodeExtended::operator=(const beep::Node* n)
+// NodeExtended* NodeExtended::operator=(const Node* n)
 // {
 //   Node::operator=(*n);
 //   return this;

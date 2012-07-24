@@ -3,8 +3,8 @@
 
 #include <set>
 
-namespace beep
-{
+//namespace beep
+//{
 
   // Forward declarations.
   class PerturbationEvent;
@@ -195,7 +195,7 @@ namespace beep
     }
   };
 
-} // end namespace beep
+//} // end namespace beep
 
 #endif /*PERTURBATIONOBSERVER_HH*/
 

@@ -20,8 +20,8 @@
 // Class Node
 //
 //---------------------------------------------------------------------
-namespace beep
-{
+//namespace beep
+//{
 
   using namespace std;
 
@@ -928,7 +928,7 @@ namespace beep
   }
 
 
-}// end namespace beep
+//}// end namespace beep
 
 
 

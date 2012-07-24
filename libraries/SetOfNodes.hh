@@ -15,8 +15,8 @@
 #include <sstream>
 #include "Node.hh"
 
-namespace beep
-{
+//namespace beep
+//{
   // forward declartations
   class SetOfNodes;
   bool operator==(const SetOfNodes &s1, const SetOfNodes &s2);
@@ -32,13 +32,13 @@ namespace beep
 
     SetOfNodes& operator=(const SetOfNodes &son);
 
-    void insert(beep::Node* u);	// Add u to the set
-    void insertVector(std::vector<beep::Node*>& v);  //Add a vector to the set - NOTE! RISK THAT THIS FUNCTION WILL BECHANGED!
-    void erase(beep::Node* u);	// Remove u from the set
-    bool member(beep::Node* u) const; // Is u a member of the set?
+    void insert(Node* u);	// Add u to the set
+    void insertVector(std::vector<Node*>& v);  //Add a vector to the set - NOTE! RISK THAT THIS FUNCTION WILL BECHANGED!
+    void erase(Node* u);	// Remove u from the set
+    bool member(Node* u) const; // Is u a member of the set?
     bool empty() const;		// Is the set empty or not?
     unsigned size() const;	// Number of elements in set
-    beep::Node* operator[](unsigned i) const; // Random access
+    Node* operator[](unsigned i) const; // Random access
   
     //----------------------------------------------------------------------
     //
@@ -73,7 +73,7 @@ namespace beep
     {
       std::ostringstream os;
       os << "   ";
-      for(std::set<beep::Node*>::const_iterator i = theSet.begin();
+      for(std::set<Node*>::const_iterator i = theSet.begin();
 	  i != theSet.end(); i++)
 	{
 	  if(*i)
@@ -100,9 +100,9 @@ namespace beep
 
 
   private:
-    std::set<beep::Node* > theSet;
+    std::set<Node* > theSet;
   };
 
-}//end namespace beep
+//}//end namespace beep
 
 #endif

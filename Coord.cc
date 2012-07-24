@@ -13,8 +13,8 @@
 //------------------------------------------
 
 
-namespace beep 
-{
+//namespace beep 
+//{
 
   using namespace std;
 
@@ -51,6 +51,6 @@ namespace beep
 
   typedef BeepVector<Coord> CoordVector;
 
-}
+//}
 
 

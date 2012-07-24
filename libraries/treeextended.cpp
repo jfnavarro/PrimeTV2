@@ -21,7 +21,7 @@
 #include "treeextended.h"
 #include "libraries/Node.hh"
 
-using namespace beep;
+//using namespace beep;
 using namespace std;
 
   TreeExtended::TreeExtended():
@@ -38,7 +38,7 @@ using namespace std;
   }
   
   //copy constructor from derived class
-  TreeExtended::TreeExtended(const beep::Tree& T)
+  TreeExtended::TreeExtended(const Tree& T)
     : Tree(T),
       lca_is_valid(false)
   {

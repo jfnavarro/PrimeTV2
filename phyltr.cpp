@@ -30,7 +30,7 @@
 #include "phyltr.h"
 #include "libraries/Node.hh"
 
-using namespace beep;
+//using namespace beep;
 using namespace std;
 
 static const unsigned                          NONE = -1;

@@ -33,7 +33,7 @@
 #include "parameters.h"
 
 
-using namespace beep;
+//using namespace beep;
 using namespace std;
 
 //helper function to clean the memory on a vector

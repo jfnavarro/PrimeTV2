@@ -6,8 +6,8 @@
 #include <stdexcept>
 
 
-namespace beep
-{
+//namespace beep
+//{
 
   //---------------------------------------------------------------------
   //! Store maps of strings to other strings. (Think gene names to species
@@ -128,7 +128,7 @@ namespace beep
         
   };
 
-}//end namespace beep
+//}//end namespace beep
 
 
 #endif

@@ -31,7 +31,7 @@
 #include <boost/multi_array.hpp>
 #include <boost/static_assert.hpp>
 
-using namespace beep;
+//using namespace beep;
 
  
 class TreeExtended : public Tree

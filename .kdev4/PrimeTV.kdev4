@@ -2,12 +2,12 @@
 BuildItems=@Variant(\x00\x00\x00\t\x00\x00\x00\x00\x00)
 
 [CMake]
-BuildDirs=/home/jose/projects/PrimeTV/build
+BuildDirs[$e]=$HOME/PrimeTV_build
 CMakeDir=/usr/share/cmake-2.8/Modules
 Current CMake Binary=file:///usr/bin/cmake
-CurrentBuildDir=file:///home/jose/projects/PrimeTV/build
-CurrentBuildType=Debug
-CurrentInstallDir=
+CurrentBuildDir=file:///scratch/newhome/PrimeTV_build
+CurrentBuildType=Release
+CurrentInstallDir=file:///usr/local
 ProjectRootRelative=./
 
 [Launch]
@@ -40,7 +40,7 @@ Working Directory=file:///home/jose/workspace/ReconciledPDF/src
 isExecutable=true
 
 [MakeBuilder]
-Default Make Environment Profile=0
+Default Make Environment Profile=
 Install As Root=true
 Number Of Jobs=1
 Su Command=2

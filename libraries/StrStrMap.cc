@@ -8,8 +8,8 @@
 #include "AnError.hh"
 
 // Author: Lars Arvestad, © the MCMC-club, SBC, all rights reserved
-namespace beep
-{
+//namespace beep
+//{
   using namespace std;
 
   //---------------------------------------------------------------------
@@ -149,4 +149,4 @@ namespace beep
     return o << res;
   }
 
-}//end namespace beep
+//}//end namespace beep

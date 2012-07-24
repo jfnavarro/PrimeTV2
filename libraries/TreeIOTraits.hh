@@ -3,8 +3,8 @@
  
 #include <string>
 
-namespace beep
-{
+//namespace beep
+//{
   //
   // TreeIOTraits
   //
@@ -105,6 +105,6 @@ namespace beep
     bool traits[last_item_dont_use];
     
   };
-}
+//} //end namespace beep
 
 #endif

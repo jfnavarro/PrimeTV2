@@ -8,8 +8,8 @@
 #include "SetOfNodes.hh"
 #include "Tree.hh"
 
-namespace beep
-{
+//namespace beep
+//{
   
   //--------------------------------------------------------------
   //
@@ -233,11 +233,11 @@ namespace beep
   //! \name Provide alias for instantiations of BeepVector
   //--------------------------------------------------------------
   //@{
-//   typedef beep::BeepVector<Probability> ProbVector; //initializes elems to 0
-  typedef beep::BeepVector<unsigned> UnsignedVector;//initializes elems to 0
-  typedef beep::BeepVector<beep::Node*> NodeVector; //initializes elems to NULL
-//   typedef beep::BeepVector<beep::NodeExtended*> NodeVectorEx; //initializes elems to NULL
-//   typedef beep::BeepVector<beep::LA_Vector> LikeVector; //init elems to (0,.,0)
+//   typedef BeepVector<Probability> ProbVector; //initializes elems to 0
+  typedef BeepVector<unsigned> UnsignedVector;//initializes elems to 0
+  typedef BeepVector<Node*> NodeVector; //initializes elems to NULL
+//   typedef BeepVector<NodeExtended*> NodeVectorEx; //initializes elems to NULL
+//   typedef BeepVector<LA_Vector> LikeVector; //init elems to (0,.,0)
   //@}
 
 
@@ -326,7 +326,7 @@ namespace beep
 
   };
 
-}// end namespace beep
+//}// end namespace beep
 
 
 #endif

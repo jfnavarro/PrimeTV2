@@ -44,7 +44,7 @@
 #include <boost/dynamic_bitset.hpp>
 #include "libraries/BeepVector.hh"
 
-using namespace beep;
+//using namespace beep;
 using namespace std;
 using boost::dynamic_bitset;
  

@@ -6,8 +6,8 @@
 // #include "Beep.hh"
 #include "Color.h"
 
-namespace beep
-{
+//namespace beep
+//{
     class Tree;
     class SetOfNodes;
     
@@ -395,7 +395,7 @@ namespace beep
 
   };
 
-}// end namespace beep
+//}// end namespace beep
 
 
 

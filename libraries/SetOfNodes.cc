@@ -1,8 +1,8 @@
 #include "SetOfNodes.hh"
 
 // Author: LArs Arvestad, © the MCMC-club, SBC, all rights reserved
-namespace beep
-{
+//namespace beep
+//{
   using namespace std;
 
   SetOfNodes::SetOfNodes()
@@ -32,13 +32,13 @@ namespace beep
 
 
   void
-  SetOfNodes::insert(beep::Node *u)
+  SetOfNodes::insert(Node *u)
   {
     theSet.insert(u);
   }
 
   void
-  SetOfNodes::insertVector(vector<beep::Node*>& v)
+  SetOfNodes::insertVector(vector<Node*>& v)
   {
     //I am simply not sure how sets work, so I hope this ugly thing works
     theSet.insert(v.begin(), v.end());
@@ -50,15 +50,15 @@ namespace beep
   }
 
   void
-  SetOfNodes::erase(beep::Node *u)
+  SetOfNodes::erase(Node *u)
   {
-    set<beep::Node *>::iterator iter = theSet.find(u);
+    set<Node *>::iterator iter = theSet.find(u);
     theSet.erase(iter);
   }
 
 
   bool
-  SetOfNodes::member(beep::Node *u) const
+  SetOfNodes::member(Node *u) const
   {
     if (theSet.find(u) == theSet.end())
       {
@@ -86,11 +86,11 @@ namespace beep
 
 
 
-  beep::Node* 
+  Node* 
   SetOfNodes::operator[](unsigned i) const
   {
     unsigned j;
-    set<beep::Node*>::iterator iter;
+    set<Node*>::iterator iter;
     for (j = 0, iter = theSet.begin(); 
 	 j < i;
 	 iter++, j++)
@@ -101,4 +101,4 @@ namespace beep
       
   }
 
-}//end namespace beep
+//}//end namespace beep

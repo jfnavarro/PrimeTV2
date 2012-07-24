@@ -31,7 +31,7 @@
 #include "layoutrees.h"
 #include <boost/foreach.hpp>
 
-using namespace beep;
+//using namespace beep;
 using namespace std;
 
 Mainops::Mainops()
@@ -191,7 +191,6 @@ void Mainops::OpenHost(const char* species)
 void Mainops::CalculateGamma()
 {
 
-
     if (parameters->do_not_draw_species_tree == false)
     {
 	gamma = new  GammaMapEx<Node>(*Guest, *Host, gs, AC);
@@ -247,7 +246,7 @@ void Mainops::reconcileTrees(const char* gene, const char* species, const char* 
 
 
 
-  void Mainops::calculateCordinates()
+ void Mainops::calculateCordinates()
   {
      bool status = true;
 

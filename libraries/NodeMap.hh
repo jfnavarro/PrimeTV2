@@ -7,8 +7,8 @@
 #include "Tree.hh"
 
 
-namespace beep
-{
+//namespace beep
+//{
 
   //-----------------------------------------------------------------
   //
@@ -158,5 +158,5 @@ namespace beep
   }
 
 
-}//end namespace beep
+//}//end namespace beep
 #endif

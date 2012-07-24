@@ -19,8 +19,8 @@
 //----------------------------------------------------------------------
 const unsigned DEF_NODE_VEC_SIZE = 100;
 
-namespace beep 
-{
+//namespace beep 
+//{
 
   // Forward declarations.
   class Node;
@@ -364,6 +364,6 @@ namespace beep
     //@}
   };
 
-}// end namespace beep
+//}// end namespace beep
 
 #endif

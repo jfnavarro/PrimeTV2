@@ -4,8 +4,8 @@
 #ifndef ANERROR_HH
 #define ANERROR_HH
 
-namespace beep
-{
+//namespace beep
+//{
 
   //! \name
   //! The following macro let you get file and lineno info in 
@@ -111,6 +111,6 @@ namespace beep
     int error_code;
   };
 
-}//end namespace beep
+//}//end namespace beep
 
 #endif

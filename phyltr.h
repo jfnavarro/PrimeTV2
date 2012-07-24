@@ -47,7 +47,7 @@
 #include <fstream>
 
 using namespace     std;
-using namespace beep;
+//using namespace beep;
 using               boost::shared_ptr;
 using               boost::dynamic_bitset;
 using               boost::multi_array;
