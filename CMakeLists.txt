@@ -1,9 +1,7 @@
 project(PrimeTV)
 cmake_minimum_required(VERSION 2.6)
-
-#enable_language(Fortran)
-#enable_language(C)
-#enable_language(CXX)
+enable_language(C)
+enable_language(CXX)
 
 ###CPACK####################################################
 SET(CPACK_PACKAGE_VERSION_MAJOR "1")
