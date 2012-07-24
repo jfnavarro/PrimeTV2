@@ -26,7 +26,8 @@
 #include <fstream>
 #include "libraries/AnError.hh"
 #include <sys/stat.h>
-
+#include <cstddef>
+#include "assert.h"
 #include <boost/program_options/options_description.hpp>
 #include <boost/program_options/parsers.hpp>
 #include <boost/program_options/variables_map.hpp>
