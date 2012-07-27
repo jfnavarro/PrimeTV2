@@ -71,7 +71,7 @@
   public:
     
     
-    //Extra Methods 
+    //Extra Methods aded by Jose Carlos Fernandez
     //----------------------------------------------------------------------
     /*---------SETTERS--------------------*/
     void setColor(Color c);

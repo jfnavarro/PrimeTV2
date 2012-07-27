@@ -16,17 +16,9 @@
     License along with this library; if not, write to the Free Software
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
     Author : Jose Fernandez Navarro  -  jc.fernandez.navarro@gmail.com
-*//*
- * Copyright (C) 2010, 2011 Ali Tofigh
- *
- * This file is part of PhylTr, a package for phylogenetic analysis
- * using duplications and transfers.
- *
- * PhylTr is released under the terms of the license contained in the
- * file LICENSE.
- */
+*/
+
 #include "Color.h"
-//#include <boost/concept_check.hpp>
 
  Color Color::operator=(Color b)
  {

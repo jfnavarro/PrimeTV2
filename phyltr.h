@@ -17,14 +17,16 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
     Author : Jose Fernandez Navarro  -  jc.fernandez.navarro@gmail.com
     
-*//*
- * Copyright (C) 2010, 2011 Ali Tofigh
- *
- * This file is part of PhylTr, a package for phylogenetic analysis
- * using duplications and transfers.
- *
- * PhylTr is released under the terms of the license contained in the
- * file LICENSE.
+    This class is based on the program created by : Ali Tofigh
+    
+    Copyright (C) 2010, 2011 Ali Tofigh
+
+    This file is part of PhylTr, a package for phylogenetic analysis
+    using duplications and transfers.
+ 
+   PhylTr is released under the terms of the license contained in the
+   file LICENSE.
+ 
  */
 
 
@@ -117,6 +119,7 @@ typedef float            cost_type;
 // defined for non-transfer vertices, and return tree_type::NONE when
 // u is a transfer vertex.
 //*****************************************************************************
+
 class Candidate {
 public:
   

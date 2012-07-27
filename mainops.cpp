@@ -31,7 +31,6 @@
 #include "layoutrees.h"
 #include <boost/foreach.hpp>
 
-//using namespace beep;
 using namespace std;
 
 Mainops::Mainops()
@@ -48,9 +47,7 @@ Mainops::~Mainops()
   delete(lambdamap);
   delete(dt);
   delete(late);
-  delete(parameters);
   delete(io);
-
 }
 
 bool Mainops::lateralTransferDP(string mapname)

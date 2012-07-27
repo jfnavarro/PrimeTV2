@@ -178,9 +178,9 @@ double LayoutTrees::getLeftMostCoordinate (Node* o)
 
 
 /* yspace has been calculated according to the number of leaves and the height
- * so the each node y cordiate will be increased by y on the leaves, the x
- * cordiante on the leaves is always the same, the y cordinates of intern
- * nodes is calculated in the midpoing between the right most y and the 
+ * so the cordinate y of each node will be increased by y on the leaves, the x
+ * cordinate on the leaves is always the same, the y cordinates of intern
+ * nodes is calculated in the midpoint between the right most y and the 
  * left most y, the x position is calcuted used the time mapped vectors
  */
 void LayoutTrees::CountSpeciesCoordinates(Node *n, int depth)
@@ -244,8 +244,8 @@ int LayoutTrees::MostGenes()
     return currentMax;
   }
 
-/* each species nodes has a visited atribute, if the size (number os nodes mapped)
- * of a speciesn node is > 1 then the nodeheight will be divided by the number
+/* each species node has a visited atribute, if the size (number os nodes mapped)
+ * of a species node is > 1 then the nodeheight will be divided by the number
  * of nodes mapped and the current node located in the according position
  */
 void LayoutTrees::AssignLeafGene(Node *n)
@@ -370,15 +370,18 @@ void LayoutTrees::CountGeneCoordinates(Node* n)
  Node*
  LayoutTrees::FindDuplications(Node* node) 
  {
-   if(gamma->isSpeciation(*node) || gamma->isLateralTransfer(*node)) {
+   if(gamma->isSpeciation(*node) || gamma->isLateralTransfer(*node)) 
+   {
        if(!node->isLeaf()) {
 	    FindDuplications(node->getLeftChild());
 	    FindDuplications(node->getRightChild());
        }
       
        Node *top = gamma->getHighestGammaPath(*node);
-      return top;	
-   } else {      
+       return top;	
+   } 
+   else 
+   {      
      Node *top_dup_l = FindDuplications(node->getLeftChild());
      Node *top_dup_r = FindDuplications(node->getRightChild());
      Node *top_l = gamma->getHighestGammaPath(*(node->getLeftChild()));
@@ -429,7 +432,6 @@ void LayoutTrees::CountGeneCoordinates(Node* n)
 
 	return newNode2->getParent();
 	
-	
       }
    }
 
@@ -457,19 +459,27 @@ void LayoutTrees::CountGeneCoordinates(Node* n)
   double 
   LayoutTrees::LeftMostCoordinate(Node* o, Node *end_of_slice, int duplevel)
   {
-    if (gamma->isSpeciation(*o)) {
-      if(gamma->getLowestGammaPath(*o) != end_of_slice) {
+    if (gamma->isSpeciation(*o)) 
+    {
+      if(gamma->getLowestGammaPath(*o) != end_of_slice) 
+      {
 	double size = gamma->getSize(end_of_slice);
 	double delta = NodeHeight / size - 1;
 	double y = (end_of_slice->getY() - NodeHeight/2) + ((duplevel) * delta);
 	return y;
-      } else {
+      } 
+      else 
+      {
 	return o->getY();
       }
-    } else {
-      if (end_of_slice == Adress[o]) {
+    } else 
+    {
+      if (end_of_slice == Adress[o]) 
+      {
 	return LeftMostCoordinate(o->getLeftChild(), end_of_slice,duplevel);
-      } else {
+      } 
+      else 
+      {
 	double size = gamma->getSize(end_of_slice);
 	double delta = NodeHeight / size - 1;
 	double y = (end_of_slice->getY() - NodeHeight/2) + ((duplevel) * delta);
@@ -482,19 +492,26 @@ void LayoutTrees::CountGeneCoordinates(Node* n)
   double
   LayoutTrees::RightMostCoordinate (Node* o, Node *end_of_slice, int duplevel)
   {
-    if (gamma->isSpeciation(*o)) {
-      if(gamma->getLowestGammaPath(*o) != end_of_slice) {
+    if (gamma->isSpeciation(*o)) 
+    {
+      if(gamma->getLowestGammaPath(*o) != end_of_slice) 
+      {
 	double size = gamma->getSize(end_of_slice);
 	double delta = NodeHeight / size - 1;
 	double y = (end_of_slice->getY()- NodeHeight/2) + ((duplevel) * delta);
 	return y; 
-      } else {
+      } 
+      else 
+      {
 	return o->getY();
       }
-    } else {
-      if (end_of_slice == Adress[o]) {
+    } else
+    {
+      if (end_of_slice == Adress[o]) 
+      {
 	return RightMostCoordinate(o->getRightChild(), end_of_slice,duplevel);
-      } else {
+      } else 
+      {
 	double size = gamma->getSize(end_of_slice);
 	double delta = NodeHeight / size - 1;
 	double y = (end_of_slice->getY()- NodeHeight/2) + ((duplevel) * delta);
@@ -509,28 +526,30 @@ void LayoutTrees::CountGeneCoordinates(Node* n)
 
   }
  
-  
   int
-  LayoutTrees::Ladderize_left() {
+  LayoutTrees::Ladderize_left() 
+  {
    return Ladderize_left(species->getRootNode());
   }
 
   int
   LayoutTrees::Ladderize_left(Node* n) 
   {
-    if(n->isLeaf()) {
+    if(n->isLeaf()) 
+    {
       return 1;
-    } else {
+    } 
+    else 
+    {
       int leftsize = Ladderize_left(n->getLeftChild());
       int rightsize = Ladderize_left(n->getRightChild());
-      if(leftsize > rightsize) {
+      if(leftsize > rightsize) 
+      {
 	n->rotate();
       }
       return leftsize + rightsize;
     }
   }
-
-
 
   int
   LayoutTrees::Ladderize_right() {
@@ -540,12 +559,16 @@ void LayoutTrees::CountGeneCoordinates(Node* n)
   int
   LayoutTrees::Ladderize_right(Node* n)
   {
-    if(n->isLeaf()) {
+    if(n->isLeaf()) 
+    {
 	return 1;
-    } else {
+    } 
+    else 
+    {
 	int leftsize = Ladderize_right(n->getLeftChild());
 	int rightsize = Ladderize_right(n->getRightChild());
-	if(rightsize > leftsize) {
+	if(rightsize > leftsize) 
+	{
 	    n->rotate();
 	}
 	return leftsize + rightsize;

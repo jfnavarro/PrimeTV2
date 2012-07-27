@@ -49,6 +49,7 @@ public:
    * return true if there is a valid scenario. 
    */
   bool lateralTransfer(string mapname);
+  
   /* calculate the lateral transfer scenarios not using parameters, therefore 
    * dynamic programming. Return true if there is a valid scenario.
    */

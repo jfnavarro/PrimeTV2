@@ -10,6 +10,10 @@ SET(CPACK_PACKAGE_VERSION_PATCH "0")
 set(PACKAGE_VERSION ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH})
 set(CPACK_SOURCE_GENERATOR TGZ;ZIP)
 
+if(WIN32)
+  message(FATAL_ERROR "PrimetTV is not yet compatible with Windows")
+endif(WIN32)
+
 # Detect machine architecture, on UNIX:
 if(UNIX AND NOT APPLE AND NOT DEFINED ${TARGET_ARCH})
 	execute_process(COMMAND dpkg --print-architecture
@@ -23,6 +27,11 @@ if(APPLE AND NOT DEFINED ${TARGET_ARCH})
                 OUTPUT_STRIP_TRAILING_WHITESPACE)
 	message(STATUS "Architecture: ${TARGET_ARCH}")
 endif(APPLE AND NOT DEFINED ${TARGET_ARCH})
+
+#location of some files needed by primetv
+set(HEADER_LOCATION "/usr/share/primetv/header.png")
+add_definitions( -DHAS_HEADER=${HEADER_LOCATION} )
+
 
 # PACKAGING OPTIONS: GENERAL
 set(PACKAGE_NICKNAME "primetv")
@@ -113,7 +122,6 @@ include_directories( ${CAIRO_INCLUDE_DIRS})
 
 
 ###DEFINITIONS###################################################
-add_definitions( ${LIBXML2_DEFINITIONS} )
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/cmake/")
 set(DCMAKE_SKIP_RPATH:BOOL=ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -169,12 +177,6 @@ if(NOT APPLE)
   include(${QT_USE_FILE})
 endif(NOT APPLE)
 
-if(APPLE)
-  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -framework accelerate -bind_at_load")
-else()
-  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}")
-endif()
-
 #Collect the files for libraries
 include (libraries/CMakeLists.txt)
 foreach(FILE ${FILES})
@@ -190,20 +192,6 @@ set(MAIN_SOURCES_UNIX windows.cpp edge.cpp layoutrees.cpp mainops.cpp parameters
 foreach(i ${PARSER_SOURCES})
  set_source_files_properties(${i} PROPERTIES LANGUAGE C)
 endforeach(i)
-
-foreach(i ${Libraries})
- set_source_files_properties(${i} PROPERTIES LANGUAGE CXX)
-endforeach(i)
-
-if(APPLE)
-  foreach(i ${MAIN_SOURCES_APPLE})
-    set_source_files_properties(${i} PROPERTIES LANGUAGE CXX)
-  endforeach(i)
-else(APPLE)
-  foreach(i ${MAIN_SOURCES_UNIX})
-    set_source_files_properties(${i} PROPERTIES LANGUAGE CXX)
-  endforeach(i)
-endif(APPLE)
 
 add_library(prime STATIC ${PARSER_SOURCES} ${Libraries})
 

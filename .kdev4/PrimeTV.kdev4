@@ -2,12 +2,11 @@
 BuildItems=@Variant(\x00\x00\x00\t\x00\x00\x00\x00\x00)
 
 [CMake]
-BuildDirs[$e]=$HOME/PrimeTV_build
+BuildDirs[$e]=$HOME/Projects/src/primetv_build
 CMakeDir=/usr/share/cmake-2.8/Modules
 Current CMake Binary=file:///usr/bin/cmake
-CurrentBuildDir=file:///scratch/newhome/PrimeTV_build
-CurrentBuildType=Release
-CurrentInstallDir=file:///usr/local
+CurrentBuildDir=file:///scratch/newhome/Projects/src/primetv_build
+CurrentBuildType=Debug
 ProjectRootRelative=./
 
 [Launch]
@@ -30,14 +29,14 @@ EnvironmentGroup=default
 Executable=file:///usr/local/bin/primetv
 External Terminal=gnome-terminal -e %exe
 GDB Path=file:///usr/bin/gdb
-Project Target=
+Project Target=PrimeTV2,primetv
 Remote GDB Config Script=
 Remote GDB Run Script=
 Remote GDB Shell Script=
 Try Setting Breakpoints On Loading Libraries=true
 Use External Terminal=false
-Working Directory=file:///home/jose/workspace/ReconciledPDF/src
-isExecutable=true
+Working Directory=file:///scratch/newhome/Projects/src/PrimeTV2/Examples
+isExecutable=false
 
 [MakeBuilder]
 Default Make Environment Profile=

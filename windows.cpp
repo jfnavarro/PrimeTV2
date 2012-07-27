@@ -104,19 +104,6 @@ MainWindow::~MainWindow()
     delete(config);
 }
 
-
-
-
-// windows& windows::operator=(const windows& other)
-// {
-//     return *this;
-// }
-//
-// bool windows::operator==(const windows& other) const
-// {
-// ///TODO: return ...;
-// }
-
 void MainWindow::loadGuest()
 {
     QString temp = openFile(tr("Open Gene Tree"));
@@ -184,6 +171,7 @@ void MainWindow::generateTree()
         }
         else
         {
+	    //NOTE perhaps smart pointer?
 //             delete(ops);
             ops = new Mainops();
             ops->setParameters(parameters);
@@ -219,13 +207,18 @@ void MainWindow::generateTree()
             statusBar()->showMessage(tr("Tree Generated"));
         }
 
-    } catch (std::exception&  e)
+    } 
+    catch (std::exception&  e)
     {
         QErrorMessage errorMessage;
         errorMessage.showMessage(e.what());
         errorMessage.exec();
-	guestTree = false;
-	hostTree = false;
+	 guestTree = false;
+	 hostTree = false;
+    }
+    catch (...)
+    {
+      qDebug() << "Unknown Exception";
     }
 
 }

@@ -53,8 +53,7 @@ public:
     MainWindow(const MainWindow& other);
     //destructor
     ~MainWindow();
-//     windows& operator=(const windows& other);
-//     bool operator==(const windows& other) const;
+   
     
 private slots:
     /* slots are functions that are going to be assigned to signals and events */
@@ -65,7 +64,7 @@ private slots:
     /* launches an open file dialog to select and load the host tree*/
     void loadHost();
     
-    /* reconcile the trees, calculate gamma and lambda, the cordinates and draw the tree on the screen*/
+    /* reconciles the trees, calculate gamma and lambda, the cordinates and draw the tree on the screen*/
     void generateTree();
     
     /* exit the application */

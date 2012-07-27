@@ -28,6 +28,9 @@
 #include "Colours.h"
 #include "math.h"
 
+#if defined HAS_HEADER
+  #define HEADER_LOCATION "@HAS_HEADER@"
+#endif
 
 //dashes pens used to pain with dashes
 static const double dashed1[] = {4.0, 1.0};
@@ -142,8 +145,7 @@ static const double pi = 3.141516;
   
   void DrawTree_time::createHeader()
   { 
-    //TODO make use of globals instead of absolute path
-    cairo_surface_t *image = cairo_image_surface_create_from_png("/usr/share/primetv/header.png");
+    cairo_surface_t *image = cairo_image_surface_create_from_png(static_cast<char*>(HEADER_LOCATION));
     cairo_save(cr);
     cairo_set_source_surface(cr,image,pagewidth - cairo_image_surface_get_width(image),10);
     cairo_paint(cr);
@@ -164,6 +166,8 @@ static const double pi = 3.141516;
     }
    
     cr = cairo_create(surfaceBackground);
+    
+    //TODO calling the same for horizontal and vertical??
     if(parameters->horiz)
       cairo_set_source_surface(cr,surface,parameters->maxLeafNameSize,parameters->maxLeafNameSize);
     else
@@ -635,7 +639,7 @@ static const double pi = 3.141516;
 	}
 	else if (n->getReconcilation() == Duplication) //duplication
 	{
-	  nDupl++;
+	   nDupl++;
 	   cairo_set_source_rgba(cr, duplCol.red, duplCol.green, duplCol.blue, 1);
 	   cairo_rectangle(cr,x-(leafWidth/5)/2,y-(leafWidth/5)/2,leafWidth/5,leafWidth/5);
 	   cairo_fill(cr);
@@ -643,7 +647,7 @@ static const double pi = 3.141516;
 	 }
 	else if (n->getReconcilation() == LateralTransfer) //duplication
 	{
-	  nTrans++;
+	   nTrans++;
 	   cairo_set_source_rgba(cr, duplCol.red, duplCol.green, duplCol.blue, 1);
 	   cairo_rectangle(cr,x-(leafWidth/5)/2,y-(leafWidth/5)/2,leafWidth/5,leafWidth/5);
 	   cairo_fill(cr);
@@ -819,8 +823,8 @@ static const double pi = 3.141516;
 
  
 
- /* this function get the destiny x and the origin x of the LT
-  * then if gets the edge when the LT lays on the origin, if 
+ /* this function gets the destiny x and the origin x of the LT
+  * then it gets the edge when the LT lays on the origin, if 
   * there is no edge the virtual edge will be between the species nodes
   * if the destiny is in a different time frame the origin and origin will
   * be placed according to the origin edge and the LGT will be drawn from
@@ -1031,10 +1035,11 @@ static const double pi = 3.141516;
    
  }
  
- //returns the species node which the LGT will lies in between on its origin point
+ //returns the species node which the LGT lies in between its origin point
  pair<Node*,pair<double,double> > DrawTree_time::getOriginLGT(Node *n)
  {
-   
+    //NOTE REDO THIS FUNCTION
+    
     Node *origin = n->getHostChild();
     Node *destiny = n->getHostParent();
     

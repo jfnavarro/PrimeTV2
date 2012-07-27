@@ -424,7 +424,12 @@ try
       main->calculateCordinates(); //calculation of the drawing cordinates
       main->DrawTree();  //drawing the tree
       main->RenderImage(); // save the file
-      delete(parameters);
+           
+      if(main)
+	delete(main);
+   
+      if(parameters)
+	delete(parameters);
     }
   }
   catch (AnError e) {
@@ -439,5 +444,6 @@ try
     return 1;
   }
 
+  
   return EXIT_SUCCESS;
 }

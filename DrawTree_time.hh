@@ -84,7 +84,7 @@ class DrawTree_time {
      * and what part of the tree they belong to */
     void createLegend();
     
-    /* this function draws the text given a parameter from the user on the 
+    /* this function draws the title text given a parameter from the user on the 
      * top of the screen*/    
     void createTitle();
 
@@ -140,22 +140,21 @@ class DrawTree_time {
     Node* getHighestMappedLGT(Node *n);
     
     /* the same as before be the lowest mapped */
-    
     Node* getLowestMappedLGT(Node *n);
     
     /* this functions returns the lowest noded mapped to the node given as input
      *  but not being lateral transfer */
     Node* getLowestMappedNOLGT(Node *n);
     
-    /* this function checks wheter the node give is a destiny of a lateral
+    /* this function checks wheter the node give is a destination of a lateral
      * transfer or not */
     bool destinyLGT(Node *n);
     
-    /* this function is a helper function to draw lateral the lateral 
+    /* this function is a helper function to draw the lateral 
      * transfer paths */
     void newLGTPath(Node *n);
     
-    /* this function get the edge that includes the nodes given as inputs
+    /* this function gets the edge that includes the nodes given as inputs
      */
     Edge *getEdge(Node *sp,Node *gn);
     
@@ -179,6 +178,8 @@ class DrawTree_time {
     /* this function add a new edge to the vector of edges */
     void addEdge(Node *spO,Node *spE,Node *gO,Node *gE,
 		double xo,double yo,double xe,double ye,Edge::category m);
+    
+    /* this function returns the number of LT for a given child son */
     unsigned NumberLT(Node *son);
 
   /* Computer the intersection of two lines, given four points. */
@@ -219,7 +220,7 @@ class DrawTree_time {
   /* During layout, the guest tree is traversed and the number 
    * of duplications/transfers are counted and stored here:
    */
-  int nDupl;
-  int nTrans;
+    int nDupl;
+    int nTrans;
 };
 #endif

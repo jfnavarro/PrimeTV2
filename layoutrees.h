@@ -46,13 +46,14 @@ template <class C> void FreeClearBV( C & cntr ) {
 class LayoutTrees
 {  
 
-
 public:
 
     /*constructor : gene tree, species tree and parameters are going to be modified */
     LayoutTrees(TreeExtended &r,TreeExtended &g,Parameters& p,const GammaMapEx<Node> &gm);
+    
     /* destructor*/
     ~LayoutTrees();
+    
     double getNodeHeight();
     
 private:
@@ -60,29 +61,30 @@ private:
     /* this function ladderize the tree to the right, it swapes the nodes */
     int Ladderize_right(); 
     int Ladderize_right(Node *n);
+    
     /* the same to the left */
     int Ladderize_left(); 
     int Ladderize_left(Node *n);
     
-    /* this function calculate the Species node cordinates using three different time approaches */
+    /* this function calculates the Species node cordinates using three different time approaches */
     void CountSpeciesCoordinates(Node *n, int depth);
     
-    /* this function calculate the gene cordinates according to the species node cordiantes calculated
+    /* this function calculates the gene cordinates according to the species node cordinates calculated
      * previously */
     void CountGeneCoordinates(Node *n);
     
-    /* this function assign a leaf or species node cordinates, it positions will depend of the number
-     * of nodes mapped to the species nodes they are being positioned on */
+    /* this function assigns a leaf gene or species node its cordinates, the positions will depend of the number
+     * of nodes mapped to the species nodes where the node is being positioned on */
     void AssignLeafGene(Node *n);
     
-    /* this function assign a duplication gene its cordinates, dependend in the number of duplication
+    /* this function assigns a duplication gene its cordinates, depending on the number of duplication
      * nodes that are being located in the species edge */
     void AssignGeneDuplication(Node *n);
     
-    /* this function assign a LGT gene its information */
+    /* this function assigns a LGT gene its information */
     void AssignGeneLGT(Node *n);
     
-    /* this function returns the number of nodes of the species nodes with has the most nodes
+    /* this function returns the number of nodes of the species node that has the most nodes
      * mapped */
     int  MostGenes();
     
@@ -90,23 +92,25 @@ private:
      * be used to calculte the x cordinates of the species nodes */
     unsigned maptimes();
     
-    /* this function return the left most y cordinate of the node given */
+    /* this function returns the left most y cordinate of the node given */
     double getLeftMostCoordinate (Node* o);
+    
     /* the same but the right most cordiante */
     double getRightMostCoordinate (Node* o);
     
-    /* this function map all the duplications of the tree in the vector Adress */
+    /* this function maps all the duplications of the tree in the vector Adress */
     Node* FindDuplications(Node* node); 
     
     /* this function maps the number of duplication mapped to each species node*/
     Node* MapDuplications(Node* de, unsigned line);
     
-    /* this function return the level in the tree of the duplication node given */
+    /* this function returns the level in the tree of the duplication node given */
     unsigned Duplevel(Node* nd, int levellineage);
     
     /* this function returns the right most cordiante node for a duplication
      * node given as input */
     double RightMostCoordinate(Node* o, Node *end_of_slice, int duplevel);
+    
     /* the same for the left*/
     double LeftMostCoordinate(Node* o, Node *end_of_slice, int duplevel);
     

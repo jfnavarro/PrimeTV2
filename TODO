@@ -24,3 +24,7 @@ add more feactures to nodes that can be changed by clicking on it, also the posi
 Conecction to trees database to use those trees.
 
 posibility to drag and drop nodes
+
+try to decrease the overlapping of edges
+
+improve the way the LGT cordinates are being calculated
