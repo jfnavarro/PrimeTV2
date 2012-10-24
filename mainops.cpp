@@ -48,6 +48,7 @@ Mainops::~Mainops()
   delete(dt);
   delete(late);
   delete(io);
+  if(layout) delete(layout);
 }
 
 bool Mainops::lateralTransferDP(string mapname)
@@ -273,6 +274,8 @@ void Mainops::DrawTree(cairo_t *cr)
 {
     dt = new DrawTree_time(*parameters,*Guest,*Host,*gamma,cr);
     
+    //TODO here I should calculate transformation according to fixed crossing lines as
+    // in GDrawConstraints in Marco's code
     dt->calculateTransformation();
     
     if(parameters->do_not_draw_species_tree == false) {
@@ -351,3 +354,7 @@ bool Mainops::getValidityLGT()
 }
 
 
+void Mainops::reduceCrossing()
+{
+  layout = new Layout(Host->getRootNode(), *(Guest->getRootNode()), *gamma);
+}

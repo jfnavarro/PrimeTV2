@@ -15,20 +15,10 @@
 // copyright: mcmc-klubben, SBC
 //----------------------------------------------------------------------
 
-//----------------------------------------------------------------------
-//
-// Class Node
-//
-//---------------------------------------------------------------------
 
-
+  unsigned int Node::maxID;
   using namespace std;
 
-  //----------------------------------------------------------------------
-  //
-  // Constructors and destructors
-  //
-  //----------------------------------------------------------------------
   Node::Node(unsigned id)
     : number(id),        // unique identifier
       parent(NULL),      // neighbors in the tree
@@ -49,6 +39,16 @@
       reconcilation(Undefined),
       visited(0)
   {
+        /* Extra methods added by Marco P. **/
+    	subTrExpl = false;
+	binaryLeftChild = NULL;
+	binaryRightChild = NULL;
+	binarySibling = NULL;
+	binaryParent = NULL;
+	swapped = false;
+	binary = false;
+	layoutIndex = 0;
+	if (number > maxID) maxID = number;
   }
 
   Node::Node(unsigned id, const string& nodeName)
@@ -71,6 +71,16 @@
       reconcilation(Undefined),
       visited(0)
   {
+       /* Extra methods added by Marco P. **/
+    	subTrExpl = false;
+	binaryLeftChild = NULL;
+	binaryRightChild = NULL;
+	binarySibling = NULL;
+	binaryParent = NULL;
+	swapped = false;
+	binary = false;
+	layoutIndex = 0;
+	if (number > maxID) maxID = number;
   }
 
   // Copy relatives in tree are not copied!
@@ -95,6 +105,15 @@
       reconcilation(v.reconcilation),
       visited(0)
   {
+       /* Extra methods added by Marco P. **/
+    	subTrExpl = false;
+	binaryLeftChild = v.binaryLeftChild;
+	binaryRightChild = v.binaryRightChild;
+	binarySibling = v.binarySibling;
+	binaryParent = v.binaryParent;
+	swapped = v.swapped;
+	binary = v.binary;
+	layoutIndex = v.layoutIndex;
   
   }
 
@@ -130,19 +149,21 @@
 	hostChild = v.hostChild;
 	reconcilation = v.reconcilation;
 	visited = v.visited;
+	/* Extra methods added by Marco P. **/
+	subTrExpl = false;
+	binaryLeftChild = v.binaryLeftChild;
+	binaryRightChild = v.binaryRightChild;
+	binarySibling = v.binarySibling;
+	binaryParent = v.binaryParent;
+	swapped = v.swapped;
+	binary = v.binary;
+	layoutIndex = v.layoutIndex;
       }
   
     return *this;
   }
   
-  
 
-
-  //---------------------------------------------------------------------
-  //
-  // Access methods
-  //
-  //---------------------------------------------------------------------
 
   // Return the requested relative
   //----------------------------------------------------------------------
@@ -219,8 +240,6 @@
   }
 
   // Set the owner tree
-  //! \todo{There is no check that T!=NULL}
-  //----------------------------------------------------------------------
   Tree*
   Node::getTree()
   {
@@ -276,8 +295,8 @@
 	}
     };
 
-    SetOfNodes
-    Node::getLeaves()
+  SetOfNodes
+  Node::getLeaves()
     {
         SetOfNodes nodes;
         if( isLeaf() ){
@@ -294,11 +313,6 @@
         return nodes;
     }
 
-  //---------------------------------------------------------------------
-  //
-  // Manipulators
-  //
-  //---------------------------------------------------------------------
 
   //Set the (leaf) name
   //---------------------------------------------------------------------
@@ -362,7 +376,6 @@
   Node::changeID(unsigned newID)
   {
     assert(newID < getTree()->getNumberOfNodes());
-//     assert(getNumber() >= getTree()->getNumberOfNodes());
     number = newID;
   }
 
@@ -384,12 +397,6 @@
       }
   }
 
-
-  //---------------------------------------------------------------------
-  //
-  // Tests
-  //
-  //---------------------------------------------------------------------
 
   // Checks if the current node is a leaf - A leaf lacks children
   //---------------------------------------------------------------------
@@ -421,13 +428,6 @@
       }
   }
 
-
-
-
-  // Comparison, order
-  // This is used when putting a node in a set.
-  // Climb tree from a until we find b or the root
-  //---------------------------------------------------------------------
   bool
   Node::operator<=(const Node& b) const
   {
@@ -453,7 +453,6 @@
       {
 	return operator<=(b);
       }
-//     return porder < b->porder;
   }
 
   bool
@@ -461,7 +460,6 @@
   {
     assert(b!= 0);
     return operator<(*b);
-//     return porder < b->porder;
   }
 
   bool
@@ -475,12 +473,9 @@
       {
 	return b <= *this;;
       }
-//     return porder < b->porder;
   }
 
-  // Until I sort out the stupid operator business, I add the following 
-  // trusty old method. Note that a.dominates(a) is true.
-  //---------------------------------------------------------------------
+
   bool
   Node::dominates(const Node& v) const
   {
@@ -506,15 +501,79 @@
 	return dominates(v);
       }
   }
+  
+  Real 
+  Node::getTime() const
+  {
+    if(this->isRoot())
+      {
+	return ownerTree->getTopTime();
+      }
+    else if(ownerTree->hasTimes())
+      {
+	return ownerTree->getTime(*getParent()) - ownerTree->getTime(*this);
+      }
+    else
+      {
+	return 0;
+      }
+  }
+  
+  void
+  Node::setTime(const Real &t)
+  {
 
+    if(getParent())
+      {
+	throw AnError("Currently we disallow using setTime for non-root nodes",1);
+      }
+    else
+      {
+	ownerTree->setTopTime(t);
+      }
+  }
+  
+  // Set the branch length associated with the node
+  // This does not affect time, nodeTime. 
   //---------------------------------------------------------------------
-  //
-  // Output
-  //
-  //---------------------------------------------------------------------
+  void
+  Node::setLength(const Real &newLength)
+  {
+    assert(getTree()->hasLengths()); // assert lengths is modeled
 
-  // Simple output
-  //---------------------------------------------------------------------
+    if(ownerTree->hasLengths())
+      {
+	ownerTree->setLength(*this, newLength);
+      }
+    else
+      {
+	throw AnError("Node::setLength:\n"
+		      "ownerTree->lengths is NULL",1);
+      }
+  }
+  
+  Real 
+  Node::getNodeTime() const
+  {
+    if(ownerTree->hasTimes())
+      return ownerTree->getTime(*this);
+    else
+      return 0;
+  }
+  
+  Real 
+  Node::getLength() const
+  {
+    if(ownerTree->hasLengths())
+      {
+	return ownerTree->getLengths()[this->getNumber()];//(*this);
+      }
+    else
+      {
+	return 0;
+      }
+  }
+
   std::ostream& 
   operator<< (std::ostream& o, const Node &v)
   {
@@ -525,10 +584,6 @@
 	<< v.stringify("ET", v.getTime())
 	<< v.stringify("BL", v.getLength());
       
-    if(v.ownerTree->hasRates())
-      {    
-	oss << v.stringify("RT", v.ownerTree->getRate(v));
-      }
     oss << v.stringify("left", v.getLeftChild())
 	<< v.stringify("right", v.getRightChild())
 	<< v.stringify("parent", v.getParent());
@@ -584,236 +639,7 @@
     return operator<<(o, *v);
   }
 
-
-  //=====================================================================
-  // 
-  // DEPRECATED!
-  //
-  //=====================================================================
-
-  // Get the node's chronological time from the leaves in the subtree
-  // rooted at the node
-  //---------------------------------------------------------------------
-  Real 
-  Node::getNodeTime() const
-  {
-    if(ownerTree->hasTimes())
-      return ownerTree->getTime(*this);
-    else
-      return 0;
-  }
-
-  // Get the arc's chronological time from parent to current node
-  //---------------------------------------------------------------------
-  Real 
-  Node::getTime() const
-  {
-    if(this->isRoot())
-      {
-	return ownerTree->getTopTime();
-      }
-    else if(ownerTree->hasTimes())
-      {
-	return ownerTree->getTime(*getParent()) - ownerTree->getTime(*this);
-      }
-    else
-      {
-	return 0;
-      }
-  }
-
-  // Get the branch (edge) length associated with the node
-  //---------------------------------------------------------------------
-  Real 
-  Node::getLength() const
-  {
-    if(ownerTree->hasLengths())
-      {
-	return ownerTree->getLengths()[this->getNumber()];//(*this);
-      }
-    else
-      {
-	return 0;
-      }
-  }
-
-  // Provided that nt does not violate the partial order of nodes and 
-  // their Nodetime, this sets the node's chronological time from the 
-  // leaves of the subtree rooted at the node AND update surrounding edge
-  // times and edge lengths.
-  // Note that it does not change the surrounding node times. 
-  // This assumes that all times and node times have been initiated. 
-  // Note that the root's edgetime will never be changed by this function
-  // This has to be done explicitely!
-  //---------------------------------------------------------------------
-  bool
-  Node::changeNodeTime(const Real &nt)
-  {
-    assert(getTree()->hasTimes()); // assert times is modeled
-    if(ownerTree->hasTimes() == false)
-      {
-	return false;
-      }
-    if(isLeaf())
-      {
-	if(nt == 0)
-	  {
-	    return true;
-	  }
-	else
-	  {
-	    ostringstream oss;
-	    oss << "Warning! Node::changeNodeTime() at node "
-		<< number
-		<< ":\n   Leaves will always have nodeTime = 0. "
-		<< "I will ignore the time\n"
-		<< "   you suggest and you should "
-		<< "probably check your code!\n";
-	    cerr << oss.str();
-	    return false;
-	  }
-      }
-    assert(nt >= 0);    // No negative times allowed
-    Node& left = *getLeftChild();
-    Node& right = *getRightChild();
-    Real let = nt - left.getNodeTime();
-    Real ret = nt - right.getNodeTime();
-
-    if(let < 0 || ret < 0) // check for sanity towards children times
-      {    
-	ostringstream oss;
-	oss << "Node::changeNodeTime() at node "
-	     << number
-	     << ":\n   Suggested nodeTime is incompatible "
-	     << "with children's nodeTimes";
-	throw AnError(oss.str(),1);
-      }
-
-    // if(!isRoot()) // this fails for trees under construction, e.g., as
-    // in TreeIO::<simple>extend<Species/Gene>Tree(...), therefore we use:
-    if(getParent()) //else it's the root or top node of tree under construction
-      {
-	Real et = getParent()->getNodeTime() - nt;
-	if(et < 0)  // Check for sanity towards parent time
-	  {
-	    ostringstream oss;
-	    // TODO: Should this be replaced by a assert? Can we guarantee that
-	    // our algorithm always suggest reasonable node times? /bens
-	    oss << "changeNodeTime() at node "
-		<< number
-		<< ":\n   Suggested nodeTime is incompatible "
-		<< "with parent's nodeTime";
-	    throw AnError(oss.str(),1);
-	  }	
-      }
-    ownerTree->setTime(*this, nt);
-
-    return true;
-  }
-
-
-  // Provided that et does not violate the partial order of nodes and 
-  // their Nodetimes, this sets the node's edge time AND update  its 
-  // node time and surrounding edge times.
-  // Note that it does not change the surrounding node times. 
-  // This assumes that all times and node times have been initiated. 
-  // Does not work for leaves, since we cannot alter a leaf's nodeTime
-  //---------------------------------------------------------------------
-  bool
-  Node::changeTime(const Real &et)
-  {
-    assert(getTree()->hasTimes()); // assert times is modeled
-    assert(et >= 0);   // No negative times allowed
-    assert(!isLeaf()); // leaves' times cannot be changed with this function
-    if(isRoot())
-      {
-	ownerTree->setTopTime(et);
-	return true;
-      }
-    else if(ownerTree->hasTimes() == false)
-      {
-	return false;
-      }
-    else
-      {
-	Real nt = getParent()->getNodeTime() - et; // get new nodeTime
-	// use it to get Children's edgeTimes
-	Node& left = *getLeftChild();
-	Real let = nt - left.getNodeTime();
-	Node& right = *getRightChild();
-	Real ret = nt - right.getNodeTime();
-	
-	if(let < 0|| ret < 0) //check for sanity of proposed edge time
-	  {
-	    // TODO: Again (see changeNodeTime) can this be replaced by 
-	    // an assert? /bens
-	    cerr << "changeTime() at node "
-		 << number
-		 << ":\n   Suggested time is incompatible "
-		 << "with surrounding nodeTimes\n";
-	    return false;
-	  }
-	
-	// Now we can set all times!
-	ownerTree->setTime(*this,nt);
-      }
-
-    return true;
-  }
-
-  // Set the node's chronological time from the leaves of the subtree
-  // rooted at the node. No check for compatibility with other nodes
-  // no update of dependent attributes!
-  // Use updateTime() to get NodeTimes and branchLengths up to date
-  //---------------------------------------------------------------------
-  void
-  Node::setNodeTime(const Real &t)
-  {
-    assert(getTree()->hasTimes()); // assert times is modeled
-    assert(t >= 0);
-    ownerTree->setTime(*this, t);
-  }
-
-
-  // Set the arc's chronological time. No check for compatibility with 
-  // other nodes, no update of dependent attributes!
-  // Use updateNodeTime() to get NodeTimes and branchLengths up to date
-  //---------------------------------------------------------------------
-  void
-  Node::setTime(const Real &t)
-  {
-
-    if(getParent())
-      {
-	throw AnError("Currently we disallow using setTime for non-root nodes",1);
-      }
-    else
-      {
-	ownerTree->setTopTime(t);
-      }
-  }
-
-
-  // Set the branch length associated with the node
-  // This does not affect time, nodeTime. 
-  //---------------------------------------------------------------------
-  void
-  Node::setLength(const Real &newLength)
-  {
-    assert(getTree()->hasLengths()); // assert lengths is modeled
-
-    if(ownerTree->hasLengths())
-      {
-	ownerTree->setLength(*this, newLength);
-      }
-    else
-      {
-	throw AnError("Node::setLength:\n"
-		      "ownerTree->lengths is NULL",1);
-      }
-  }
-
-   /*** EXTRA FEACTURES*****/
+   /*** EXTRA FEATURES ***/
    
    
   void Node::setColor(Color c)
@@ -924,4 +750,174 @@
   unsigned Node::getVisited()
   {
     return visited;
+  }
+  
+  
+  /* Extra methods added by Marco P. **/
+  
+  int Node::getXtraIndex()
+  {
+    return xtraNIndex;
+  }
+
+  int Node::getXtraIndex() const
+  {
+    return xtraNIndex;
+  }
+   
+  void Node::setXtraIndex(int xtraNIndex)
+  {
+    this->xtraNIndex = xtraNIndex;
+  }
+  
+  void Node::setBinaryLeftChild(Node* node) 
+  {
+    if (node == NULL) 
+    {
+      binaryLeftChild = NULL;
+      return;
+    }
+    //insert the left son; tell him you're its father
+    binaryLeftChild = node; 
+    node->setBinaryParent(this);
+    //tell both the children of the respective sibling
+    if (binaryRightChild != NULL and binaryRightChild != node) 
+    {
+	binaryRightChild->setBinarySibling(binaryLeftChild);
+	binaryLeftChild->setBinarySibling(binaryRightChild);
+    }
+  }
+
+  void Node::setBinary(bool bin) 
+  {
+    this->binary = bin;
+  }
+
+
+  bool Node::isBinary() 
+  {
+    return binary;
+  }
+
+  void Node::rotateBinaryChild() 
+  {
+    if(binaryLeftChild!=NULL and binaryRightChild != NULL)
+    {
+	swap(*binaryLeftChild,*binaryRightChild);
+    }
+
+  }
+
+  void Node::setBinaryRightChild(Node* node) 
+  {
+    if (node == NULL) {
+	binaryRightChild = NULL;
+	return;
+    }
+    //insert the right son; tell him you're its father
+    binaryRightChild = node;
+    node->setBinaryParent(this);
+    //tell both the children of the respective sibling
+    if (binaryLeftChild != NULL and binaryLeftChild != node) {
+	binaryRightChild->setBinarySibling(binaryLeftChild);
+	binaryLeftChild->setBinarySibling(binaryRightChild);
+    }
+  }
+
+  Node* Node::getBinaryLeftChild() 
+  {
+    return binaryLeftChild;
+  }
+  
+  Node* Node::getBinaryRightChild() 
+  {
+    return binaryRightChild;
+  }
+  
+  bool Node::subTrComplExpl() 
+  {
+    return subTrExpl;
+  }
+
+  void Node::setSubTrComplExpl(bool value) 
+  {
+    subTrExpl = value;
+  }
+
+  void Node::addNodeSwap(Node* speciesNode, Node* swappedNode)
+  {
+    if(swapped == false){
+	swapped = true;
+    }
+    valueInfo valInfo(swappedNode);
+    NMap.insert(mapType::value_type(speciesNode->getNumber(), valInfo));
+    nodeMap[speciesNode->getNumber()] = swappedNode;
+  }
+
+
+  int Node::set(Node* searchNode, int strType, double val, int XtraInd)
+  {
+    mapType::iterator nIter = NMap.find(searchNode->getNumber());
+    if(nIter!=NMap.end())
+    {
+	if(strType== 1){
+	  nIter->second.type = 1;
+	  nIter->second.XtraIndex = 0;
+	}
+	else if(strType == 2){
+	  nIter->second.type = 2;
+	  nIter->second.XtraIndex = XtraInd;
+	}
+	else{}
+	
+	nIter->second.value = val;
+	return nIter->second.swapNode->getNumber();
+    }
+    else{
+	return -1;
+    }
+  }
+
+  std::map<int,Node::valueInfo>::iterator Node::find(Node* findNode)
+  {
+    mapType::iterator nIter = NMap.find(findNode->getNumber());
+    if(nIter!=NMap.end()){
+	return nIter;
+    }
+    return nIter;
+  }
+
+
+  Node* Node::getSwappedNode(Node* speciesNode){
+    return nodeMap[speciesNode->getNumber()];
+  }
+
+  bool Node::hasBeenSwapped(){
+    return swapped;
+  }
+
+  void Node::setBinaryParent(Node *v) {
+    binaryParent = v;
+  }
+
+  Node*
+  Node::getBinaryParent() {
+    return binaryParent;
+  }
+
+  void Node::setBinarySibling(Node *v) {
+    binarySibling = v;
+  }
+
+  Node*
+  Node::getBinarySibling() {
+    return binarySibling;
+  }
+  
+  void Node::setLayoutIndex(int layoutId) {
+	layoutIndex = layoutId;
+  }
+
+  int Node::getLayoutIndex() {
+	return layoutIndex;
   }

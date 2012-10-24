@@ -31,7 +31,10 @@
     ~SetOfNodes();
 
     SetOfNodes& operator=(const SetOfNodes &son);
-
+    
+    /* added by Marco P. */
+    std::set<Node*>::iterator search(Node *u);
+    
     void insert(Node* u);	// Add u to the set
     void insertVector(std::vector<Node*>& v);  //Add a vector to the set - NOTE! RISK THAT THIS FUNCTION WILL BECHANGED!
     void erase(Node* u);	// Remove u from the set

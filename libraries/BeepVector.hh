@@ -233,11 +233,8 @@ using namespace std;
   //! \name Provide alias for instantiations of BeepVector
   //--------------------------------------------------------------
   //@{
-//   typedef BeepVector<Probability> ProbVector; //initializes elems to 0
   typedef BeepVector<unsigned> UnsignedVector;//initializes elems to 0
   typedef BeepVector<Node*> NodeVector; //initializes elems to NULL
-//   typedef BeepVector<NodeExtended*> NodeVectorEx; //initializes elems to NULL
-//   typedef BeepVector<LA_Vector> LikeVector; //init elems to (0,.,0)
   //@}
 
 

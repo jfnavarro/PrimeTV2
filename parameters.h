@@ -95,6 +95,7 @@ public:
   Color speciesFontColor;
   Color geneFontColor;
   Color allFontColor;
+  bool reduce;
 };
 
 

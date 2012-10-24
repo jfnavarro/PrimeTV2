@@ -7,13 +7,6 @@
 
   using namespace std;
 
-
-  //----------------------------------------------------------------
-  //
-  // Construct/destruct/assign
-  //
-  //----------------------------------------------------------------
-
   AnError::AnError(const string &message, int err_code) throw()
     : msg_str(message),
       arg_str(""),
@@ -30,19 +23,10 @@
   {
   }
 
-
-
   AnError::~AnError() throw()
   {
   }
 
-  //----------------------------------------------------------------
-  //
-  // Interface
-  //
-  //----------------------------------------------------------------
-
-  // Output the error message and exit if the error code is positive
   void
   AnError::action()
   {
@@ -55,8 +39,6 @@
       }
   }
 
-
-  // \return The error message, without even considering to exit.
   std::string
   AnError::message() const
   {
@@ -72,8 +54,6 @@
     return s;
   }
 
-
-  // The supplied error code.
   int
   AnError::code() const
   {
@@ -85,4 +65,3 @@
   {
     return message().c_str();
   }
-

@@ -41,6 +41,7 @@
   #include "ui_primetv.h"
 #endif
 
+
 using namespace boost;
 namespace po = boost::program_options;
 using namespace std;
@@ -87,7 +88,6 @@ try
   const char* genetree;
   const char* mapfile = "";
   string colorconfig;
-
   // Create path to default config file
   
   char *homepath = getenv("HOME");
@@ -171,7 +171,9 @@ try
     ("show-event-count", po::bool_switch(&parameters->show_event_count),
      "Show the number of duplications and transfers used in the computed reconciliation.")
     ("vertical,V", po::bool_switch(&parameters->horiz)->default_value(false), 
-     "Vertical orientation, horizontal by default.");
+     "Vertical orientation, horizontal by default.")
+    ("reduce,R", po::bool_switch(&parameters->reduce)->default_value(false), 
+     "Reduce number of crossing lines, false by default.");
 
   
   // Hidden options, will be allowed both on command line and
@@ -213,7 +215,7 @@ try
   || !strcmp(av[1], "/help") || !strcmp(av[1], "-help") || !strcmp(av[1], "help") ))
   {
       cout << visible << "\n" << "\n Default input <guest tree> [<host tree>] [<options>]\n Alternative input"
-     "(option -R) <gene tree> <species tree> <map file> [<options>] \n";
+     "(option -r) <gene tree> <species tree> <map file> [<options>] \n";
       return 0;
   }
 
@@ -226,7 +228,6 @@ try
   {
     parameters->colorConfig->setColors(vm["color"].as<string>().c_str());
   }
-  
   
   if (vm.count("input-file"))
   {
@@ -421,6 +422,9 @@ try
       }
       
       main->CalculateGamma(); //calculation of gamma and lambda
+      
+      if(parameters->reduce) main->reduceCrossing();
+      
       main->calculateCordinates(); //calculation of the drawing cordinates
       main->DrawTree();  //drawing the tree
       main->RenderImage(); // save the file

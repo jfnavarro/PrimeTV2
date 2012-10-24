@@ -70,7 +70,6 @@ public:
     // check if the node given as a parameter is a LGT or not
     bool isLateralTransfer(T &u) const;
     
-    
     // returns the lambdamap
     LambdaMapEx<T> getLambda() const;
     
@@ -127,6 +126,9 @@ public:
     
     //Count the gamma-paths on a gene
     unsigned numberOfGammaPaths(Node &u) const;
+    
+    
+    SetOfNodesEx<T> getGamma(T *x) const;
     
 private:
    
@@ -860,5 +862,16 @@ private:
   {
     return this->transfer_edges;
   }
+  
+  
+  template <class T>
+  SetOfNodesEx<T>
+  GammaMapEx<T>::getGamma(T *x) const
+  {
+    assert(x != NULL);
+    assert(x->getNumber() < gamma.size());
+    return gamma[x->getNumber()];
+  }
+  
 
 #endif // GAMMAMAPEX_H

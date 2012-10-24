@@ -80,6 +80,7 @@ Parameters::Parameters()
   allFontColor.blue = 0.0;
   allFontColor.green = 0.0;
   allFontColor.red = 0.0;
+  reduce = false;
 }
 
 Parameters& Parameters::operator=(const Parameters& p)
@@ -140,6 +141,7 @@ Parameters& Parameters::operator=(const Parameters& p)
 	speciesFontColor = p.speciesFontColor;
 	geneFontColor = p.geneFontColor;
 	allFontColor = p.allFontColor;
+	reduce = p.reduce;
       }
     return *this;
 

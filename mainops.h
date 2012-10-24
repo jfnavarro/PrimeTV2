@@ -33,7 +33,7 @@
 #include "libraries/AnError.hh"
 #include "DrawTree_time.hh"
 #include "libraries/gammamapex.h"
-
+#include "Layout.h"
 
 class Mainops
 {
@@ -82,6 +82,9 @@ public:
   /* set the parameters object */
   void setParameters(Parameters *p);
   
+  /* reduce number of crossing lines */
+  void reduceCrossing();
+  
 private:
   
   /* check if there are scenarios with LGT in the set of scenarios given */
@@ -105,7 +108,7 @@ private:
   TreeIO *io;
   vector<SetOfNodesEx<Node> > AC;
   StrStrMap          gs;
-
+  Layout* layout;
 };  
 
 

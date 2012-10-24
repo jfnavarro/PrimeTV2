@@ -2,7 +2,6 @@
 #include "NHXtree.h"
 
 #include <stdio.h>
-//#include <malloc.h>
 #include <stdlib.h>
 
 /*
@@ -19,16 +18,6 @@ delete_trees(struct NHXtree *T)
     free(T);
   }
 }
-
-/*struct NHXtree *read_tree(const char *filename)
-{
-}
-struct NHXtree *read_tree_string(const char *str)
-{
-}
-struct NHXtree *read_tree_from_file_stream(FILE * f)
-{
-}*/
 /*
   Internal stuff
 */

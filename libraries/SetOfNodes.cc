@@ -41,11 +41,6 @@
   {
     //I am simply not sure how sets work, so I hope this ugly thing works
     theSet.insert(v.begin(), v.end());
-    //Alternative 
-    //   for(unsigned n = 0; n < v.size(); n++)
-    //     {
-    //       theSet.insert(v[n]);
-    //     }
   }
 
   void
@@ -98,4 +93,8 @@
       }
     return *iter;
       
+  }
+  
+  std::set<Node*>::iterator SetOfNodes::search(Node *u){
+	  return theSet.find(u);
   }

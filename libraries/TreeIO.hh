@@ -358,11 +358,11 @@
       if(traits.hasET() || traits.hasNT() || 
 	(traits.hasNW() && traits.hasNWisET()))
 	{
-	  tree.setTimes(*new RealVector(treeSize(t)), true);
+	  tree.setTimes(*new RealVector(treeSize(t)));
 	}
       if(traits.hasBL()|| (traits.hasNW() && traits.hasNWisET() == false))
 	{
-	  tree.setLengths(*new RealVector(treeSize(t)), true);
+	  tree.setLengths(*new RealVector(treeSize(t)));
 	}
     
       // Convert it into our preferred C++ data structure
@@ -1081,9 +1081,9 @@
     //----------------------------------------------------------------------
 
   protected:
+    
     enum TreeSource source; //!< Where do we read trees from?
     std::string stringThatWasPreviouslyNamedS;          //!< filename of current file to read from
-
     static std::string antiChainMarkupTag; //!< \todo{is this used? /bens
     
 

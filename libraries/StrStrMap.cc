@@ -99,7 +99,7 @@
 	    idx--;
 	  }
       }
-    PROGRAMMING_ERROR("Out of bounds.");
+    //PROGRAMMING_ERROR("Out of bounds.");
     return("");  
   }
 
