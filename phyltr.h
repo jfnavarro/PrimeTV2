@@ -439,7 +439,7 @@ multi_array<cost_type, 2>           g_below;
 multi_array<cost_type, 2>           g_outside;
 multi_array<BacktrackElement, 2>    g_backtrack_matrix;
 static ProgramInput g_input;
-static const unsigned                          NONE = -1;
+static const unsigned               NONE = -1;
 
 
 

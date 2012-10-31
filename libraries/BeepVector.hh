@@ -5,7 +5,6 @@
 #include <vector>
 #include <sstream>
 #include "Node.hh"
-#include "SetOfNodes.hh"
 #include "Tree.hh"
 
 using namespace std;

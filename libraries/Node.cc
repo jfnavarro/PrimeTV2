@@ -122,6 +122,8 @@
   {
     
   }
+  
+  
 
   // Assignment: Also pointers are copied, which might not be the 
   // proper thing to do.
@@ -295,17 +297,17 @@
 	}
     };
 
-  SetOfNodes
+  SetOfNodesEx<Node>
   Node::getLeaves()
     {
-        SetOfNodes nodes;
+        SetOfNodesEx<Node> nodes;
         if( isLeaf() ){
             nodes.insert(this);
         }
         else{
             //Find leaves recursively
             nodes = leftChild->getLeaves();
-            SetOfNodes r = rightChild->getLeaves();
+            SetOfNodesEx<Node> r = rightChild->getLeaves();
             for(unsigned int i = 0; i < r.size(); i++){
                 nodes.insert(r[i]);
             }

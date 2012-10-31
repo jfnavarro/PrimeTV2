@@ -81,6 +81,7 @@ Parameters::Parameters()
   allFontColor.green = 0.0;
   allFontColor.red = 0.0;
   reduce = false;
+  drawAll = false;
 }
 
 Parameters& Parameters::operator=(const Parameters& p)
@@ -142,6 +143,7 @@ Parameters& Parameters::operator=(const Parameters& p)
 	geneFontColor = p.geneFontColor;
 	allFontColor = p.allFontColor;
 	reduce = p.reduce;
+	drawAll = p.drawAll;
       }
     return *this;
 

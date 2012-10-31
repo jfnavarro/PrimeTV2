@@ -87,7 +87,10 @@ try
   const char* speciestree;
   const char* genetree;
   const char* mapfile = "";
+  std::string precomputed_scenario_file = "";
   string colorconfig;
+  bool show_lgt_scenarios = false;
+  bool load_precomputed_lgt_scenario = false;
   // Create path to default config file
   
   char *homepath = getenv("HOME");
@@ -108,7 +111,7 @@ try
     ("help,h", "Produce help message") 
     ("gui", po::bool_switch(&parameters->UI), "Initiates a Graphical User Interface")
     ("reconciled,r", po::bool_switch(&parameters->isreconciled)->default_value(false), 
-     "Indicates that the Guest tree is already reconciled. By default, a most parsimonous reconciliation is computed. This option requires a third input file which maps guest tree leaves to hsot tree leaves")
+     "Indicates that the Guest tree is already reconciled. By default, a most parsimonous reconciliation is computed. This option requires a third input file which maps guest tree leaves to host tree leaves")
     ("config,C", po::value<string>(&config_file)->default_value(default_config_file),
                   "Name of a file of a configuration.");
     
@@ -173,7 +176,13 @@ try
     ("vertical,V", po::bool_switch(&parameters->horiz)->default_value(false), 
      "Vertical orientation, horizontal by default.")
     ("reduce,R", po::bool_switch(&parameters->reduce)->default_value(false), 
-     "Reduce number of crossing lines, false by default.");
+     "Reduce number of crossing lines, false by default.")
+    ("show-scenarios,b", po::bool_switch(&show_lgt_scenarios)->default_value(false), 
+     "Output on the screen all pre-computed LGT scenarios(only valid if option -l is activated).")
+    ("draw-all-lgt,Y", po::bool_switch(&parameters->drawAll)->default_value(false), 
+     "Draw a file for each pre-computed LGT scenario.")
+    ("precomputed-lgt-scenario,X", po::value<string>(&precomputed_scenario_file), 
+     "<string> name of the file containing the scenario as: \nTransfer edges Numbers: 9  2\nSigma 0 : 2\nSigma 1 : 4\n...");
 
   
   // Hidden options, will be allowed both on command line and
@@ -377,6 +386,12 @@ try
 	parameters->yoffset = 0.0;
     } 
   }
+  
+  if (vm.count("precomputed-lgt-scenario"))
+  {
+    load_precomputed_lgt_scenario = true;
+  }
+    
 
 
 //********************************************************************************************//
@@ -415,19 +430,36 @@ try
       //we calculate the LGT scenarios is indicated
       if(parameters->lattransfer)
       { 
- 	if(parameters->lateralmincost == 1.0 && parameters->lateralmaxcost == 1.0) //do it with parameters
-	 main->lateralTransferDP(mapfile);
+	if(load_precomputed_lgt_scenario)
+	{
+	  main->loadPreComputedScenario(precomputed_scenario_file);
+	}
+ 	else if(parameters->lateralmincost == 1.0 && parameters->lateralmaxcost == 1.0) //do it with parameters
+	{
+	  main->lateralTransferDP(mapfile);
+	}
  	else
+	{
  	  main->lateralTransfer(mapfile);
+	}
       }
       
-      main->CalculateGamma(); //calculation of gamma and lambda
+      if(parameters->drawAll && parameters->lattransfer)
+      {
+	main->drawAllLGT();
+      }
+      else if(parameters->drawAll)
+      {
+	std::cerr << "The option -Y has to be used together with the option -l\n";
+	return 1;
+      }
+      else
+      {
+	main->drawBest();
+      }
       
-      if(parameters->reduce) main->reduceCrossing();
-      
-      main->calculateCordinates(); //calculation of the drawing cordinates
-      main->DrawTree();  //drawing the tree
-      main->RenderImage(); // save the file
+      if(show_lgt_scenarios and parameters->lattransfer)
+	  main->printLGT();
            
       if(main)
 	delete(main);

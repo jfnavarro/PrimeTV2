@@ -4,10 +4,10 @@
 #include <string>
 #include "Color.h"
 #include <map>
+#include <libraries/SetOfNodesEx.hh>
 
     using namespace std;
     class Tree;
-    class SetOfNodes;
     
     enum  Type{Leaf=0, Speciation=1, Duplication=2, LateralTransfer=3, Undefined=4};
     
@@ -122,7 +122,7 @@
     void setParent(Node *parent);
     void changeID(unsigned newID);
     void deleteSubtree();
-    SetOfNodes getLeaves();
+    SetOfNodesEx<Node> getLeaves();
     bool isLeaf() const;		
     bool isRoot() const;		
     bool operator<=(const Node& b) const;

@@ -82,10 +82,23 @@ public:
   /* set the parameters object */
   void setParameters(Parameters *p);
   
-  /* reduce number of crossing lines */
-  void reduceCrossing();
+  /* print a selected numbef of LGT scenarios sorted by cost */
+  void printLGT();
   
-private:
+  /* draws and saves in a file the most optimal scenario */
+  void drawBest();
+  
+  /* draws and saves in different files all the valid LGT scenarios*/
+  void drawAllLGT();
+  
+  /* loads a precomputed LGT scenario from a text file
+   * file must look like :
+   * Transfer edges Numbers:	9 3 
+     Sigma 0 : 2
+     Sigma 1 : 4
+     ...
+  */
+  void loadPreComputedScenario(const std::string &filename); 
   
   /* check if there are scenarios with LGT in the set of scenarios given */
   bool thereAreLGT(std::vector<Scenario> scenarios);

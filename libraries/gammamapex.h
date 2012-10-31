@@ -55,7 +55,7 @@ public:
     //generates the most parimonious gamma object
     static GammaMapEx MostParsimonious(const TreeExtended &G,const TreeExtended &S,const LambdaMapEx<T> &L); 
     
-    /* these functions are going to compute and lod the chainOnNode vector which is a map
+    /* these functions are going to compute and load the chainOnNode vector which is a map
      * of species nodes mapped for each gene node*/
     void computeGammaBound(T *g);
     void computeGammaBoundBelow(T *g);

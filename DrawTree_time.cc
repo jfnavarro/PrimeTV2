@@ -248,11 +248,10 @@ static const double pi = 3.141516;
       oss << "#duplications: " << nDupl
 	  << ", no transfers ";
     }
-    const char *str = oss.str().c_str();
-    cerr << str << endl;
-    cairo_text_extents (cr, str, &extents);
+    cerr << oss.str() << endl;
+    cairo_text_extents (cr, oss.str().c_str(), &extents);
     cairo_move_to (cr, 0, extents.height*2);
-    cairo_show_text(cr,  str);
+    cairo_show_text(cr,  oss.str().c_str());
     cairo_restore(cr);
   }
   

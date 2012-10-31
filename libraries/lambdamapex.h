@@ -43,6 +43,7 @@
 #include "parameters.h"
 #include <boost/dynamic_bitset.hpp>
 #include "libraries/BeepVector.hh"
+#include "libraries/StrStrMap.hh"
 
 using namespace std;
 using boost::dynamic_bitset;
@@ -70,8 +71,8 @@ public:
     void update(const TreeExtended &G,const TreeExtended &S, StrStrMap* gs = 0);
     
     //update lambda with the Lateral Transfers
-    void update(const TreeExtended &G, const TreeExtended &S, const std::vector<unsigned> sigma,
-                const dynamic_bitset<> transfer_edges);
+    void update(const TreeExtended &G, const TreeExtended &S, const std::vector<unsigned> &sigma,
+                const dynamic_bitset<> &transfer_edges);
     
     //update lambda for a normal reconcilation for a lambda given
     void update(const TreeExtended &G, const TreeExtended& S,const std::vector<unsigned> &lambda);
@@ -178,8 +179,8 @@ private:
   }
   
   template <class T>
-  void LambdaMapEx<T>::update(const TreeExtended& G, const TreeExtended& S, const std::vector< unsigned int > sigma, 
-			 const dynamic_bitset<> transfer_edges)
+  void LambdaMapEx<T>::update(const TreeExtended& G, const TreeExtended& S, const std::vector< unsigned int > &sigma, 
+			 const dynamic_bitset<> &transfer_edges)
   {
     
     clearValues();

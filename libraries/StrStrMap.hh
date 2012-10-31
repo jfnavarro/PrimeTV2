@@ -4,42 +4,20 @@
 #include <string>
 #include <map>
 #include <stdexcept>
-
+  
+  // Author: Lars Arvestad, © the MCMC-club, SBC, all rights reserved
 
   using namespace std;
-  
-  //---------------------------------------------------------------------
-  //! Store maps of strings to other strings. (Think gene names to species
-  //! names.) Strings in the interface are char pointers, but internally, 
-  //! I use C++ std class string until we go string in the whole app.
-  //!
-  //! \todo{This class is a candidate for a rewrite such that it is a subclass
-  //! of map<string,string> rather than a, eeh, container for it.}
-  //
-  // Please notice that this file also contain the subclass DummyStrStrMap
-  //! Author: Lars Arvestad, SBC, © the MCMC-club, SBC, all rights reserved
-  //---------------------------------------------------------------------
-  class StrStrMap
+
+  class StrStrMap 
   {
   public:
-    //---------------------------------------------------------------------
-    // 
-    // Construct / Destruct
-    //
-    //---------------------------------------------------------------------
+
     StrStrMap();
     virtual ~StrStrMap();
     StrStrMap(const StrStrMap& sm);
 
     StrStrMap& operator=(const StrStrMap& sm);
-
-
-    
-    //---------------------------------------------------------------------
-    // 
-    // Interface
-    //
-    //---------------------------------------------------------------------
 
     //! Adding relations 
     //! u is a gene name x is a species name
@@ -65,66 +43,13 @@
     {
       return avbildning;
     }
-
-    //---------------------------------------------------------------------
-    //! I/O
-    //---------------------------------------------------------------------
-    friend std::ostream& operator<<(std::ostream &o, const StrStrMap &);
     
-    //---------------------------------------------------------------------
-    //
-    // Attributes
-    //
-    //---------------------------------------------------------------------
+    friend std::ostream& operator<<(std::ostream &o, const StrStrMap &);
+
   private:
+    
     std::map<std::string, std::string> avbildning;	// Stores the mapping
     
-  };
-
-  //---------------------------------------------------------------------
-  //
-  //! Dummy map from any sequence to one species when no species tree is used.
-  //
-  //---------------------------------------------------------------------
-  class StrStrMapDummy : public StrStrMap 
-  {
-  public:
-    //---------------------------------------------------------------------
-    //
-    // Construct/desctruct/assign
-    // 
-    //---------------------------------------------------------------------
-    StrStrMapDummy( const std::string& theSpecies ) 
-      : s(theSpecies) 
-    {}
-
-    virtual ~StrStrMapDummy() 
-    {}
-    
-
-    virtual void insert(const std::string &u, const std::string &x) 
-    {
-      throw std::runtime_error(std::string("Not implemented"));
-    }
-
-    virtual std::string getNthItem(unsigned idx) const 
-    {
-      throw std::runtime_error(std::string("Not implemented"));
-    }
-
-    virtual std::string find(const std::string &u) const 
-    {
-      return s; 
-    }
-     
-    //---------------------------------------------------------------------
-    //
-    // Attributes
-    // 
-    //---------------------------------------------------------------------
- private:
-    std::string s;
-        
   };
 
 #endif

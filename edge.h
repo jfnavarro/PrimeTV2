@@ -45,7 +45,6 @@ public:
     const Node *getSpeEnd() const;
     const Node *getGeneOrigin() const;
     const Node *getGeneEnd() const;
-//     Edge *getNext() const;
     double getXorigin();
     double getYorigin();
     double getXend();
@@ -55,13 +54,11 @@ public:
     void setSpeEnd(const Node &);
     void setGeneOrigin(const Node &);
     void setGeneEnd(const Node &);
-//     void setNext(Edge *);
     void setXorigin(double x);
     void setYorigin(double y);
     void setXend(double x);
     void setYend(double y);
     void setMode(category c);
-//     void linkEdge(const Edge& other);
     
 private:
     
@@ -69,7 +66,6 @@ private:
     const Node *speEnd;
     const Node *geneOrigin;
     const Node *geneEnd;
-//     Edge *next;
     double xOrigin;
     double xEnd;
     double yOrigin;

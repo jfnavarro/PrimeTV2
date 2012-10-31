@@ -30,7 +30,7 @@
 #include <vector>
 #include "layoutrees.h"
 #include <boost/foreach.hpp>
-
+#include <boost/lexical_cast.hpp>
 using namespace std;
 
 Mainops::Mainops()
@@ -135,6 +135,23 @@ bool Mainops::lateralTransfer(string mapname)
       }
 }
 
+void Mainops::printLGT()
+{
+  BOOST_FOREACH(Scenario &sc, scenarios)
+  {
+    std::cout << "\n" << sc << std::endl;
+    std::cout << "Lambda" << std::endl;
+    for(std::vector<unsigned>::const_iterator it = sc.cp.getLambda().begin();
+	it != sc.cp.getLambda().end(); ++it)
+	  std::cout << *it << " ";
+    std::cout << "\nSigma" << std::endl;
+    for(std::vector<unsigned>::const_iterator it = late->g_input.sigma.begin();
+	it != late->g_input.sigma.end(); ++it)
+	  std::cout << *it << " ";
+  }
+}
+
+
 bool Mainops::thereAreLGT(std::vector<Scenario> scenarios)
 {
   BOOST_FOREACH(Scenario &sc, scenarios)
@@ -157,8 +174,6 @@ void Mainops::OpenReconciled(const char* reconciled)
 
 void Mainops::OpenHost(const char* species)
 {
-    Host = new TreeExtended(Tree::EmptyTree());
-     
     io->setSourceFile(species);
     io->checkTagsForTree(traits);
  
@@ -167,7 +182,6 @@ void Mainops::OpenHost(const char* species)
     else
  	traits.enforceHostTree();
 
-    delete(Host);
     Host = new TreeExtended(io->readBeepTree<TreeExtended,Node>(traits,0,0));
     Node *root = Host->getRootNode();
 
@@ -193,6 +207,7 @@ void Mainops::CalculateGamma()
     {
 	gamma = new  GammaMapEx<Node>(*Guest, *Host, gs, AC);
 	
+	//NOTE I could use the lambda estimated by Phyltr
         if (parameters->lattransfer)
         {
 	  gamma = new GammaMapEx<Node>(gamma->update(*Guest,*Host,sigma,transferedges));
@@ -200,11 +215,14 @@ void Mainops::CalculateGamma()
     }
     else
     {
+       //NOTE I could use the lambda estimated by Phyltr
 	lambdamap = new LambdaMapEx<Node>(*Guest, *Host, gs);
 
         if (parameters->lattransfer)
+	{
             lambdamap->update(*Guest,*Host,sigma,transferedges);
-
+	}
+	
 	gamma = new GammaMapEx<Node>(GammaMapEx<Node>::MostParsimonious(*Guest,*Host,*lambdamap));
     }
 
@@ -263,7 +281,15 @@ void Mainops::reconcileTrees(const char* gene, const char* species, const char* 
      {   
         Host->reset();
 	Guest->reset();
-	LayoutTrees *spcord = new LayoutTrees(*Host,*Guest,*parameters,*gamma);
+	LayoutTrees *spcord = new LayoutTrees(*Host,*Guest,*parameters,*gamma);   
+	//reduce crossing only if not LGT 
+	if(parameters->reduce && !parameters->lattransfer)
+	{
+	  layout = new Layout(Host->getRootNode(), *(Guest->getRootNode()), *gamma);
+	  /* I should get a map here */
+	  //spcord->replaceNodes(map)
+	  delete layout;
+	}
 	parameters->leafwidth = spcord->getNodeHeight();
 
      }
@@ -353,8 +379,97 @@ bool Mainops::getValidityLGT()
   } 
 }
 
-
-void Mainops::reduceCrossing()
+void Mainops::drawBest()
 {
-  layout = new Layout(Host->getRootNode(), *(Guest->getRootNode()), *gamma);
+   CalculateGamma(); //calculation of gamma and lambda      
+   calculateCordinates(); //calculation of the drawing cordinates
+   DrawTree();  //drawing the tree
+   RenderImage(); // save the file
+}
+
+void Mainops::drawAllLGT()
+{
+  unsigned index = 0;
+  std::string original_filename = parameters->outfile;
+  sort(scenarios.begin(), scenarios.end());
+  BOOST_FOREACH (Scenario &sc, scenarios)
+  {
+    transferedges = sc.transfer_edges;
+    parameters->transferedges = sc.transfer_edges;
+    parameters->duplications = sc.duplications;
+    lambda = sc.cp.getLambda();
+    CalculateGamma();
+    if(gamma->validLGT())
+    { 
+      //NOTE added afer file extension??
+      parameters->outfile = original_filename + boost::lexical_cast<string>(++index);
+      drawBest();
+    }
+  }
+}
+
+void Mainops::loadPreComputedScenario(const std::string &filename)
+{
+  
+  std::ifstream scenario_file;
+  std::string line;
+  scenario_file.open(filename.c_str(), std::ios::in);
+  if (!scenario_file) 
+  {
+     throw AnError("Could not open file " + filename);
+  }
+  
+  std::vector<unsigned> sigma_temp;
+  
+  while (getline(scenario_file, line)) 
+  {
+     if(scenario_file.good())    
+     {
+        if(line.size() == 0)  // Skip any blank lines
+                continue;
+        else if(line[0] == '#')  // Skip any comment lines
+                continue;
+        else
+	{
+	  if ((line.find("Transfer") != std::string::npos))
+	  {
+	    const std::size_t start_pos = line.find(":");
+	    const std::size_t stop_pos = line.size() - 1;
+	    std::string temp = line.substr(start_pos + 1,stop_pos - start_pos);
+	    std::cout << "Reading lateral transfer " << temp << std::endl;
+	    temp.erase(remove(temp.begin(),temp.end(),' '),temp.end());
+	    stringstream lineStream(temp);
+	    std::vector<unsigned> transfer_nodes((istream_iterator<int>(lineStream)), istream_iterator<int>());
+	    std::cout << "Reading lateral transfer vector size " << transfer_nodes.size() << std::endl;
+	    transferedges.clear();
+	    transferedges.resize(Guest->getNumberOfNodes());
+	    for(std::vector<unsigned>::const_iterator it = transfer_nodes.begin(); it != transfer_nodes.end(); ++it)
+	      transferedges.set(boost::lexical_cast<unsigned>(*it));
+	  }
+	  else if ((line.find("Lambda") != std::string::npos))
+	  {
+	    const std::size_t start_pos = line.find_first_of(":");
+	    const std::size_t stop_pos = line.size() - 1;
+	    std::string temp = line.substr(start_pos + 1,stop_pos - start_pos);
+	    std::cout << "Reading Lambda " << temp << std::endl;
+	    temp.erase(remove(temp.begin(),temp.end(),' '),temp.end());
+	    unsigned mapped_lambda_temp = boost::lexical_cast<unsigned>(temp);
+	    sigma_temp.push_back(mapped_lambda_temp);
+	    std::cout << "Reading Lambda vector size " << sigma_temp.size() << std::endl;
+	  }
+	  else
+	  {
+	    continue;
+	  }
+      }
+     
+    }
+  }
+  scenario_file.close();
+  sigma = sigma_temp;
+  CalculateGamma();
+  if(gamma->validLGT())
+  {
+    drawBest();
+  }
 }

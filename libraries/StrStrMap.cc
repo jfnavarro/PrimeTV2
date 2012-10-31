@@ -4,18 +4,12 @@
 #include <set>
 #include <map>
 #include <iostream>
-
 #include "AnError.hh"
 
-// Author: Lars Arvestad, © the MCMC-club, SBC, all rights reserved
+// // Author: Lars Arvestad, © the MCMC-club, SBC, all rights reserved
 
   using namespace std;
 
-  //---------------------------------------------------------------------
-  // 
-  // Construct / Destruct
-  //
-  //---------------------------------------------------------------------
   StrStrMap::StrStrMap() 
     : avbildning()
   {
@@ -40,13 +34,6 @@
     return *this;
   }
 
-  //---------------------------------------------------------------------
-  // 
-  // Interface
-  //
-  //---------------------------------------------------------------------
-
-  // Adding relations
   void
   StrStrMap::insert(const string &x, const string &y)
   {
@@ -129,11 +116,6 @@
     return reverse.size();
   }
 
-
-  //---------------------------------------------------------------------
-  // Output, mainly for debugging
-  //---------------------------------------------------------------------
-  // Write map to ostream, one string pair per line.
   std::ostream& 
   operator<<(std::ostream &o, const StrStrMap &m)
   {

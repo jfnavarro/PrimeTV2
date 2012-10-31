@@ -24,8 +24,6 @@
 #define PARAMETERS_H
 #include "Colours.h"
 #include <vector>
-#include "libraries/StrStrMap.hh"
-#include "libraries/SetOfNodes.hh"
 #include <boost/dynamic_bitset.hpp>
 
 using namespace std;
@@ -96,6 +94,7 @@ public:
   Color geneFontColor;
   Color allFontColor;
   bool reduce;
+  bool drawAll;
 };
 
 

@@ -130,6 +130,9 @@ private:
     /* this function returns the size of the biggest name label on both trees */
     double biggestLabel();
     
+    /* this functions takes a map of node->node and replaces their cordinates in
+     * the gene tree */
+    void replaceNodes(const std::map<unsigned,unsigned> &replacements); 
     
     TreeExtended *species;
     TreeExtended *gene;

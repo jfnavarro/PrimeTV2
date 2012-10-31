@@ -104,11 +104,6 @@ const Node *Edge::getGeneEnd() const
     return this->geneEnd;
 }
 
-// Edge *Edge::getNext() const
-// {
-//     return this->next;
-// }
-
 double Edge::getXorigin()
 {
     return this->xOrigin;
@@ -154,11 +149,6 @@ void Edge::setGeneEnd(const Node &n)
     this->geneEnd = &n;
 }
 
-// void Edge::setNext(Edge *e)
-// {
-//     this->next = e;
-// }
-
 void Edge::setXorigin(double x)
 {
     this->xOrigin = x;
@@ -178,11 +168,6 @@ void Edge::setYend(double y)
 {
     this->yEnd = y;
 }
-
-// void Edge::linkEdge(const Edge& other)
-// {
-//  
-// }
 
 void Edge::setMode(category c)
 {

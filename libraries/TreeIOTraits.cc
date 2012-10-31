@@ -162,9 +162,7 @@ TreeIOTraits::logicAnd(const TreeIOTraits t)
 void 
 TreeIOTraits::enforceStandardSanity()
 {
-	//    setNWisET(hasNW() && !(hasNT() || hasET())); // if hasET or hasNT then discard NW
 	setNT(hasNT() && !hasET());	// if hasET then discard NT
-	//    setET(hasET() || hasNW());	// read edgeTimes either from ET or NW
 	setBL(hasBL() || (hasNW() && (hasNWisET() ==false)));
 }
 

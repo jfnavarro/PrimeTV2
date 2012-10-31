@@ -206,7 +206,7 @@ void LayoutTrees::CountSpeciesCoordinates(Node *n, int depth)
       double yposition = (sumyleft + sumyright) / 2;
       double time = n->getNodeTime();
       double xposition;
-      //TODO this is the correct one
+
       if(nodetime && !equal)
       {
 	xposition = ((1-time) * XCanvasSize) + xCanvasXtra;
@@ -642,5 +642,25 @@ void LayoutTrees::CountGeneCoordinates(Node* n)
    }
    
    return size;
+ }
+
+ void LayoutTrees::replaceNodes(const std::map< unsigned int, unsigned int >& replacements)
+ {
+   for(std::map<unsigned int,unsigned int>::const_iterator it = replacements.begin();
+       it != replacements.end(); ++it)
+       {
+	 Node *first = gene->getNode(it->first);
+	 Node *second = gene->getNode(it->second);
+	 if(first && second)
+	 {
+	  //HostParent and HostChild should not change
+	   double temp_x = first->getX();
+	   double temp_y = first->getY();
+	   first->setX(second->getX());
+	   first->setY(second->getY());
+	   second->setX(temp_x);
+	   second->setY(temp_y);
+	 }
+       }
  }
 
