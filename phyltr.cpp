@@ -196,7 +196,7 @@ bool Phyltr::read_sigma(map< string, string > str_sigma)
 
 Scenario Phyltr::getMaxCostScenario()
 {
-  if(scenarios.size() > 0)
+  if(!scenarios.empty())
   {
     sort(scenarios.begin(), scenarios.end());
     
@@ -237,7 +237,7 @@ void Phyltr::printLambda(vector< vid_t > lambda)
 
 Scenario Phyltr::getMinCostScenario()
 {
-  if(scenarios.size() > 0)
+  if(!scenarios.empty())
   {
     sort(scenarios.begin(), scenarios.end());
     Scenario min = scenarios.at(0);
@@ -423,7 +423,7 @@ Scenario::Scenario(unsigned size) :
 
 Candidate& Candidate::operator=(const Candidate &cp)
 {
-  Candidate *x = new Candidate();
+  /*Candidate *x = new Candidate();
   x->duplications_ = cp.duplications_;
   x->transfer_edges_ = cp.transfer_edges_;
   x->cost_ = cp.cost_;
@@ -433,6 +433,16 @@ Candidate& Candidate::operator=(const Candidate &cp)
   x->right_ = cp.right_;
   
   return *x;
+  */
+  duplications_ = cp.duplications_;
+  transfer_edges_ = cp.transfer_edges_;
+  cost_ = cp.cost_;
+  lambda_ =  cp.lambda_;
+  P_ = cp.P_;
+  left_ = cp.left_;
+  right_ = cp.right_;
+  
+  return *this;
 }
 
 Candidate::Candidate() :
@@ -927,8 +937,8 @@ Candidate::compute_highest_mapping_(vector<vid_t> &highest) const
 
 void compute_lambda(const TreeExtended &S,
                     const TreeExtended &G,
-                    const std::vector<unsigned> sigma,
-                    const boost::dynamic_bitset<> transfer_edges,
+                    const std::vector<unsigned> &sigma,
+                    const boost::dynamic_bitset<> &transfer_edges,
                     std::vector<unsigned> &lambda)
 {
 
@@ -1013,7 +1023,7 @@ int count_losses(const TreeExtended &S,
 
 void
 create_gene_species_map(const TreeExtended &species_tree,const TreeExtended &gene_tree, 
-			std::string map_filename,std::vector<unsigned> &sigma)
+			 const std::string& map_filename,std::vector<unsigned> &sigma)
 {
 
     using namespace std;
@@ -1025,7 +1035,7 @@ create_gene_species_map(const TreeExtended &species_tree,const TreeExtended &gen
          back_inserter(map_file_content));
 
     /* Make sure there are even number of strings in map file. */
-    if (map_file_content.size() == 0 || map_file_content.size() % 2 != 0)
+    if (map_file_content.empty() || map_file_content.size() % 2 != 0)
         {
             throw logic_error("error reading map file.");
         } 
@@ -1065,7 +1075,7 @@ create_gene_species_map(const TreeExtended &species_tree,const TreeExtended &gen
 
 void
 create_gene_species_map(const TreeExtended &species_tree,const TreeExtended &gene_tree, 
-			map<string, string> str_sigma,std::vector<unsigned> &sigma)
+			 map<string, string> &str_sigma,std::vector<unsigned> &sigma)
 {
 
     using namespace std;

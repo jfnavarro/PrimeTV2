@@ -82,6 +82,17 @@ Parameters::Parameters()
   allFontColor.red = 0.0;
   reduce = false;
   drawAll = false;
+  all_font_size = 1.0;
+}
+
+Parameters::~Parameters()
+{
+  if(colorConfig)
+  {
+    //TODO find out why this does not work
+    //delete colorConfig;
+    colorConfig = 0;
+  }
 }
 
 Parameters& Parameters::operator=(const Parameters& p)
@@ -144,6 +155,9 @@ Parameters& Parameters::operator=(const Parameters& p)
 	allFontColor = p.allFontColor;
 	reduce = p.reduce;
 	drawAll = p.drawAll;
+	all_font_size = p.all_font_size;
+	show_event_count = p.show_event_count;
+	s_contour_width = p.s_contour_width;
       }
     return *this;
 

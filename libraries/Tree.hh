@@ -129,8 +129,8 @@
     
     /* puag, mutable, really? */
     mutable RealVector* times;
-    mutable RealVector* rates;
     mutable RealVector* lengths;
+    mutable RealVector* rates;
     mutable Real topTime;   
     
   };

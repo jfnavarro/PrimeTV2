@@ -182,7 +182,7 @@ try
     ("draw-all-lgt,Y", po::bool_switch(&parameters->drawAll)->default_value(false), 
      "Draw a file for each pre-computed LGT scenario.")
     ("precomputed-lgt-scenario,X", po::value<string>(&precomputed_scenario_file), 
-     "<string> name of the file containing the scenario as: \nTransfer edges Numbers: 9  2\nSigma 0 : 2\nSigma 1 : 4\n...");
+     "<string> name of the file containing the scenario as: \nTransfer edges Numbers: (9,2,0.12)\n Where 9 is origin, 2 destiny and 0.12 time.");
 
   
   // Hidden options, will be allowed both on command line and
@@ -432,7 +432,9 @@ try
       { 
 	if(load_precomputed_lgt_scenario)
 	{
-	  main->loadPreComputedScenario(precomputed_scenario_file);
+	  std::cerr << "This option -X(precomputed LGT scenario) is not functional yet.." << std::endl;
+	  return 1;
+	  //main->loadPreComputedScenario(precomputed_scenario_file);
 	}
  	else if(parameters->lateralmincost == 1.0 && parameters->lateralmaxcost == 1.0) //do it with parameters
 	{
@@ -468,7 +470,8 @@ try
 	delete(parameters);
     }
   }
-  catch (AnError e) {
+  catch (AnError &e) 
+  {
     e.action();
   }
   catch(const boost::bad_any_cast& ex)
@@ -478,6 +481,10 @@ try
   catch (const std::exception& e) {
     cerr << e.what() << endl;
     return 1;
+  }
+  catch(...)
+  {
+    cerr << "Unknown exception, contact the developer.." << std::endl;
   }
 
   

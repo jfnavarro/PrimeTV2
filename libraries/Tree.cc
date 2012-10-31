@@ -2,6 +2,7 @@
 #include <iostream>
 #include <sstream>
 #include <cmath>
+#include <tcutil.h>
 #include "AnError.hh"
 #include "BeepVector.hh"
 #include "Tree.hh"
@@ -17,7 +18,11 @@
     rootNode(NULL),
     name2node(),
     all_nodes(DEF_NODE_VEC_SIZE, NULL), 
-    name("Tree")
+    name("Tree"),
+    times(0),
+    lengths(0),
+    rates(0),
+    topTime(0)
   {
   }
 
@@ -29,7 +34,8 @@
 	delete rootNode;
 	rootNode = 0;
       }
-
+     //NOTE what should I do with the times,lenghts and rates?
+    //clearNodeAttributes();
   }
 
   Tree::Tree(const Tree &T)
@@ -38,7 +44,12 @@
       rootNode(NULL),
       name2node(),                                       // Initialization
       all_nodes(max(noOfNodes,DEF_NODE_VEC_SIZE), NULL), // Allocate vector
-      name(T.name)
+      name(T.name),
+      //NOTE what should I do with the times,lenghts and rates?
+      //times(T.times),
+      //lengths(T.lengths),
+      //rates(T.rates),
+      topTime(T.topTime)
   {
     if(T.getRootNode())
       {
@@ -52,7 +63,6 @@
     Tree T;
     string name = leafname;
     T.setRootNode(T.addNode(0, 0, 0, name));
-    T.times = new RealVector(T,0);
     T.topTime = rootTime;
     T.setName("Tree");
     return T;
@@ -75,6 +85,10 @@
 	  {
 	    setRootNode(copyAllNodes(T.getRootNode()));
 	  }
+	//NOTE what should I do with the times,lenghts and rates?
+	//times = T.times;
+	//lengths = T.lengths;
+	//rates = T.rates;
       }
     return *this;
   }
@@ -401,8 +415,7 @@
     Node& left = *root.getLeftChild();
     Node& right = *root.getRightChild();
 
-    if(getTime(left) > getTime(right) ||
-       getTime(left) > getTime(right))
+    if(getTime(left) > getTime(right) || getTime(right) > getTime(left))
       {
 	return false;
       }
@@ -543,6 +556,7 @@
     if(times)
       {
 	delete times;
+	times = 0;
       }
     times = &v;
   }
@@ -553,6 +567,7 @@
     if(rates)
       {
 	delete rates;
+	rates = 0;
       }
     rates = &v;
   }

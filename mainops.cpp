@@ -34,25 +34,61 @@
 using namespace std;
 
 Mainops::Mainops()
- :Guest(0),Host(0),gamma(0),lambdamap(0),dt(0),late(0),parameters(0),io(0)
+ :Guest(0),Host(0),gamma(0),lambdamap(0),dt(0),late(0),parameters(0),io(0),layout(0)
 {
 
 }
 
 Mainops::~Mainops()
 {
-  delete(Guest);
-  delete(Host);
-  delete(gamma);
-  delete(lambdamap);
-  delete(dt);
-  delete(late);
-  delete(io);
-  if(layout) delete(layout);
+  if(Guest)
+  {
+    delete(Guest);
+    Guest = 0;
+  }
+  if(Host)
+  {
+    delete(Host);
+    Host = 0;
+  }
+  if(gamma)
+  {
+    delete(gamma);
+    gamma = 0;
+  }
+  if(lambdamap)
+  {
+    delete(lambdamap);
+    lambdamap = 0;
+  }
+  if(dt)
+  {
+    delete(dt);
+    dt = 0;
+  }
+  if(late)
+  {
+    delete(late);
+    late = 0;
+  }
+  if(io)
+  {
+    delete(io);
+  }
+  if(layout) 
+  {
+    delete(layout);
+    layout = 0;
+  }
 }
 
 bool Mainops::lateralTransferDP(string mapname)
 {  
+      if(late)
+      {
+	delete late;
+	late = 0;
+      }
       late = new Phyltr();
       late->g_input.duplication_cost = parameters->lateralduplicost;
       late->g_input.transfer_cost = parameters->lateraltrancost;
@@ -76,7 +112,7 @@ bool Mainops::lateralTransferDP(string mapname)
       late->dp_algorithm();
       late->backtrack();
       
-      if(late->scenarios.size() > 0 && thereAreLGT(late->scenarios))
+      if(!late->scenarios.empty() && thereAreLGT(late->scenarios))
       {
 	Scenario optscenario = late->getMinCostScenario(); 
 	lambda = optscenario.cp.getLambda();
@@ -97,6 +133,11 @@ bool Mainops::lateralTransferDP(string mapname)
 
 bool Mainops::lateralTransfer(string mapname)
 {
+      if(late) 
+      {
+	delete late;
+	late = 0;
+      }
       late = new Phyltr();
       late->g_input.duplication_cost = parameters->lateralduplicost;
       late->g_input.transfer_cost = parameters->lateraltrancost;
@@ -140,14 +181,14 @@ void Mainops::printLGT()
   BOOST_FOREACH(Scenario &sc, scenarios)
   {
     std::cout << "\n" << sc << std::endl;
-    std::cout << "Lambda" << std::endl;
+    /*std::cout << "Lambda" << std::endl;
     for(std::vector<unsigned>::const_iterator it = sc.cp.getLambda().begin();
 	it != sc.cp.getLambda().end(); ++it)
 	  std::cout << *it << " ";
     std::cout << "\nSigma" << std::endl;
     for(std::vector<unsigned>::const_iterator it = late->g_input.sigma.begin();
 	it != late->g_input.sigma.end(); ++it)
-	  std::cout << *it << " ";
+	  std::cout << *it << " ";*/
   }
 }
 
@@ -165,15 +206,29 @@ bool Mainops::thereAreLGT(std::vector<Scenario> scenarios)
 
 void Mainops::OpenReconciled(const char* reconciled)
 {
-     
+    if(Guest)
+    {
+      delete Guest;
+      Guest = 0;
+    }
+    if(io)
+    {
+      delete io;
+      io = 0;
+    }
+    
     io = new TreeIO(TreeIO::fromFile(reconciled));
-     
     Guest = new TreeExtended(io->readBeepTree<TreeExtended,Node>(&AC, &gs));
-
 }
 
 void Mainops::OpenHost(const char* species)
 {
+    if(Host)
+    {
+      delete Host;
+      Host = 0;
+    }
+    
     io->setSourceFile(species);
     io->checkTagsForTree(traits);
  
@@ -185,8 +240,9 @@ void Mainops::OpenHost(const char* species)
     Host = new TreeExtended(io->readBeepTree<TreeExtended,Node>(traits,0,0));
     Node *root = Host->getRootNode();
 
-    if (root->getTime() == 0.0)
+    if ((double)root->getTime() == (double)0.0)
     {
+      //NOTE this is strange, if node->time == 0 then node->time = 0*0.1 ??
       Real t = root->getNodeTime();
       root->setTime(0.1 * t); //the assert inside the function is failing
     }
@@ -202,7 +258,12 @@ void Mainops::OpenHost(const char* species)
 
 void Mainops::CalculateGamma()
 {
-
+    if(gamma) 
+    {
+      delete gamma;
+      gamma = 0;
+    }
+    
     if (parameters->do_not_draw_species_tree == false)
     {
 	gamma = new  GammaMapEx<Node>(*Guest, *Host, gs, AC);
@@ -216,6 +277,12 @@ void Mainops::CalculateGamma()
     else
     {
        //NOTE I could use the lambda estimated by Phyltr
+        if(lambdamap) 
+	{
+	  delete lambdamap;
+	  lambdamap = 0;
+	}
+       
 	lambdamap = new LambdaMapEx<Node>(*Guest, *Host, gs);
 
         if (parameters->lattransfer)
@@ -232,11 +299,26 @@ void Mainops::CalculateGamma()
 
 void Mainops::reconcileTrees(const char* gene, const char* species, const char* mapfile)
 {
-
+    if(io)
+    {
+      delete io;
+      io = 0;
+    }
     io = new TreeIO(TreeIO::fromFile(gene));
+    
+    if(Guest)
+    {
+      delete Guest;
+      Guest = 0;
+    }
     Guest = new TreeExtended(io->readBeepTree<TreeExtended,Node>(&AC, &gs));
     
     io->setSourceFile(species);
+    if(Host)
+    {
+      delete Host;
+      Host = 0;
+    }
     Host = new TreeExtended(io->readNewickTree<TreeExtended,Node>());
 
     if (strcmp(mapfile,"")!=0)
@@ -244,16 +326,34 @@ void Mainops::reconcileTrees(const char* gene, const char* species, const char* 
       gs = TreeIO::readGeneSpeciesInfo(mapfile);
     }
 
+    if(lambdamap) 
+    {
+      delete lambdamap;
+      lambdamap = 0;
+    }
     lambdamap = new LambdaMapEx<Node>(*Guest, *Host, gs);
 
+    if(gamma)
+    {
+      delete gamma;
+      gamma = 0;
+    }
     gamma = new GammaMapEx<Node>(GammaMapEx<Node>::MostParsimonious(*Guest, *Host, *lambdamap));
     
     string textTree =  io->writeGuestTree<TreeExtended,Node>(*Guest,gamma);
     
-    delete(io);
+    if(io) 
+    {
+      delete(io);
+      io = 0;
+    }
     io = new TreeIO(TreeIO::fromString(textTree));
    
-    delete(Guest);
+    if(Guest) 
+    {
+      delete(Guest);
+      Guest = 0;
+    }
     Guest = new TreeExtended(io->readBeepTree<TreeExtended,Node>(&AC, &gs));
 
     OpenHost(species);
@@ -288,20 +388,32 @@ void Mainops::reconcileTrees(const char* gene, const char* species, const char* 
 	  layout = new Layout(Host->getRootNode(), *(Guest->getRootNode()), *gamma);
 	  /* I should get a map here */
 	  //spcord->replaceNodes(map)
-	  delete layout;
+	  if(layout)
+	  {
+	    delete layout;
+	    layout = 0;
+	  }
 	}
 	parameters->leafwidth = spcord->getNodeHeight();
 
+	if(spcord)
+	{
+	  delete spcord;
+	  spcord = 0;
+	}
      }
+     
   }
 
 
 void Mainops::DrawTree(cairo_t *cr)
 {
+    if(dt){
+      delete dt;
+      dt = 0;
+    }
     dt = new DrawTree_time(*parameters,*Guest,*Host,*gamma,cr);
-    
-    //TODO here I should calculate transformation according to fixed crossing lines as
-    // in GDrawConstraints in Marco's code
+
     dt->calculateTransformation();
     
     if(parameters->do_not_draw_species_tree == false) {
@@ -429,9 +541,7 @@ void Mainops::loadPreComputedScenario(const std::string &filename)
                 continue;
         else if(line[0] == '#')  // Skip any comment lines
                 continue;
-        else
-	{
-	  if ((line.find("Transfer") != std::string::npos))
+        else if ((line.find("Transfer") != std::string::npos))
 	  {
 	    const std::size_t start_pos = line.find(":");
 	    const std::size_t stop_pos = line.size() - 1;
@@ -441,32 +551,18 @@ void Mainops::loadPreComputedScenario(const std::string &filename)
 	    stringstream lineStream(temp);
 	    std::vector<unsigned> transfer_nodes((istream_iterator<int>(lineStream)), istream_iterator<int>());
 	    std::cout << "Reading lateral transfer vector size " << transfer_nodes.size() << std::endl;
+	    
+	    //NOTE here I read the LGT transfer edges and assign times to them, need a structure that would be
+	    // used in the DrawTree_time to locate the origin of the LGT according to times
+	    
 	    transferedges.clear();
 	    transferedges.resize(Guest->getNumberOfNodes());
 	    for(std::vector<unsigned>::const_iterator it = transfer_nodes.begin(); it != transfer_nodes.end(); ++it)
 	      transferedges.set(boost::lexical_cast<unsigned>(*it));
 	  }
-	  else if ((line.find("Lambda") != std::string::npos))
-	  {
-	    const std::size_t start_pos = line.find_first_of(":");
-	    const std::size_t stop_pos = line.size() - 1;
-	    std::string temp = line.substr(start_pos + 1,stop_pos - start_pos);
-	    std::cout << "Reading Lambda " << temp << std::endl;
-	    temp.erase(remove(temp.begin(),temp.end(),' '),temp.end());
-	    unsigned mapped_lambda_temp = boost::lexical_cast<unsigned>(temp);
-	    sigma_temp.push_back(mapped_lambda_temp);
-	    std::cout << "Reading Lambda vector size " << sigma_temp.size() << std::endl;
-	  }
-	  else
-	  {
-	    continue;
-	  }
-      }
-     
-    }
+     }
   }
   scenario_file.close();
-  sigma = sigma_temp;
   CalculateGamma();
   if(gamma->validLGT())
   {

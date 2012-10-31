@@ -34,6 +34,7 @@ class Parameters
 public:
   
   Parameters();
+  ~Parameters();
   Parameters& operator=(const Parameters &ts);
   
   string species_font;

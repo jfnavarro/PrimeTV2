@@ -19,7 +19,7 @@ Name=New Native Application Configuration
 Type=Native Application
 
 [Launch][Launch Configuration 0][Data]
-Arguments=--gui
+Arguments=cyano.stree cyano1.gtree mapfile.map -r
 Debugger Shell=
 Dependencies=@Variant(\x00\x00\x00\t\x00\x00\x00\x00\x00)
 Dependency Action=Install
@@ -35,7 +35,7 @@ Remote GDB Run Script=
 Remote GDB Shell Script=
 Try Setting Breakpoints On Loading Libraries=true
 Use External Terminal=false
-Working Directory=file:///scratch/newhome/Projects/src/PrimeTV2/Examples
+Working Directory=file:///scratch/newhome/Desktop/prime/test
 isExecutable=false
 
 [MakeBuilder]

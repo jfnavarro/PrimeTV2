@@ -121,8 +121,8 @@ public:
     bool isInGamma(T *u, T *x) const;
     
     /* update the gamma to include Lateral Gene transfer */
-    GammaMapEx update(const TreeExtended &G, const TreeExtended &S, const std::vector<unsigned> sigma,
-                const dynamic_bitset<> transfer_edges);
+    GammaMapEx update(const TreeExtended &G, const TreeExtended &S, const std::vector<unsigned> &sigma,
+                const dynamic_bitset<> &transfer_edges);
     
     //Count the gamma-paths on a gene
     unsigned numberOfGammaPaths(Node &u) const;
@@ -832,8 +832,8 @@ private:
   
   template <class T>
   GammaMapEx<T>
-  GammaMapEx<T>::update(const TreeExtended& G, const TreeExtended& S, const std::vector< unsigned int > sigma, 
-			const dynamic_bitset<> transfer_edges)
+  GammaMapEx<T>::update(const TreeExtended& G, const TreeExtended& S, const std::vector< unsigned int > &sigma, 
+			const dynamic_bitset<> &transfer_edges)
   {
     lambdaex.update(G,S,sigma,transfer_edges);
     GammaMapEx gamma_star(G, S, lambdaex);

@@ -91,17 +91,41 @@ MainWindow::~MainWindow()
         cr_ = 0;
     }
 
-    delete(verticalLayout);
-    delete(scrollArea);
-    delete(params);
-    delete(widget);
-    delete(ops);
-    delete(parameters);
-    delete(reconciledtree);
-    delete(genetree);
-    delete(mapfile);
-    delete(speciestree);
-    delete(config);
+    if(verticalLayout)
+    {
+      delete(verticalLayout);
+      verticalLayout = 0;
+    }
+    if(scrollArea)
+    {
+      delete(scrollArea);
+      scrollArea = 0;
+    }
+    if(params)
+    {
+      delete(params);
+      params = 0;
+    }
+    if(widget)
+    {
+      delete(widget);
+      widget = 0;
+    }
+    if(ops)
+    {
+      delete(ops);
+      ops = 0;
+    }
+    if(parameters)
+    {
+      delete(parameters);
+      parameters = 0;
+    }
+    if(config)
+    {
+      delete(config);
+      config = 0;
+    }
 }
 
 void MainWindow::loadGuest()
@@ -172,8 +196,13 @@ void MainWindow::generateTree()
         else
         {
 	    //NOTE perhaps smart pointer?
-//             delete(ops);
-            ops = new Mainops();
+	    if(ops)  
+	    {
+	      delete ops;
+	      ops = 0;
+	    }
+	    ops = new Mainops();
+	    
             ops->setParameters(parameters);
 
             if (!checkBoxReconcile->checkState())
@@ -207,7 +236,15 @@ void MainWindow::generateTree()
             statusBar()->showMessage(tr("Tree Generated"));
         }
 
-    } 
+    }
+    catch(AnError &e)
+    {
+       QErrorMessage errorMessage;
+       errorMessage.showMessage(e.what());
+       errorMessage.exec();
+       guestTree = false;
+       hostTree = false;
+    }
     catch (std::exception&  e)
     {
         QErrorMessage errorMessage;
@@ -366,7 +403,7 @@ void MainWindow::newImage()
     menuparameters = false;
     isPainted = false;
     mapfileStatus = false;
-    delete(parameters);
+    if(parameters) delete(parameters);
     parameters = new Parameters();
     loadParameters(parameters);
     widget->resize(parameters->width,parameters->height);

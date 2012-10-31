@@ -150,7 +150,7 @@ TreeIOTraits::setTT(bool b)
 
 
 void 
-TreeIOTraits::logicAnd(const TreeIOTraits t)
+TreeIOTraits::logicAnd(const TreeIOTraits &t)
 {
 	for (int i=nw; i<last_item_dont_use; i++) 
 	{

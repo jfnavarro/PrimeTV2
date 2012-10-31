@@ -781,8 +781,10 @@
 		  unsigned i = id->size();
 		  (*id)[opn] = i;
 		}
+		
+	      tagstr << " HY=(" << (*id)[pn] << " " << (*id)[opn] << ")";
 	    }
-	  tagstr << " HY=(" << (*id)[pn] << " " << (*id)[opn] << ")";
+	  
 	}
       if(extinct && extinct->find(&u) != extinct->end())
 	{

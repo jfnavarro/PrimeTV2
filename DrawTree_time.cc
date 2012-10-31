@@ -1037,7 +1037,7 @@ static const double pi = 3.141516;
  //returns the species node which the LGT lies in between its origin point
  pair<Node*,pair<double,double> > DrawTree_time::getOriginLGT(Node *n)
  {
-    //NOTE REDO THIS FUNCTION
+    //TODO REDO THIS FUNCTION either using a more robust geometric approach or using LGT origin times
     
     Node *origin = n->getHostChild();
     Node *destiny = n->getHostParent();

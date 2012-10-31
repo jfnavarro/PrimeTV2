@@ -450,8 +450,8 @@ static const unsigned               NONE = -1;
 /* compute the lambda vector */
 void compute_lambda(const TreeExtended &species_tree,
                     const TreeExtended &gene_tree,
-                    const std::vector<unsigned> sigma,
-                    const boost::dynamic_bitset<> transfer_edges,
+                    const std::vector<unsigned> &sigma,
+                    const boost::dynamic_bitset<> &transfer_edges,
                     std::vector<unsigned> &lambda);
 
 /* count the number of losses of the scenario with the lateral transfer
@@ -465,13 +465,13 @@ int count_losses(const TreeExtended  &species_tree,
 /* create the map file */
 void create_gene_species_map(const TreeExtended &species_tree, 
                              const TreeExtended &gene_tree, 
-                             std::string map_filename,
+                             const std::string &map_filename,
                              std::vector<unsigned> &sigma);
 
 void
 create_gene_species_map(const TreeExtended &species_tree,
 			const TreeExtended &gene_tree, 
-			map<string, string> str_sigma,
+			map<string, string> &str_sigma,
 			std::vector<unsigned> &sigma);
 
 bool operator<(const Scenario &, const Scenario &);

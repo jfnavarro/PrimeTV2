@@ -79,7 +79,7 @@
     
     //! Given what traits are available and what is wanted, determine the
     //! smallest common set of traits.
-    void logicAnd(const TreeIOTraits t);
+    void logicAnd(const TreeIOTraits &t);
     
     //! All combinations of traits are either not sane or not wanted. This
     //! function enforces such constraints.

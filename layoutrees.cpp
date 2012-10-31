@@ -60,7 +60,8 @@ LayoutTrees::LayoutTrees(TreeExtended &r,TreeExtended &g,
 
 LayoutTrees::~LayoutTrees()
 {
-  FreeClearBV(Adress);
+  //NOTE not sure I want to clean this vector since its element points to Nodes
+  //FreeClearBV(Adress);
 }
 
 void LayoutTrees::calculateSizes()

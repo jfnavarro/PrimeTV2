@@ -93,10 +93,7 @@ public:
   
   /* loads a precomputed LGT scenario from a text file
    * file must look like :
-   * Transfer edges Numbers:	9 3 
-     Sigma 0 : 2
-     Sigma 1 : 4
-     ...
+   * Transfer edges Numbers:	(origin,destiny,time) (1,2,0.12) 
   */
   void loadPreComputedScenario(const std::string &filename); 
   

@@ -34,6 +34,12 @@ using namespace std;
    this->setColors("1");
  }
 
+
+ Colours::~Colours()
+ {
+
+ }
+
  //set the color combination
  void Colours::setColors(const char *set)
  {

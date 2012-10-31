@@ -48,6 +48,7 @@ class Colours
     Color umColor;
 
     Colours();
+    ~Colours();
     void setColors(const char *set);
     const char* getSet();
     
