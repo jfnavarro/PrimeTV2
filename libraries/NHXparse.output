@@ -1,0 +1,743 @@
+Terminals unused in grammar
+
+   SEMICOLON
+   TAG
+   SPECIES_NAME
+   IS_DUPLICATION
+   NODE_ID
+   UNKNOWN_ANNOTATION
+
+
+State 18 conflicts: 2 shift/reduce
+State 24 conflicts: 1 shift/reduce
+State 25 conflicts: 1 shift/reduce
+
+
+Grammar
+
+    0 $accept: tree_file $end
+
+    1 tree_file: /* empty */
+    2          | tree_list
+
+    3 tree_list: tree
+    4          | tree_list tree
+
+    5 tree: subtree
+
+    6 subtree_list: subtree
+    7             | subtree_list COMMA subtree
+
+    8 subtree: leaf newick_weight possible_x_annotation
+    9        | LEFT_PAREN subtree_list RIGHT_PAREN label newick_weight possible_x_annotation
+   10        | LEFT_PAREN error
+
+   11 leaf: STRING
+   12     | APOSTROPHE STRING APOSTROPHE
+
+   13 label: /* empty */
+   14      | INTEGER
+   15      | FLOAT
+   16      | STRING
+   17      | APOSTROPHE STRING APOSTROPHE
+
+   18 newick_weight: /* empty */
+   19              | COLON number
+   20              | error
+
+   21 number: FLOAT
+   22       | INTEGER
+
+   23 possible_x_annotation: /* empty */
+   24                      | ext_annotations
+
+   25 ext_annotations: ext_annotation
+   26                | ext_annotations ext_annotation
+
+   27 ext_annotation: NHX_ANNOTATION_START possible_separator annotation_list ANNOTATION_END
+   28               | BEEP_ANNOTATION_START possible_separator annotation_list ANNOTATION_END
+   29               | NHX_ANNOTATION_START error
+   30               | BEEP_ANNOTATION_START error
+
+   31 annotation_list: annotation
+   32                | annotation possible_separator annotation_list
+
+   33 possible_separator: /* empty */
+   34                   | SEPARATOR
+
+   35 $@1: /* empty */
+
+   36 annotation: STRING EQUAL $@1 value
+   37           | error
+
+   38 value: STRING
+   39      | INTEGER
+   40      | FLOAT
+   41      | LEFT_PAREN int_list RIGHT_PAREN
+   42      | error
+
+   43 int_list: INTEGER
+   44         | int_list INTEGER
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+error (256) 10 20 29 30 37 42
+LEFT_PAREN (258) 9 10 41
+RIGHT_PAREN (259) 9 41
+EQUAL (260) 36
+COLON (261) 19
+SEMICOLON (262)
+COMMA (263) 7
+SEPARATOR (264) 34
+APOSTROPHE (265) 12 17
+TAG (266)
+STRING (267) 11 12 16 17 36 38
+FLOAT (268) 15 21 40
+INTEGER (269) 14 22 39 43 44
+NHX_ANNOTATION_START (270) 27 29
+BEEP_ANNOTATION_START (271) 28 30
+ANNOTATION_END (272) 27 28
+SPECIES_NAME (273)
+IS_DUPLICATION (274)
+NODE_ID (275)
+UNKNOWN_ANNOTATION (276)
+
+
+Nonterminals, with rules where they appear
+
+$accept (22)
+    on left: 0
+tree_file (23)
+    on left: 1 2, on right: 0
+tree_list (24)
+    on left: 3 4, on right: 2 4
+tree (25)
+    on left: 5, on right: 3 4
+subtree_list (26)
+    on left: 6 7, on right: 7 9
+subtree (27)
+    on left: 8 9 10, on right: 5 6 7
+leaf (28)
+    on left: 11 12, on right: 8
+label (29)
+    on left: 13 14 15 16 17, on right: 9
+newick_weight (30)
+    on left: 18 19 20, on right: 8 9
+number (31)
+    on left: 21 22, on right: 19
+possible_x_annotation (32)
+    on left: 23 24, on right: 8 9
+ext_annotations (33)
+    on left: 25 26, on right: 24 26
+ext_annotation (34)
+    on left: 27 28 29 30, on right: 25 26
+annotation_list (35)
+    on left: 31 32, on right: 27 28 32
+possible_separator (36)
+    on left: 33 34, on right: 27 28 32
+annotation (37)
+    on left: 36 37, on right: 31 32
+$@1 (38)
+    on left: 35, on right: 36
+value (39)
+    on left: 38 39 40 41 42, on right: 36
+int_list (40)
+    on left: 43 44, on right: 41 44
+
+
+state 0
+
+    0 $accept: . tree_file $end
+
+    LEFT_PAREN  shift, and go to state 1
+    APOSTROPHE  shift, and go to state 2
+    STRING      shift, and go to state 3
+
+    $default  reduce using rule 1 (tree_file)
+
+    tree_file  go to state 4
+    tree_list  go to state 5
+    tree       go to state 6
+    subtree    go to state 7
+    leaf       go to state 8
+
+
+state 1
+
+    9 subtree: LEFT_PAREN . subtree_list RIGHT_PAREN label newick_weight possible_x_annotation
+   10        | LEFT_PAREN . error
+
+    error       shift, and go to state 9
+    LEFT_PAREN  shift, and go to state 1
+    APOSTROPHE  shift, and go to state 2
+    STRING      shift, and go to state 3
+
+    subtree_list  go to state 10
+    subtree       go to state 11
+    leaf          go to state 8
+
+
+state 2
+
+   12 leaf: APOSTROPHE . STRING APOSTROPHE
+
+    STRING  shift, and go to state 12
+
+
+state 3
+
+   11 leaf: STRING .
+
+    $default  reduce using rule 11 (leaf)
+
+
+state 4
+
+    0 $accept: tree_file . $end
+
+    $end  shift, and go to state 13
+
+
+state 5
+
+    2 tree_file: tree_list .
+    4 tree_list: tree_list . tree
+
+    LEFT_PAREN  shift, and go to state 1
+    APOSTROPHE  shift, and go to state 2
+    STRING      shift, and go to state 3
+
+    $default  reduce using rule 2 (tree_file)
+
+    tree     go to state 14
+    subtree  go to state 7
+    leaf     go to state 8
+
+
+state 6
+
+    3 tree_list: tree .
+
+    $default  reduce using rule 3 (tree_list)
+
+
+state 7
+
+    5 tree: subtree .
+
+    $default  reduce using rule 5 (tree)
+
+
+state 8
+
+    8 subtree: leaf . newick_weight possible_x_annotation
+
+    error  shift, and go to state 15
+    COLON  shift, and go to state 16
+
+    $end                   reduce using rule 18 (newick_weight)
+    LEFT_PAREN             reduce using rule 18 (newick_weight)
+    RIGHT_PAREN            reduce using rule 18 (newick_weight)
+    COMMA                  reduce using rule 18 (newick_weight)
+    APOSTROPHE             reduce using rule 18 (newick_weight)
+    STRING                 reduce using rule 18 (newick_weight)
+    NHX_ANNOTATION_START   reduce using rule 18 (newick_weight)
+    BEEP_ANNOTATION_START  reduce using rule 18 (newick_weight)
+
+    newick_weight  go to state 17
+
+
+state 9
+
+   10 subtree: LEFT_PAREN error .
+
+    $default  reduce using rule 10 (subtree)
+
+
+state 10
+
+    7 subtree_list: subtree_list . COMMA subtree
+    9 subtree: LEFT_PAREN subtree_list . RIGHT_PAREN label newick_weight possible_x_annotation
+
+    RIGHT_PAREN  shift, and go to state 18
+    COMMA        shift, and go to state 19
+
+
+state 11
+
+    6 subtree_list: subtree .
+
+    $default  reduce using rule 6 (subtree_list)
+
+
+state 12
+
+   12 leaf: APOSTROPHE STRING . APOSTROPHE
+
+    APOSTROPHE  shift, and go to state 20
+
+
+state 13
+
+    0 $accept: tree_file $end .
+
+    $default  accept
+
+
+state 14
+
+    4 tree_list: tree_list tree .
+
+    $default  reduce using rule 4 (tree_list)
+
+
+state 15
+
+   20 newick_weight: error .
+
+    $default  reduce using rule 20 (newick_weight)
+
+
+state 16
+
+   19 newick_weight: COLON . number
+
+    FLOAT    shift, and go to state 21
+    INTEGER  shift, and go to state 22
+
+    number  go to state 23
+
+
+state 17
+
+    8 subtree: leaf newick_weight . possible_x_annotation
+
+    NHX_ANNOTATION_START   shift, and go to state 24
+    BEEP_ANNOTATION_START  shift, and go to state 25
+
+    $default  reduce using rule 23 (possible_x_annotation)
+
+    possible_x_annotation  go to state 26
+    ext_annotations        go to state 27
+    ext_annotation         go to state 28
+
+
+state 18
+
+    9 subtree: LEFT_PAREN subtree_list RIGHT_PAREN . label newick_weight possible_x_annotation
+
+    APOSTROPHE  shift, and go to state 29
+    STRING      shift, and go to state 30
+    FLOAT       shift, and go to state 31
+    INTEGER     shift, and go to state 32
+
+    APOSTROPHE  [reduce using rule 13 (label)]
+    STRING      [reduce using rule 13 (label)]
+    $default    reduce using rule 13 (label)
+
+    label  go to state 33
+
+
+state 19
+
+    7 subtree_list: subtree_list COMMA . subtree
+
+    LEFT_PAREN  shift, and go to state 1
+    APOSTROPHE  shift, and go to state 2
+    STRING      shift, and go to state 3
+
+    subtree  go to state 34
+    leaf     go to state 8
+
+
+state 20
+
+   12 leaf: APOSTROPHE STRING APOSTROPHE .
+
+    $default  reduce using rule 12 (leaf)
+
+
+state 21
+
+   21 number: FLOAT .
+
+    $default  reduce using rule 21 (number)
+
+
+state 22
+
+   22 number: INTEGER .
+
+    $default  reduce using rule 22 (number)
+
+
+state 23
+
+   19 newick_weight: COLON number .
+
+    $default  reduce using rule 19 (newick_weight)
+
+
+state 24
+
+   27 ext_annotation: NHX_ANNOTATION_START . possible_separator annotation_list ANNOTATION_END
+   29               | NHX_ANNOTATION_START . error
+
+    error      shift, and go to state 35
+    SEPARATOR  shift, and go to state 36
+
+    error   [reduce using rule 33 (possible_separator)]
+    STRING  reduce using rule 33 (possible_separator)
+
+    possible_separator  go to state 37
+
+
+state 25
+
+   28 ext_annotation: BEEP_ANNOTATION_START . possible_separator annotation_list ANNOTATION_END
+   30               | BEEP_ANNOTATION_START . error
+
+    error      shift, and go to state 38
+    SEPARATOR  shift, and go to state 36
+
+    error   [reduce using rule 33 (possible_separator)]
+    STRING  reduce using rule 33 (possible_separator)
+
+    possible_separator  go to state 39
+
+
+state 26
+
+    8 subtree: leaf newick_weight possible_x_annotation .
+
+    $default  reduce using rule 8 (subtree)
+
+
+state 27
+
+   24 possible_x_annotation: ext_annotations .
+   26 ext_annotations: ext_annotations . ext_annotation
+
+    NHX_ANNOTATION_START   shift, and go to state 24
+    BEEP_ANNOTATION_START  shift, and go to state 25
+
+    $default  reduce using rule 24 (possible_x_annotation)
+
+    ext_annotation  go to state 40
+
+
+state 28
+
+   25 ext_annotations: ext_annotation .
+
+    $default  reduce using rule 25 (ext_annotations)
+
+
+state 29
+
+   17 label: APOSTROPHE . STRING APOSTROPHE
+
+    STRING  shift, and go to state 41
+
+
+state 30
+
+   16 label: STRING .
+
+    $default  reduce using rule 16 (label)
+
+
+state 31
+
+   15 label: FLOAT .
+
+    $default  reduce using rule 15 (label)
+
+
+state 32
+
+   14 label: INTEGER .
+
+    $default  reduce using rule 14 (label)
+
+
+state 33
+
+    9 subtree: LEFT_PAREN subtree_list RIGHT_PAREN label . newick_weight possible_x_annotation
+
+    error  shift, and go to state 15
+    COLON  shift, and go to state 16
+
+    $end                   reduce using rule 18 (newick_weight)
+    LEFT_PAREN             reduce using rule 18 (newick_weight)
+    RIGHT_PAREN            reduce using rule 18 (newick_weight)
+    COMMA                  reduce using rule 18 (newick_weight)
+    APOSTROPHE             reduce using rule 18 (newick_weight)
+    STRING                 reduce using rule 18 (newick_weight)
+    NHX_ANNOTATION_START   reduce using rule 18 (newick_weight)
+    BEEP_ANNOTATION_START  reduce using rule 18 (newick_weight)
+
+    newick_weight  go to state 42
+
+
+state 34
+
+    7 subtree_list: subtree_list COMMA subtree .
+
+    $default  reduce using rule 7 (subtree_list)
+
+
+state 35
+
+   29 ext_annotation: NHX_ANNOTATION_START error .
+
+    $default  reduce using rule 29 (ext_annotation)
+
+
+state 36
+
+   34 possible_separator: SEPARATOR .
+
+    $default  reduce using rule 34 (possible_separator)
+
+
+state 37
+
+   27 ext_annotation: NHX_ANNOTATION_START possible_separator . annotation_list ANNOTATION_END
+
+    error   shift, and go to state 43
+    STRING  shift, and go to state 44
+
+    annotation_list  go to state 45
+    annotation       go to state 46
+
+
+state 38
+
+   30 ext_annotation: BEEP_ANNOTATION_START error .
+
+    $default  reduce using rule 30 (ext_annotation)
+
+
+state 39
+
+   28 ext_annotation: BEEP_ANNOTATION_START possible_separator . annotation_list ANNOTATION_END
+
+    error   shift, and go to state 43
+    STRING  shift, and go to state 44
+
+    annotation_list  go to state 47
+    annotation       go to state 46
+
+
+state 40
+
+   26 ext_annotations: ext_annotations ext_annotation .
+
+    $default  reduce using rule 26 (ext_annotations)
+
+
+state 41
+
+   17 label: APOSTROPHE STRING . APOSTROPHE
+
+    APOSTROPHE  shift, and go to state 48
+
+
+state 42
+
+    9 subtree: LEFT_PAREN subtree_list RIGHT_PAREN label newick_weight . possible_x_annotation
+
+    NHX_ANNOTATION_START   shift, and go to state 24
+    BEEP_ANNOTATION_START  shift, and go to state 25
+
+    $default  reduce using rule 23 (possible_x_annotation)
+
+    possible_x_annotation  go to state 49
+    ext_annotations        go to state 27
+    ext_annotation         go to state 28
+
+
+state 43
+
+   37 annotation: error .
+
+    $default  reduce using rule 37 (annotation)
+
+
+state 44
+
+   36 annotation: STRING . EQUAL $@1 value
+
+    EQUAL  shift, and go to state 50
+
+
+state 45
+
+   27 ext_annotation: NHX_ANNOTATION_START possible_separator annotation_list . ANNOTATION_END
+
+    ANNOTATION_END  shift, and go to state 51
+
+
+state 46
+
+   31 annotation_list: annotation .
+   32                | annotation . possible_separator annotation_list
+
+    SEPARATOR  shift, and go to state 36
+
+    ANNOTATION_END  reduce using rule 31 (annotation_list)
+    $default        reduce using rule 33 (possible_separator)
+
+    possible_separator  go to state 52
+
+
+state 47
+
+   28 ext_annotation: BEEP_ANNOTATION_START possible_separator annotation_list . ANNOTATION_END
+
+    ANNOTATION_END  shift, and go to state 53
+
+
+state 48
+
+   17 label: APOSTROPHE STRING APOSTROPHE .
+
+    $default  reduce using rule 17 (label)
+
+
+state 49
+
+    9 subtree: LEFT_PAREN subtree_list RIGHT_PAREN label newick_weight possible_x_annotation .
+
+    $default  reduce using rule 9 (subtree)
+
+
+state 50
+
+   36 annotation: STRING EQUAL . $@1 value
+
+    $default  reduce using rule 35 ($@1)
+
+    $@1  go to state 54
+
+
+state 51
+
+   27 ext_annotation: NHX_ANNOTATION_START possible_separator annotation_list ANNOTATION_END .
+
+    $default  reduce using rule 27 (ext_annotation)
+
+
+state 52
+
+   32 annotation_list: annotation possible_separator . annotation_list
+
+    error   shift, and go to state 43
+    STRING  shift, and go to state 44
+
+    annotation_list  go to state 55
+    annotation       go to state 46
+
+
+state 53
+
+   28 ext_annotation: BEEP_ANNOTATION_START possible_separator annotation_list ANNOTATION_END .
+
+    $default  reduce using rule 28 (ext_annotation)
+
+
+state 54
+
+   36 annotation: STRING EQUAL $@1 . value
+
+    error       shift, and go to state 56
+    LEFT_PAREN  shift, and go to state 57
+    STRING      shift, and go to state 58
+    FLOAT       shift, and go to state 59
+    INTEGER     shift, and go to state 60
+
+    value  go to state 61
+
+
+state 55
+
+   32 annotation_list: annotation possible_separator annotation_list .
+
+    $default  reduce using rule 32 (annotation_list)
+
+
+state 56
+
+   42 value: error .
+
+    $default  reduce using rule 42 (value)
+
+
+state 57
+
+   41 value: LEFT_PAREN . int_list RIGHT_PAREN
+
+    INTEGER  shift, and go to state 62
+
+    int_list  go to state 63
+
+
+state 58
+
+   38 value: STRING .
+
+    $default  reduce using rule 38 (value)
+
+
+state 59
+
+   40 value: FLOAT .
+
+    $default  reduce using rule 40 (value)
+
+
+state 60
+
+   39 value: INTEGER .
+
+    $default  reduce using rule 39 (value)
+
+
+state 61
+
+   36 annotation: STRING EQUAL $@1 value .
+
+    $default  reduce using rule 36 (annotation)
+
+
+state 62
+
+   43 int_list: INTEGER .
+
+    $default  reduce using rule 43 (int_list)
+
+
+state 63
+
+   41 value: LEFT_PAREN int_list . RIGHT_PAREN
+   44 int_list: int_list . INTEGER
+
+    RIGHT_PAREN  shift, and go to state 64
+    INTEGER      shift, and go to state 65
+
+
+state 64
+
+   41 value: LEFT_PAREN int_list RIGHT_PAREN .
+
+    $default  reduce using rule 41 (value)
+
+
+state 65
+
+   44 int_list: int_list INTEGER .
+
+    $default  reduce using rule 44 (int_list)

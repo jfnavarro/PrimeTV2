@@ -19,7 +19,7 @@ Name=New Native Application Configuration
 Type=Native Application
 
 [Launch][Launch Configuration 0][Data]
-Arguments=cyano.stree cyano1.gtree mapfile.map -r
+Arguments=--gui
 Debugger Shell=
 Dependencies=@Variant(\x00\x00\x00\t\x00\x00\x00\x00\x00)
 Dependency Action=Install

@@ -262,7 +262,7 @@ void MainWindow::generateTree()
 
 void MainWindow::paintTree()
 {
-//     widget->paintCanvas();
+    widget->paintCanvas();
     cr_ = widget->getCairoCanvas();
     ops->calculateCordinates();
     ops->DrawTree(cr_);

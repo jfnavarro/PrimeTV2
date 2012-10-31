@@ -67,6 +67,10 @@ void Canvas::paintEvent(QPaintEvent* )
  * and link them */
 void Canvas::paintCanvas()
 {
+    XFlush(QX11Info::display());
+    
+    int w = width();
+    int h = height();
     buf_ = QPixmap(width(),height());
     buf_.fill(Qt::white);
     
@@ -79,6 +83,11 @@ void Canvas::paintCanvas()
     Visual* visual = reinterpret_cast<Visual*>(info.visual());
     XRenderPictFormat *format = XRenderFindVisualFormat(display, visual);
 
+    if(cr_)
+    {
+      cairo_destroy(cr_);
+      cr_ = 0;
+    }
     surface_ = cairo_xlib_surface_create_with_xrender_format(display, drawable, screen, format,width(),height());
     cr_ = cairo_create(surface_);
 
@@ -147,7 +156,7 @@ bool Canvas::print()
 
 void Canvas::resizeEvent(QResizeEvent* )
 {
-    paintCanvas();
+    //paintCanvas();
 }
 
 
