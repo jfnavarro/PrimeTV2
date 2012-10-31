@@ -262,7 +262,7 @@ void MainWindow::generateTree()
 
 void MainWindow::paintTree()
 {
-    widget->paintCanvas();
+    //widget->paintCanvas();
     cr_ = widget->getCairoCanvas();
     ops->calculateCordinates();
     ops->DrawTree(cr_);
@@ -403,7 +403,11 @@ void MainWindow::newImage()
     menuparameters = false;
     isPainted = false;
     mapfileStatus = false;
-    if(parameters) delete(parameters);
+    if(parameters)
+    {
+      delete(parameters);
+      parameters = 0;
+    }
     parameters = new Parameters();
     loadParameters(parameters);
     widget->resize(parameters->width,parameters->height);
@@ -411,7 +415,7 @@ void MainWindow::newImage()
     actionLoad_Map_File->setEnabled(false);
     actionSave->setEnabled(false);
     statusBar()->showMessage(tr("New tree"));
-    widget->repaint();
+    widget->update();
     repaint();
 }
 

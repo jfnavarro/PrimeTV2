@@ -67,16 +67,13 @@ void Canvas::paintEvent(QPaintEvent* )
  * and link them */
 void Canvas::paintCanvas()
 {
-    XFlush(QX11Info::display());
-    
-    int w = width();
-    int h = height();
     buf_ = QPixmap(width(),height());
     buf_.fill(Qt::white);
     
     const QX11Info& info = buf_.x11Info();
     Display* display = info.display();
- 
+    //XFlush(display);
+    
     Drawable drawable = buf_.handle();
     Screen* screen = XScreenOfDisplay(display, info.screen());
  
@@ -156,7 +153,7 @@ bool Canvas::print()
 
 void Canvas::resizeEvent(QResizeEvent* )
 {
-    //paintCanvas();
+    paintCanvas();
 }
 
 
