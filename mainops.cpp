@@ -385,9 +385,11 @@ void Mainops::reconcileTrees(const char* gene, const char* species, const char* 
 	//reduce crossing only if not LGT 
 	if(parameters->reduce && !parameters->lattransfer)
 	{
-	  layout = new Layout(Host->getRootNode(), *(Guest->getRootNode()), *gamma);
-	  /* I should get a map here */
-	  //spcord->replaceNodes(map)
+	  std::cout << "NOTE : this option is still experimental.." << std::endl;
+	  layout = new Layout(Host, Guest);
+	  std::map<int,int> node2node;
+	  layout->run(node2node,*gamma);
+	  spcord->replaceNodes(node2node);
 	  if(layout)
 	  {
 	    delete layout;
@@ -426,7 +428,8 @@ void Mainops::DrawTree(cairo_t *cr)
 	    dt->DrawTimeLabels();
 	}
       }
-      dt->DrawSpeciesEdgesWithContour();
+      //dt->DrawSpeciesEdgesWithContour();
+      dt->DrawSpeciesEdges();
       dt->DrawSpeciesNodes();
       dt->DrawSpeciesNodeLabels();
     }

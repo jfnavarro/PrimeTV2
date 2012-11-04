@@ -132,20 +132,32 @@ static const double pi = 3.141516;
   //
   DrawTree_time::~DrawTree_time()
   {
-    if(!cr)
+    if(cr)
+    {
       cairo_destroy(cr);
-    if(!surface)
+      cr = 0;
+    }
+    if(surface)
+    {
       cairo_surface_destroy(surface);
-    if(!surfaceBackground)
+      surface = 0;
+    }
+    if(surfaceBackground)
+    {
       cairo_surface_destroy(surfaceBackground);
-   
-    delete(config);
+      surfaceBackground = 0;
+    }
+    if(config)
+    {
+      delete(config);
+      config = 0;
+    }
     FreeClear(geneEdges);
   }
   
   void DrawTree_time::createHeader()
   { 
-    cairo_surface_t *image = cairo_image_surface_create_from_png(static_cast<char*>(HEADER_LOCATION));
+    cairo_surface_t *image = cairo_image_surface_create_from_png(((std::string)(HEADER_LOCATION)).c_str());
     cairo_save(cr);
     cairo_set_source_surface(cr,image,pagewidth - cairo_image_surface_get_width(image),10);
     cairo_paint(cr);
@@ -174,14 +186,7 @@ static const double pi = 3.141516;
       cairo_set_source_surface(cr,surface,parameters->maxLeafNameSize,parameters->maxLeafNameSize);
     
     cairo_paint(cr);
-    cairo_destroy(cr);
-    cairo_surface_destroy(surface);
-    cairo_surface_destroy(surfaceBackground);
-    cr = 0;
-    surface = 0;
-    surfaceBackground = 0;
     return EXIT_SUCCESS;
-    
   }
   
   void DrawTree_time::calculateTransformation()
@@ -472,6 +477,50 @@ static const double pi = 3.141516;
 	 cairo_set_source_rgba(cr, cfill.red, cfill.green, cfill.blue, 1);
 	 cairo_fill(cr);
        }
+     }
+   }
+   
+   
+   
+   void DrawTree_time::DrawSpeciesEdges()
+   {
+
+     cairo_set_source_rgba(cr,config->species_edge_color.red,config->species_edge_color.green,config->species_edge_color.blue,1);
+     cairo_set_line_width(cr, 1);
+     double midnode = leafWidth;
+     Node *root = species->getRootNode();
+     cairo_move_to(cr,0,root->getY()+midnode);
+     cairo_rel_line_to(cr,root->getX(),0);
+     cairo_rel_line_to(cr,0,-midnode*2);
+     cairo_rel_line_to(cr,- root->getX(),0);
+     cairo_close_path(cr);
+     cairo_stroke_preserve(cr);
+     cairo_fill(cr);
+     
+     for ( Node *n = species->preorder_begin(); n != NULL; n = species->preorder_next(n) )
+     {
+       double x = n->getX();
+       double y = n->getY();
+       cairo_set_source_rgba(cr,config->species_edge_color.red,config->species_edge_color.green,config->species_edge_color.blue,1);
+       if(!n->isLeaf())
+       {
+	  cairo_move_to(cr,x,y + midnode);
+	  cairo_rel_line_to(cr,n->getLeftChild()->getX()-x,n->getLeftChild()->getY()-y);
+	  cairo_rel_line_to(cr,0,-midnode*2);
+	  cairo_rel_line_to(cr,x-n->getLeftChild()->getX(),(y) - (n->getLeftChild()->getY()));
+	  cairo_close_path(cr);
+	  cairo_stroke_preserve(cr);
+	  cairo_fill(cr);
+
+	  cairo_move_to(cr,x,y - midnode);
+	  cairo_rel_line_to(cr,n->getRightChild()->getX()-x,n->getRightChild()->getY()-y);
+	  cairo_rel_line_to(cr,0,midnode*2);
+	  cairo_rel_line_to(cr,x-n->getRightChild()->getX(),y - n->getRightChild()->getY());
+	  cairo_close_path(cr);
+	  cairo_stroke_preserve(cr);
+	  cairo_fill(cr);
+       }
+       cairo_stroke(cr);
      }
    }
 

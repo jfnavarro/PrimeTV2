@@ -49,12 +49,17 @@ class LayoutTrees
 public:
 
     /*constructor : gene tree, species tree and parameters are going to be modified */
+    //TODO I should create a run method out of the constructor
     LayoutTrees(TreeExtended &r,TreeExtended &g,Parameters& p,const GammaMapEx<Node> &gm);
     
     /* destructor*/
     ~LayoutTrees();
     
     double getNodeHeight();
+    
+     /* this functions takes a map of node->node and replaces their cordinates in
+     * the gene tree */
+    void replaceNodes(const std::map<int,int> &replacements); 
     
 private:
    
@@ -129,10 +134,6 @@ private:
     
     /* this function returns the size of the biggest name label on both trees */
     double biggestLabel();
-    
-    /* this functions takes a map of node->node and replaces their cordinates in
-     * the gene tree */
-    void replaceNodes(const std::map<unsigned,unsigned> &replacements); 
     
     TreeExtended *species;
     TreeExtended *gene;

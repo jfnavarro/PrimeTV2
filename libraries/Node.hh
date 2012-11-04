@@ -22,31 +22,6 @@
     Node(unsigned id, const std::string& nodeName);
     virtual ~Node();
     Node(const Node &);
-    
-    /* Extra methods added by Marco P. **/
-    enum structureType {
-	NOTINIT = 0, XTRA = 1, MP = 2
-    };
-	
-    struct valueInfo 
-    {
-      Node* swapNode;
-      int type;
-      double value;
-      int XtraIndex;
-
-      valueInfo(Node* sNode) {
-	swapNode = sNode;
-	type = 0;
-	value = 0;
-      }
-
-      valueInfo(Node* sNode, int ty, double val) : type(ty), value(val) {
-	  swapNode = sNode;
-      }
-    };
-    
-    /* Extra methods added by Marco P. **/	
 	
     //Extra Methods aded by Jose Carlos Fernandez
     void setColor(Color c);
@@ -73,34 +48,9 @@
     unsigned getVisited();
     int getXtraIndex();
     int getXtraIndex() const;
+    void setRightChild(Node *);
+    void setLeftChild(Node *);
     //Extra Methods aded by Jose Carlos Fernandez
-    
-    /* Extra methods added by Marco P. **/
-    void setXtraIndex(int xtraNIndex);
-    void setBinary(bool);
-    bool isBinary();
-    bool isBinary() const;
-    void addNodeSwap(Node* speciesNode, Node* swappedNode);
-    Node* getSwappedNode(Node*);
-    bool hasBeenSwapped();
-    int set(Node*, int, double, int);
-    std::map<int,Node::valueInfo>::iterator find(Node*);
-    Node* getBinaryParent();
-    void setBinaryParent(Node*);
-    Node* getBinarySibling();	
-    void setBinaryLeftChild(Node*);
-    void rotateBinaryChild();
-    void setBinaryRightChild(Node*);
-    Node* getBinaryLeftChild();
-    Node* getBinaryRightChild();
-    void setLayoutIndex(int layoutIndex);
-    int getLayoutIndex();
-    void setBinarySibling(Node*);
-    void setDuplication(bool);
-    bool isDuplication();
-    void init();
-    bool subTrComplExpl();
-    void setSubTrComplExpl(bool);
     
     void rotate();
     Node* getLeftChild() const;
@@ -131,6 +81,15 @@
     bool operator>(const Node& b) const;
     bool dominates(const Node &b) const;
     bool strictlyDominates(const Node &b) const;
+    
+    Real getNodeTime() const;
+    Real getTime() const;
+    Real getLength() const;
+    bool changeNodeTime(const Real &t);
+    bool changeTime(const Real &et);
+    void setNodeTime(const Real &t);
+    void setTime(const Real &t); 
+    void setLength(const Real &newLength);
     
     friend std::ostream& operator<< (std::ostream& o, const Node &v);
     friend std::ostream& operator<< (std::ostream& o, const Node *v);
@@ -169,34 +128,6 @@
     Node *hostChild;
     Type reconcilation;
     unsigned visited;
-    
-    /* extra features Marco P. */
-    typedef std::map<int, valueInfo> mapType;
-    mapType NMap;
-    int xtraNIndex;
-    std::map<int, Node*> nodeMap;
-    int layoutIndex;
-    Node *binaryParent;
-    Node *binarySibling;
-    Node *binaryLeftChild;
-    Node *binaryRightChild;
-    bool binary;
-    bool swapped;
-    bool subTrExpl;
-    /* extra features Marco P. */
-    
-  public:
-    
-    static unsigned int maxID;
-
-    Real getNodeTime() const;
-    Real getTime() const;
-    Real getLength() const;
-    bool changeNodeTime(const Real &t);
-    bool changeTime(const Real &et);
-    void setNodeTime(const Real &t);
-    void setTime(const Real &t); 
-    void setLength(const Real &newLength);
 
   };
 

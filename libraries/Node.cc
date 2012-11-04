@@ -15,8 +15,6 @@
 // copyright: mcmc-klubben, SBC
 //----------------------------------------------------------------------
 
-
-  unsigned int Node::maxID;
   using namespace std;
 
   Node::Node(unsigned id)
@@ -39,16 +37,7 @@
       reconcilation(Undefined),
       visited(0)
   {
-        /* Extra methods added by Marco P. **/
-    	subTrExpl = false;
-	binaryLeftChild = NULL;
-	binaryRightChild = NULL;
-	binarySibling = NULL;
-	binaryParent = NULL;
-	swapped = false;
-	binary = false;
-	layoutIndex = 0;
-	if (number > maxID) maxID = number;
+
   }
 
   Node::Node(unsigned id, const string& nodeName)
@@ -71,16 +60,7 @@
       reconcilation(Undefined),
       visited(0)
   {
-       /* Extra methods added by Marco P. **/
-    	subTrExpl = false;
-	binaryLeftChild = NULL;
-	binaryRightChild = NULL;
-	binarySibling = NULL;
-	binaryParent = NULL;
-	swapped = false;
-	binary = false;
-	layoutIndex = 0;
-	if (number > maxID) maxID = number;
+
   }
 
   // Copy relatives in tree are not copied!
@@ -105,16 +85,7 @@
       reconcilation(v.reconcilation),
       visited(0)
   {
-       /* Extra methods added by Marco P. **/
-    	subTrExpl = false;
-	binaryLeftChild = v.binaryLeftChild;
-	binaryRightChild = v.binaryRightChild;
-	binarySibling = v.binarySibling;
-	binaryParent = v.binaryParent;
-	swapped = v.swapped;
-	binary = v.binary;
-	layoutIndex = v.layoutIndex;
-  
+
   }
 
 
@@ -151,15 +122,6 @@
 	hostChild = v.hostChild;
 	reconcilation = v.reconcilation;
 	visited = v.visited;
-	/* Extra methods added by Marco P. **/
-	subTrExpl = false;
-	binaryLeftChild = v.binaryLeftChild;
-	binaryRightChild = v.binaryRightChild;
-	binarySibling = v.binarySibling;
-	binaryParent = v.binaryParent;
-	swapped = v.swapped;
-	binary = v.binary;
-	layoutIndex = v.layoutIndex;
       }
   
     return *this;
@@ -754,172 +716,12 @@
     return visited;
   }
   
-  
-  /* Extra methods added by Marco P. **/
-  
-  int Node::getXtraIndex()
+  void Node::setRightChild(Node *r )
   {
-    return xtraNIndex;
+    rightChild = r;
   }
 
-  int Node::getXtraIndex() const
+  void Node::setLeftChild(Node *l )
   {
-    return xtraNIndex;
-  }
-   
-  void Node::setXtraIndex(int xtraNIndex)
-  {
-    this->xtraNIndex = xtraNIndex;
-  }
-  
-  void Node::setBinaryLeftChild(Node* node) 
-  {
-    if (node == NULL) 
-    {
-      binaryLeftChild = NULL;
-      return;
-    }
-    //insert the left son; tell him you're its father
-    binaryLeftChild = node; 
-    node->setBinaryParent(this);
-    //tell both the children of the respective sibling
-    if (binaryRightChild != NULL and binaryRightChild != node) 
-    {
-	binaryRightChild->setBinarySibling(binaryLeftChild);
-	binaryLeftChild->setBinarySibling(binaryRightChild);
-    }
-  }
-
-  void Node::setBinary(bool bin) 
-  {
-    this->binary = bin;
-  }
-
-
-  bool Node::isBinary() 
-  {
-    return binary;
-  }
-
-  void Node::rotateBinaryChild() 
-  {
-    if(binaryLeftChild!=NULL and binaryRightChild != NULL)
-    {
-	swap(*binaryLeftChild,*binaryRightChild);
-    }
-
-  }
-
-  void Node::setBinaryRightChild(Node* node) 
-  {
-    if (node == NULL) {
-	binaryRightChild = NULL;
-	return;
-    }
-    //insert the right son; tell him you're its father
-    binaryRightChild = node;
-    node->setBinaryParent(this);
-    //tell both the children of the respective sibling
-    if (binaryLeftChild != NULL and binaryLeftChild != node) {
-	binaryRightChild->setBinarySibling(binaryLeftChild);
-	binaryLeftChild->setBinarySibling(binaryRightChild);
-    }
-  }
-
-  Node* Node::getBinaryLeftChild() 
-  {
-    return binaryLeftChild;
-  }
-  
-  Node* Node::getBinaryRightChild() 
-  {
-    return binaryRightChild;
-  }
-  
-  bool Node::subTrComplExpl() 
-  {
-    return subTrExpl;
-  }
-
-  void Node::setSubTrComplExpl(bool value) 
-  {
-    subTrExpl = value;
-  }
-
-  void Node::addNodeSwap(Node* speciesNode, Node* swappedNode)
-  {
-    if(swapped == false){
-	swapped = true;
-    }
-    valueInfo valInfo(swappedNode);
-    NMap.insert(mapType::value_type(speciesNode->getNumber(), valInfo));
-    nodeMap[speciesNode->getNumber()] = swappedNode;
-  }
-
-
-  int Node::set(Node* searchNode, int strType, double val, int XtraInd)
-  {
-    mapType::iterator nIter = NMap.find(searchNode->getNumber());
-    if(nIter!=NMap.end())
-    {
-	if(strType== 1){
-	  nIter->second.type = 1;
-	  nIter->second.XtraIndex = 0;
-	}
-	else if(strType == 2){
-	  nIter->second.type = 2;
-	  nIter->second.XtraIndex = XtraInd;
-	}
-	else{}
-	
-	nIter->second.value = val;
-	return nIter->second.swapNode->getNumber();
-    }
-    else{
-	return -1;
-    }
-  }
-
-  std::map<int,Node::valueInfo>::iterator Node::find(Node* findNode)
-  {
-    mapType::iterator nIter = NMap.find(findNode->getNumber());
-    if(nIter!=NMap.end()){
-	return nIter;
-    }
-    return nIter;
-  }
-
-
-  Node* Node::getSwappedNode(Node* speciesNode){
-    return nodeMap[speciesNode->getNumber()];
-  }
-
-  bool Node::hasBeenSwapped(){
-    return swapped;
-  }
-
-  void Node::setBinaryParent(Node *v) {
-    binaryParent = v;
-  }
-
-  Node*
-  Node::getBinaryParent() {
-    return binaryParent;
-  }
-
-  void Node::setBinarySibling(Node *v) {
-    binarySibling = v;
-  }
-
-  Node*
-  Node::getBinarySibling() {
-    return binarySibling;
-  }
-  
-  void Node::setLayoutIndex(int layoutId) {
-	layoutIndex = layoutId;
-  }
-
-  int Node::getLayoutIndex() {
-	return layoutIndex;
+    leftChild = l;
   }

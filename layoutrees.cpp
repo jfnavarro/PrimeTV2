@@ -645,13 +645,14 @@ void LayoutTrees::CountGeneCoordinates(Node* n)
    return size;
  }
 
- void LayoutTrees::replaceNodes(const std::map< unsigned int, unsigned int >& replacements)
+ void LayoutTrees::replaceNodes(const std::map<int,int>& replacements)
  {
-   for(std::map<unsigned int,unsigned int>::const_iterator it = replacements.begin();
+   for(std::map<int,int>::const_iterator it = replacements.begin();
        it != replacements.end(); ++it)
        {
 	 Node *first = gene->getNode(it->first);
 	 Node *second = gene->getNode(it->second);
+	 std::cout << "Replacing Node " << it->first << " with Node " << it->second << std::endl;
 	 if(first && second)
 	 {
 	  //HostParent and HostChild should not change
