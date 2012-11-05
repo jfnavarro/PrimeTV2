@@ -46,8 +46,6 @@
     Node *getHostChild() const;
     Type getReconcilation() const;
     unsigned getVisited();
-    int getXtraIndex();
-    int getXtraIndex() const;
     void setRightChild(Node *);
     void setLeftChild(Node *);
     //Extra Methods aded by Jose Carlos Fernandez

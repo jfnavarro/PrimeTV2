@@ -48,12 +48,12 @@ public:
   /* calculate the Lateral transfer scenarios using parameters,
    * return true if there is a valid scenario. 
    */
-  bool lateralTransfer(string mapname);
+  bool lateralTransfer(const std::string &mapname);
   
   /* calculate the lateral transfer scenarios not using parameters, therefore 
    * dynamic programming. Return true if there is a valid scenario.
    */
-  bool lateralTransferDP(string mapname);
+  bool lateralTransferDP(const std::string &mapname);
   
   /* load the reconciled gene tree and obtatins its information */
   void OpenReconciled(const char* reconciled);
@@ -66,6 +66,9 @@ public:
   
   /* calculate the gamma map and the lambda map of the trees loaded */
   void CalculateGamma();
+  
+  /* check wether the reconcilation of LGT scenario is valid */
+  int checkValidity();
   
   /* calculates the cordinates of the tree */
   void calculateCordinates();
@@ -95,7 +98,7 @@ public:
    * file must look like :
    * Transfer edges Numbers:	(origin,destiny,time) (1,2,0.12) 
   */
-  void loadPreComputedScenario(const std::string &filename); 
+  void loadPreComputedScenario(const std::string &filename,const std::string &mapname); 
   
   /* check if there are scenarios with LGT in the set of scenarios given */
   bool thereAreLGT(std::vector<Scenario> scenarios);

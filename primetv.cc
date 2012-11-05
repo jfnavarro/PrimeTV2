@@ -257,7 +257,7 @@ try
       }
     }
    
-    if(!parameters->isreconciled && (size == 1 || size == 2))
+    if(!(bool)(parameters->isreconciled) && (size == 1 || size == 2))
     {
       reconciledtree = vm["input-file"].as< vector<string> >().at(0).c_str();
       
@@ -389,6 +389,11 @@ try
   
   if (vm.count("precomputed-lgt-scenario"))
   {
+    if((bool)(parameters->lattransfer))
+    {
+      std::cerr << "The option -X(precomputed-lgt-scenario) cannot be used together with the option -l(lgt).." << std::endl;
+      return 0;
+    }
     load_precomputed_lgt_scenario = true;
   }
     
@@ -397,7 +402,7 @@ try
 //********************************************************************************************//
 
     
-    if(parameters->UI) //We start the User Interface
+    if((bool)(parameters->UI)) //We start the User Interface
     {
       #if not defined __NOQTX11__
 	QApplication app(ac, av);
@@ -408,7 +413,7 @@ try
 	delete(parameters);
       #else
 	std::cerr << "The QT based GUI of PrimeTV2 is not yet compatible with MAC based systems\n" << std::endl;
-	return -1;
+	return 0;
       #endif
     }
     else // We start the script version
@@ -417,7 +422,7 @@ try
       main->setParameters(parameters);
 
       //if we don't need to reconcile the trees
-      if(!parameters->isreconciled)
+      if(!(bool)(parameters->isreconciled))
       {
 	main->OpenReconciled(reconciledtree);
 	main->OpenHost(speciestree);
@@ -429,15 +434,9 @@ try
       }
       
       //we calculate the LGT scenarios is indicated
-      if(parameters->lattransfer)
+      if((bool)(parameters->lattransfer))
       { 
-	if(load_precomputed_lgt_scenario)
-	{
-	  std::cerr << "This option -X(precomputed LGT scenario) is not functional yet.." << std::endl;
-	  return 1;
-	  //main->loadPreComputedScenario(precomputed_scenario_file);
-	}
- 	else if(parameters->lateralmincost == 1.0 && parameters->lateralmaxcost == 1.0) //do it with parameters
+ 	if(parameters->lateralmincost == 1.0 && parameters->lateralmaxcost == 1.0) //do it with parameters
 	{
 	  main->lateralTransferDP(mapfile);
 	}
@@ -446,24 +445,40 @@ try
  	  main->lateralTransfer(mapfile);
 	}
       }
+      else if(load_precomputed_lgt_scenario)
+      {
+	main->loadPreComputedScenario(precomputed_scenario_file,mapfile);
+      }
       
-      if(parameters->drawAll && parameters->lattransfer)
+      if(parameters->drawAll && parameters->lattransfer && !load_precomputed_lgt_scenario)
       {
 	main->drawAllLGT();
       }
       else if(parameters->drawAll)
       {
-	std::cerr << "The option -Y has to be used together with the option -l\n";
-	return 1;
+	std::cerr << "The option -Y has to be used together with the option -l and cannot be used together with the option -X." << std::endl;
+	return 0;
       }
       else
       {
 	main->drawBest();
       }
       
-      if(show_lgt_scenarios and parameters->lattransfer)
-	  main->printLGT();
-           
+      if(show_lgt_scenarios && parameters->lattransfer && !load_precomputed_lgt_scenario)
+      {
+	main->printLGT();
+      }
+      else if(show_lgt_scenarios)
+      {
+	std::cerr << "The option -b has to be used together with the option -l and cannot be used together with the option -X." << std::endl;
+	return 0;
+      }
+      else
+      {
+	std::cout << "The tree/s were generated succesfully" << std::endl;
+      }
+      
+      //NOTE these guys should be deleted from outside so they are cleaned when exceptions happen
       if(main)
 	delete(main);
    
@@ -474,20 +489,22 @@ try
   catch (AnError &e) 
   {
     e.action();
+    return -1;
   }
   catch(const boost::bad_any_cast& ex)
   {
     cerr << "The format of any of the parameters is not correct\n";
+    return -1;
   }
   catch (const std::exception& e) {
     cerr << e.what() << endl;
-    return 1;
+    return -1;
   }
   catch(...)
   {
     cerr << "Unknown exception, contact the developer.." << std::endl;
+    return -1;
   }
-
   
   return EXIT_SUCCESS;
 }

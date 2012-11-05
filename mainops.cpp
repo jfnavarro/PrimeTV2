@@ -18,6 +18,9 @@
     Author : Jose Fernandez Navarro  -  jc.fernandez.navarro@gmail.com
 */
 
+ /*TODO I should remove the functionality of the objects from the constructor and only create
+  * and destroy objects one time */
+ 
 #include "mainops.h"
 #include "phyltr.h"
 #include <boost/dynamic_bitset.hpp>
@@ -31,6 +34,7 @@
 #include "layoutrees.h"
 #include <boost/foreach.hpp>
 #include <boost/lexical_cast.hpp>
+#include <boost/algorithm/string.hpp> 
 using namespace std;
 
 Mainops::Mainops()
@@ -82,7 +86,7 @@ Mainops::~Mainops()
   }
 }
 
-bool Mainops::lateralTransferDP(string mapname)
+bool Mainops::lateralTransferDP(const std::string &mapname)
 {  
       if(late)
       {
@@ -114,24 +118,24 @@ bool Mainops::lateralTransferDP(string mapname)
       
       if(!late->scenarios.empty() && thereAreLGT(late->scenarios))
       {
-	Scenario optscenario = late->getMinCostScenario(); 
-	lambda = optscenario.cp.getLambda();
-	transferedges = optscenario.transfer_edges;
+	Scenario scenario = late->getMinCostScenario(); 
+	lambda = scenario.cp.getLambda();
+	transferedges = scenario.transfer_edges;
 	parameters->transferedges = transferedges;
 	sigma = late->g_input.sigma;
 	scenarios = late->scenarios;
-	
 	return true;
       }
       else
       {
 	parameters->lattransfer = false;
+	std::cout << "Not valid LGT scenarios found.." << std::endl;
 	return false;
       }
 
 }
 
-bool Mainops::lateralTransfer(string mapname)
+bool Mainops::lateralTransfer(const std::string &mapname)
 {
       if(late) 
       {
@@ -160,35 +164,28 @@ bool Mainops::lateralTransfer(string mapname)
       
       if(late->scenarios.size() > 0 && thereAreLGT(late->scenarios))
       {
-	Scenario optscenario = late->getMinCostScenario(); 
-	lambda = optscenario.cp.getLambda();
-	transferedges = optscenario.transfer_edges;
+	Scenario scenario = late->getMinCostScenario(); 
+	lambda = scenario.cp.getLambda();
+	transferedges = scenario.transfer_edges;
 	parameters->transferedges = transferedges;
 	sigma = late->g_input.sigma;
 	scenarios = late->scenarios;
-	
 	return true;
       }
       else
       {
 	parameters->lattransfer = false;
+	std::cout << "Not valid LGT scenarios found.." << std::endl;
 	return false;
       }
 }
 
 void Mainops::printLGT()
 {
+  std::cout << "List of computed LGT scenarios sorted by cost.." << std::endl;
   BOOST_FOREACH(Scenario &sc, scenarios)
   {
-    std::cout << "\n" << sc << std::endl;
-    /*std::cout << "Lambda" << std::endl;
-    for(std::vector<unsigned>::const_iterator it = sc.cp.getLambda().begin();
-	it != sc.cp.getLambda().end(); ++it)
-	  std::cout << *it << " ";
-    std::cout << "\nSigma" << std::endl;
-    for(std::vector<unsigned>::const_iterator it = late->g_input.sigma.begin();
-	it != late->g_input.sigma.end(); ++it)
-	  std::cout << *it << " ";*/
+    std::cout << sc << std::endl;
   }
 }
 
@@ -276,7 +273,6 @@ void Mainops::CalculateGamma()
     }
     else
     {
-       //NOTE I could use the lambda estimated by Phyltr
         if(lambdamap) 
 	{
 	  delete lambdamap;
@@ -364,49 +360,48 @@ void Mainops::reconcileTrees(const char* gene, const char* species, const char* 
 
  void Mainops::calculateCordinates()
   {
-     bool status = true;
+    Host->reset();
+    Guest->reset();
+    LayoutTrees *spcord = new LayoutTrees(*Host,*Guest,*parameters,*gamma);   
+    //reduce crossing only if not LGT 
+    if(parameters->reduce && !(bool)(parameters->lattransfer))
+    {
+	std::cout << "NOTE : this option is still experimental.." << std::endl;
+	layout = new Layout(Host, Guest);
+	std::map<int,int> node2node;
+	layout->run(node2node,*gamma);
+	spcord->replaceNodes(node2node);
+	if(layout)
+	{
+	  delete layout;
+	  layout = 0;
+	}
+    }
+    parameters->leafwidth = spcord->getNodeHeight();
+    if(spcord)
+    {
+      delete spcord;
+      spcord = 0;
+    }
+  }
 
+  
+  int Mainops::checkValidity()
+  {
+     int status = true;
      if(parameters->lattransfer)
        status = getValidityLGT();
      else
        status = gamma->valid();
      
      if (!status) {
-	if(parameters->lattransfer)
-	  throw AnError(": The LGT scenario was not valid. Aborts!\n");
-	else
-	  throw AnError(": This is not a correctly reconciled tree. Aborts!\n");
+	return 0;
      }  
-     else 
-     {   
-        Host->reset();
-	Guest->reset();
-	LayoutTrees *spcord = new LayoutTrees(*Host,*Guest,*parameters,*gamma);   
-	//reduce crossing only if not LGT 
-	if(parameters->reduce && !parameters->lattransfer)
-	{
-	  std::cout << "NOTE : this option is still experimental.." << std::endl;
-	  layout = new Layout(Host, Guest);
-	  std::map<int,int> node2node;
-	  layout->run(node2node,*gamma);
-	  spcord->replaceNodes(node2node);
-	  if(layout)
-	  {
-	    delete layout;
-	    layout = 0;
-	  }
-	}
-	parameters->leafwidth = spcord->getNodeHeight();
-
-	if(spcord)
-	{
-	  delete spcord;
-	  spcord = 0;
-	}
-     }
-     
+     else
+     {
+       return 1;
+    }
   }
-
 
 void Mainops::DrawTree(cairo_t *cr)
 {
@@ -472,7 +467,9 @@ void Mainops::setParameters(Parameters *p)
 bool Mainops::getValidityLGT()
 {
   if(gamma->validLGT())
+  {
     return true;
+  }
   else
   {
     sort(scenarios.begin(), scenarios.end());
@@ -489,14 +486,20 @@ bool Mainops::getValidityLGT()
 	return true;
       }
     }
-    
     return false;
   } 
 }
 
 void Mainops::drawBest()
 {
-   CalculateGamma(); //calculation of gamma and lambda      
+   CalculateGamma(); //calculation of gamma and lambda
+   if(!checkValidity())
+   {
+     if(parameters->lattransfer)
+      throw AnError(": The LGT scenario was not valid. Aborts!\n");
+    else
+      throw AnError(": This is not a correctly reconciled tree. Aborts!\n");
+   }
    calculateCordinates(); //calculation of the drawing cordinates
    DrawTree();  //drawing the tree
    RenderImage(); // save the file
@@ -513,17 +516,18 @@ void Mainops::drawAllLGT()
     parameters->transferedges = sc.transfer_edges;
     parameters->duplications = sc.duplications;
     lambda = sc.cp.getLambda();
-    CalculateGamma();
+    parameters->outfile = original_filename + boost::lexical_cast<string>(++index);
+    CalculateGamma(); //calculation of gamma and lambdamap
     if(gamma->validLGT())
-    { 
-      //NOTE added afer file extension??
-      parameters->outfile = original_filename + boost::lexical_cast<string>(++index);
-      drawBest();
+    {
+      calculateCordinates(); //calculation of the drawing cordinates
+      DrawTree();  //drawing the tree
+      RenderImage(); // save the file
     }
   }
 }
 
-void Mainops::loadPreComputedScenario(const std::string &filename)
+void Mainops::loadPreComputedScenario(const std::string &filename,const std::string &mapname)
 {
   
   std::ifstream scenario_file;
@@ -533,8 +537,6 @@ void Mainops::loadPreComputedScenario(const std::string &filename)
   {
      throw AnError("Could not open file " + filename);
   }
-  
-  std::vector<unsigned> sigma_temp;
   
   while (getline(scenario_file, line)) 
   {
@@ -549,26 +551,51 @@ void Mainops::loadPreComputedScenario(const std::string &filename)
 	    const std::size_t start_pos = line.find(":");
 	    const std::size_t stop_pos = line.size() - 1;
 	    std::string temp = line.substr(start_pos + 1,stop_pos - start_pos);
-	    std::cout << "Reading lateral transfer " << temp << std::endl;
-	    temp.erase(remove(temp.begin(),temp.end(),' '),temp.end());
 	    stringstream lineStream(temp);
-	    std::vector<unsigned> transfer_nodes((istream_iterator<int>(lineStream)), istream_iterator<int>());
-	    std::cout << "Reading lateral transfer vector size " << transfer_nodes.size() << std::endl;
-	    
-	    //NOTE here I read the LGT transfer edges and assign times to them, need a structure that would be
-	    // used in the DrawTree_time to locate the origin of the LGT according to times
-	    
+	    std::vector<std::string> transfer_nodes((istream_iterator<std::string>(lineStream)), istream_iterator<std::string>());
 	    transferedges.clear();
 	    transferedges.resize(Guest->getNumberOfNodes());
-	    for(std::vector<unsigned>::const_iterator it = transfer_nodes.begin(); it != transfer_nodes.end(); ++it)
-	      transferedges.set(boost::lexical_cast<unsigned>(*it));
+	    for(std::vector<std::string>::const_iterator it = transfer_nodes.begin(); it != transfer_nodes.end(); ++it)
+	    {
+	      std::vector<std::string> strs;
+	      std::string temp = *it;
+	      temp.erase(remove(temp.begin(),temp.end(),'('),temp.end());
+	      temp.erase(remove(temp.begin(),temp.end(),')'),temp.end());
+	      boost::split(strs, temp, boost::is_any_of(","));
+	      if(Guest->getNode(boost::lexical_cast<unsigned>(strs.at(0))) != NULL)
+	      {
+		transferedges.set(boost::lexical_cast<unsigned>(strs.at(0))); //origin LGT
+	      }
+	      else
+	      {
+		throw AnError("Node read in the LGT scenario file does not exist in the Gene Tree");
+	      }
+	      //transferedges.set(boost::lexical_cast<unsigned>(strs.at(1))); //destiny LGT
+	      // strs.at(2) //this is the time NOTE not used yet (the idea is to put the time in the node and use it to compute the cordinates
+	    }
 	  }
      }
   }
   scenario_file.close();
-  CalculateGamma();
-  if(gamma->validLGT())
+  parameters->lattransfer = true;
+  if(late) 
   {
-    drawBest();
+    delete late;
+    late = 0;
   }
+  late = new Phyltr();
+  late->g_input.gene_tree = Guest;
+  late->g_input.species_tree = Host;
+  if(parameters->isreconciled)
+  {
+    late->g_input.sigma_fname = mapname;
+    late->read_sigma();
+  }
+  else
+  {
+    late->read_sigma(gs.getMapping());
+  }
+  parameters->transferedges = transferedges;
+  sigma = late->g_input.sigma;
+  return;
 }

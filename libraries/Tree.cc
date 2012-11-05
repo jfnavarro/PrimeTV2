@@ -191,7 +191,7 @@
   Node* 
   Tree::getNode(unsigned no) const
   {
-    if (no > all_nodes.size()) 
+    if (no >= all_nodes.size()) 
       {
 	return NULL;
       }

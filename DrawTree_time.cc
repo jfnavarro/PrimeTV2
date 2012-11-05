@@ -147,11 +147,11 @@ static const double pi = 3.141516;
       cairo_surface_destroy(surfaceBackground);
       surfaceBackground = 0;
     }
-    if(config)
+    /*if(config)
     {
       delete(config);
       config = 0;
-    }
+    }*/
     FreeClear(geneEdges);
   }
   
