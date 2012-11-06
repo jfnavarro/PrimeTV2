@@ -40,13 +40,12 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 find_package(BISON REQUIRED)
 find_package(FLEX REQUIRED)
 
-find_package(Qt4 COMPONENTS QtCore QtGui QtMain REQUIRED)
-
+find_package(Qt4 COMPONENTS QtCore QtGui)
 if(NOT Q_WS_X11 OR APPLE)
     set(QT4_FOUND "FALSE") ##bad code, I should check for the existence of the function     buf_ = QPixmap(width(),height()); buf_.fill(Qt::white);const QX11Info& info = buf_.x11Info();Display* display = info.display();
     message(STATUS "Qt4-x11 not found")
 endif(NOT Q_WS_X11 OR APPLE)
-if(QT4_FOUND)
+if(QT4_FOUND AND QT_QTGUI_FOUND AND QT_QTCORE_FOUND)
     message(STATUS "Qt4 found")
     message(STATUS "Building PrimeTV2 with the GUI(experimental)")
     find_package(X11 REQUIRED)
@@ -56,10 +55,11 @@ if(QT4_FOUND)
     include_directories(${QT_INCLUDES}) 
     include_directories( ${qt4_include_dir} )
     include_directories( ${X11_INCLUDE_DIR} )
-else(QT4_FOUND)
+else(QT4_FOUND AND QT_QTGUI_FOUND AND QT_QTCORE_FOUND)
     message(STATUS "Building PrimeTV2 without the GUI")
     add_definitions(-D__NOQTX11__)
-endif(QT4_FOUND)
+endif(QT4_FOUND AND QT_QTGUI_FOUND AND QT_QTCORE_FOUND )
+
   
 find_package(Cairo REQUIRED)
 
@@ -222,7 +222,7 @@ add_library(prime STATIC ${PARSER_SOURCES} ${Libraries})
 
 if(QT4_FOUND)
   add_executable(primetv ${MAIN_SOURCES_UNIX})
-  target_link_libraries(primetv prime ${X11_LIBRARIES} ${QT_LIBRARIES} ${CAIRO_LIBRARIES}  ${Boost_LIBRARIES} )
+  target_link_libraries(primetv prime ${X11_LIBRARIES} ${QT_LIBRARIES} ${CAIRO_LIBRARIES}  ${Boost_LIBRARIES} ) #${OPENGL_LIBRARIES} )
 else(QT4_FOUND)
   add_executable(primetv ${MAIN_SOURCES_APPLE})
   target_link_libraries(primetv prime ${CAIRO_LIBRARIES}  ${Boost_LIBRARIES} )
