@@ -412,7 +412,7 @@ try
 	delete(appWindow);
 	delete(parameters);
       #else
-	std::cerr << "The QT based GUI of PrimeTV2 is not yet compatible with MAC based systems\n" << std::endl;
+	std::cerr << "The QT based GUI of PrimeTV2 is not present\n" << std::endl;
 	return 0;
       #endif
     }

@@ -6,10 +6,19 @@ The list of packages needed to compile it are :
 
 	BISON
 	FLEX
-	QT4
-	X11
+	[QT4 X11] "optional"
 	Cairo
 	BOOST 1.42
+
+They can be installed in Ubuntu by using the following commands :
+
+sudo apt-get install libboost-dev libboost_serialization-dev libboost-program-options-dev libcairo2-dev bison flex [libqt4-dev x11]
+
+They can be installed in Fedora by using the following commands :
+
+
+They can be installed in MAC by using the following commands :
+
 
 As well as the C++ compiler and developer essentials.
 
