@@ -33,6 +33,122 @@ set(HEADER_LOCATION "/usr/share/primetv/header.png")
 add_definitions( -DHAS_HEADER=${HEADER_LOCATION} )
 
 
+###PACKAGES######################################
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR})
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
+find_package(BISON REQUIRED)
+find_package(FLEX REQUIRED)
+
+
+find_package(Qt4 COMPONENTS QtCore QtGui REQUIRED)
+if(QT4_FOUND)
+    message(STATUS "Qt4 found")
+    message(STATUS "Building PrimeTV2 with the GUI(experimental)")
+    find_package(X11 REQUIRED)
+    add_definitions(-DQT_DLL)
+    add_definitions(-DQT_THREAD_SUPPORT)
+    add_definitions(${QT_DEFINITIONS})
+    include_directories(${QT_INCLUDES}) 
+    include_directories( ${qt4_include_dir} )
+    include_directories( ${X11_INCLUDE_DIR} )
+else(QT4_FOUND)
+    message(FATAL_ERROR "Qt4 not found")
+    message(STATUS "Building PrimeTV2 without the GUI")
+    add_definitions(-D__NOQTX11__)
+endif(QT4_FOUND)
+  
+find_package(Cairo REQUIRED)
+
+set(Boost_USE_STATIC_LIBS   TRUE)
+SET (Boost_ADDITIONAL_VERSIONS "1.36" "1.36.0" "1.41" "1.41.0" "1.39" "1.39.0" "1.42.0" "1.42" "1.43.0" 
+			       "1.43." "1.44.0" "1.44.0" "1.45.0" "1.45" "1.46.0" "1.46" "1.47.0" "1.47")
+find_package(Boost COMPONENTS serialization program_options REQUIRED)
+if(NOT Boost_FOUND)
+  message(FATAL_ERROR  "Boost not found" )
+endif(NOT Boost_FOUND)
+
+####PACKAGES##################################################
+
+##DIRECTORIES#################################################
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
+include_directories(${Boost_INCLUDE_DIRS})
+include_directories("${PROJECT_BINARY_DIR}")
+include_directories(${CMAKE_BINARY_DIR})
+include_directories(${CAIRO_INCLUDE_DIR})
+######DIRECTORIES#################################################
+
+
+###DEFINITIONS###################################################
+
+
+
+###DEFINITIONS###################################################
+
+##FLAGS###
+set(CMAKE_BUILD_TYPE "Debug")
+
+IF(UNIX)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wreorder  -Wall -fexceptions")
+  if( ${CMAKE_CXX_COMPILER} MATCHES "icpc" )
+    #Remove annoying Intel warnings.
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -wd383 -wd869 -wd981")
+  endif( ${CMAKE_CXX_COMPILER} MATCHES "icpc" )
+  set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g3 -O0")
+  set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3 -funroll-loops")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -fexceptions")
+  set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG}")
+  set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE}")
+  OPTION(STATIC "build a static binaries. This is mainly intended for the win32-package and the MACOSX-bundle." OFF )
+endif(UNIX)
+
+if(APPLE)
+  SET (CMAKE_SYSTEM_NAME Generic)
+  SET (CMAKE_SYSTEM_VERSION 1)
+  SET (CMAKE_SYSTEM_PROCESSOR i686)
+  SET_PROPERTY(GLOBAL PROPERTY TARGET_SUPPORTS_SHARED_LIBS TRUE)
+
+  SET (SDKVER "10.7")
+  SET (DEVROOT "/Developer/")
+  SET (SDKROOT "${DEVROOT}/SDKs/MacOSX${SDKVER}.sdk")
+  SET (CMAKE_OSX_SYSROOT "${SDKROOT}")
+  SET (CMAKE_OSX_ARCHITECTURES "i386" "x86_64" "i686")
+
+  SET (CMAKE_C_COMPILER "${DEVROOT}/usr/bin/gcc-4.2")
+  SET (CMAKE_CXX_COMPILER "${DEVROOT}/usr/bin/g++-4.2")
+  SET (CMAKE_C_COMPILER "${DEVROOT}/usr/bin/gcc-4.2")
+  SET (CMAKE_CXX_COMPILER "${DEVROOT}/usr/bin/g++-4.2")
+
+  SET (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99 -Wall -fexceptions")
+  SET (CMAKE_C_FLAGS_DEBUG ${CMAKE_C_FLAGS} "-DDEBUG=1" "-ggdb")
+  SET (CMAKE_C_FLAGS_RELEASE ${CMAKE_C_FLAGS} "-DNDEBUG=1")
+  SET (CMAKE_C_FLAGS_RELWITHDEBINFO ${CMAKE_C_FLAGS} "-DNDEBUG=1" "-ggdb")
+
+  SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wreorder  -Wall -fexceptions")
+  SET (CMAKE_CXX_FLAGS_DEBUG ${CMAKE_CXX_FLAGS} "-DDEBUG=1" "-ggdb" "-g3 -O0")
+  SET (CMAKE_CXX_FLAGS_RELEASE ${CMAKE_CXX_FLAGS} "-DNDEBUG=1" "-O3 -funroll-loops")
+  SET (CMAKE_CXX_FLAGS_RELWITHDEBINFO ${CMAKE_CXX_FLAGS} "-DNDEBUG=1" "-ggdb")
+
+  ADD_DEFINITIONS("-arch i386")
+  ADD_DEFINITIONS("-arch x86_64")
+  ADD_DEFINITIONS("-arch i686")
+  
+  INCLUDE_DIRECTORIES(SYSTEM "${SDKROOT}/usr/include")
+  LINK_DIRECTORIES("${SDKROOT}/usr/lib")
+
+  SET (CMAKE_FIND_ROOT_PATH "${SDKROOT}")
+  SET (CMAKE_FIND_ROOT_PATH_MODE_PROGRAM BOTH)
+  SET (CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
+  SET (CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+
+  OPTION(STATIC "build a static binaries. This is mainly intended for the win32-package and the MACOSX-bundle." ON )
+  
+endif(APPLE)
+
+
+##FLAGS#############################################################
+
+
 # PACKAGING OPTIONS: GENERAL
 set(PACKAGE_NICKNAME "primetv")
 set(CPACK_SET_DESTDIR TRUE) # Enabling absolute paths for CPack (important!)
@@ -43,9 +159,6 @@ IF(APPLE)
 	SET(CPACK_GENERATOR "TGZ;TBZ2;OSXX11")
         set(CPACK_PACKAGE_FILE_NAME "${PACKAGE_NICKNAME}-${PACKAGE_VERSION}-mac-${TARGET_ARCH}")
         set(CPACK_SOURCE_PACKAGE_FILE_NAME  "${PACKAGE_NICKNAME}-${PACKAGE_VERSION}-mac-src")
-        SET(CMAKE_OSX_SYSROOT /Developer/SDKs/MacOSX10.4u.sdk)
-        SET(CMAKE_OSX_ARCHITECTURES ppc;i386)
-        SET(CMAKE_FIND_ROOT_PATH /Developer/SDKs/MacOSX10.4u.sdk)
         SET(MACOSX_BUNDLE_BUNDLE_NAME Converters)
         SET(MACOSX_BUNDLE_BUNDLE_VERSION ${VERSION})
         SET(MACOSX_BUNDLE_SHORT_VERSION_STRING ${VERSION})
@@ -75,83 +188,6 @@ set(CPACK_RPM_PACKAGE_DEPENDS "${CPACK_RPM_PACKAGE_DEPENDS},boost-devel,")
 
 include(CPack)
 #####CPACK###################################################
-
-###PACKAGES######################################
-set (CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR})
-
-find_package(BISON REQUIRED)
-find_package(FLEX REQUIRED)
-
-
-find_package(Qt4 COMPONENTS QtCore QtGui REQUIRED)
-if(QT4_FOUND)
-    message(STATUS "Qt4 found")
-    message(STATUS "Building PrimeTV2 with the GUI(experimental)")
-    find_package(X11 REQUIRED)
-else(QT4_FOUND)
-    message(FATAL_ERROR "Qt4 not found")
-    message(STATUS "Building PrimeTV2 without the GUI")
-    add_definitions(-D__NOQTX11__)
-endif(QT4_FOUND)
-  
-find_package(Cairo REQUIRED)
-
-set(Boost_USE_STATIC_LIBS   TRUE)
-SET (Boost_ADDITIONAL_VERSIONS "1.36" "1.36.0" "1.41" "1.41.0" "1.39" "1.39.0" "1.42.0" "1.42" "1.43.0" 
-			       "1.43." "1.44.0" "1.44.0" "1.45.0" "1.45" "1.46.0" "1.46" "1.47.0" "1.47")
-find_package(Boost COMPONENTS serialization program_options REQUIRED)
-if(NOT Boost_FOUND)
-  message(FATAL_ERROR  "Boost not found" )
-endif(NOT Boost_FOUND)
-
-####PACKAGES##################################################
-
-##DIRECTORIES#################################################
-if(NOT APPLE)
-  include_directories(${QT_INCLUDES}) 
-  include_directories( ${qt4_include_dir} )
-  include_directories( ${X11_INCLUDE_DIR} )
-endif(NOT APPLE)
-include_directories(${CMAKE_CURRENT_BINARY_DIR})
-include_directories(${Boost_INCLUDE_DIRS})
-include_directories("${PROJECT_BINARY_DIR}")
-include_directories(${CMAKE_BINARY_DIR})
-include_directories(${CAIRO_INCLUDE_DIR})
-######DIRECTORIES#################################################
-
-
-###DEFINITIONS###################################################
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/cmake/")
-set(DCMAKE_SKIP_RPATH:BOOL=ON)
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-if(NOT APPLE)
-  add_definitions(-DQT_DLL)
-  add_definitions(-DQT_THREAD_SUPPORT)
-  add_definitions(${QT_DEFINITIONS})
-endif(NOT APPLE)
-###DEFINITIONS###################################################
-
-##FLAGS###
-set(CMAKE_BUILD_TYPE "Debug")
-
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wreorder  -Wall -fexceptions")
-if( ${CMAKE_CXX_COMPILER} MATCHES "icpc" )
-    #Remove annoying Intel warnings.
-   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -wd383 -wd869 -wd981")
-endif( ${CMAKE_CXX_COMPILER} MATCHES "icpc" )
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g3 -O0")
-set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3 -funroll-loops")
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -fexceptions")
-set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG}")
-set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE}")
-
-if(APPLE)
-  OPTION(STATIC "build a static binaries. This is mainly intended for the win32-package and the MACOSX-bundle." ON )
-else(APPLE)
-  OPTION(STATIC "build a static binaries. This is mainly intended for the win32-package and the MACOSX-bundle." OFF )
-endif()
-
-##FLAGS#############################################################
 
 #Profile
 if(DEFINED ${PROFILE})
