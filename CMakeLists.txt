@@ -41,10 +41,11 @@ find_package(BISON REQUIRED)
 find_package(FLEX REQUIRED)
 
 find_package(Qt4 COMPONENTS QtCore QtGui QtMain REQUIRED)
-if(Q_WS_X11)
+
+if(NOT Q_WS_X11 OR APPLE)
     set(QT4_FOUND "FALSE") ##bad code, I should check for the existence of the function     buf_ = QPixmap(width(),height()); buf_.fill(Qt::white);const QX11Info& info = buf_.x11Info();Display* display = info.display();
     message(STATUS "Qt4-x11 not found")
-endif(Q_WS_X11)
+endif(NOT Q_WS_X11 OR APPLE)
 if(QT4_FOUND)
     message(STATUS "Qt4 found")
     message(STATUS "Building PrimeTV2 with the GUI(experimental)")
