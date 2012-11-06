@@ -40,8 +40,10 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 find_package(BISON REQUIRED)
 find_package(FLEX REQUIRED)
 
-
-find_package(Qt4 COMPONENTS QtCore QtGui REQUIRED)
+find_package(Qt4 COMPONENTS QtCore QtGui QtMain REQUIRED)
+if(APPLE)
+    set(QT4_FOUND "FALSE") ##bad code, I should check for the existence of the function     buf_ = QPixmap(width(),height()); buf_.fill(Qt::white);const QX11Info& info = buf_.x11Info();Display* display = info.display();
+endif(APPLE)
 if(QT4_FOUND)
     message(STATUS "Qt4 found")
     message(STATUS "Building PrimeTV2 with the GUI(experimental)")
@@ -53,7 +55,7 @@ if(QT4_FOUND)
     include_directories( ${qt4_include_dir} )
     include_directories( ${X11_INCLUDE_DIR} )
 else(QT4_FOUND)
-    message(FATAL_ERROR "Qt4 not found")
+    message(STATUS "Qt4 not found")
     message(STATUS "Building PrimeTV2 without the GUI")
     add_definitions(-D__NOQTX11__)
 endif(QT4_FOUND)
@@ -103,34 +105,26 @@ IF(UNIX)
 endif(UNIX)
 
 if(APPLE)
+
   SET_PROPERTY(GLOBAL PROPERTY TARGET_SUPPORTS_SHARED_LIBS TRUE)
 
 #  SET (SDKVER "10.7")
 #  SET (DEVROOT "/Developer/")
 #  SET (SDKROOT "${DEVROOT}/SDKs/MacOSX${SDKVER}.sdk")
 #  SET (CMAKE_OSX_SYSROOT "${SDKROOT}")
-  SET (CMAKE_OSX_ARCHITECTURES "i386" "x86_64" "i686")
-
+  SET (CMAKE_OSX_ARCHITECTURES ${TARGET_ARCH})
 #  SET (CMAKE_C_COMPILER "${DEVROOT}/usr/bin/gcc-4.2")
 #  SET (CMAKE_CXX_COMPILER "${DEVROOT}/usr/bin/g++-4.2")
-  SET (CMAKE_C_COMPILER "/usr/bin/gcc-4.2")
-  SET (CMAKE_CXX_COMPILER "/usr/bin/g++-4.2")
   
   SET (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -fexceptions")
   SET (CMAKE_C_FLAGS_DEBUG ${CMAKE_C_FLAGS_DEBUG} )
   SET (CMAKE_C_FLAGS_RELEASE ${CMAKE_C_FLAGS_RELEASE} )
-
   SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wreorder  -Wall -fexceptions")
-  SET (CMAKE_CXX_FLAGS_DEBUG ${CMAKE_CXX_FLAGS_DEBUG} "-g3 -O0")
-  SET (CMAKE_CXX_FLAGS_RELEASE ${CMAKE_CXX_FLAGS_RELEASE} "-O3 -funroll-loops")
-
-#  ADD_DEFINITIONS("-arch i386")
-#  ADD_DEFINITIONS("-arch x86_64")
-#  ADD_DEFINITIONS("-arch i686")
+  SET (CMAKE_CXX_FLAGS_DEBUG ${CMAKE_CXX_FLAGS_DEBUG})
+  SET (CMAKE_CXX_FLAGS_RELEASE ${CMAKE_CXX_FLAGS_RELEASE})
   
 #  INCLUDE_DIRECTORIES(SYSTEM "${SDKROOT}/usr/include")
 #  LINK_DIRECTORIES("${SDKROOT}/usr/lib")
-
 #  SET (CMAKE_FIND_ROOT_PATH "${SDKROOT}")
 #  SET (CMAKE_FIND_ROOT_PATH_MODE_PROGRAM BOTH)
 #  SET (CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
@@ -197,7 +191,7 @@ bison_target(MyParser ${PROJECT_SOURCE_DIR}/libraries/NHXparse.y ${PROJECT_SOURC
 add_flex_bison_dependency(MyScanner MyParser)
 
 #QT4 DIRECTIVES
-if(NOT APPLE)
+if(QT4_FOUND)
   set(Qt_Headers windows.h canvas.h)
   set(Qt_Forms primetv.ui parameters.ui)
   set(Qt_Resources application.qrc)
@@ -205,7 +199,7 @@ if(NOT APPLE)
   QT4_WRAP_UI(QT4_FORMS_HEADERS ${Qt_Forms})
   QT4_ADD_RESOURCES(Qt4_Resources_Rcc ${Qt_Resources})
   include(${QT_USE_FILE})
-endif(NOT APPLE)
+endif(QT4_FOUND)
 
 #Collect the files for libraries
 include (libraries/CMakeLists.txt)
@@ -225,13 +219,13 @@ endforeach(i)
 
 add_library(prime STATIC ${PARSER_SOURCES} ${Libraries})
 
-if(NOT APPLE)
+if(QT4_FOUND)
   add_executable(primetv ${MAIN_SOURCES_UNIX})
   target_link_libraries(primetv prime ${X11_LIBRARIES} ${QT_LIBRARIES} ${CAIRO_LIBRARIES}  ${Boost_LIBRARIES} )
-else(NOT APPLE)
+else(QT4_FOUND)
   add_executable(primetv ${MAIN_SOURCES_APPLE})
   target_link_libraries(primetv prime ${CAIRO_LIBRARIES}  ${Boost_LIBRARIES} )
-endif(NOT APPLE)
+endif(QT4_FOUND)
 
 if(APPLE)
   set_property(TARGET primetv PROPERTY LINK_SEARCH_END_STATIC ON)

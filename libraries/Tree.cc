@@ -2,7 +2,6 @@
 #include <iostream>
 #include <sstream>
 #include <cmath>
-#include <tcutil.h>
 #include "AnError.hh"
 #include "BeepVector.hh"
 #include "Tree.hh"
