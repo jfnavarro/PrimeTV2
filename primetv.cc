@@ -42,10 +42,13 @@
 #endif
 
 
-using namespace boost;
-namespace po = boost::program_options;
-using namespace std;
+  using namespace boost;
+  namespace po = boost::program_options;
+  using namespace std;
 
+  //member objects
+  static Parameters *parameters = 0;
+  static Mainops *mainops = 0;
   
   /* Helper function to sort vectors used in the parser of parameters */
   template<class T>
@@ -62,7 +65,19 @@ using namespace std;
     return (stat (filename, &buffer) == 0);
   }
 
-
+  void cleanUp()
+  {
+    if(parameters)
+    {
+      delete parameters;
+      parameters = 0;
+    }
+    if(mainops)
+    {
+      delete mainops;
+      mainops = 0;
+    }
+  }
 
 int
 main (int ac, char *av[]) 
@@ -80,7 +95,7 @@ main (int ac, char *av[])
   
 try
 {
-  Parameters *parameters = new Parameters();
+  parameters = new Parameters();
   string config_file;
   string default_config_file;
   const char* reconciledtree;
@@ -394,23 +409,46 @@ try
       std::cerr << "The option -X(precomputed-lgt-scenario) cannot be used together with the option -l(lgt).." << std::endl;
       return 0;
     }
+    if(show_lgt_scenarios)
+    {
+      std::cerr << "The option -X(precomputed-lgt-scenario) cannot be used together with the option -b(show-scenarios).." << std::endl;
+      return 0;
+    }
+    if((bool)(parameters->drawAll))
+    {
+      std::cerr << "The option -X(precomputed-lgt-scenario) cannot be used together with the option -Y(draw-all-lgt).." << std::endl;
+      return 0;
+    }
     load_precomputed_lgt_scenario = true;
   }
     
 
+  if(show_lgt_scenarios && !(bool)(parameters->lattransfer))
+  {
+    std::cerr << "The option -b(show-scenarios) has to be used together with the option -l(lgt).." << std::endl;
+    return 0;    
+  }
+  
+  if((bool)(parameters->drawAll) && !(bool)(parameters->lattransfer))
+  {
+    std::cerr << "The option -Y(draw-all-lgt) cannot be used together with the option -l(lgt).." << std::endl;
+    return 0;   
+  }
 
 //********************************************************************************************//
 
+    mainops = new Mainops(); //object that cointains all the main operations
+    mainops->start();
+    mainops->setParameters(parameters);
     
     if((bool)(parameters->UI)) //We start the User Interface
     {
       #if not defined __NOQTX11__
 	QApplication app(ac, av);
-	MainWindow *appWindow = new MainWindow(parameters);
+	MainWindow *appWindow = new MainWindow(parameters,mainops);
 	appWindow->show();
 	return app.exec();
 	delete(appWindow);
-	delete(parameters);
       #else
 	std::cerr << "The QT based GUI of PrimeTV2 is not present\n" << std::endl;
 	return 0;
@@ -418,93 +456,70 @@ try
     }
     else // We start the script version
     { 
-      Mainops *main = new Mainops(); //object that cointains all the main operations
-      main->setParameters(parameters);
-
       //if we don't need to reconcile the trees
       if(!(bool)(parameters->isreconciled))
       {
-	main->OpenReconciled(reconciledtree);
-	main->OpenHost(speciestree);
-	
+	mainops->OpenReconciled(reconciledtree);
+	mainops->OpenHost(speciestree);
       }
       else
       {
-	main->reconcileTrees(genetree,speciestree,mapfile);
+	mainops->reconcileTrees(genetree,speciestree,mapfile);
       }
       
       //we calculate the LGT scenarios is indicated
       if((bool)(parameters->lattransfer))
       { 
- 	if(parameters->lateralmincost == 1.0 && parameters->lateralmaxcost == 1.0) //do it with parameters
-	{
-	  main->lateralTransferDP(mapfile);
-	}
- 	else
-	{
- 	  main->lateralTransfer(mapfile);
-	}
+ 	mainops->lateralTransfer(mapfile,(parameters->lateralmincost == 1.0 && parameters->lateralmaxcost == 1.0));
       }
       else if(load_precomputed_lgt_scenario)
       {
-	main->loadPreComputedScenario(precomputed_scenario_file,mapfile);
+	mainops->loadPreComputedScenario(precomputed_scenario_file,mapfile);
       }
       
-      if(parameters->drawAll && parameters->lattransfer && !load_precomputed_lgt_scenario)
+      if(parameters->drawAll)
       {
-	main->drawAllLGT();
-      }
-      else if(parameters->drawAll)
-      {
-	std::cerr << "The option -Y has to be used together with the option -l and cannot be used together with the option -X." << std::endl;
-	return 0;
+	mainops->drawAllLGT();
       }
       else
       {
-	main->drawBest();
+	mainops->drawBest();
       }
       
-      if(show_lgt_scenarios && parameters->lattransfer && !load_precomputed_lgt_scenario)
+      if(show_lgt_scenarios)
       {
-	main->printLGT();
+	mainops->printLGT();
       }
-      else if(show_lgt_scenarios)
-      {
-	std::cerr << "The option -b has to be used together with the option -l and cannot be used together with the option -X." << std::endl;
-	return 0;
-      }
-      else
-      {
-	std::cout << "The tree/s were generated succesfully" << std::endl;
-      }
+
+      std::cout << "The tree/s were generated succesfully" << std::endl;
       
-      //NOTE these guys should be deleted from outside so they are cleaned when exceptions happen
-      if(main)
-	delete(main);
-   
-      if(parameters)
-	delete(parameters);
     }
   }
-  catch (AnError &e) 
+  catch (const AnError &e) 
   {
-    e.action();
+    cleanUp();
+    cerr << e.what() << endl;
     return -1;
   }
   catch(const boost::bad_any_cast& ex)
   {
+    cleanUp();
     cerr << "The format of any of the parameters is not correct\n";
     return -1;
   }
-  catch (const std::exception& e) {
+  catch (const std::exception& e) 
+  {
+    cleanUp();
     cerr << e.what() << endl;
     return -1;
   }
   catch(...)
   {
+    cleanUp();
     cerr << "Unknown exception, contact the developer.." << std::endl;
     return -1;
   }
   
+  cleanUp();
   return EXIT_SUCCESS;
 }

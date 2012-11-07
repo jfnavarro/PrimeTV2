@@ -62,8 +62,12 @@ class DrawTree_time {
     
     /* constructor, parameters in constant, the trees are going to be modified
      * the gamma object is constant and the cairo object is optional */
-    DrawTree_time(const Parameters&,TreeExtended &gene, TreeExtended &species, 
-		  const GammaMapEx<Node> &gamma, cairo_t *cr_ = 0);
+    DrawTree_time();
+    
+    void start(Parameters *p, TreeExtended *g, TreeExtended *s, 
+	       const GammaMapEx<Node> *ga,const LambdaMapEx<Node> *la, cairo_t* cr_ = 0);
+    
+    void cleanUp();
     
     //destructor
     ~DrawTree_time();
@@ -190,20 +194,24 @@ class DrawTree_time {
 		      double &x5, double &y5);
       
     
-    std::map<Node*,unsigned> LGT; //map of lateral transfer
-    std::vector<Edge*> geneEdges; //edges
-    LambdaMapEx<Node> lambda;
+    //external attributes
+    const LambdaMapEx<Node> *lambda;
     const Parameters *parameters;
     TreeExtended *gene;
     TreeExtended *species;
     const GammaMapEx<Node> *gamma;
-
+    Colours *config;
+    
     //Cairo objects
     cairo_surface_t *surface;
     cairo_surface_t *surfaceBackground;
     cairo_t *cr;
     cairo_text_extents_t extents;
     cairo_matrix_t matrix;
+    
+    //aux containers
+    std::map<Node*,unsigned> LGT; //map of lateral transfer
+    std::vector<Edge*> geneEdges; //edges
     
     //standard drawing parameters
     double pagewidth;
@@ -213,8 +221,6 @@ class DrawTree_time {
     double speciesfontsize;
     double linewidth;
     double s_contour_width;
-    Colours *config;
-    bool image;
     double leafWidth;
     
   /* During layout, the guest tree is traversed and the number 
@@ -222,5 +228,7 @@ class DrawTree_time {
    */
     int nDupl;
     int nTrans;
+    
+    bool image;
 };
 #endif

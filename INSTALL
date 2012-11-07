@@ -7,19 +7,27 @@ The list of packages needed to compile it are :
 	BISON
 	FLEX
 	[QT4 X11] "optional"
-	Cairo
-	BOOST 1.42
+	Cairo >= 1.0
+	BOOST >=1.42
 
 They can be installed in Ubuntu by using the following commands :
 
-sudo apt-get install libboost-dev libboost_serialization-dev libboost-program-options-dev libcairo2-dev bison flex [libqt4-dev x11]
+sudo apt-get install build-essential cmake libboost-dev libboost-serialization-dev libboost-program-options-dev libcairo2-dev bison flex [libqt4-dev]
 
 They can be installed in Fedora by using the following commands :
 
+sudo yum install cairo-devel boost-devel cmake-devel
 
 They can be installed in MAC by using the following commands :
 
+sudo port install cmake
+sudo port install cairo
+sudo port install boost
+sudo port install bison
+sudo port install flex
 
 As well as the C++ compiler and developer essentials.
 
 The exec file "primetv" will be placed in usr/bin
+
+NOTE : there is a incompatibility error with the latest Ubuntu version (12.04) and qt4-x11 which might make the User Interface to be instable.

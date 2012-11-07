@@ -35,12 +35,19 @@
 #include <boost/foreach.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/algorithm/string.hpp> 
+
 using namespace std;
 
 Mainops::Mainops()
- :Guest(0),Host(0),gamma(0),lambdamap(0),dt(0),late(0),parameters(0),io(0),layout(0)
+ :Guest(0),Host(0),gamma(0),lambdamap(0),dt(0),parameters(0),io(0)
 {
 
+}
+
+void Mainops::start()
+{
+  io = new TreeIO();
+  dt = new DrawTree_time();
 }
 
 Mainops::~Mainops()
@@ -60,116 +67,64 @@ Mainops::~Mainops()
     delete(gamma);
     gamma = 0;
   }
-  if(lambdamap)
+  /*if(lambdamap)
   {
     delete(lambdamap);
     lambdamap = 0;
-  }
+  }*/
   if(dt)
   {
     delete(dt);
     dt = 0;
   }
-  if(late)
-  {
-    delete(late);
-    late = 0;
-  }
   if(io)
   {
     delete(io);
-  }
-  if(layout) 
-  {
-    delete(layout);
-    layout = 0;
+    io = 0;
   }
 }
 
-bool Mainops::lateralTransferDP(const std::string &mapname)
-{  
-      if(late)
-      {
-	delete late;
-	late = 0;
-      }
-      late = new Phyltr();
-      late->g_input.duplication_cost = parameters->lateralduplicost;
-      late->g_input.transfer_cost = parameters->lateraltrancost;
-      late->g_input.max_cost = parameters->lateralmaxcost;
-      late->g_input.min_cost = parameters->lateralmincost;
-      late->g_input.print_only_minimal_loss_scenarios = false;
-      late->g_input.print_only_minimal_transfer_scenarios = false;
-      late->g_input.gene_tree = Guest;
-      late->g_input.species_tree = Host;
-      
-      if(parameters->isreconciled)
-      {
-	late->g_input.sigma_fname = mapname;
-	late->read_sigma();
-      }
-      else
-      {
-	late->read_sigma(gs.getMapping());
-      }
-      
-      late->dp_algorithm();
-      late->backtrack();
-      
-      if(!late->scenarios.empty() && thereAreLGT(late->scenarios))
-      {
-	Scenario scenario = late->getMinCostScenario(); 
-	lambda = scenario.cp.getLambda();
-	transferedges = scenario.transfer_edges;
-	parameters->transferedges = transferedges;
-	sigma = late->g_input.sigma;
-	scenarios = late->scenarios;
-	return true;
-      }
-      else
-      {
-	parameters->lattransfer = false;
-	std::cout << "Not valid LGT scenarios found.." << std::endl;
-	return false;
-      }
-
-}
-
-bool Mainops::lateralTransfer(const std::string &mapname)
+bool Mainops::lateralTransfer(const std::string &mapname, bool dp)
 {
-      if(late) 
+      Phyltr late =  Phyltr();
+      late.g_input.duplication_cost = parameters->lateralduplicost;
+      late.g_input.transfer_cost = parameters->lateraltrancost;
+      late.g_input.max_cost = parameters->lateralmaxcost;
+      late.g_input.min_cost = parameters->lateralmincost;
+      late.g_input.gene_tree = Guest;
+      late.g_input.species_tree = Host;
+      if(dp)
       {
-	delete late;
-	late = 0;
+	late.g_input.print_only_minimal_loss_scenarios = false;
+	late.g_input.print_only_minimal_transfer_scenarios = false;
       }
-      late = new Phyltr();
-      late->g_input.duplication_cost = parameters->lateralduplicost;
-      late->g_input.transfer_cost = parameters->lateraltrancost;
-      late->g_input.max_cost = parameters->lateralmaxcost;
-      late->g_input.min_cost = parameters->lateralmincost;
-      late->g_input.gene_tree = Guest;
-      late->g_input.species_tree = Host;
-      
       if(parameters->isreconciled)
       {
-	late->g_input.sigma_fname = mapname;
-	late->read_sigma();
+	late.g_input.sigma_fname = mapname;
+	late.read_sigma();
       }
       else
       {
-	late->read_sigma(gs.getMapping());
+	late.read_sigma(gs.getMapping());
       }
       
-      late->fpt_algorithm();
-      
-      if(late->scenarios.size() > 0 && thereAreLGT(late->scenarios))
+      if(dp)
+      {      
+	late.dp_algorithm();
+	late.backtrack();
+      }
+      else
       {
-	Scenario scenario = late->getMinCostScenario(); 
+	late.fpt_algorithm();
+      }
+      if(late.scenarios.size() > 0 && thereAreLGT(late.scenarios))
+      {
+	Scenario scenario = late.getMinCostScenario(); 
 	lambda = scenario.cp.getLambda();
 	transferedges = scenario.transfer_edges;
 	parameters->transferedges = transferedges;
-	sigma = late->g_input.sigma;
-	scenarios = late->scenarios;
+	sigma = late.g_input.sigma;
+	scenarios = late.scenarios;
 	return true;
       }
       else
@@ -203,29 +158,21 @@ bool Mainops::thereAreLGT(std::vector<Scenario> scenarios)
 
 void Mainops::OpenReconciled(const char* reconciled)
 {
-    if(Guest)
-    {
-      delete Guest;
-      Guest = 0;
-    }
     if(io)
     {
-      delete io;
-      io = 0;
+      io->setSourceFile(reconciled);
     }
-    
-    io = new TreeIO(TreeIO::fromFile(reconciled));
+    else
+    {
+      io = new TreeIO(TreeIO::fromFile(reconciled));
+    }
+    //NOTE copy constructor re-writes and it seems to clean everything up
     Guest = new TreeExtended(io->readBeepTree<TreeExtended,Node>(&AC, &gs));
 }
 
 void Mainops::OpenHost(const char* species)
-{
-    if(Host)
-    {
-      delete Host;
-      Host = 0;
-    }
-    
+{    
+
     io->setSourceFile(species);
     io->checkTagsForTree(traits);
  
@@ -233,7 +180,8 @@ void Mainops::OpenHost(const char* species)
  	throw AnError("Host tree lacks time information for some of it nodes", 1);
     else
  	traits.enforceHostTree();
-
+    
+    //NOTE copy constructor re-writes and it seems to clean everything up
     Host = new TreeExtended(io->readBeepTree<TreeExtended,Node>(traits,0,0));
     Node *root = Host->getRootNode();
 
@@ -255,30 +203,18 @@ void Mainops::OpenHost(const char* species)
 
 void Mainops::CalculateGamma()
 {
-    if(gamma) 
-    {
-      delete gamma;
-      gamma = 0;
-    }
-    
+
     if (parameters->do_not_draw_species_tree == false)
     {
-	gamma = new  GammaMapEx<Node>(*Guest, *Host, gs, AC);
-	
-	//NOTE I could use the lambda estimated by Phyltr
+	gamma = new GammaMapEx<Node>(*Guest, *Host, gs, AC);
         if (parameters->lattransfer)
         {
 	  gamma = new GammaMapEx<Node>(gamma->update(*Guest,*Host,sigma,transferedges));
         }
+        lambdamap = gamma->getLambda();
     }
     else
-    {
-        if(lambdamap) 
-	{
-	  delete lambdamap;
-	  lambdamap = 0;
-	}
-       
+    {  
 	lambdamap = new LambdaMapEx<Node>(*Guest, *Host, gs);
 
         if (parameters->lattransfer)
@@ -295,65 +231,27 @@ void Mainops::CalculateGamma()
 
 void Mainops::reconcileTrees(const char* gene, const char* species, const char* mapfile)
 {
-    if(io)
-    {
-      delete io;
-      io = 0;
-    }
+
     io = new TreeIO(TreeIO::fromFile(gene));
-    
-    if(Guest)
-    {
-      delete Guest;
-      Guest = 0;
-    }
     Guest = new TreeExtended(io->readBeepTree<TreeExtended,Node>(&AC, &gs));
-    
     io->setSourceFile(species);
-    if(Host)
-    {
-      delete Host;
-      Host = 0;
-    }
     Host = new TreeExtended(io->readNewickTree<TreeExtended,Node>());
 
     if (strcmp(mapfile,"")!=0)
     {  
       gs = TreeIO::readGeneSpeciesInfo(mapfile);
     }
-
-    if(lambdamap) 
+    else
     {
-      delete lambdamap;
-      lambdamap = 0;
+      throw AnError(": The mapfile is empty!\n");
     }
-    lambdamap = new LambdaMapEx<Node>(*Guest, *Host, gs);
 
-    if(gamma)
-    {
-      delete gamma;
-      gamma = 0;
-    }
-    gamma = new GammaMapEx<Node>(GammaMapEx<Node>::MostParsimonious(*Guest, *Host, *lambdamap));
-    
+    LambdaMapEx<Node> lambdamap_local = LambdaMapEx<Node>(*Guest, *Host, gs);
+    GammaMapEx<Node> gamma_local = GammaMapEx<Node>(GammaMapEx<Node>::MostParsimonious(*Guest, *Host, *lambdamap));
     string textTree =  io->writeGuestTree<TreeExtended,Node>(*Guest,gamma);
-    
-    if(io) 
-    {
-      delete(io);
-      io = 0;
-    }
-    io = new TreeIO(TreeIO::fromString(textTree));
-   
-    if(Guest) 
-    {
-      delete(Guest);
-      Guest = 0;
-    }
+    io->setSourceString(textTree);
     Guest = new TreeExtended(io->readBeepTree<TreeExtended,Node>(&AC, &gs));
-
     OpenHost(species);
-
 }
 
 
@@ -362,54 +260,33 @@ void Mainops::reconcileTrees(const char* gene, const char* species, const char* 
   {
     Host->reset();
     Guest->reset();
-    LayoutTrees *spcord = new LayoutTrees(*Host,*Guest,*parameters,*gamma);   
+    LayoutTrees spcord = LayoutTrees(Host,Guest,parameters,gamma,lambdamap);  
+    spcord.start();
     //reduce crossing only if not LGT 
     if(parameters->reduce && !(bool)(parameters->lattransfer))
     {
 	std::cout << "NOTE : this option is still experimental.." << std::endl;
-	layout = new Layout(Host, Guest);
+	Layout layout = Layout(Host, Guest);
 	std::map<int,int> node2node;
-	layout->run(node2node,*gamma);
-	spcord->replaceNodes(node2node);
-	if(layout)
-	{
-	  delete layout;
-	  layout = 0;
-	}
+	layout.run(node2node,*gamma);
+	spcord.replaceNodes(node2node);
     }
-    parameters->leafwidth = spcord->getNodeHeight();
-    if(spcord)
-    {
-      delete spcord;
-      spcord = 0;
-    }
+    parameters->leafwidth = spcord.getNodeHeight();
   }
 
   
-  int Mainops::checkValidity()
+ int Mainops::checkValidity()
   {
-     int status = true;
      if(parameters->lattransfer)
-       status = getValidityLGT();
+       return getValidityLGT();
      else
-       status = gamma->valid();
-     
-     if (!status) {
-	return 0;
-     }  
-     else
-     {
-       return 1;
-    }
+       return gamma->valid();
   }
 
 void Mainops::DrawTree(cairo_t *cr)
 {
-    if(dt){
-      delete dt;
-      dt = 0;
-    }
-    dt = new DrawTree_time(*parameters,*Guest,*Host,*gamma,cr);
+
+    dt->start(parameters,Guest,Host,gamma,lambdamap,cr);
 
     dt->calculateTransformation();
     
@@ -578,24 +455,19 @@ void Mainops::loadPreComputedScenario(const std::string &filename,const std::str
   }
   scenario_file.close();
   parameters->lattransfer = true;
-  if(late) 
-  {
-    delete late;
-    late = 0;
-  }
-  late = new Phyltr();
-  late->g_input.gene_tree = Guest;
-  late->g_input.species_tree = Host;
+  Phyltr late = Phyltr();
+  late.g_input.gene_tree = Guest;
+  late.g_input.species_tree = Host;
   if(parameters->isreconciled)
   {
-    late->g_input.sigma_fname = mapname;
-    late->read_sigma();
+    late.g_input.sigma_fname = mapname;
+    late.read_sigma();
   }
   else
   {
-    late->read_sigma(gs.getMapping());
+    late.read_sigma(gs.getMapping());
   }
   parameters->transferedges = transferedges;
-  sigma = late->g_input.sigma;
+  sigma = late.g_input.sigma;
   return;
 }

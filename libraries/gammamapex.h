@@ -72,6 +72,7 @@ public:
     
     // returns the lambdamap
     LambdaMapEx<T> getLambda() const;
+    LambdaMapEx<T> *getLambda();
     
     /* print the gamma on a string file */
     string print(const bool& full) const;
@@ -321,10 +322,16 @@ private:
   
 
   
-   template <class T>
+  template <class T>
   LambdaMapEx<T> GammaMapEx<T>::getLambda() const
   {
     return lambdaex;
+  }
+  
+  template <class T>
+  LambdaMapEx<T> *GammaMapEx<T>::getLambda() 
+  {
+    return &lambdaex;
   }
   
    template <class T>
@@ -833,7 +840,7 @@ private:
   template <class T>
   GammaMapEx<T>
   GammaMapEx<T>::update(const TreeExtended& G, const TreeExtended& S, const std::vector< unsigned int > &sigma, 
-			const dynamic_bitset<> &transfer_edges)
+			 const dynamic_bitset<> &transfer_edges)
   {
     lambdaex.update(G,S,sigma,transfer_edges);
     GammaMapEx gamma_star(G, S, lambdaex);

@@ -1,10 +1,8 @@
-Get rid/improve/redo GammaEx and LambdaEx, they could just be a contained containing a map and some interface functions
+Get rid/improve/redo GammaEx and LambdaEx, they could just be a container with a map and some interface functions
 
-Separate Node class in two class with inheritance.
+Separate Node class in two classes with inheritance.
 
-Replace SetOfNodes, BeepVector and StrStrMap for std or boost structures
-
-Improve website.
+Replace SetOfNodes, BeepVector and StrStrMap for std or boost containers
 
 Add genome to nodes (branchlenght)
 
@@ -12,18 +10,20 @@ List of scenarios to chose from in the User Interfance
 
 Cmake cross plataform with automatic installation of packages.
 
-Make Cmake compatible to WIndows,Mac and other UNIX platforms
+Make the building procedure compatible with Windows
 
 Time of nodes a variable in the node.
 
 Separate ownertrees methods in node.
 
-add more feactures to nodes that can be changed by clicking on it, also the position.
+Add more feactures to nodes, i.e. a feature that can be changed by clicking on it, also the position.
 
-Conecction to trees database to use those trees.
-
-posibility to drag and drop nodes
+Posibility to drag and drop nodes
 
 improve the way the LGT cordinates are being calculated by including a time event to the LGT edge
 
 Get rid/redo the Newick/PRIME tree parser, the current one uses C code and bison and flex.
+
+Improve the UI
+
+Perform a battery of several tests and create a testing script

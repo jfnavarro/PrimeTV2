@@ -22,11 +22,17 @@
 #include "layoutrees.h"
 
 
-LayoutTrees::LayoutTrees(TreeExtended &r,TreeExtended &g,
-				      Parameters& p,const GammaMapEx<Node> &gm)
-  :species(&r),gene(&g),parameters(&p),gamma(&gm),bv(r),Adress(g),lambda(gm.getLambda())
+LayoutTrees::LayoutTrees(TreeExtended *r,TreeExtended *g,
+		          Parameters *p,const GammaMapEx<Node> *gm,
+			  const LambdaMapEx<Node> *l)
+  :species(r),gene(g),parameters(p),gamma(gm),lambda(l),bv(r->getNumberOfNodes()),Adress(g->getNumberOfNodes())
 {
   
+
+}
+
+void LayoutTrees::start()
+{
   if (parameters->ladd == 'r') 
   {  
     Ladderize_right();
@@ -58,10 +64,10 @@ LayoutTrees::LayoutTrees(TreeExtended &r,TreeExtended &g,
   CountGeneCoordinates(gene->getRootNode());
 }
 
+
 LayoutTrees::~LayoutTrees()
 {
-  //NOTE not sure I want to clean this vector since its element points to Nodes
-  //FreeClearBV(Adress);
+
 }
 
 void LayoutTrees::calculateSizes()
@@ -272,9 +278,9 @@ void LayoutTrees::AssignLeafGene(Node *n)
     n->setHostChild(spn);
     
     if(!n->isRoot() && gamma->isLateralTransfer(*n->getParent()) 
-      && (lambda[n] == lambda[n->getParent()]))
+      && ((*lambda)[n] == (*lambda)[n->getParent()]))
     {
-      Node *destiny = lambda[getHighestMappedLGT(n)];
+      Node *destiny = (*lambda)[getHighestMappedLGT(n)];
       n->setHostParent(destiny);
     }
     else
@@ -355,12 +361,12 @@ void LayoutTrees::CountGeneCoordinates(Node* n)
  {
    n->setReconcilation(LateralTransfer);
    
-   Node *SoriginLT = lambda[n];
-   Node *SdestinyLT = lambda[n->getLeftChild()];
+   Node *SoriginLT = (*lambda)[n];
+   Node *SdestinyLT = (*lambda)[n->getLeftChild()];
    
    if(SoriginLT == SdestinyLT)
    {  
-     SdestinyLT = lambda[n->getRightChild()];
+     SdestinyLT = (*lambda)[n->getRightChild()];
    }
  
    n->setHostParent(SdestinyLT);
@@ -613,7 +619,7 @@ void LayoutTrees::CountGeneCoordinates(Node* n)
    while(gamma->isLateralTransfer(*parent) && !parent->isRoot())
      parent = parent->getParent();
    
-   while(!species->descendant(lambda[n],lambda[parent]) && !parent->isRoot())
+   while(!species->descendant((*lambda)[n],(*lambda)[parent]) && !parent->isRoot())
      parent = parent->getParent();
    
    return parent;

@@ -43,15 +43,22 @@ static const double pi = 3.141516;
   
   //Constructor
 
-  DrawTree_time::DrawTree_time(const Parameters &p,TreeExtended &gene, TreeExtended &species, 
-			       const GammaMapEx<Node> &gamma, cairo_t *cr_)
-    :parameters(&p),gene(&gene),species(&species),gamma(&gamma),surface(0),surfaceBackground(0),config(0),
-     nDupl(0),nTrans(0)
+  DrawTree_time::DrawTree_time()
+    :config(0),surface(0),surfaceBackground(0),cr(0),nDupl(0),nTrans(0),image(false)
   {
     
-    image = false;
+
+  }
+
+  void DrawTree_time::start(Parameters *p, TreeExtended *g, TreeExtended *s, 
+			     const GammaMapEx<Node> *ga,const LambdaMapEx<Node> *la, cairo_t* cr_)
+  {
+    parameters = p;
+    gene = g;
+    species = s;
+    gamma = ga;
     config = parameters->colorConfig;
-    lambda = gamma.getLambda();
+    lambda = la;
     
     //change the dimensions according to the oriantation
     if(parameters->horiz)
@@ -69,6 +76,8 @@ static const double pi = 3.141516;
     
     char str[80];
     //file format has to be completed
+    
+    cleanUp();
     
     //create the surface according to the format given
     if(parameters->format.compare("pdf") == 0)
@@ -125,12 +134,10 @@ static const double pi = 3.141516;
     cairo_set_source_rgba (cr, 1, 1, 1,1);
     cairo_set_line_width (cr, linewidth);
     cairo_paint(cr);
- }
 
-  //
-  // Total destruction
-  //
-  DrawTree_time::~DrawTree_time()
+  }
+  
+  void DrawTree_time::cleanUp()
   {
     if(cr)
     {
@@ -147,12 +154,16 @@ static const double pi = 3.141516;
       cairo_surface_destroy(surfaceBackground);
       surfaceBackground = 0;
     }
-    /*if(config)
-    {
-      delete(config);
-      config = 0;
-    }*/
+
     FreeClear(geneEdges);
+  }
+
+  //
+  // Total destruction
+  //
+  DrawTree_time::~DrawTree_time()
+  {
+    cleanUp();
   }
   
   void DrawTree_time::createHeader()
@@ -710,10 +721,7 @@ static const double pi = 3.141516;
   void DrawTree_time::DrawGeneEdges()
   {
       Color& regular = config->gene_edge_color;
-      //      Color& lgt = config->gene_lgt_color; // No support for special LGT color at this point
-
       cairo_set_source_rgba(cr, regular.red, regular.green, regular.blue,1);
-     
       cairo_set_line_width(cr,linewidth/2);
       
       for (unsigned i = 0; i < gene->getNumberOfNodes(); i++)
@@ -730,7 +738,7 @@ static const double pi = 3.141516;
 	      newDrawPath(n);
 	    }
 	  }
-	  else if (lambda[n]->isRoot())
+	  else if ((*lambda)[n]->isRoot())
 	  {
 	     cairo_move_to(cr,n->getX(),n->getY());
 	     cairo_line_to(cr,0,n->getY());
@@ -796,7 +804,7 @@ static const double pi = 3.141516;
    //when there is a LGT in between we have to draw the path
    //until the next speciation or duplication node or LT node
    if(n->getParent()->getReconcilation() == LateralTransfer 
-     && (lambda[n] == lambda[n->getParent()]) && !destinyLGT(n))
+     && ((*lambda)[n] == (*lambda)[n->getParent()]) && !destinyLGT(n))
    {
      destiny = n->getHostParent();
      nparent = getHighestMappedLGT(n);
@@ -982,7 +990,7 @@ static const double pi = 3.141516;
    while(parent->getReconcilation() == LateralTransfer && !parent->isRoot())
      parent = parent->getParent();
    
-   while(!species->descendant(lambda[n],lambda[parent]) && !parent->isRoot())
+   while(!species->descendant((*lambda)[n],(*lambda)[parent]) && !parent->isRoot())
      parent = parent->getParent();
    
    return parent;
@@ -997,14 +1005,14 @@ static const double pi = 3.141516;
    Node *child = n->getHostChild();
    Node *son;
    
-    if(lambda[right] == child)
+    if((*lambda)[right] == child)
       son = right;
    else
       son = left;
    
    while(son->getReconcilation() == LateralTransfer && !son->isLeaf())
    {
-      if(lambda[son->getRightChild()] == child)
+      if((*lambda)[son->getRightChild()] == child)
 	son = son->getRightChild();
       else
 	son = son->getLeftChild();
@@ -1022,14 +1030,14 @@ static const double pi = 3.141516;
    Node *child = n->getHostParent();
    Node *son;
    
-    if(lambda[right] == child)
+    if((*lambda)[right] == child)
       son = right;
    else
       son = left;
    
    while(son->getReconcilation() == LateralTransfer && !son->isLeaf())
    {
-      if(lambda[son->getRightChild()] == child)
+      if((*lambda)[son->getRightChild()] == child)
 	son = son->getRightChild();
       else
 	son = son->getLeftChild();
@@ -1094,17 +1102,10 @@ static const double pi = 3.141516;
     Node *GeneOrigin = getLowestMappedLGT(n); 
     Node *GeneDestiny = getLowestMappedNOLGT(n);
     Node *nparent = getHighestMappedLGT(GeneOrigin);
-    Node *originbound = lambda[nparent];
+    Node *originbound = (*lambda)[nparent];
     
     double destinyx;
     double originx = (GeneDestiny->getX() + destiny->getParent()->getX()) / 2;
-    
-//     double size = NumberLT(n) + 1;
-//     double mapped = GeneOrigin->getVisited();
-//     GeneOrigin->setVisited(1);
-//     double edge = GeneDestiny->getX() - destiny->getParent()->getX();
-//     double originx = ((edge/size) * mapped) + destiny->getParent()->getX() + leafWidth;
-//     double originx = destiny->getX() - leafWidth;
     
     while((originx > (origin->getX() - leafWidth/4) && originx > (destiny->getParent()->getX() + leafWidth/4)) 
       || (existLGTEdge(originx) || overlapSpeciesNode(originx,origin,destiny)))

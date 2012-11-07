@@ -30,9 +30,9 @@
 
 #define QUALITY 75  //0-100
 
-MainWindow::MainWindow(Parameters *p, QWidget *parent)
-  :QMainWindow(parent),lastVisitedDir(),ops(0),parameters(p),guestTree(false),
-        hostTree(false),menuparameters(false),isPainted(false),cr_(0),mapfileStatus(false),config(0)
+MainWindow::MainWindow(Parameters *p, Mainops *m, QWidget *parent)
+  :QMainWindow(parent),lastVisitedDir(),ops(m),parameters(p),guestTree(false),
+        hostTree(false),menuparameters(false),isPainted(false),mapfileStatus(false),config(0)
 {
 
     Ui_MainWindow::setupUi(this);
@@ -73,7 +73,7 @@ MainWindow::MainWindow(Parameters *p, QWidget *parent)
 
     mapfile = "";
     QRect screen = QApplication::desktop()->screenGeometry();
-    resize(screen.width()-100, screen.height()-100);
+    resize((unsigned)((screen.width())/2),(unsigned)((screen.height())/2));
 
     widget->paintCanvas();
     widget->repaint();
@@ -86,11 +86,6 @@ MainWindow::MainWindow(const MainWindow& other)
 
 MainWindow::~MainWindow()
 {
-    if (cr_) {
-        cairo_destroy(cr_);
-        cr_ = 0;
-    }
-
     if(verticalLayout)
     {
       delete(verticalLayout);
@@ -110,16 +105,6 @@ MainWindow::~MainWindow()
     {
       delete(widget);
       widget = 0;
-    }
-    if(ops)
-    {
-      delete(ops);
-      ops = 0;
-    }
-    if(parameters)
-    {
-      delete(parameters);
-      parameters = 0;
     }
     if(config)
     {
@@ -194,15 +179,7 @@ void MainWindow::generateTree()
 
         }
         else
-        {
-	    //NOTE perhaps smart pointer?
-	    if(ops)  
-	    {
-	      delete ops;
-	      ops = 0;
-	    }
-	    ops = new Mainops();
-	    
+        {   
             ops->setParameters(parameters);
 
             if (!checkBoxReconcile->checkState())
@@ -216,12 +193,10 @@ void MainWindow::generateTree()
             }
 
             if (parameters->lattransfer)
-	      {
-                if (parameters->lateralmincost == 1.0 && parameters->lateralmaxcost == 1.0) //do it with parameters
-		  ops->lateralTransferDP(mapfile);
-                else
-		  ops->lateralTransfer(mapfile);
+	    {
+		ops->lateralTransfer(mapfile,(parameters->lateralmincost == 1.0 && parameters->lateralmaxcost == 1.0));
             }
+            
             ops->CalculateGamma();
 
             paintTree();
@@ -263,9 +238,8 @@ void MainWindow::generateTree()
 void MainWindow::paintTree()
 {
     //widget->paintCanvas();
-    cr_ = widget->getCairoCanvas();
     ops->calculateCordinates();
-    ops->DrawTree(cr_);
+    ops->DrawTree(widget->getCairoCanvas());
     widget->repaint();
     isPainted = true;
     repaint();
@@ -403,11 +377,6 @@ void MainWindow::newImage()
     menuparameters = false;
     isPainted = false;
     mapfileStatus = false;
-    if(parameters)
-    {
-      delete(parameters);
-      parameters = 0;
-    }
     parameters = new Parameters();
     loadParameters(parameters);
     widget->resize(parameters->width,parameters->height);
@@ -415,7 +384,8 @@ void MainWindow::newImage()
     actionLoad_Map_File->setEnabled(false);
     actionSave->setEnabled(false);
     statusBar()->showMessage(tr("New tree"));
-    widget->update();
+    widget->paintCanvas();
+    widget->repaint();
     repaint();
 }
 
@@ -622,13 +592,9 @@ void MainWindow::activateLGT()
 
     if (checkBoxLGT->isChecked() && hostTree && guestTree && isPainted)
     {
-      if (parameters->lateralmincost == 1.0 && parameters->lateralmaxcost == 1.0) //do it with parameters
-	ops->lateralTransferDP(mapfile);
-      else
-	ops->lateralTransfer(mapfile);
-	
-      ops->CalculateGamma();
-      paintTree();
+	ops->lateralTransfer(mapfile,(parameters->lateralmincost == 1.0 && parameters->lateralmaxcost == 1.0) );
+	ops->CalculateGamma();
+	paintTree();
     }
 
 }

@@ -34,23 +34,17 @@
 
 using namespace std;
 
-//helper function to clean the memory on a vector
-template <class C> void FreeClearBV( C & cntr ) {
-    for ( typename C::iterator it = cntr.begin(); 
-              it != cntr.end(); ++it ) {
-        delete * it;
-    }
-    cntr.clearValues();
-}
-
 class LayoutTrees
 {  
 
 public:
 
     /*constructor : gene tree, species tree and parameters are going to be modified */
-    //TODO I should create a run method out of the constructor
-    LayoutTrees(TreeExtended &r,TreeExtended &g,Parameters& p,const GammaMapEx<Node> &gm);
+    LayoutTrees(TreeExtended *r,TreeExtended *g,
+		 Parameters *p,const GammaMapEx<Node> *gm,
+		 const LambdaMapEx<Node> *l);
+    
+    void start();
     
     /* destructor*/
     ~LayoutTrees();
@@ -135,10 +129,15 @@ private:
     /* this function returns the size of the biggest name label on both trees */
     double biggestLabel();
     
+    //external attributes
     TreeExtended *species;
     TreeExtended *gene;
-    mutable Parameters *parameters;
+    Parameters *parameters;
     const GammaMapEx<Node> *gamma;
+    const LambdaMapEx<Node> *lambda;
+    BeepVector<unsigned> bv;
+    BeepVector<Node*> Adress;
+    
     double NodeHeight;
     double yspace;
     double xspace;
@@ -152,11 +151,10 @@ private:
     std::vector<double> numXPositions; //equally distributed no time
     std::map<double,double> numXPositionsTimes; //distributed equally by time
     std::vector<double> maptime;
-    BeepVector<unsigned> bv;
-    BeepVector<Node*> Adress;
+
     bool nodetime;
     bool equal;
-    LambdaMapEx<Node> lambda;
+    
 
 };
 

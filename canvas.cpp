@@ -38,7 +38,14 @@ Canvas::Canvas(QWidget* parent)
 //destroys the cairo object if it exists
 Canvas::~Canvas()
 {
-    if (cr_) {
+    if(surface_)
+    {
+      cairo_surface_destroy(surface_);
+      surface_ = 0;
+    }
+    
+    if (cr_) 
+    {
         cairo_destroy(cr_);
         cr_ = 0;
     }
@@ -80,13 +87,50 @@ void Canvas::paintCanvas()
     Visual* visual = reinterpret_cast<Visual*>(info.visual());
     XRenderPictFormat *format = XRenderFindVisualFormat(display, visual);
 
+
+    
+    if(surface_)
+    {
+      cairo_surface_destroy(surface_);
+      surface_ = 0;
+    }
+    
     if(cr_)
     {
       cairo_destroy(cr_);
       cr_ = 0;
     }
+    
     surface_ = cairo_xlib_surface_create_with_xrender_format(display, drawable, screen, format,width(),height());
     cr_ = cairo_create(surface_);
+    
+    /* xcb is a more portable alternative to xlib 
+       QT5(to be released in November 2012) will replace xlib for xbc, so the code
+       has to be ported, fortunately, cairo is compatible with xcb and this will solve
+       some portability issues with MAC
+       http://www.cairographics.org/manual/cairo-XCB-Surfaces.html
+       
+    surface_ = cairo_xcb_surface_create_with_xrender_format (xcb_connection_t *connection,
+								 xcb_screen_t *screen,
+								 xcb_drawable_t drawable,
+                                                             xcb_render_pictforminfo_t *format,
+                                                             int width,
+                                                             int height);
+    */
+    
+    /* another option is to compile Cairo with --enable-qt which allows to use these functions :
+     * Cairo-qt is still experimental, it will be improved in further versions
+     * 
+     * cairo_public cairo_surface_t *
+       cairo_qt_surface_create (QPainter *painter);
+
+	cairo_public cairo_surface_t *
+	cairo_qt_surface_create_with_qimage (cairo_format_t format,int width,int height);
+
+	cairo_public cairo_surface_t *
+	cairo_qt_surface_create_with_qpixmap (cairo_content_t content,int width,int height);
+				      
+   */
 
 }
 
@@ -153,7 +197,10 @@ bool Canvas::print()
 
 void Canvas::resizeEvent(QResizeEvent* )
 {
-    paintCanvas();
+    //resize surface  here
+    
+    
+   // paintCanvas();
 }
 
 

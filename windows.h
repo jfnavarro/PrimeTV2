@@ -48,7 +48,7 @@ class MainWindow : public QMainWindow, public Ui_MainWindow, public Ui_Parameter
 public:
   
     // constructor we only need the parameters object and the parent if there is any
-    MainWindow(Parameters *p, QWidget *parent = 0);
+    MainWindow(Parameters *p,Mainops *m, QWidget *parent = 0);
     //copy constructor
     MainWindow(const MainWindow& other);
     //destructor
@@ -142,7 +142,6 @@ private:
     bool hostTree;
     bool menuparameters;
     bool isPainted;
-    cairo_t* cr_; //cairo object
     bool mapfileStatus;
     ConfigFile *config;
    

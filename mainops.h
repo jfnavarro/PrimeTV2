@@ -44,16 +44,13 @@ public:
   Mainops();  
   //destructor
   ~Mainops();
+  //instantiates objects
+  void start();
   
   /* calculate the Lateral transfer scenarios using parameters,
    * return true if there is a valid scenario. 
    */
-  bool lateralTransfer(const std::string &mapname);
-  
-  /* calculate the lateral transfer scenarios not using parameters, therefore 
-   * dynamic programming. Return true if there is a valid scenario.
-   */
-  bool lateralTransferDP(const std::string &mapname);
+  bool lateralTransfer(const std::string &mapname, bool dp = false /*dynamic programming*/);
   
   /* load the reconciled gene tree and obtatins its information */
   void OpenReconciled(const char* reconciled);
@@ -111,17 +108,18 @@ public:
   GammaMapEx<Node> *gamma;
   LambdaMapEx<Node> *lambdamap;
   DrawTree_time *dt; //drawing
-  Phyltr *late; //LGT
+  Parameters *parameters;
+  
   TreeIOTraits traits;
   std::vector<Scenario> scenarios;
   dynamic_bitset<> transferedges;
   std::vector<unsigned> sigma;
   std::vector<unsigned> lambda;
-  Parameters *parameters;
+  
   TreeIO *io;
   vector<SetOfNodesEx<Node> > AC;
   StrStrMap          gs;
-  Layout* layout;
+
 };  
 
 
