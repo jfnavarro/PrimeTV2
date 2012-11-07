@@ -17,9 +17,6 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
     Author : Jose Fernandez Navarro  -  jc.fernandez.navarro@gmail.com
 */
-
- /*TODO I should remove the functionality of the objects from the constructor and only create
-  * and destroy objects one time */
  
 #include "mainops.h"
 #include "phyltr.h"
@@ -48,6 +45,20 @@ void Mainops::start()
 {
   io = new TreeIO();
   dt = new DrawTree_time();
+}
+
+void Mainops::cleanTrees()
+{
+  if(Guest)
+  {
+    delete(Guest);
+    Guest = 0;
+  }
+  if(Host)
+  {
+    delete(Host);
+    Host = 0;
+  }
 }
 
 Mainops::~Mainops()
@@ -159,7 +170,6 @@ bool Mainops::thereAreLGT(std::vector<Scenario> scenarios)
 void Mainops::OpenReconciled(const char* reconciled)
 {
     io->setSourceFile(reconciled);
-    //NOTE copy constructor re-writes and it seems to clean everything up
     Guest = new TreeExtended(io->readBeepTree<TreeExtended,Node>(&AC, &gs));
 }
 
@@ -173,7 +183,6 @@ void Mainops::OpenHost(const char* species)
     else
  	traits.enforceHostTree();
     
-    //NOTE copy constructor re-writes and it seems to clean everything up
     Host = new TreeExtended(io->readBeepTree<TreeExtended,Node>(traits,0,0));
     Node *root = Host->getRootNode();
 

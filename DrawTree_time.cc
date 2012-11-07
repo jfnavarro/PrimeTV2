@@ -77,7 +77,8 @@ static const double pi = 3.141516;
     char str[80];
     //file format has to be completed
     
-    cleanUp();
+    //TODO this fails with the GUI
+    //cleanUp();
     
     //create the surface according to the format given
     if(parameters->format.compare("pdf") == 0)

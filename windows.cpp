@@ -181,7 +181,8 @@ void MainWindow::generateTree()
         else
         {   
             ops->setParameters(parameters);
-
+	     ops->cleanTrees();
+	     
             if (!checkBoxReconcile->checkState())
             {
                 ops->OpenReconciled(reconciledtree);
@@ -267,8 +268,7 @@ void MainWindow::update()
     {
         parameters->imagescale -= 0.10;
     }
-
-    if (QObject::sender() == pushButtonMoveDown)
+    else if (QObject::sender() == pushButtonMoveDown)
     {
         parameters->yoffset++;
     }

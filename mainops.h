@@ -47,6 +47,8 @@ public:
   //instantiates objects
   void start();
   
+  void cleanTrees();
+  
   /* calculate the Lateral transfer scenarios using parameters,
    * return true if there is a valid scenario. 
    */
