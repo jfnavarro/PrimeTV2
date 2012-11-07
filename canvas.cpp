@@ -30,7 +30,7 @@
 #include <cairo/cairo-xlib-xrender.h>
 
 Canvas::Canvas(QWidget* parent)
-  : QWidget(parent),cr_(0)
+  : QWidget(parent),cr_(0),surface_(0)
 {
 
 }
@@ -89,7 +89,7 @@ void Canvas::paintCanvas()
 
 
     
-    if(surface_)
+    /*if(surface_)
     {
       cairo_surface_destroy(surface_);
       surface_ = 0;
@@ -99,7 +99,7 @@ void Canvas::paintCanvas()
     {
       cairo_destroy(cr_);
       cr_ = 0;
-    }
+    }*/
     
     surface_ = cairo_xlib_surface_create_with_xrender_format(display, drawable, screen, format,width(),height());
     cr_ = cairo_create(surface_);

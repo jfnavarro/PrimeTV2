@@ -53,6 +53,7 @@ public:
     MainWindow(const MainWindow& other);
     //destructor
     ~MainWindow();
+    void upda();
    
     
 private slots:

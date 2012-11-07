@@ -76,7 +76,7 @@ MainWindow::MainWindow(Parameters *p, Mainops *m, QWidget *parent)
     resize((unsigned)((screen.width())/2),(unsigned)((screen.height())/2));
 
     widget->paintCanvas();
-    widget->repaint();
+    widget->update();
 }
 
 MainWindow::MainWindow(const MainWindow& other)
@@ -240,7 +240,7 @@ void MainWindow::paintTree()
     //widget->paintCanvas();
     ops->calculateCordinates();
     ops->DrawTree(widget->getCairoCanvas());
-    widget->repaint();
+    widget->update();
     isPainted = true;
     repaint();
 }
@@ -385,7 +385,7 @@ void MainWindow::newImage()
     actionSave->setEnabled(false);
     statusBar()->showMessage(tr("New tree"));
     widget->paintCanvas();
-    widget->repaint();
+    widget->update();
     repaint();
 }
 

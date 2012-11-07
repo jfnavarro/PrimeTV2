@@ -158,21 +158,13 @@ bool Mainops::thereAreLGT(std::vector<Scenario> scenarios)
 
 void Mainops::OpenReconciled(const char* reconciled)
 {
-    if(io)
-    {
-      io->setSourceFile(reconciled);
-    }
-    else
-    {
-      io = new TreeIO(TreeIO::fromFile(reconciled));
-    }
+    io->setSourceFile(reconciled);
     //NOTE copy constructor re-writes and it seems to clean everything up
     Guest = new TreeExtended(io->readBeepTree<TreeExtended,Node>(&AC, &gs));
 }
 
 void Mainops::OpenHost(const char* species)
 {    
-
     io->setSourceFile(species);
     io->checkTagsForTree(traits);
  
@@ -232,7 +224,7 @@ void Mainops::CalculateGamma()
 void Mainops::reconcileTrees(const char* gene, const char* species, const char* mapfile)
 {
 
-    io = new TreeIO(TreeIO::fromFile(gene));
+    io->setSourceFile(gene);
     Guest = new TreeExtended(io->readBeepTree<TreeExtended,Node>(&AC, &gs));
     io->setSourceFile(species);
     Host = new TreeExtended(io->readNewickTree<TreeExtended,Node>());
@@ -247,8 +239,8 @@ void Mainops::reconcileTrees(const char* gene, const char* species, const char* 
     }
 
     LambdaMapEx<Node> lambdamap_local = LambdaMapEx<Node>(*Guest, *Host, gs);
-    GammaMapEx<Node> gamma_local = GammaMapEx<Node>(GammaMapEx<Node>::MostParsimonious(*Guest, *Host, *lambdamap));
-    string textTree =  io->writeGuestTree<TreeExtended,Node>(*Guest,gamma);
+    GammaMapEx<Node> gamma_local = GammaMapEx<Node>(GammaMapEx<Node>::MostParsimonious(*Guest, *Host, lambdamap_local));
+    string textTree =  io->writeGuestTree<TreeExtended,Node>(*Guest,&gamma_local);
     io->setSourceString(textTree);
     Guest = new TreeExtended(io->readBeepTree<TreeExtended,Node>(&AC, &gs));
     OpenHost(species);
