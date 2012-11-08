@@ -181,6 +181,8 @@ void MainWindow::generateTree()
         else
         {   
             ops->setParameters(parameters);
+	    
+	    //TODO second time I load a tree it does not do the reconcilation properly
             
 	    if (!checkBoxReconcile->checkState())
             {
@@ -596,6 +598,11 @@ void MainWindow::activateLGT()
     {
 	ops->lateralTransfer(mapfile,(parameters->lateralmincost == 1.0 && parameters->lateralmaxcost == 1.0) );
 	ops->CalculateGamma();
+	paintTree();
+    }
+    else
+    {
+      	ops->CalculateGamma();
 	paintTree();
     }
 
