@@ -588,6 +588,8 @@ void MainWindow::showParameters()
 
 void MainWindow::activateLGT()
 {
+    //TODO make sure normal reconcilation gets painted when we switch off
+    
     parameters->lattransfer = checkBoxLGT->isChecked();
     parameters->lateralmincost = (float)spinBoxMinCost->value();
     parameters->lateralmaxcost = (float)spinBoxMaxCost->value();
@@ -600,7 +602,7 @@ void MainWindow::activateLGT()
 	ops->CalculateGamma();
 	paintTree();
     }
-    else
+    else if(hostTree && guestTree && isPainted)
     {
       	ops->CalculateGamma();
 	paintTree();
