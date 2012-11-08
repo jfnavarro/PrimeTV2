@@ -182,8 +182,9 @@ void MainWindow::generateTree()
         {   
             ops->setParameters(parameters);
 	     ops->cleanTrees();
-	     
-            if (!checkBoxReconcile->checkState())
+	     ops->start();
+            
+	    if (!checkBoxReconcile->checkState())
             {
                 ops->OpenReconciled(reconciledtree);
                 ops->OpenHost(speciestree);
@@ -260,6 +261,8 @@ void MainWindow::closeEvent(QCloseEvent *e)
 
 void MainWindow::update()
 {
+    //TODO i need to restorei imagescale and offset to original prior increasing
+    //     the increasing amoung should be stored
     if (QObject::sender() == pushButtonZoomIn)
     {
         parameters->imagescale += 0.10;

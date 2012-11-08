@@ -59,6 +59,22 @@ void Mainops::cleanTrees()
     delete(Host);
     Host = 0;
   }
+  if(gamma)
+  {
+    delete(gamma);
+    gamma = 0;
+  }
+  if(dt)
+  {
+    delete(dt);
+    dt = 0;
+  }
+  if(io)
+  {
+    delete(io);
+    io = 0;
+  }
+  
 }
 
 Mainops::~Mainops()
@@ -78,11 +94,6 @@ Mainops::~Mainops()
     delete(gamma);
     gamma = 0;
   }
-  /*if(lambdamap)
-  {
-    delete(lambdamap);
-    lambdamap = 0;
-  }*/
   if(dt)
   {
     delete(dt);
