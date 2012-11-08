@@ -181,8 +181,6 @@ void MainWindow::generateTree()
         else
         {   
             ops->setParameters(parameters);
-	     ops->cleanTrees();
-	     ops->start();
             
 	    if (!checkBoxReconcile->checkState())
             {
@@ -261,8 +259,9 @@ void MainWindow::closeEvent(QCloseEvent *e)
 
 void MainWindow::update()
 {
-    //TODO i need to restorei imagescale and offset to original prior increasing
-    //     the increasing amoung should be stored
+    //TODO  I need to fix the zoom and the moving, it gets called several times
+    //	    I need to control it gets called one time per click
+    /*
     if (QObject::sender() == pushButtonZoomIn)
     {
         parameters->imagescale += 0.10;
@@ -287,7 +286,7 @@ void MainWindow::update()
     {
         parameters->xoffset++;
     }
-
+    */
     parameters->title = checkBoxHeader->isChecked();
     lineEditHeaderText->setEnabled(checkBoxHeader->isChecked());
 
