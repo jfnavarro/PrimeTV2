@@ -78,7 +78,7 @@ static const double pi = 3.141516;
     //file format has to be completed
     
     //TODO this fails with the GUI
-    //cleanUp();
+    cleanUp();
     
     //create the surface according to the format given
     if(parameters->format.compare("pdf") == 0)
@@ -135,7 +135,7 @@ static const double pi = 3.141516;
     cairo_set_source_rgba (cr, 1, 1, 1,1);
     cairo_set_line_width (cr, linewidth);
     cairo_paint(cr);
-
+    
   }
   
   void DrawTree_time::cleanUp()
@@ -157,6 +157,7 @@ static const double pi = 3.141516;
     }
 
     FreeClear(geneEdges);
+    LGT.clear();
   }
 
   //
