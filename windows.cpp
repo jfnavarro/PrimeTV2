@@ -240,11 +240,22 @@ void MainWindow::generateTree()
 void MainWindow::paintTree()
 {
     //widget->paintCanvas();
-    ops->calculateCordinates();
-    ops->DrawTree(widget->getCairoCanvas());
-    widget->update();
-    isPainted = true;
-    repaint();
+    if(ops->checkValidity())
+    {
+      ops->calculateCordinates();
+      ops->DrawTree(widget->getCairoCanvas());
+      widget->update();
+      isPainted = true;
+      repaint();
+    }
+    else
+    {
+       QErrorMessage errorMessage;
+       errorMessage.showMessage("Error wrong LGT or reconciled scenario loaded");
+       errorMessage.exec();
+       guestTree = false;
+       hostTree = false;
+    }
 }
 
 void MainWindow::exit()
