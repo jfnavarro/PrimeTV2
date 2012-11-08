@@ -602,11 +602,11 @@ void MainWindow::activateLGT()
 	ops->CalculateGamma();
 	paintTree();
     }
-    else if(hostTree && guestTree && isPainted)
+    /*else if(hostTree && guestTree && isPainted)
     {
       	ops->CalculateGamma();
 	paintTree();
-    }
+    }*/
 
 }
 
