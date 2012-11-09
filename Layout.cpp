@@ -55,15 +55,15 @@ void Layout::run(std::map< int, int >& nodeMoveMap, const GammaMapEx<Node> &gamm
     std::cerr << "There was an error clonning the gene tree in the class Layout.." << std::endl;
 }
 
-void Layout::solveMCNRT(Node *fatherNode, Node &geneRoot,const GammaMapEx<Node> &gamma, std::map<int,int> &nodeMoveMap) 
+void Layout::solveMCNRT(Node *fatherNode, Node &geneRoot,const GammaMapEx<Node> &gamma, std::map<int,int> &nodeMoveMap)
 {
   Node *leftChild, *rightChild;
   //keep going down layer after layer
-  if ( (fatherNode->getRightChild() == NULL)	|| (fatherNode->getLeftChild() == NULL)) 
+  if ( (fatherNode->getRightChild() == NULL)	|| (fatherNode->getLeftChild() == NULL))
   {
     return;
   }
-  
+
   rightChild = fatherNode->getRightChild();
   leftChild = fatherNode->getLeftChild();
 
@@ -95,7 +95,7 @@ void Layout::solveMCNRT(Node *fatherNode, Node &geneRoot,const GammaMapEx<Node> 
   SetOfNodesEx<Node> *nodeset = new SetOfNodesEx<Node>;
   //originalNode points to the current node in the original tree
   //actualNode points to the current node in the copied tree (used for perform internal rotations)
-  for (i = 0; i < fatherSet.size(); i++) 
+  for (i = 0; i < fatherSet.size(); i++)
   {
     Node *originalNode = fatherSet.operator [](i);
     Node *actualNode = copyTree->getNode(fatherSet.operator [](i)->getNumber());
@@ -103,25 +103,25 @@ void Layout::solveMCNRT(Node *fatherNode, Node &geneRoot,const GammaMapEx<Node> 
     exploreNode(actualNode, originalNode, sigma, tau, reversedTau, s, layoutSize, control, nodeset);
   }
   //	get the leftmost internal node, intNode = y
-  
+
   int direct = evaluateDirect(sigma, tau, reversedTau, layoutSize, readOnly,fatherNode, nodeset, nodeMoveMap);
   rotatedTau = rotateLayout(tau, layoutSize, leftChildSet.size());
   revRotTau = reverseLayout(rotatedTau, layoutSize);
   int rotated = evaluateDirect(sigma, rotatedTau, revRotTau, layoutSize,readOnly, fatherNode, nodeset, nodeMoveMap);
   regCount += direct;
   readOnly = false;
-  if ((direct >= rotated)) 
+  if ((direct >= rotated))
   {
     fatherNode->rotate();
     direct = evaluateDirect(sigma, rotatedTau, revRotTau, layoutSize, readOnly, fatherNode, nodeset, nodeMoveMap);
     optCount += direct;
-  } 
-  else 
+  }
+  else
   {
     rotated = evaluateDirect(sigma, tau, reversedTau, layoutSize, readOnly,fatherNode, nodeset, nodeMoveMap);
     optCount += rotated;
   }
-  //cleaning up
+//  cleaning up
   delete[] sigma;
   delete[] tau;
   delete[] reversedTau;
@@ -129,10 +129,10 @@ void Layout::solveMCNRT(Node *fatherNode, Node &geneRoot,const GammaMapEx<Node> 
   delete[] rotatedTau;
 }
 
-NodeWithIndex** Layout::reverseLayout(NodeWithIndex **delta, int layoutSize) 
+NodeWithIndex** Layout::reverseLayout(NodeWithIndex **delta, int layoutSize)
 {
   NodeWithIndex **reversedDelta = new NodeWithIndex *[layoutSize];
-  for (int i = 0; i < layoutSize; i++) 
+  for (int i = 0; i < layoutSize; i++)
   {
     reversedDelta[i] = new NodeWithIndex;
     reversedDelta[i] = delta[layoutSize - 1 - i];
@@ -142,16 +142,16 @@ NodeWithIndex** Layout::reverseLayout(NodeWithIndex **delta, int layoutSize)
 
 
 
-NodeWithIndex** Layout::rotateLayout(NodeWithIndex **delta, int layoutSize,int leftSize) 
+NodeWithIndex** Layout::rotateLayout(NodeWithIndex **delta, int layoutSize,int leftSize)
 {
   NodeWithIndex **rotatedDelta = new NodeWithIndex *[layoutSize];
-  for (int i = 0; i < layoutSize - leftSize; i++) 
+  for (int i = 0; i < layoutSize - leftSize; i++)
   {
     rotatedDelta[i] = new NodeWithIndex;
     rotatedDelta[i]->node	 = delta[leftSize + i]->node;
     rotatedDelta[i]->layoutIndex = delta[leftSize + i]->layoutIndex;
   }
-  for (int i = 0; i < leftSize; i++) 
+  for (int i = 0; i < leftSize; i++)
   {
     rotatedDelta[layoutSize - leftSize + i] = new NodeWithIndex;
     rotatedDelta[layoutSize - leftSize + i]->node = delta[i]->node;
@@ -161,9 +161,9 @@ NodeWithIndex** Layout::rotateLayout(NodeWithIndex **delta, int layoutSize,int l
 }
 
 //return the layout index of rightmostleftson
-int Layout::findOrderIndex(NodeWithIndex **sigma, Node* rightMostLeftSon,int layoutSize) 
+int Layout::findOrderIndex(NodeWithIndex **sigma, Node* rightMostLeftSon,int layoutSize)
 {
-  for (int i = 0; i < layoutSize; i++) 
+  for (int i = 0; i < layoutSize; i++)
   {
     if (sigma[i]->node == rightMostLeftSon)
       return i;
@@ -173,34 +173,34 @@ int Layout::findOrderIndex(NodeWithIndex **sigma, Node* rightMostLeftSon,int lay
 
 //find the node regarded as z in OT-GTL
 //namely the rightmost node son of the left child of the internal node y
-Node* Layout::getRightMostLeftSon(Node* internalNode, SetOfNodesEx<Node> levelGenesNodes) 
+Node* Layout::getRightMostLeftSon(Node* internalNode, SetOfNodesEx<Node> levelGenesNodes)
 {
   if(internalNode==NULL)
     return NULL;
-  if (internalNode->getLeftChild() == NULL) 
+  if (internalNode->getLeftChild() == NULL)
   {
     return NULL;
   }
   Node *nextSon = internalNode->getLeftChild();
-  if (nextSon == NULL) 
+  if (nextSon == NULL)
   {
     return NULL;
   }
-  if (levelGenesNodes.member(nextSon)) 
+  if (levelGenesNodes.member(nextSon))
   {
     // Left son already belongs to the species level";
     return NULL;
   }
-  while (!levelGenesNodes.member(nextSon)) 
+  while (!levelGenesNodes.member(nextSon))
   {
-    if (nextSon->getRightChild() == NULL) 
+    if (nextSon->getRightChild() == NULL)
     {
       return NULL;
     }
     else
       nextSon = nextSon->getRightChild();
-    
-    if (nextSon == NULL) 
+
+    if (nextSon == NULL)
     {
       return NULL;
     }
@@ -224,10 +224,10 @@ int Layout::getLayoutIndex(Node* searchedNode, NodeWithIndex** layout, int layou
 
 
 void Layout::rotateBinary(Node* intNode, NodeWithIndex **sigma, SetOfNodesEx<Node> *nodeset,
-			   Node* speciesNode, int layoutSize, std::map<int, int> &nodeMoveMap) 
+			   Node* speciesNode, int layoutSize, std::map<int, int> &nodeMoveMap)
 {
 
-  if (intNode->getLeftChild() == NULL || intNode->getLeftChild() == NULL) 
+  if (intNode->getLeftChild() == NULL || intNode->getLeftChild() == NULL)
   {
     cerr << "\n\nswapping create NULL pointers\n\n";
     return;
@@ -240,46 +240,46 @@ void Layout::rotateBinary(Node* intNode, NodeWithIndex **sigma, SetOfNodesEx<Nod
   Node* leftNodeSibling = intNode->getLeftChild();
   Node* rightNodeSibling = intNode->getRightChild();
 
-  while (!nodeset->member(leftMostNode)) 
+  while (!nodeset->member(leftMostNode))
   {
     if (leftMostNode->getLeftChild() != NULL)
       leftMostNode = leftMostNode->getLeftChild();
-    else 
+    else
     {
       return;
     }
   }
 
-  while (!nodeset->member(leftNodeSibling)) 
+  while (!nodeset->member(leftNodeSibling))
   {
     if (leftNodeSibling->getRightChild() != NULL)
       leftNodeSibling = leftNodeSibling->getRightChild();
-    else 
+    else
     {
       return;
     }
   }
 
-  while (!nodeset->member(rightMostNode)) 
+  while (!nodeset->member(rightMostNode))
   {
     if (rightMostNode->getRightChild() != NULL)
       rightMostNode = rightMostNode->getRightChild();
-    else 
+    else
     {
       return;
     }
   }
 
-  while (!nodeset->member(rightNodeSibling)) 
+  while (!nodeset->member(rightNodeSibling))
   {
     if (rightNodeSibling->getLeftChild() != NULL)
       rightNodeSibling = rightNodeSibling->getLeftChild();
-    else 
+    else
     {
       return;
     }
   }
-  
+
   int sxSxIndex = getLayoutIndex(leftMostNode, sigma, layoutSize);
   int sxDxIndex = getLayoutIndex(leftNodeSibling, sigma, layoutSize);
   int dxDxIndex = getLayoutIndex(rightMostNode, sigma, layoutSize);
@@ -290,7 +290,7 @@ void Layout::rotateBinary(Node* intNode, NodeWithIndex **sigma, SetOfNodesEx<Nod
 
   if(length<=0) return;
 
-  for (int i = 0; i <= min(sxLen, dxLen); i++) 
+  for (int i = 0; i <= min(sxLen, dxLen); i++)
   {
     nodeMoveMap.operator [](sigma[sxSxIndex + i]->node->getNumber()) = sigma[dxSxIndex + i]->node->getNumber();
     if(print)
@@ -302,7 +302,7 @@ void Layout::rotateBinary(Node* intNode, NodeWithIndex **sigma, SetOfNodesEx<Nod
 
   }
 
-  for (int i = length; i < max(sxLen, dxLen); i++) 
+  for (int i = length; i < max(sxLen, dxLen); i++)
   {
     nodeMoveMap.operator [](sigma[sxSxIndex + i]->node->getNumber()) = sigma[dxDxIndex - i]->node->getNumber();
     if(print)
@@ -321,21 +321,21 @@ void Layout::rotateBinary(Node* intNode, NodeWithIndex **sigma, SetOfNodesEx<Nod
 
 //return the number of nodes smaller than z after x
 //that equal the number of crossings
-int Layout::computeCrossing(int x, int z, NodeWithIndex **delta, int layoutSize) 
+int Layout::computeCrossing(int x, int z, NodeWithIndex **delta, int layoutSize)
 {
   //find node x in delta layout
   int i, j;
   int sum = 0;
-  for (i = 0; i < layoutSize; i++) 
+  for (i = 0; i < layoutSize; i++)
   {
-    if (delta[i]->layoutIndex == x) 
+    if (delta[i]->layoutIndex == x)
     {
       break;
     }
   }
 
   //node smaller than z positioned after x in "delta" layout
-  for (j = i; j < layoutSize; j++) 
+  for (j = i; j < layoutSize; j++)
   {
     if (delta[j]->layoutIndex <= z) {
       sum++;
@@ -346,7 +346,7 @@ int Layout::computeCrossing(int x, int z, NodeWithIndex **delta, int layoutSize)
 
 int Layout::evaluateDirect(NodeWithIndex **sigma, NodeWithIndex **tau,
 		NodeWithIndex **reversedTau, int layoutSize, bool readOnly,
-		Node* speciesNode, SetOfNodesEx<Node> *nodeset, std::map<int,int> &nodeMoveMap) 
+		Node* speciesNode, SetOfNodesEx<Node> *nodeset, std::map<int,int> &nodeMoveMap)
 {
   int z;
   //number of crossing with regular layout and with inverted ones
@@ -358,7 +358,7 @@ int Layout::evaluateDirect(NodeWithIndex **sigma, NodeWithIndex **tau,
   vector<Node*> newVector;
   vector<Node*> deleteVector;
 
-  for (int i = 0; i < layoutSize; i++) 
+  for (int i = 0; i < layoutSize; i++)
   {
     if(sigma[i]!=NULL)
       newVector.push_back(sigma[i]->node);
@@ -368,9 +368,9 @@ int Layout::evaluateDirect(NodeWithIndex **sigma, NodeWithIndex **tau,
   Node *tempNode;
   //bool binary = true;
 
-  for (int l = 0; tmpSize >= 1; l++) 
+  for (int l = 0; tmpSize >= 1; l++)
   {
-    for (int i = 0; i < tmpSize - 1; i = i + 2) 
+    for (int i = 0; i < tmpSize - 1; i = i + 2)
     {
 	Node *node1 = newVector.at(i);
 	Node *node2 = newVector.at(i + 1);
@@ -400,8 +400,8 @@ int Layout::evaluateDirect(NodeWithIndex **sigma, NodeWithIndex **tau,
 	  i-=1;
 	}
      }
-      
-    if (tmpSize % 2 != 0) 
+
+    if (tmpSize % 2 != 0)
     {
       deleteVector.push_back(newVector.at(tmpSize - 1));
     }
@@ -423,22 +423,22 @@ int Layout::evaluateDirect(NodeWithIndex **sigma, NodeWithIndex **tau,
   else
     lastNode = sigma[0]->node->getParent();
 
-  while ((intNode!=NULL)&&(intNode != lastNode)) 
+  while ((intNode!=NULL)&&(intNode != lastNode))
   {
     Node *rightMostLeftSon = getRightMostLeftSon(intNode, *nodeset);
     //if NULL intNode should not be considered, and we should move one layer up
-    if (rightMostLeftSon == NULL) 
+    if (rightMostLeftSon == NULL)
     {
-      if (intNode->getLeftChild() != NULL) 
+      if (intNode->getLeftChild() != NULL)
       {
 	intNode = intNode->getLeftChild();
-      } 
-      else 
+      }
+      else
       {
 	intNode = NULL;
       }
-      
-      if (layoutSize == 2) 
+
+      if (layoutSize == 2)
       {
 	rightMostLeftSon = sigma[0]->node;
 	intNode = rightMostLeftSon->getParent();
@@ -451,38 +451,38 @@ int Layout::evaluateDirect(NodeWithIndex **sigma, NodeWithIndex **tau,
     z = getLayoutIndex(rightMostLeftSon, sigma, layoutSize);
     sum = 0, reversedSum = 0;
 
-    for (int i = z + 1; i < maxToCompute; i++) 
+    for (int i = z + 1; i < maxToCompute; i++)
     {
       sum = sum + computeCrossing(i, z, tau, layoutSize);
       reversedSum = reversedSum + computeCrossing(i, z, reversedTau, layoutSize);
     }
 
-    if (sum > reversedSum) 
+    if (sum > reversedSum)
     {
       totalSum += reversedSum;
-      if (readOnly == false) 
+      if (readOnly == false)
       {
 	  rotateBinary(intNode, sigma, nodeset, speciesNode, layoutSize, nodeMoveMap);
       }
-    } 
-    else 
+    }
+    else
     {
       totalSum += sum;
     }
-      
+
     if (intNode!=NULL)
     {
-      if(intNode->getLeftChild() != NULL) 
+      if(intNode->getLeftChild() != NULL)
       {
 	intNode = intNode->getLeftChild();
-      } 
+      }
       else
       {
 	intNode = NULL;
       }
-    } 
+    }
     maxToCompute = z + 1;
-    
+
    }
 
    return totalSum;
@@ -490,7 +490,7 @@ int Layout::evaluateDirect(NodeWithIndex **sigma, NodeWithIndex **tau,
 
 //build sigma, tau and reversed tau for current layer
 void Layout::exploreNode(Node *actualNode, Node *originalNode, NodeWithIndex **sigma, NodeWithIndex **tau,
-		NodeWithIndex **reversedTau, int &s, int layoutSize, Node *control, SetOfNodesEx<Node> *nodeSet) 
+		NodeWithIndex **reversedTau, int &s, int layoutSize, Node *control, SetOfNodesEx<Node> *nodeSet)
 {
   //if the left gene son belongs to one of the species level descense is over.
   //add the actualNode to the sigma layout and the left child to the tau one
@@ -500,26 +500,26 @@ void Layout::exploreNode(Node *actualNode, Node *originalNode, NodeWithIndex **s
   Node *geneLeftCopy = actualNode->getLeftChild();
   Node *geneRightCopy = actualNode->getRightChild();
 
-  if (geneLeft != NULL && geneLeftCopy!=NULL) 
+  if (geneLeft != NULL && geneLeftCopy!=NULL)
   {
     exploreNode(geneLeftCopy, geneLeft, sigma, tau, reversedTau, s, layoutSize, actualNode, nodeSet);
   }
 
-  if (geneRight != NULL && geneRightCopy!=NULL) 
+  if (geneRight != NULL && geneRightCopy!=NULL)
   {
     exploreNode(geneRightCopy, geneRight, sigma, tau, reversedTau, s, layoutSize, actualNode, nodeSet);
   }
 
   //actual node belongs to one of the species child (straight line)
-  if (leftChildSet.member(originalNode)) 
+  if (leftChildSet.member(originalNode))
   {
     int index = retrieveNodePos(leftChildSet, originalNode);
-    if (index == -1) 
+    if (index == -1)
     {
 	cerr << "error: Gene node not found\n";
 	return;
-    } 
-    else 
+    }
+    else
     {
 	tau[index] = new NodeWithIndex;
 	reversedTau[layoutSize - index - 1] = new NodeWithIndex;
@@ -536,12 +536,12 @@ void Layout::exploreNode(Node *actualNode, Node *originalNode, NodeWithIndex **s
 	  sigma[s]->node = control;
 	  tau[index]->node = control;
 	  reversedTau[layoutSize - index - 1]->node = control;
-	  actualNode->setParent(control);			
+	  actualNode->setParent(control);
 	  if(control->getLeftChild()==NULL)
 	  {
 	    control->setLeftChild(actualNode);
 	  }
-	  else
+	  else if (control->getRightChild()==NULL)
 	  {
 	    control->setRightChild(actualNode);
 	  }
@@ -553,16 +553,16 @@ void Layout::exploreNode(Node *actualNode, Node *originalNode, NodeWithIndex **s
 	return;
     }
   }
-  else if ((rightChildSet.member(originalNode))) 
+  else if ((rightChildSet.member(originalNode)))
   {
-    int index = retrieveNodePos(rightChildSet, originalNode);		
+    int index = retrieveNodePos(rightChildSet, originalNode);
     int leftSize = leftChildSet.size();
     int summedIndex = index + leftSize;
-    if (index == -1) 
+    if (index == -1)
     {
 	return;
-    } 
-    else 
+    }
+    else
     {
 	sigma[s] = new NodeWithIndex;
 	tau[summedIndex] = new NodeWithIndex;
@@ -586,7 +586,7 @@ void Layout::exploreNode(Node *actualNode, Node *originalNode, NodeWithIndex **s
 	  {
 	    control->setLeftChild(actualNode);
 	  }
-	  else
+	  else if (control->getRightChild()==NULL)
 	  {
 	    control->setRightChild(actualNode);
 	  }
@@ -607,17 +607,17 @@ void Layout::exploreNode(Node *actualNode, Node *originalNode, NodeWithIndex **s
 }
 
 
-int Layout::retrieveNodePos(SetOfNodesEx<Node> nodeSet, Node* node) 
+int Layout::retrieveNodePos(SetOfNodesEx<Node> nodeSet, Node* node)
 {
-  unsigned int i;	
-  for (i = 0; i < nodeSet.size(); i++) 
+  unsigned int i;
+  for (i = 0; i < nodeSet.size(); i++)
   {
     if (nodeSet.operator [](i) == node) return i;
   }
   return -1;
 }
 
-Layout::~Layout() 
+Layout::~Layout()
 {
   if(copyTree)
   {
