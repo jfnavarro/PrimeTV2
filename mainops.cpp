@@ -277,7 +277,7 @@ void Mainops::reconcileTrees(const char* gene, const char* species, const char* 
     //reduce crossing only if not LGT 
     if(parameters->reduce && !(bool)(parameters->lattransfer))
     {
-	std::cout << "NOTE : this option is still experimental.." << std::endl;
+	std::cout << "NOTE : the option -R is still experimental.." << std::endl;
 	Layout layout = Layout(Host, Guest);
 	std::map<int,int> node2node;
 	layout.run(node2node,*gamma);

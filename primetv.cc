@@ -126,7 +126,7 @@ try
     ("help,h", "Produce help message") 
     ("gui", po::bool_switch(&parameters->UI), "Initiates a Graphical User Interface")
     ("reconciled,r", po::bool_switch(&parameters->isreconciled)->default_value(false), 
-     "Indicates that the Guest tree is already reconciled. By default, a most parsimonous reconciliation is computed. This option requires a third input file which maps guest tree leaves to host tree leaves")
+     "Indicates that the Guest tree is not reconciled. By default, it is assumed that the Guest Tree is already reconciled in PRIME format. This option requires a third input file which maps guest tree leaves to host tree leaves")
     ("config,C", po::value<string>(&config_file)->default_value(default_config_file),
                   "Name of a file of a configuration.");
     
