@@ -154,11 +154,11 @@ try
     ("size,p", po::value<std::vector<float> >()->multitoken(),
      "Image size in pixels <width> <height>")
     ("guest-font,j", po::value<string>(&parameters->gene_font)->default_value("Times"),
-     "<string> use this font for guest tree labels (def. Times)")
+     "<string> use this font for guest tree labels (def. Times) possible options = \"serif\", \"sans-serif\", \"Purisa\", \"Sans\", \"monospace\" ..etc")
     ("host-font,q", po::value<string>(&parameters->species_font)->default_value("Times"), 
-     "<string> use this font for host node labels (def. Times)")
+     "<string> use this font for host node labels (def. Times) possible options = \"serif\", \"sans-serif\", \"Purisa\", \"Sans\", \"monospace\" ..etc")
     ("all-font,A", po::value<string>(&parameters->all_font)->default_value("Times"), 
-     "<string> use this font for the rest of text labels (def. Times)")
+     "<string> use this font for the rest of text labels (def. Times) possible options = \"serif\", \"sans-serif\", \"Purisa\", \"Sans\", \"monospace\" ..etc")
     ("fontscale,s", po::value<float>(&parameters->fontscale)->default_value(1.0), 
      "<float> scale fonts by this number")
     ("genefontsize,G", po::value<float>(&parameters->gene_font_size)->default_value(10.0), 

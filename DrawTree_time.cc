@@ -28,8 +28,8 @@
 #include "Colours.h"
 #include "math.h"
 
-#if defined HAS_HEADER
-  #define HEADER_LOCATION "@HAS_HEADER@"
+#ifndef HAS_HEADER
+  #define HAS_HEADER ""
 #endif
 
 //dashes pens used to pain with dashes
@@ -73,6 +73,7 @@ static const double pi = 3.141516;
     }
     
     leafWidth = parameters->leafwidth;
+    
     
     char str[80];
     //file format has to be completed
@@ -170,7 +171,8 @@ static const double pi = 3.141516;
   
   void DrawTree_time::createHeader()
   { 
-    cairo_surface_t *image = cairo_image_surface_create_from_png(((std::string)(HEADER_LOCATION)).c_str());
+    std::string imagefile = boost::lexical_cast<std::string>(HAS_HEADER);
+    cairo_surface_t *image = cairo_image_surface_create_from_png(imagefile.c_str());
     cairo_save(cr);
     cairo_set_source_surface(cr,image,pagewidth - cairo_image_surface_get_width(image),10);
     cairo_paint(cr);
@@ -212,6 +214,7 @@ static const double pi = 3.141516;
       double cx = pagewidth/2;
       double cy = pageheight/2;
     
+      //TODO I should increase the canvas size if a scale to more than 1.0
       cairo_matrix_t matrix2;
       cairo_matrix_init(&matrix,c,s,-s,c,cx-c*cx+s*cy,cy-s*cx-c*cy);
       double xscale = (pageheight/pagewidth) * parameters->imagescale;
@@ -277,7 +280,7 @@ static const double pi = 3.141516;
   {
     int x = 0;
     int y = 0;
-    int width = 180;
+    int width = 160;
     int height = 90;
 
     cairo_save(cr);
@@ -386,7 +389,7 @@ static const double pi = 3.141516;
 	cairo_set_source_rgba(cr,config->umColor.red,config->umColor.green,config->umColor.blue,0.80);
 	
     cairo_select_font_face (cr, parameters->gene_font.c_str(), CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_BOLD);
-    cairo_set_font_size(cr,fontsize);
+    cairo_set_font_size(cr,fontsize * parameters->markerscale);
     cairo_text_extents (cr, "i", &extents);
     double offset = extents.width/2;
     

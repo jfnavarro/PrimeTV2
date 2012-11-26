@@ -29,8 +29,8 @@ if(APPLE AND NOT DEFINED ${TARGET_ARCH})
 endif(APPLE AND NOT DEFINED ${TARGET_ARCH})
 
 #location of some files needed by primetv
-set(HEADER_LOCATION "/usr/share/primetv/header.png")
-add_definitions( -DHAS_HEADER=${HEADER_LOCATION} )
+set(HEADER_LOCATION "${CMAKE_INSTALL_PREFIX}/share/primetv/header.png")
+add_definitions( -DHAS_HEADER="${HEADER_LOCATION}")
 
 
 ###PACKAGES######################################
@@ -233,5 +233,5 @@ if(APPLE)
 endif(APPLE)
 
 #TODO : take into consideration when using windows, make use of globals
-install(TARGETS primetv DESTINATION bin)
-install(FILES ${PROJECT_SOURCE_DIR}/images/header.png DESTINATION /usr/share/primetv PERMISSIONS OWNER_READ GROUP_READ WORLD_READ)
+install(TARGETS primetv DESTINATION ./bin)
+install(FILES ${PROJECT_SOURCE_DIR}/images/header.png DESTINATION ${CMAKE_INSTALL_PREFIX}/share/primetv PERMISSIONS OWNER_READ GROUP_READ WORLD_READ)

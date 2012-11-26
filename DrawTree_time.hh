@@ -42,7 +42,7 @@
 #include "phyltr.h"
 #include <parameters.h>
 #include "edge.h"
-
+#include <boost/lexical_cast.hpp>
 
 using namespace std;
 

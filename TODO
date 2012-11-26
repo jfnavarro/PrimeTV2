@@ -27,3 +27,5 @@ Get rid/redo the Newick/PRIME tree parser, the current one uses C code and bison
 Improve the UI
 
 Perform a battery of several tests and create a testing script
+
+In the terminal version when scaling to more than 1.0 the tree gets out of the canvas
