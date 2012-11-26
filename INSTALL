@@ -2,7 +2,17 @@ The program has only been tested in UBUNTU.
 
 It's compiled using CMAKE.
 
-The list of packages needed to compile it are :
+For example
+
+git clone https://github.com/jfnavarro/PrimeTV2.github
+
+mkdir primetv_build
+
+cmake ../PrimeTV2
+
+make && make install
+
+The list of packages needed to compile PrimeTV2 are :
 
 	BISON
 	FLEX
@@ -28,7 +38,7 @@ sudo port install flex
 
 As well as the C++ compiler and developer essentials.
 
-The exec file "primetv" will be placed in usr/bin
+The exec file "primetv" will be placed in usr/bin or an alternative location indicated in CMake by -DCMAKE_INSTALL_PREFIX
 
 NOTE : there is a incompatibility error with the latest Ubuntu version (12.04) and qt4-x11 which might make the User Interface to be instable.
 NOTE : the User Interface is still under development
