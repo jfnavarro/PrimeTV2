@@ -95,6 +95,7 @@ main (int ac, char *av[])
   
 try
 {
+
   parameters = new Parameters();
   string config_file;
   string default_config_file;

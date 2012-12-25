@@ -15,6 +15,7 @@
     You should have received a copy of the GNU General Public License along
     with this program; if not, write to the Free Software Foundation, Inc.,
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+    
     Author : Jose Fernandez Navarro  -  jc.fernandez.navarro@gmail.com
 */
 
@@ -28,6 +29,8 @@
 #include <QX11Info>
 #include "canvas.h"
 #include <cairo/cairo-xlib-xrender.h>
+#include "xcb/xcb.h"
+#include <tcutil.h>
 
 Canvas::Canvas(QWidget* parent)
   : QWidget(parent),cr_(0),surface_(0)
@@ -104,12 +107,29 @@ void Canvas::paintCanvas()
     surface_ = cairo_xlib_surface_create_with_xrender_format(display, drawable, screen, format,width(),height());
     cr_ = cairo_create(surface_);
     
+
+    
     /* xcb is a more portable alternative to xlib 
        QT5(to be released in November 2012) will replace xlib for xbc, so the code
        has to be ported, fortunately, cairo is compatible with xcb and this will solve
-       some portability issues with MAC
+       some portability issues with MAC and Ubuntu 12.04
        http://www.cairographics.org/manual/cairo-XCB-Surfaces.html
-       
+   
+    //qxcbscreen.h
+    //qxcbimage.h
+    
+    QList<QScreen *> screens = QGuiApplication::screens();
+    QXcbScreen *xcbscreen = static_cast<QXcbScreen *>(screens.at(0)->handle());
+    Display *display = static_cast<Display *>(xcbscreen->connection()->xlib_display());
+
+    xcb_connection_t *connection = xcb_connect (NULL, NULL);
+    
+    xcb_screen_t *screen = xcbscreen;
+    
+    xcb_drawable_t drawable = screen->root;
+    
+    xcb_render_pictforminfo_t *format = ;
+    
     surface_ = cairo_xcb_surface_create_with_xrender_format (xcb_connection_t *connection,
 								 xcb_screen_t *screen,
 								 xcb_drawable_t drawable,
@@ -118,20 +138,6 @@ void Canvas::paintCanvas()
                                                              int height);
     */
     
-    /* another option is to compile Cairo with --enable-qt which allows to use these functions :
-     * Cairo-qt is still experimental, it will be improved in further versions
-     * 
-     * cairo_public cairo_surface_t *
-       cairo_qt_surface_create (QPainter *painter);
-
-	cairo_public cairo_surface_t *
-	cairo_qt_surface_create_with_qimage (cairo_format_t format,int width,int height);
-
-	cairo_public cairo_surface_t *
-	cairo_qt_surface_create_with_qpixmap (cairo_content_t content,int width,int height);
-				      
-   */
-
 }
 
 bool Canvas::saveCanvas(const QString& fileName, const char* format, int quality)
