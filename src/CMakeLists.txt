@@ -20,7 +20,7 @@ message( STATUS )
 
 ###PROJECT and GLOBAL VARIABLES####################################################
 
-SET(APPLICATION_NAME "PrimeTV2 : Phylogenetic trees viewer")
+set(APPLICATION_NAME "PrimeTV2 : Phylogenetic trees viewer")
 
 #Cpack stuff
 set(LICENSE_FILE "LICENSE")
@@ -81,13 +81,12 @@ set(ICONS_DIR "${PROJECT_SOURCE_DIR}/resources/icons")
 set(HEADER_LOCATION "${CMAKE_INSTALL_PREFIX}/share/primetv/header.png")
 add_definitions( -DHAS_HEADER="${HEADER_LOCATION}")
 
-
 ###PACKAGES######################################
 
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/cmake" "${PROJECT_SOURCE_DIR}/cmake/qt5")
-set(CMAKE_PREFIX_PATH ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/cmake" "${PROJECT_SOURCE_DIR}/cmake/qt5")
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/cmake" )
+set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} "${PROJECT_SOURCE_DIR}/cmake" )
 
-SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}")
+SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/src")
 SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}")
 SET(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}")
 
@@ -116,8 +115,7 @@ message(STATUS "Qt5 plugins dir : ${QT_PLUGINS_DIR}")
 set(Boost_USE_STATIC_LIBS ON)
 set(Boost_USE_MULTITHREADED OFF) 
 set(Boost_USE_STATIC_RUNTIME ON)
-find_package(Boost REQUIRED)  
-include_directories(${Boost_INCLUDE_DIRS})
+find_package(Boost REQUIRED COMPONENTS thread filesystem system program_options)  
 
 find_package(BISON REQUIRED)
 find_package(FLEX REQUIRED)
@@ -126,12 +124,14 @@ find_package(Cairo REQUIRED)
 ####PACKAGES##################################################
 
 ##DIRECTORIES#################################################
-include_directories("${CMAKE_CURRENT_BINARY_DIR}")
-include_directories("${Boost_INCLUDE_DIRS}")
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
+include_directories(${Boost_INCLUDE_DIRS})
 include_directories("${PROJECT_BINARY_DIR}/src")
-include_directories("${CMAKE_BINARY_DIR}")
+include_directories("${PROJECT_SOURCE_DIR}/src")
 include_directories("${PROJECT_BINARY_DIR}/src/libraries")
-include_directories("${CAIRO_INCLUDE_DIR}")
+include_directories("${PROJECT_SOURCE_DIR}/src/libraries")
+include_directories(${CMAKE_BINARY_DIR})
+include_directories(${CAIRO_INCLUDE_DIR})
 ######DIRECTORIES#################################################
 
 
@@ -141,13 +141,15 @@ add_definitions(-DPROJECT_VERSION=\"${PROJECT_VERSION}\")
 
 ###DEFINITIONS###################################################
 
-
-flex_target(MyScanner libraries/NHX.l libraries/lexer.c COMPILE_FLAGS "-Pyytree_" )
-bison_target(MyParser libraries/NHXparse.y libraries/NHXparse.c COMPILE_FLAGS "-d -y -p yytree_" ) 
+bison_target(MyParser "${PROJECT_SOURCE_DIR}/src/libraries/NHXparse.y" 
+                      "${PROJECT_SOURCE_DIR}/src/libraries/NHXparse.c" 
+                      COMPILE_FLAGS "-d -y -p yytree_" ) 
+flex_target(MyScanner "${PROJECT_SOURCE_DIR}/src/libraries/NHX.l" 
+                      "${PROJECT_SOURCE_DIR}/src/libraries/lexer.c" 
+                      COMPILE_FLAGS "-Pyytree_" )
 add_flex_bison_dependency(MyScanner MyParser)
 
 #QT5 DIRECTIVES
-set(Qt_Headers windows.h canvas.h)
 set(FORMS "${PROJECT_SOURCE_DIR}/resources/primetv.ui" "${PROJECT_SOURCE_DIR}/resources/parameters.ui")
 set(RESOURCES "${PROJECT_SOURCE_DIR}/resources/application.qrc")
 
@@ -161,23 +163,32 @@ foreach(FILE ${FILES})
 endforeach(FILE)
 
 #set up tree parsers
-set(PARSER_SOURCES libraries/NHXnode.c libraries/NHXtree.c 
-		   libraries/NHXannotation.c ${FLEX_MyScanner_OUTPUTS} ${BISON_MyParser_OUTPUTS}  )
+set(PARSER_SOURCES "${PROJECT_SOURCE_DIR}/src/libraries/NHXnode.c" 
+                   "${PROJECT_SOURCE_DIR}/src/libraries/NHXtree.c" 
+                   "${PROJECT_SOURCE_DIR}/src/libraries/NHXannotation.c" 
+                   "${BISON_MyParser_OUTPUTS}" 
+                   "${FLEX_MyScanner_OUTPUTS}" )
 
 set(MAIN_SOURCES windows.cpp edge.cpp layoutrees.cpp mainops.cpp 
-		 parameters.cpp phyltr.cpp Color.cpp Colours.cpp 
-		 DrawTree_time.cc canvas.cpp Layout.cpp 
-		 ${QT_FORMS} ${QT_RESOURCES})
+                 parameters.cpp phyltr.cpp Color.cpp Colours.cpp 
+                 DrawTree_time.cc canvas.cpp Layout.cpp GraphicView.cpp)
 		  
 foreach(i ${PARSER_SOURCES})
  set_source_files_properties(${i} PROPERTIES LANGUAGE C)
 endforeach(i)
 
-add_library(primetvlib STATIC ${MAIN_SOURCES} ${PARSER_SOURCES} ${Libraries} )
+add_library(primetvlib STATIC ${PARSER_SOURCES} ${Libraries} )
 
-add_executable(${PROJECT_NAME} primetv.cc)
+if(WIN32)
+  add_executable(primetv WIN32 primetv.cc ${MAIN_SOURCES} ${QT_FORMS} ${QT_RESOURCES})
+elseif(APPLE)
+  add_executable(primetv MACOSX_BUNDLE primetv.cc ${MAIN_SOURCES} ${QT_FORMS} ${QT_RESOURCES})
+else()
+  add_executable(primetv primetv.cc ${MAIN_SOURCES} ${QT_FORMS} ${QT_RESOURCES})
+endif()
+
 qt5_use_modules(${PROJECT_NAME} Widgets Core Gui PrintSupport) 
-target_link_libraries(${PROJECT_NAME} primetvlib ${CAIRO_LIBRARIES} ${Boost_LIBRARIES} ) #${OPENGL_LIBRARIES} ${X11_LIBRARIES}  ) 
+target_link_libraries(${PROJECT_NAME} primetvlib ${CAIRO_LIBRARIES} ${Boost_LIBRARIES} ) 
 
 if(APPLE)
   set_property(TARGET ${PROJECT_NAME} PROPERTY LINK_SEARCH_END_STATIC ON)
@@ -185,12 +196,12 @@ endif(APPLE)
 
 #TODO : take into consideration when using windows, make use of globals
 install(FILES ${PROJECT_SOURCE_DIR}/resources/images/header.png 
-	DESTINATION ${CMAKE_INSTALL_PREFIX}/share/primetv 
-	PERMISSIONS OWNER_READ GROUP_READ WORLD_READ)
+        DESTINATION ${CMAKE_INSTALL_PREFIX}/share/primetv 
+        PERMISSIONS OWNER_READ GROUP_READ WORLD_READ)
 
 install(TARGETS ${PROJECT_NAME} 
-	BUNDLE DESTINATION . COMPONENT Runtime
-	RUNTIME DESTINATION bin COMPONENT Runtime)
+        BUNDLE DESTINATION . COMPONENT Runtime
+        RUNTIME DESTINATION bin COMPONENT Runtime)
 
 ##BUILDING AND INSTALLING #############################################################
 

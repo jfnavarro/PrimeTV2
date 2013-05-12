@@ -29,9 +29,9 @@
   {
     if(rootNode)
       {
-	rootNode->deleteSubtree();    
-	delete rootNode;
-	rootNode = 0;
+        rootNode->deleteSubtree();    
+        delete rootNode;
+        rootNode = 0;
       }
      //NOTE what should I do with the times,lenghts and rates?
     //clearNodeAttributes();

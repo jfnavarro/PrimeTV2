@@ -2,9 +2,9 @@
 #define NODE_HH
 #include <iostream>
 #include <string>
-#include "Color.h"
+#include "../Color.h"
 #include <map>
-#include <libraries/SetOfNodesEx.hh>
+#include <SetOfNodesEx.hh>
 
     using namespace std;
     class Tree;

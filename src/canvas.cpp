@@ -20,22 +20,20 @@
 */
 
 
-
 #include <QDebug>
 #include <QPainter>
-#include <QGui/QResizeEvent>
-#include <QPrintSupport/QPrinter>
-#include <QPrintSupport/QPrintDialog>
-#include "qxcbscreen.h
-#include "qxcbimage.h
+#include <QResizeEvent>
+#include <QtPrintSupport/QPrinter>
+#include <QtPrintSupport/QPrintEngine>
+#include <QtPrintSupport/QPrintDialog>
 #include "canvas.h"
-#include <cairo/cairo-xlib-xrender.h>
-#include "xcb/xcb.h"
 
-Canvas::Canvas(QWidget* parent)
-  : QWidget(parent),cr_(0),surface_(0)
+Canvas::Canvas( const QPixmap& pixmap,
+                QGraphicsItem* parent, QGraphicsScene* scene ) :
+                QObject(), QGraphicsPixmapItem ( pixmap,parent )
 {
-
+    setTransformationMode(Qt::SmoothTransformation);
+    setFlags(QGraphicsItem::ItemIsMovable);
 }
 
 //destroys the cairo object if it exists
@@ -43,33 +41,9 @@ Canvas::~Canvas()
 {
 }
 
-void Canvas::paintEvent(QPaintEvent* )
-{
-    if (!cr_) return;
-
-    QPainter(this).drawPixmap(0, 0, buf_);
-}
-
-
-void Canvas::paintCanvas()
-{
-    buf_ = QPixmap(width(),height());
-    buf_.fill(Qt::white);
-    
-}
-
 bool Canvas::saveCanvas(const QString& fileName, const char* format, int quality)
 {
-  if(!buf_)
-  {
-    return false;
-  }
-  else
-  {
-    return buf_.save(fileName,format,quality);
-    
-  }
-    
+  return pixmap().save(fileName,format,quality);   
 }
 
 /*This function creates the printer object to capture the filename
@@ -78,19 +52,16 @@ bool Canvas::saveCanvas(const QString& fileName, const char* format, int quality
  */
 bool Canvas::saveCanvasPDF(const QString& fileName)
 {   
-   QPrinter printer(QPrinter::ScreenResolution);
-   printer.setOutputFileName(fileName);
-   printer.setOutputFormat(QPrinter::PdfFormat);
-   printer.setFullPage(true);
-   printer.setPageSize(QPrinter::A4);
-   //TODO this is just a hack, the resolution should be calculated according to the size of the canvas
-   //TODO another solution would be to scale the painter to the size of A4
-   printer.setResolution(150);
-   QPixmap pixmap = QPixmap::grabWidget(this);
-   QPainter painter;
-   painter.begin(&printer);
-   painter.drawPixmap(0, 0, pixmap);
-   painter.end();
+//    QPrinter printer(QPrinter::ScreenResolution);
+//    printer.setOutputFileName(fileName);
+//    printer.setOutputFormat(QPrinter::PdfFormat);
+//    printer.setFullPage(true);
+//    printer.setPageSize(QPrinter::A4);
+//    printer.setResolution(150);
+//    QPainter painter;
+//    painter.begin(&printer);
+//    painter.drawPixmap(0, 0, pixmap());
+//    painter.end();
    return true;
 }
 
@@ -98,35 +69,81 @@ bool Canvas::saveCanvasPDF(const QString& fileName)
 and then send the canvas to the printer to be printed out*/
 bool Canvas::print()
 {
-  QPrinter printer;
-  printer.setPageSize(QPrinter::A4);
-  //TODO this is just a hack, the resolution should be calculated according to the size of the canvas
-  //TODO another solution would be to scale the painter to the size of A4
-  printer.setResolution(150);
-  printer.setFullPage(true);
-  QPrintDialog print(&printer , this);
-  if(print.exec()== QPrintDialog::Accepted)
-  {
-      QPixmap pixmap = QPixmap::grabWidget(this);
-      QPainter painter;
-      painter.begin(&printer);
-      painter.drawPixmap(0, 0, pixmap);
-      painter.end();
-      return true;
-  }
-  else
-    return false;
+//   QPrinter printer;
+//   printer.setPageSize(QPrinter::A4);
+//   printer.setResolution(150);
+//   printer.setFullPage(true);
+//   QPrintDialog print(&printer);
+//   if(print.exec()== QPrintDialog::Accepted)
+//   {
+//       QPainter painter;
+//       painter.begin(&printer);
+//       painter.drawPixmap(0, 0, pixmap());
+//       painter.end();
+//       return true;
+//   }
+//   else
+//       return false;
+
+    return true;
 }
 
-
-void Canvas::resizeEvent(QResizeEvent* )
+QRectF Canvas::boundingRect() const
 {
-    //resize surface  here
-    
-    
-   // paintCanvas();
+    return QRectF ( QPointF ( 0,0 ),QSizeF(pixmap().width(),pixmap().height()));
 }
 
+void Canvas::paint ( QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget )
+{
+    painter->drawPixmap ( boundingRect().toRect(), pixmap() );
+    //QGraphicsPixmapItem::paint(painter, option, widget);
+}
 
+void Canvas::setPixmap(const QPixmap& pixmap)
+{
+    QGraphicsPixmapItem::setPixmap(pixmap);
+}
 
+void Canvas::rotateLeftCentered()
+{
+    QTransform temp = transform();
+    resetTransform();
+//     translate ( pixmap().width() /2,pixmap().height() /2 );
+//     rotate ( -10 );
+//     translate ( - ( pixmap().width() /2 ),- ( pixmap().height() /2 ) );
+    setTransform(temp,true);
+}
+
+void Canvas::rotateRightCentered()
+{
+    QTransform temp = transform();
+    resetTransform();
+//     translate ( pixmap().width() / 2, pixmap().height() /2 );
+//     rotate ( 10 );
+//     translate ( - ( pixmap().width() / 2 ), - ( pixmap().height() / 2 ) );
+    setTransform(temp,true); 
+}
+
+void Canvas::invert()
+{
+    QTransform temp = transform();
+    resetTransform();
+//     translate ( pixmap().width() /2,pixmap().height() /2 );
+//     scale ( 1, -1 );
+//     translate ( - ( pixmap().width() /2 ),- ( pixmap().height() /2 ) );
+    setTransform(temp,true);
+}
+
+void Canvas::setSize ( int sizeW, int sizeH )
+{
+    prepareGeometryChange();
+    QPixmap scaledP = pixmap().scaled(sizeW,sizeH,Qt::KeepAspectRatio,Qt::SmoothTransformation);
+    setPixmap(scaledP);
+    update();
+}
+
+void Canvas::setVisible ( bool status)
+{
+    setVisible(status);
+}
 

@@ -9,19 +9,19 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>482</width>
-    <height>466</height>
+    <width>512</width>
+    <height>467</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Parameters</string>
   </property>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>11</x>
      <y>11</y>
-     <width>464</width>
+     <width>471</width>
      <height>445</height>
     </rect>
    </property>
@@ -464,11 +464,6 @@
         <string>Grey scale</string>
        </property>
       </widget>
-      <zorder>radioButtonColor3</zorder>
-      <zorder>radioButtonColor2</zorder>
-      <zorder>radioButtonColor1</zorder>
-      <zorder>verticalSpacer_3</zorder>
-      <zorder>radioButtonColor4</zorder>
      </widget>
     </item>
     <item row="8" column="0">

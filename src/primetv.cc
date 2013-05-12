@@ -28,6 +28,7 @@
 #include <sys/stat.h>
 #include <cstddef>
 #include "assert.h"
+
 #include <boost/program_options/options_description.hpp>
 #include <boost/program_options/parsers.hpp>
 #include <boost/program_options/variables_map.hpp>
@@ -35,11 +36,9 @@
 #include <boost/token_functions.hpp>
 #include <boost/foreach.hpp>
 
-#if not defined __NOQTX11__
-  #include <QApplication>
-  #include "windows.h"
-  #include "ui_primetv.h"
-#endif
+#include <QApplication>
+#include "windows.h"
+#include "ui_primetv.h"
 
 
   using namespace boost;
@@ -143,7 +142,7 @@ try
      "Annotate host edges by their time extent")
     ("notime,n", po::bool_switch(&parameters->noTimeAnnotation),"No time annotation at all")
     ("format,f", po::value<string>(&parameters->format)->default_value("pdf"),
-     "File format: pdf(Pdf) ps(PostScript) jpg(JPEG) svg png")
+     "File format: pdf(Pdf) ps(PostScript) jpg(JPEG) svg")
     ("nohost,y", po::bool_switch(&parameters->do_not_draw_species_tree)->default_value(false),
      "No host tree is given nor shown")
     ("noguest,g", po::bool_switch(&parameters->do_not_draw_guest_tree)->default_value(false),
@@ -444,52 +443,47 @@ try
     
     if((bool)(parameters->UI)) //We start the User Interface
     {
-      #if not defined __NOQTX11__
-	QApplication app(ac, av);
-	MainWindow *appWindow = new MainWindow(parameters,mainops);
-	appWindow->show();
-	return app.exec();
-	delete(appWindow);
-      #else
-	std::cerr << "The QT based GUI of PrimeTV2 is not present\n" << std::endl;
-	return 0;
-      #endif
+      QApplication app(ac, av);
+      MainWindow *appWindow = new MainWindow(parameters,mainops);
+      appWindow->show();
+      return app.exec();
+      delete(appWindow);
     }
     else // We start the script version
-    { 
+    {       
       //if we don't need to reconcile the trees
       if(!(bool)(parameters->isreconciled))
       {
-	mainops->OpenReconciled(reconciledtree);
-	mainops->OpenHost(speciestree);
+        mainops->OpenReconciled(reconciledtree);
+        mainops->OpenHost(speciestree);
       }
       else
       {
-	mainops->reconcileTrees(genetree,speciestree,mapfile);
+        mainops->reconcileTrees(genetree,speciestree,mapfile);
       }
       
       //we calculate the LGT scenarios is indicated
       if((bool)(parameters->lattransfer))
       { 
- 	mainops->lateralTransfer(mapfile,(parameters->lateralmincost == 1.0 && parameters->lateralmaxcost == 1.0));
+        mainops->lateralTransfer(mapfile,(parameters->lateralmincost == 1.0 && parameters->lateralmaxcost == 1.0));
       }
       else if(load_precomputed_lgt_scenario)
       {
-	mainops->loadPreComputedScenario(precomputed_scenario_file,mapfile);
+        mainops->loadPreComputedScenario(precomputed_scenario_file,mapfile);
       }
       
       if(parameters->drawAll)
       {
-	mainops->drawAllLGT();
+        mainops->drawAllLGT();
       }
       else
       {
-	mainops->drawBest();
+        mainops->drawBest();
       }
       
       if(show_lgt_scenarios)
       {
-	mainops->printLGT();
+        mainops->printLGT();
       }
 
       std::cout << "The tree/s were generated succesfully" << std::endl;

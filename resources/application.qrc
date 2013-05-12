@@ -13,5 +13,6 @@
     <file>images/Actions-format-indent-more-icon.png</file>
     <file>images/print-printer-icone-7769-64.png</file>
     <file>images/select-by-color-icon.png</file>
+    <file>images/header.png</file>
   </qresource>
 </RCC>

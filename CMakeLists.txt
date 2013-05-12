@@ -1,7 +1,7 @@
 ###############################################################################
 # NAME AND VERSION
 ###############################################################################
-project(primetv2)
+project(primetv)
 cmake_minimum_required(VERSION 2.8.9)
 enable_language(C)
 enable_language(CXX)

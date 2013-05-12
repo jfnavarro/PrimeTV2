@@ -104,7 +104,9 @@ public:
   
   /* check whether there is a scenario valid on the vector of scenarios */
   bool getValidityLGT();
-  
+
+protected:
+    
   TreeExtended *Guest;
   TreeExtended *Host;
   GammaMapEx<Node> *gamma;

@@ -26,8 +26,8 @@
 #ifndef TREEEXTENDED_H
 #define TREEEXTENDED_H
 
-#include "libraries/AnError.hh"
-#include "libraries/Tree.hh"
+#include "AnError.hh"
+#include "Tree.hh"
 #include <boost/multi_array.hpp>
 #include <boost/static_assert.hpp>
 

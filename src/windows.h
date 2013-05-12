@@ -27,8 +27,7 @@
 #ifndef WINDOWS_H
 #define WINDOWS_H
 #include <QFileDialog>
-#include <QScrollArea>
-#include <QVBoxLayout>
+#include <QTemporaryFile>
 #include "ui_primetv.h"
 #include "ui_parameters.h"
 #include <mainops.h>
@@ -43,7 +42,7 @@ class QMenu;
 class MainWindow : public QMainWindow, public Ui_MainWindow, public Ui_Parameters
 {
 
-   Q_OBJECT;
+   Q_OBJECT
   
 public:
   
@@ -53,8 +52,6 @@ public:
     MainWindow(const MainWindow& other);
     //destructor
     ~MainWindow();
-    void upda();
-   
     
 private slots:
     /* slots are functions that are going to be assigned to signals and events */
@@ -86,10 +83,6 @@ private slots:
     /* show or hide the parameters panel*/
     void showParameters();
     
-    /* to activate the Lateral Transfer and load the values, it will draw the picture is there is a picture on
-     * the canvas */
-    void activateLGT();
-    
     /* to activate the reconcilation mode, therefore the open map button will be enabled, because a map file is needed
      * to reconcile*/
     void activateReconcilation();
@@ -111,10 +104,6 @@ private:
    /* creates an open file dialog and returns the file chosen*/
     QString openFile(QString header);
     
-    /* overloaded functions */
-    virtual void resizeEvent(QResizeEvent* event);
-    virtual void paintEvent(QPaintEvent* event);
-    
     /* paint the current tree on the canvas */
     void paintTree();
     
@@ -128,10 +117,10 @@ private:
     /* overloaded close Event function to handle the exit */
     void closeEvent(QCloseEvent *e);
     
-    QVBoxLayout *verticalLayout; //vertical layout object to implement scrolling
-    QScrollArea *scrollArea;  //scroll area widget to implement the scrolling
     QWidget *params; //parameters panel
-    Canvas *widget; //canvas where the tree will be painted
+    Canvas *canvas; //pixmap where tree is loaded
+    QGraphicsScene *scene; //main scene
+    
     QString lastVisitedDir;
     Mainops *ops; // main operations
     Parameters *parameters;

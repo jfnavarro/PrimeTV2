@@ -23,6 +23,10 @@
 #include <QtGui>
 #include <qfileinfo.h>
 #include <QColorDialog>
+#include <QDesktopWidget>
+#include <QErrorMessage>
+#include <QTemporaryFile>
+
 #include "windows.h"
 
 
@@ -34,14 +38,15 @@ MainWindow::MainWindow(Parameters *p, Mainops *m, QWidget *parent)
 {
 
     Ui_MainWindow::setupUi(this);
-    params = new QWidget();
+    params = new QWidget(this);
     Ui_Parameters::setupUi(params);
     params->setWindowFlags(Qt::Tool | Qt::CustomizeWindowHint | Qt::WindowTitleHint
                            | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint ); //| Qt::WindowStaysOnTopHint
-    params->show();
     params->hide();
 
+    parameters->format = "svg";
     loadParameters(parameters);
+    
     createActions();
 
     actionLoad_Map_File->setEnabled(false);
@@ -57,8 +62,10 @@ MainWindow::MainWindow(Parameters *p, Mainops *m, QWidget *parent)
     QRect screen = QApplication::desktop()->screenGeometry();
     resize((unsigned)((screen.width())/2),(unsigned)((screen.height())/2));
 
-    widget->paintCanvas();
-    widget->update();
+    scene = new QGraphicsScene();
+    view->setScene(scene);
+    canvas = new Canvas(QPixmap());
+    scene->addItem(canvas);
 }
 
 MainWindow::MainWindow(const MainWindow& other)
@@ -68,25 +75,10 @@ MainWindow::MainWindow(const MainWindow& other)
 
 MainWindow::~MainWindow()
 {
-    if(verticalLayout)
-    {
-      delete(verticalLayout);
-      verticalLayout = 0;
-    }
-    if(scrollArea)
-    {
-      delete(scrollArea);
-      scrollArea = 0;
-    }
     if(params)
     {
       delete(params);
       params = 0;
-    }
-    if(widget)
-    {
-      delete(widget);
-      widget = 0;
     }
     if(config)
     {
@@ -161,12 +153,15 @@ void MainWindow::generateTree()
 
         }
         else
-        {   
-            ops->setParameters(parameters);
-	    
-	    //TODO second time I load a tree it does not do the reconcilation properly
+        {               
+            QTemporaryFile tempfile;
+            bool ok = tempfile.open();
+            parameters->outfile = tempfile.fileName().toStdString();
+            tempfile.remove();
             
-	    if (!checkBoxReconcile->checkState())
+            ops->cleanTrees();
+            
+            if (!checkBoxReconcile->checkState())
             {
                 ops->OpenReconciled(reconciledtree);
                 ops->OpenHost(speciestree);
@@ -176,22 +171,16 @@ void MainWindow::generateTree()
                 ops->reconcileTrees(genetree,speciestree,mapfile);
             }
 
-            if (parameters->lattransfer)
-	    {
-		ops->lateralTransfer(mapfile,(parameters->lateralmincost == 1.0 && parameters->lateralmaxcost == 1.0));
+            if ((bool)parameters->lattransfer)
+            {
+                ops->lateralTransfer(mapfile,(parameters->lateralmincost == 1.0 && parameters->lateralmaxcost == 1.0));
             }
             
-            ops->CalculateGamma();
-
+            ops->drawBest(); //draw tree into temp file
+            
             paintTree();
 
             actionSave->setEnabled(true);
-            pushButtonMoveDown->setEnabled(true);
-            pushButtonMoveLeft->setEnabled(true);
-            pushButtonMoveRight->setEnabled(true);
-            pushButtonMoveUp->setEnabled(true);
-            pushButtonZoomOut->setEnabled(true);
-            pushButtonZoomIn->setEnabled(true);
             statusBar()->showMessage(tr("Tree Generated"));
         }
 
@@ -209,8 +198,8 @@ void MainWindow::generateTree()
         QErrorMessage errorMessage;
         errorMessage.showMessage(e.what());
         errorMessage.exec();
-	 guestTree = false;
-	 hostTree = false;
+        guestTree = false;
+        hostTree = false;
     }
     catch (...)
     {
@@ -221,22 +210,31 @@ void MainWindow::generateTree()
 
 void MainWindow::paintTree()
 {
-    //widget->paintCanvas();
-    if(ops->checkValidity())
+    std::string filename = parameters->outfile + "." + parameters->format;
+    QFile file(QString::fromStdString(filename));
+    if(file.exists())
     {
-      ops->calculateCordinates();
-      ops->DrawTree(widget->getCairoCanvas());
-      widget->update();
-      isPainted = true;
-      repaint();
+        QPixmap image = canvas->pixmap();
+        if (!image.load(file.fileName())) {
+            QErrorMessage errorMessage;
+            errorMessage.showMessage("Error loading image " + QString::fromStdString(filename));
+            errorMessage.exec();
+            guestTree = false;
+            hostTree = false;
+            return;
+        }
+        canvas->setPixmap(image);
+        scene->setSceneRect(QRectF(0, 0, canvas->pixmap().width() + 200, canvas->pixmap().height() + 200));
+        qreal centerX = (scene->width() / 2.0) - (canvas->pixmap().width() /2.0);
+        qreal centerY = (scene->height() / 2.0) - (canvas->pixmap().height() /2.0);;
+        canvas->setOffset(QPointF(centerX, centerY));
+        view->update();
+        isPainted = true;
     }
     else
     {
-       QErrorMessage errorMessage;
-       errorMessage.showMessage("Error wrong LGT or reconciled scenario loaded");
-       errorMessage.exec();
-       guestTree = false;
-       hostTree = false;
+        guestTree = false;
+        hostTree = false;
     }
 }
 
@@ -254,34 +252,13 @@ void MainWindow::closeEvent(QCloseEvent *e)
 
 void MainWindow::update()
 {
-    //TODO  I need to fix the zoom and the moving, it gets called several times
-    //	    I need to control it gets called one time per click
-    /*
-    if (QObject::sender() == pushButtonZoomIn)
-    {
-        parameters->imagescale += 0.10;
-    }
-    else if (QObject::sender() == pushButtonZoomOut)
-    {
-        parameters->imagescale -= 0.10;
-    }
-    else if (QObject::sender() == pushButtonMoveDown)
-    {
-        parameters->yoffset++;
-    }
-    else if (QObject::sender() == pushButtonMoveUp)
-    {
-        parameters->yoffset--;
-    }
-    else if (QObject::sender() == pushButtonMoveLeft)
-    {
-        parameters->xoffset--;
-    }
-    else if (QObject::sender() == pushButtonMoveRight)
-    {
-        parameters->xoffset++;
-    }
-    */
+    
+    parameters->lattransfer = checkBoxLGT->isChecked();
+    parameters->lateralmincost = (float)spinBoxMinCost->value();
+    parameters->lateralmaxcost = (float)spinBoxMaxCost->value();
+    parameters->lateralduplicost = (float)spinBoxDupliCost->value();
+    parameters->lateraltrancost = (float)spinBoxSpeCost->value();
+    
     parameters->title = checkBoxHeader->isChecked();
     lineEditHeaderText->setEnabled(checkBoxHeader->isChecked());
 
@@ -317,11 +294,6 @@ void MainWindow::update()
     parameters->fontsize = spinBoxAllFontSize->value();
     parameters->gene_font_size = spinBoxGeneFontSize->value();
     parameters->species_font_size = spinBoxSpeciesFontSize->value();
-    
-    if (parameters->horiz)
-        widget->resize(parameters->height,parameters->width);
-    else
-        widget->resize(parameters->width,parameters->height);
 
     if (QObject::sender() == comboBoxTime)
     {
@@ -362,7 +334,10 @@ void MainWindow::update()
         parameters->colorConfig->setColors("4");
 
     if (isPainted && hostTree && guestTree)
-    {
+    { 
+        if((bool)parameters->lattransfer)
+            ops->lateralTransfer(mapfile,(parameters->lateralmincost == 1.0 && parameters->lateralmaxcost == 1.0));
+        ops->drawBest(); //draw tree into temp file
         paintTree();
     }
 }
@@ -374,16 +349,19 @@ void MainWindow::newImage()
     menuparameters = false;
     isPainted = false;
     mapfileStatus = false;
+    scene->clear();
+    scene->update();
+    canvas = new Canvas(QPixmap());
+    scene->addItem(canvas);
+    if(parameters)
+        delete parameters;
     parameters = new Parameters();
     loadParameters(parameters);
-    widget->resize(parameters->width,parameters->height);
-    widget->paintCanvas();
+    parameters->format = "svg";
+    ops->setParameters(parameters);
     actionLoad_Map_File->setEnabled(false);
     actionSave->setEnabled(false);
     statusBar()->showMessage(tr("New tree"));
-    widget->paintCanvas();
-    widget->update();
-    repaint();
 }
 
 void MainWindow::loadParameters(Parameters *parameters)
@@ -441,17 +419,11 @@ void MainWindow::loadParameters(Parameters *parameters)
     spinBoxAllFontSize->setValue(parameters->fontsize);
     spinBoxGeneFontSize->setValue(parameters->gene_font_size);
     spinBoxSpeciesFontSize->setValue(parameters->species_font_size);
-    
-    if (parameters->horiz)
-        widget->resize(parameters->height,parameters->width);
-    else
-        widget->resize(parameters->width,parameters->height);
 
     if (parameters->noTimeAnnotation)
         comboBoxTime->setCurrentIndex(1);
     else if (parameters->timeAtEdges)
         comboBoxTime->setCurrentIndex(2);
-
 }
 
 
@@ -487,11 +459,11 @@ void MainWindow::save()
             parameters->format = suffix;
             string fileRelname = fileinfo.absoluteFilePath().toUtf8().constData();
             parameters->outfile = fileRelname;
-            status = widget->saveCanvasPDF(fileinfo.absoluteFilePath() + "." + suffix);
+            status = canvas->saveCanvasPDF(fileinfo.absoluteFilePath() + "." + suffix);
         }
         else
         {
-            status = widget->saveCanvas(fileinfo.absoluteFilePath() + "." + suffix,suffix,QUALITY);
+            status = canvas->saveCanvas(fileinfo.absoluteFilePath() + "." + suffix,suffix,QUALITY);
         }
 
         if (status)
@@ -515,12 +487,6 @@ void MainWindow::save()
     if (status)
     {
         actionSave->setEnabled(false);
-        pushButtonMoveDown->setEnabled(false);
-        pushButtonMoveLeft->setEnabled(false);
-        pushButtonMoveRight->setEnabled(false);
-        pushButtonMoveUp->setEnabled(false);
-        pushButtonZoomOut->setEnabled(false);
-        pushButtonZoomIn->setEnabled(false);
     }
 }
 
@@ -579,68 +545,32 @@ void MainWindow::showParameters()
 
 }
 
-void MainWindow::activateLGT()
-{
-    //TODO make sure normal reconcilation gets painted when we switch off
-    
-    parameters->lattransfer = checkBoxLGT->isChecked();
-    parameters->lateralmincost = (float)spinBoxMinCost->value();
-    parameters->lateralmaxcost = (float)spinBoxMaxCost->value();
-    parameters->lateralduplicost = (float)spinBoxDupliCost->value();
-    parameters->lateraltrancost = (float)spinBoxSpeCost->value();
-
-    if (checkBoxLGT->isChecked() && hostTree && guestTree && isPainted)
-    {
-	ops->lateralTransfer(mapfile,(parameters->lateralmincost == 1.0 && parameters->lateralmaxcost == 1.0) );
-	ops->CalculateGamma();
-	paintTree();
-    }
-    /*else if(hostTree && guestTree && isPainted)
-    {
-      	ops->CalculateGamma();
-	paintTree();
-    }*/
-
-}
-
 void MainWindow::activateReconcilation()
 {
     parameters->isreconciled = checkBoxReconcile->isChecked();
     guestTree = false;
     hostTree = false;
     menuparameters = false;
-    mapfile = false;
-    if (isPainted)
-    {
-        widget->resize(parameters->width,parameters->height);
-        widget->paintCanvas();
-    }
+    mapfile = "";;
+    scene->clear();
+    scene->update();
+    canvas = new Canvas(QPixmap());
+    scene->addItem(canvas);
     isPainted = false;
     actionLoad_Map_File->setEnabled(checkBoxReconcile->isChecked());
     actionSave->setEnabled(false);
-    repaint();
     statusBar()->showMessage(tr("New tree"));
-
 }
 
 void MainWindow::print()
 {
-    if (isPainted)
+    bool status = canvas->print();
+    if (!status)
     {
-        bool status = widget->print();
-        if (!status)
-        {
-	    statusBar()->showMessage(tr("Error Printing"));
-
-        }
-        else
-            statusBar()->showMessage(tr("Tree Printed"));
+        statusBar()->showMessage(tr("Error Printing"));
     }
     else
-    {
-	statusBar()->showMessage(tr("Tree Printed"));
-    }
-
+        statusBar()->showMessage(tr("Tree Printed"));
 }
 
 void MainWindow::loadFontColor()
@@ -680,15 +610,15 @@ void MainWindow::loadConfigFile()
         try
         {
             config = new ConfigFile(filename.toStdString());
-	    
-	    Parameters *parameters = new Parameters();
-	    
+            
+            Parameters *parameters = new Parameters();
+            
             parameters->gene_font = config->read<string>((string)"genefont",(string)"Times");
             parameters->species_font = config->read<string>((string)"speciefont",(string)"Times");
-	    parameters->all_font = config->read<string>((string)"allfont",(string)"Times");
-	    parameters->fontsize = config->read<float>((string)"fontsize",(float)10.0);
-	    parameters->gene_font_size = config->read<float>((string)"genefontsize",(float)10.0);
-	    parameters->species_font_size = config->read<float>((string)"speciesfontsize",(float)10.0);
+            parameters->all_font = config->read<string>((string)"allfont",(string)"Times");
+            parameters->fontsize = config->read<float>((string)"fontsize",(float)10.0);
+            parameters->gene_font_size = config->read<float>((string)"genefontsize",(float)10.0);
+            parameters->species_font_size = config->read<float>((string)"speciesfontsize",(float)10.0);
             parameters->fontscale = config->read<float>((string)"fontscale",(float)1);
             parameters->markers = config->read<bool>((string)"mark",false);
             parameters->ladd = config->read<char>((string)"ladderize",'n');
@@ -719,14 +649,16 @@ void MainWindow::loadConfigFile()
             parameters->geneFontColor.blue = config->read<double>((string)"genefontcolorB",0.0);
             parameters->geneFontColor.green =  config->read<double>((string)"genefontcolorG",0.0);
             parameters->geneFontColor.red = config->read<double>((string)"genefontcolorR",0.0);
-	    parameters->allFontColor.blue = config->read<double>((string)"allfontcolorB",0.0);
+            parameters->allFontColor.blue = config->read<double>((string)"allfontcolorB",0.0);
             parameters->allFontColor.green =  config->read<double>((string)"allfontcolorG",0.0);
             parameters->allFontColor.red = config->read<double>((string)"allfontcolorR",0.0);
 
+            parameters->format = "jpg";
+            
             statusBar()->showMessage(tr("Configuration Loaded"));
-	    loadParameters(parameters);
-	    delete(this->parameters);
-	    this->parameters = parameters;
+            loadParameters(parameters);
+            delete(this->parameters);
+            this->parameters = parameters;
         }
         catch (std::exception& e)
         {
@@ -734,7 +666,6 @@ void MainWindow::loadConfigFile()
             errorMessage.showMessage(tr(e.what()));
             errorMessage.exec();
         }
-
 
     }
     else
@@ -760,10 +691,10 @@ void MainWindow::saveConfigFile()
 	    //            out << "reconcile" << " = " << parameters->isreconciled << endl;
             out << "genefont" << " = " << parameters->gene_font << endl;
             out << "speciefont" << " = " << parameters->species_font << endl;
-	    out << "allfont" << " = " << parameters->all_font << endl;
-	    out << "fontsize" << " = " << parameters->fontsize << endl;
-	    out << "genefontsize" << " = " << parameters->gene_font_size << endl;
-	    out << "speciesfontsize" << " = " << parameters->species_font_size << endl;
+            out << "allfont" << " = " << parameters->all_font << endl;
+            out << "fontsize" << " = " << parameters->fontsize << endl;
+            out << "genefontsize" << " = " << parameters->gene_font_size << endl;
+            out << "speciesfontsize" << " = " << parameters->species_font_size << endl;
             out << "fontscale" << " = " << parameters->fontscale << endl;
             out << "mark" << " = " << parameters->markers << endl;
             out << "ladderize" << " = " << parameters->ladd << endl;
@@ -791,7 +722,7 @@ void MainWindow::saveConfigFile()
             out << "genefontcolorB" << " = " << parameters->geneFontColor.blue << endl;
             out << "genefontcolorG " << " = " << parameters->geneFontColor.green << endl;
             out << "genefontcolorR " << " = " << parameters->geneFontColor.red << endl;
-	    out << "allfontcolorB" << " = " << parameters->geneFontColor.blue << endl;
+            out << "allfontcolorB" << " = " << parameters->geneFontColor.blue << endl;
             out << "allfontcolorG " << " = " << parameters->geneFontColor.green << endl;
             out << "allfontcolorR " << " = " << parameters->geneFontColor.red << endl;
 
@@ -830,7 +761,7 @@ void MainWindow::createActions()
     connect(checkBoxHeader, SIGNAL(stateChanged(int)), this, SLOT(update()));
     connect(checkBoxHost, SIGNAL(stateChanged(int)), this, SLOT(update()));
     connect(checkBoxINodes, SIGNAL(stateChanged(int)), this, SLOT(update()));
-    connect(checkBoxLGT, SIGNAL(stateChanged(int)), this, SLOT(activateLGT()));
+    connect(checkBoxLGT, SIGNAL(stateChanged(int)), this, SLOT(update()));
     connect(checkBoxLadderize, SIGNAL(stateChanged(int)), this, SLOT(update()));
     connect(checkBoxLegend, SIGNAL(stateChanged(int)), this, SLOT(update()));
     connect(checkBoxLogo, SIGNAL(stateChanged(int)), this, SLOT(update()));
@@ -842,12 +773,6 @@ void MainWindow::createActions()
     connect(fontComboBoxSpecies, SIGNAL(currentFontChanged(QFont)), this, SLOT(update()));
     connect(fontComboBoxAll, SIGNAL(currentFontChanged(QFont)), this, SLOT(update()));
     connect(lineEditHeaderText, SIGNAL(textEdited(QString)), this, SLOT(update()));
-    connect(pushButtonMoveDown, SIGNAL(clicked()), this, SLOT(update()));
-    connect(pushButtonMoveLeft, SIGNAL(clicked()), this, SLOT(update()));
-    connect(pushButtonMoveRight, SIGNAL(clicked()), this, SLOT(update()));
-    connect(pushButtonMoveUp, SIGNAL(clicked()), this, SLOT(update()));
-    connect(pushButtonZoomIn, SIGNAL(clicked()), this, SLOT(update()));
-    connect(pushButtonZoomOut, SIGNAL(clicked()), this, SLOT(update()));
     connect(radioButtonColor1, SIGNAL(toggled(bool)), this, SLOT(update()));
     connect(radioButtonColor2, SIGNAL(toggled(bool)), this, SLOT(update()));
     connect(radioButtonColor3, SIGNAL(toggled(bool)), this, SLOT(update()));
@@ -868,14 +793,3 @@ void MainWindow::createActions()
     connect(actionSave_configuration, SIGNAL(triggered(bool)), this, SLOT(saveConfigFile()));
 }
 
-
-
-void MainWindow::resizeEvent(QResizeEvent* event)
-{
-
-}
-
-void MainWindow::paintEvent(QPaintEvent* event)
-{
-
-}

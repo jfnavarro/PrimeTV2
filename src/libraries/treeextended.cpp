@@ -19,7 +19,7 @@
 */
 
 #include "treeextended.h"
-#include "libraries/Node.hh"
+#include "Node.hh"
 
 using namespace std;
 

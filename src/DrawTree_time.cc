@@ -85,19 +85,19 @@ static const double pi = 3.141516;
     if(parameters->format.compare("pdf") == 0)
     {
       surface = cairo_pdf_surface_create (strcat(strcpy(str,parameters->outfile.c_str()),".pdf"), 
-					  pagewidth - parameters->separation/2, pageheight - parameters->separation/2);
+                                          pagewidth - parameters->separation/2, pageheight - parameters->separation/2);
       surfaceBackground = cairo_pdf_surface_create (strcat(strcpy(str,parameters->outfile.c_str()),".pdf"), pagewidth, pageheight);
       
     }else if(parameters->format.compare("ps") == 0)
     {
       surface = cairo_ps_surface_create (strcat(strcpy(str,parameters->outfile.c_str()),".ps"), 
-					 pagewidth - parameters->separation/2, pageheight - parameters->separation/2);
+                                        pagewidth - parameters->separation/2, pageheight - parameters->separation/2);
       surfaceBackground = cairo_ps_surface_create (strcat(strcpy(str,parameters->outfile.c_str()),".ps"), pagewidth, pageheight);
       
     }else if(parameters->format.compare("svg") == 0)
     {
       surface = cairo_svg_surface_create (strcat(strcpy(str,parameters->outfile.c_str()),".svg"), 
-					  pagewidth - parameters->separation/2, pageheight - parameters->separation/2);
+                                           pagewidth - parameters->separation/2, pageheight - parameters->separation/2);
       surfaceBackground = cairo_svg_surface_create (strcat(strcpy(str,parameters->outfile.c_str()),".svg"), pagewidth, pageheight);
     }
     else if(parameters->format.compare("jpg") == 0)
@@ -109,7 +109,7 @@ static const double pi = 3.141516;
     else
     {
       surface = cairo_pdf_surface_create (strcat(strcpy(str,parameters->outfile.c_str()),".pdf"), 
-					  pagewidth - parameters->maxLeafNameSize, pageheight - parameters->maxLeafNameSize);
+                                          pagewidth - parameters->maxLeafNameSize, pageheight - parameters->maxLeafNameSize);
       surfaceBackground = cairo_pdf_surface_create (strcat(strcpy(str,parameters->outfile.c_str()),".pdf"), pagewidth, pageheight);
     }
         
@@ -189,7 +189,7 @@ static const double pi = 3.141516;
       char str[80];
       cairo_status_t e = cairo_surface_write_to_png (surface, strcat(strcpy(str,parameters->outfile.c_str()),".jpg"));
       if (!e == CAIRO_STATUS_SUCCESS )
-	throw AnError("Could not write file!\n", 1);
+        throw AnError("Could not write file!\n", 1);
     }
    
     cr = cairo_create(surfaceBackground);

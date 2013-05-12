@@ -20,22 +20,17 @@
 
 #ifndef CANVAS_H
 #define CANVAS_H
-#include <QPixmap>
+#include <QGraphicsPixmapItem>
 #include <QByteArray>
-#include <cairo/cairo.h>
 
-
-class Canvas: public QObject, public QPixmap
+class Canvas: public QObject, public QGraphicsPixmapItem
 {
   Q_OBJECT
 
 public:
   
     //constructor, parent object passed as parameter
-    Canvas(QWidget* parent = 0);
-    
-    //generate the Cairo surface and object
-    void paintCanvas();
+    Canvas(const QPixmap& pixmap, QGraphicsItem* parent = 0, QGraphicsScene* scene = 0);
     
     //save the canvas in a file
     bool saveCanvas(const QString & fileName, const char * format = 0, int quality = -1);
@@ -49,12 +44,26 @@ public:
     //destructor
     ~Canvas();
 
-protected:
-  
-    //methods inherited from QWidget
-    //they are called everytime we draw or resize the Canvas
-    virtual void paintEvent(QPaintEvent* );
-    virtual void resizeEvent(QResizeEvent* );
+    virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget);
+    
+    virtual void setPixmap(const QPixmap &pixmap);
+
+    void setSize(int _sizeW,int _sizeH);
+
+  protected:
+
+    virtual QRectF boundingRect() const;
+    
+  public slots:
+ 
+    
+    void rotateRightCentered();
+    
+    void rotateLeftCentered();
+    
+    void invert(); 
+
+    void setVisible(bool);
 
 };
 
