@@ -1,6 +1,5 @@
 <RCC>
   <qresource>
-    <file>images/index.jpeg</file>
     <file>images/Zoom-Out-icon.png</file>
     <file>images/Zoom-In-icon.png</file>
     <file>images/filesave-48.png</file>

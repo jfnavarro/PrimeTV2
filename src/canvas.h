@@ -18,20 +18,14 @@
     Author : Jose Fernandez Navarro  -  jc.fernandez.navarro@gmail.com
 */
 
-/* This class is used in the User Interface, it is an extension of QWidget
- * adding the functionality to be drawn by a Cairo object making possible
- * to create Canvas that are Cairo drawable
- * It also includes some extra functions (printing, saving...)
- */
-
 #ifndef CANVAS_H
 #define CANVAS_H
-#include <QWidget>
+#include <QPixmap>
 #include <QByteArray>
 #include <cairo/cairo.h>
 
 
-class Canvas: public QWidget
+class Canvas: public QObject, public QPixmap
 {
   Q_OBJECT
 
@@ -39,12 +33,6 @@ public:
   
     //constructor, parent object passed as parameter
     Canvas(QWidget* parent = 0);
-    
-    //returns the cairo object
-    cairo_t* getCairoCanvas();
-    
-    //returns the cairo surface
-    cairo_surface_t* getCairoSurface();
     
     //generate the Cairo surface and object
     void paintCanvas();
@@ -68,12 +56,6 @@ protected:
     virtual void paintEvent(QPaintEvent* );
     virtual void resizeEvent(QResizeEvent* );
 
-private:
-  
-    QByteArray text_;
-    QPixmap buf_;
-    cairo_t* cr_;
-    cairo_surface_t* surface_;
 };
 
 #endif // CANVAS_H

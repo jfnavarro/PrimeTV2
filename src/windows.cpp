@@ -18,13 +18,11 @@
     Author : Jose Fernandez Navarro  -  jc.fernandez.navarro@gmail.com
 */
 
-#include <QX11Info>
 #include <QDebug>
 #include <QPainter>
 #include <QtGui>
 #include <qfileinfo.h>
 #include <QColorDialog>
-#include <cairo-xlib-xrender.h>
 #include "windows.h"
 
 
@@ -42,22 +40,6 @@ MainWindow::MainWindow(Parameters *p, Mainops *m, QWidget *parent)
                            | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint ); //| Qt::WindowStaysOnTopHint
     params->show();
     params->hide();
-
-    verticalLayout = new QVBoxLayout(centralwidget);
-    verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
-
-    scrollArea = new QScrollArea();
-    scrollArea->setObjectName(QString::fromUtf8("scrollArea"));
-    scrollArea->setWidgetResizable(false);
-    scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-    scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-    verticalLayout->addWidget(scrollArea);
-
-    widget = new Canvas(scrollArea);
-    widget->setObjectName(QString::fromUtf8("widget"));
-    widget->setGeometry(QRect(0, 25, parameters->width,parameters->height));
-
-    scrollArea->setWidget(widget);
 
     loadParameters(parameters);
     createActions();

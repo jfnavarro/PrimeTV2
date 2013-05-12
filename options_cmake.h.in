@@ -1,0 +1,8 @@
+// Main solution header file (CMake generated)
+#ifndef __COMMON_OPTIONS_CMAKE_H__
+#define __COMMON_OPTIONS_CMAKE_H__
+
+// This is flag for unit tests
+#cmakedefine01 BUILD_UNIT_TESTS
+
+#endif // __COMMON_OPTIONS_CMAKE_H__

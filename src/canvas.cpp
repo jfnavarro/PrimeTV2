@@ -23,14 +23,14 @@
 
 #include <QDebug>
 #include <QPainter>
-#include <QResizeEvent>
-#include <QPrinter>
-#include <QPrintDialog>
-#include <QX11Info>
+#include <QGui/QResizeEvent>
+#include <QPrintSupport/QPrinter>
+#include <QPrintSupport/QPrintDialog>
+#include "qxcbscreen.h
+#include "qxcbimage.h
 #include "canvas.h"
 #include <cairo/cairo-xlib-xrender.h>
 #include "xcb/xcb.h"
-#include <tcutil.h>
 
 Canvas::Canvas(QWidget* parent)
   : QWidget(parent),cr_(0),surface_(0)
@@ -41,27 +41,6 @@ Canvas::Canvas(QWidget* parent)
 //destroys the cairo object if it exists
 Canvas::~Canvas()
 {
-    if(surface_)
-    {
-      cairo_surface_destroy(surface_);
-      surface_ = 0;
-    }
-    
-    if (cr_) 
-    {
-        cairo_destroy(cr_);
-        cr_ = 0;
-    }
-}
-
-cairo_t* Canvas::getCairoCanvas()
-{
-  return cr_;
-}
-
-cairo_surface_t* Canvas::getCairoSurface()
-{
-  return surface_;
 }
 
 void Canvas::paintEvent(QPaintEvent* )
@@ -72,71 +51,10 @@ void Canvas::paintEvent(QPaintEvent* )
 }
 
 
-/* This function uses Xlib and X11 to
- * create a Cairo drawable object from a Qt display object
- * and link them */
 void Canvas::paintCanvas()
 {
     buf_ = QPixmap(width(),height());
     buf_.fill(Qt::white);
-    
-    const QX11Info& info = buf_.x11Info();
-    Display* display = info.display();
-    //XFlush(display);
-    
-    Drawable drawable = buf_.handle();
-    Screen* screen = XScreenOfDisplay(display, info.screen());
- 
-    Visual* visual = reinterpret_cast<Visual*>(info.visual());
-    XRenderPictFormat *format = XRenderFindVisualFormat(display, visual);
-
-
-    
-    /*if(surface_)
-    {
-      cairo_surface_destroy(surface_);
-      surface_ = 0;
-    }
-    
-    if(cr_)
-    {
-      cairo_destroy(cr_);
-      cr_ = 0;
-    }*/
-    
-    surface_ = cairo_xlib_surface_create_with_xrender_format(display, drawable, screen, format,width(),height());
-    cr_ = cairo_create(surface_);
-    
-
-    
-    /* xcb is a more portable alternative to xlib 
-       QT5(to be released in November 2012) will replace xlib for xbc, so the code
-       has to be ported, fortunately, cairo is compatible with xcb and this will solve
-       some portability issues with MAC and Ubuntu 12.04
-       http://www.cairographics.org/manual/cairo-XCB-Surfaces.html
-   
-    //qxcbscreen.h
-    //qxcbimage.h
-    
-    QList<QScreen *> screens = QGuiApplication::screens();
-    QXcbScreen *xcbscreen = static_cast<QXcbScreen *>(screens.at(0)->handle());
-    Display *display = static_cast<Display *>(xcbscreen->connection()->xlib_display());
-
-    xcb_connection_t *connection = xcb_connect (NULL, NULL);
-    
-    xcb_screen_t *screen = xcbscreen;
-    
-    xcb_drawable_t drawable = screen->root;
-    
-    xcb_render_pictforminfo_t *format = ;
-    
-    surface_ = cairo_xcb_surface_create_with_xrender_format (xcb_connection_t *connection,
-								 xcb_screen_t *screen,
-								 xcb_drawable_t drawable,
-                                                             xcb_render_pictforminfo_t *format,
-                                                             int width,
-                                                             int height);
-    */
     
 }
 
