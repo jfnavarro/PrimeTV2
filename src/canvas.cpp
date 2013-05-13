@@ -52,40 +52,28 @@ bool Canvas::saveCanvas(const QString& fileName, const char* format, int quality
  */
 bool Canvas::saveCanvasPDF(const QString& fileName)
 {
-    //    QPrinter printer(QPrinter::ScreenResolution);
-    //    printer.setOutputFileName(fileName);
-    //    printer.setOutputFormat(QPrinter::PdfFormat);
-    //    printer.setFullPage(true);
-    //    printer.setPageSize(QPrinter::A4);
-    //    printer.setResolution(150);
-    //    QPainter painter;
-    //    painter.begin(&printer);
-    //    painter.drawPixmap(0, 0, pixmap());
-    //    painter.end();
-    return true;
+    return pixmap().save(fileName);
 }
 
 /*This function launches a printing dialog to select the printing device
  and then send the canvas to the printer to be printed out*/
 bool Canvas::print()
 {
-    //   QPrinter printer;
-    //   printer.setPageSize(QPrinter::A4);
-    //   printer.setResolution(150);
-    //   printer.setFullPage(true);
-    //   QPrintDialog print(&printer);
-    //   if(print.exec()== QPrintDialog::Accepted)
-    //   {
-    //       QPainter painter;
-    //       painter.begin(&printer);
-    //       painter.drawPixmap(0, 0, pixmap());
-    //       painter.end();
-    //       return true;
-    //   }
-    //   else
-    //       return false;
-    
-    return true;
+    QPrinter printer;
+    printer.setPageSize(QPrinter::A4);
+    printer.setResolution(150);
+    printer.setFullPage(true);
+    QPrintDialog print(&printer);
+    if(print.exec()== QPrintDialog::Accepted)
+    {
+        QPainter painter;
+        painter.begin(&printer);
+        painter.drawPixmap(0, 0, pixmap());
+        painter.end();
+        return true;
+    }
+    else
+        return false;
 }
 
 QRectF Canvas::boundingRect() const

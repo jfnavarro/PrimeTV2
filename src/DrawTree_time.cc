@@ -100,7 +100,7 @@ static const double pi = 3.141516;
                                            pagewidth - parameters->separation/2, pageheight - parameters->separation/2);
       surfaceBackground = cairo_svg_surface_create (strcat(strcpy(str,parameters->outfile.c_str()),".svg"), pagewidth, pageheight);
     }
-    else if(parameters->format.compare("jpg") == 0)
+    else if(parameters->format.compare("jpg") == 0 or parameters->format.compare("png") == 0)
     {
       image = true;
       surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, pagewidth - parameters->separation/2, pageheight - parameters->separation/2);
@@ -187,9 +187,20 @@ static const double pi = 3.141516;
     if(image)
     {
       char str[80];
-      cairo_status_t e = cairo_surface_write_to_png (surface, strcat(strcpy(str,parameters->outfile.c_str()),".jpg"));
-      if (!e == CAIRO_STATUS_SUCCESS )
-        throw AnError("Could not write file!\n", 1);
+      
+      if( parameters->format.compare("png") == 0 )
+      {
+	cairo_status_t e = cairo_surface_write_to_png (surface, strcat(strcpy(str,parameters->outfile.c_str()),".png"));
+	if (!e == CAIRO_STATUS_SUCCESS )
+	  throw AnError("Could not write file!\n", 1);
+      }
+      else if ( parameters->format.compare("jpg") == 0 )
+      {
+	//cairo_status_t e = cairo_surface_write_to_jpg (surface, strcat(strcpy(str,parameters->outfile.c_str()),".jpg"));
+	//if (!e == CAIRO_STATUS_SUCCESS )
+	  //throw AnError("Could not write file!\n", 1);
+      }
+
     }
    
     cr = cairo_create(surfaceBackground);

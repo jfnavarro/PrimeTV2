@@ -354,8 +354,8 @@
       return false;
     }
 
-      recursivelyCheckTags(v->left, traits);
-      recursivelyCheckTags(v->right, traits);
+    recursivelyCheckTags(v->left, traits);
+    recursivelyCheckTags(v->right, traits);
 
     checkTags(*v, traits);
     return true;

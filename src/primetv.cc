@@ -142,7 +142,7 @@ try
      "Annotate host edges by their time extent")
     ("notime,n", po::bool_switch(&parameters->noTimeAnnotation),"No time annotation at all")
     ("format,f", po::value<string>(&parameters->format)->default_value("pdf"),
-     "File format: pdf(Pdf) ps(PostScript) jpg(JPEG) svg")
+     "File format: pdf(Pdf) ps(PostScript) png(PNG) svg")
     ("nohost,y", po::bool_switch(&parameters->do_not_draw_species_tree)->default_value(false),
      "No host tree is given nor shown")
     ("noguest,g", po::bool_switch(&parameters->do_not_draw_guest_tree)->default_value(false),

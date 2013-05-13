@@ -44,7 +44,7 @@ MainWindow::MainWindow(Parameters *p, Mainops *m, QWidget *parent)
                            | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint ); //| Qt::WindowStaysOnTopHint
     params->hide();
 
-    parameters->format = "svg";
+    parameters->format = "png";
     loadParameters(parameters);
     
     createActions();

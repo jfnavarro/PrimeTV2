@@ -180,12 +180,12 @@ void Mainops::OpenHost(const char* species)
 {    
     TreeIOTraits traits;
     io->setSourceFile(species);
-    io->checkTagsForTree(traits);
- 
-    if(traits.containsTimeInformation() == false)
-        throw AnError("Host tree lacks time information for some of it nodes", 1);
-    else
-        traits.enforceHostTree();
+//     io->checkTagsForTree(traits);
+//     
+//     if(traits.containsTimeInformation() == false)
+// 	throw AnError("Host tree lacks time information for some of its nodes\n" + traits.print(), 1);
+//     else
+//         traits.enforceHostTree();
     
     Host = new TreeExtended(io->readBeepTree<TreeExtended,Node>(traits,0,0));
     Node *root = Host->getRootNode();
@@ -236,7 +236,6 @@ void Mainops::CalculateGamma()
 
 void Mainops::reconcileTrees(const char* gene, const char* species, const char* mapfile)
 {
-
     io->setSourceFile(gene);
     Guest = new TreeExtended(io->readBeepTree<TreeExtended,Node>(&AC, &gs));
     io->setSourceFile(species);
