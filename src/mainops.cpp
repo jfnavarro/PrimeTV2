@@ -178,6 +178,7 @@ void Mainops::OpenReconciled(const char* reconciled)
 
 void Mainops::OpenHost(const char* species)
 {    
+    TreeIOTraits traits;
     io->setSourceFile(species);
     io->checkTagsForTree(traits);
  
@@ -198,7 +199,7 @@ void Mainops::OpenHost(const char* species)
 
     if (Host->imbalance() / Host->rootToLeafTime() > 0.01) {
         parameters->scaleByTime = false;
-        cerr << "The species tree is not ultrametric (it appears unbalanced),\n"
+        std::cerr << "The species tree is not ultrametric (it appears unbalanced),\n"
         "so scaling by time is turned off. See also option '-t'.\n";
 
     }

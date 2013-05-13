@@ -114,7 +114,6 @@ protected:
   DrawTree_time *dt; //drawing
   Parameters *parameters;
   
-  TreeIOTraits traits;
   std::vector<Scenario> scenarios;
   dynamic_bitset<> transferedges;
   std::vector<unsigned> sigma;

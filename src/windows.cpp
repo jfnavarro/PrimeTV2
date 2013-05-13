@@ -38,7 +38,7 @@ MainWindow::MainWindow(Parameters *p, Mainops *m, QWidget *parent)
 {
 
     Ui_MainWindow::setupUi(this);
-    params = new QWidget(this);
+    params = new QWidget();
     Ui_Parameters::setupUi(params);
     params->setWindowFlags(Qt::Tool | Qt::CustomizeWindowHint | Qt::WindowTitleHint
                            | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint ); //| Qt::WindowStaysOnTopHint
@@ -66,6 +66,10 @@ MainWindow::MainWindow(Parameters *p, Mainops *m, QWidget *parent)
     view->setScene(scene);
     canvas = new Canvas(QPixmap());
     scene->addItem(canvas);
+    
+    #ifdef Q_WS_MAC
+    toolBar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+    #endif
 }
 
 MainWindow::MainWindow(const MainWindow& other)
