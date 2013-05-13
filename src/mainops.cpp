@@ -180,13 +180,15 @@ void Mainops::OpenHost(const char* species)
 {    
     TreeIOTraits traits;
     io->setSourceFile(species);
-//     io->checkTagsForTree(traits);
-//     
-//     if(traits.containsTimeInformation() == false)
-// 	throw AnError("Host tree lacks time information for some of its nodes\n" + traits.print(), 1);
-//     else
-//         traits.enforceHostTree();
     
+    //NOTE for some reasons this does not work in MAC
+#ifndef __APPLE__
+    io->checkTagsForTree(traits);
+    if(traits.containsTimeInformation() == false)
+        throw AnError("Host tree lacks time information for some of its nodes\n" + traits.print(), 1);
+    else
+        traits.enforceHostTree();
+#endif    
     Host = new TreeExtended(io->readBeepTree<TreeExtended,Node>(traits,0,0));
     Node *root = Host->getRootNode();
 
