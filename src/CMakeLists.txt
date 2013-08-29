@@ -256,7 +256,7 @@ if(APPLE)
       #COMMAND mkdir -p ${CMAKE_INSTALL_PREFIX}/Resources/translations
       #COMMAND install -m 644 ${CMAKE_SOURCE_DIR}/resources/icons/icon.png ${CMAKE_INSTALL_PREFIX}/Resources/
       #COMMAND install -m 644 ${QT_LOCALES} ${CMAKE_INSTALL_PREFIX}/Resources/translations/
-      COMMAND install -m 644 ${PROJECT_SOURCE_DIR}/resources/images/header.png ${OS_X_PROJECT_BINARY_DIR}/share/primetv 
+      COMMAND install -m 644 ${CMAKE_SOURCE_DIR}/resources/images/header.png ${OS_X_PROJECT_BINARY_DIR}/Contents/Resources/ 
       COMMAND install -m 644 ${CMAKE_SOURCE_DIR}/cmake/mac/qt.conf ${OS_X_PROJECT_BINARY_DIR}/Contents/Resources/
       #COMMAND ${MACDEPLOYQT} ${BUNDLE_DIR}
       )
@@ -282,7 +282,7 @@ if(APPLE)
       COMMAND mkdir -p ${DMG_DIR}
       COMMAND cp -R ${BUNDLE_DIR} ${DMG_DIR}/
       COMMAND ln -sf /Applications ${DMG_DIR}
-      COMMAND cp ${PROJECT_SOURCE_DIR}/resources/images/header.png .
+      COMMAND cp ${CMAKE_SOURCE_DIR}/resources/images/header.png .
       #COMMAND cp ${CMAKE_SOURCE_DIR}/assets/images/stVi.icns .VolumeIcon.icns
       COMMAND hdiutil create ${CMAKE_BINARY_DIR}/${PROJECT_NAME}-${PROJECT_VERSION}.dmg -srcfolder ${DMG_DIR}
       DEPENDS ${PROJECT_NAME}
