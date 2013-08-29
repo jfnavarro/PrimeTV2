@@ -20,103 +20,44 @@ message( STATUS )
 
 ###PROJECT and GLOBAL VARIABLES####################################################
 
-set(APPLICATION_NAME "PrimeTV2 : Phylogenetic trees viewer")
-
-#Cpack stuff
-set(LICENSE_FILE "LICENSE")
-set(README_FILE "README")
-set(PROJECT_VERSION_MAJOR "0")
-set(PROJECT_VERSION_MINOR "1")
-set(PROJECT_VERSION_PATCH "0")
-set(PROJECT_VERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}")
-set(PROJECT_VENDOR "PrimeTV")
-set(PROJECT_COPYRIGHT_YEAR "2013")
-set(PROJECT_DOMAIN_FIRST "primetv")
-set(PROJECT_DOMAIN_SECOND "com")
-set(PROJECT_DOMAIN "${PROJECT_DOMAIN_FIRST}.${PROJECT_DOMAIN_SECOND}")
-
-# install locations
-if(APPLE)
-  if(NOT ${CMAKE_INSTALL_PREFIX})
-    set(CMAKE_INSTALL_PREFIX ".")
-  endif()
-  set(EXECUTABLE "${PROJECT_NAME}.app")
-  set(BIN_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/${EXECUTABLE}/Contents/bin")
-  set(DOC_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/${EXECUTABLE}/Contents/docs")
-  set(INCLUDE_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/${EXECUTABLE}/Contents/include")
-  set(LIB_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/${EXECUTABLE}/Contents/lib")
-  set(APPS "${CMAKE_INSTALL_PREFIX}/${EXECUTABLE}")
-  set(PLUGINS "${CMAKE_INSTALL_PREFIX}/${EXECUTABLE}/Contents/Plugins")
-  set(QTCONF "${CMAKE_INSTALL_PREFIX}/${EXECUTABLE}/Contents/Resources")
-elseif(WIN32 OR MINGW)
-  if(NOT ${CMAKE_INSTALL_PREFIX})
-    set(CMAKE_INSTALL_PREFIX ".")
-  endif()
-  set(BIN_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/bin")
-  set(DOC_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/docs")
-  set(EXECUTABLE "${PROJECT_NAME}.exe")
-  set(INCLUDE_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/include")
-  set(LIB_INSTALL_DIR "${BIN_INSTALL_DIR}")
-  set(APPS "${CMAKE_INSTALL_PREFIX}/bin/${EXECUTABLE}")
-  set(PLUGINS ${BIN_INSTALL_DIR})
-  set(QTCONF ${BIN_INSTALL_DIR})
-elseif(UNIX)
-  if(NOT ${CMAKE_INSTALL_PREFIX})
-    set(CMAKE_INSTALL_PREFIX "bin")
-  endif()
-  string(TOLOWER ${PROJECT_NAME} PROJECT_NAME_LOWERCASE)
-  set(BIN_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/bin")
-  set(DOC_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/share/doc/${PROJECT_NAME_LOWERCASE}/")
-  set(EXECUTABLE "${PROJECT_NAME_LOWERCASE}${CMAKE_EXECUTABLE_SUFFIX}")
-  set(INCLUDE_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/include/${PROJECT_NAME_LOWERCASE}")
-  set(LIB_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/lib/${PROJECT_NAME_LOWERCASE}")
-  set(APPS "${CMAKE_INSTALL_PREFIX}/bin/${EXECUTABLE}")
-  set(PLUGINS ${BIN_INSTALL_DIR})
-  set(QTCONF ${BIN_INSTALL_DIR})
-endif()
-
+# Initialise the project
+initialise_project()
+#location of the icons
 set(ICONS_DIR "${PROJECT_SOURCE_DIR}/resources/icons")
-
 #location of some files needed by primetv
 set(HEADER_LOCATION "${CMAKE_INSTALL_PREFIX}/share/primetv/header.png")
-add_definitions( -DHAS_HEADER="${HEADER_LOCATION}")
+add_definitions(-DHAS_HEADER="${HEADER_LOCATION}")
+
+# Organize projects into folders
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 ###PACKAGES######################################
 
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/cmake" )
-set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} "${PROJECT_SOURCE_DIR}/cmake" )
-
-SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/src")
-SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}")
-SET(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}")
-
+# put everything that is generated into the binary dir
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+set(CMAKE_BINARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 # Find includes in corresponding build directories
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 # Instruct CMake to run moc automatically when needed.
 set(CMAKE_AUTOMOC ON)
+# location of home made cmake macros
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/cmake" )
+set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} "${PROJECT_SOURCE_DIR}/cmake" )
 
+#find qt libraries
 use_qt5lib(Qt5Widgets)
 use_qt5lib(Qt5Core)
 use_qt5lib(Qt5Gui)
 use_qt5lib(Qt5PrintSupport)
 
-#useful qt5 locations
-SET(QT_BINARY_DIR ${_qt5Core_install_prefix}/bin)
-SET(QT_LIBRARY_DIR ${_qt5Core_install_prefix}/lib)
-SET(QT_PLUGINS_DIR ${_qt5Core_install_prefix}/plugins)
-SET(QT_VERSION_MAJOR ${Qt5Core_VERSION_MAJOR})
-SET(QT_VERSION_MINOR ${Qt5Core_VERSION_MINOR})
-SET(QT_VERSION_PATCH ${Qt5Core_VERSION_PATCH})
-
-message(STATUS "Qt5 binary dir : ${QT_BINARY_DIR}")
-message(STATUS "Qt5 library dir : ${QT_LIBRARY_DIR}")
-message(STATUS "Qt5 plugins dir : ${QT_PLUGINS_DIR}")
-    
+#find boost    
 set(Boost_USE_STATIC_LIBS ON)
 set(Boost_USE_MULTITHREADED ON) 
 set(Boost_USE_STATIC_RUNTIME ON)
 find_package(Boost REQUIRED COMPONENTS system program_options)  
-
+#find bison flex and cairo
 find_package(BISON REQUIRED)
 find_package(FLEX REQUIRED)
 find_package(Cairo REQUIRED)
@@ -124,13 +65,13 @@ find_package(Cairo REQUIRED)
 ####PACKAGES##################################################
 
 ##DIRECTORIES#################################################
-include_directories(${CMAKE_CURRENT_BINARY_DIR})
+#include_directories(${CMAKE_CURRENT_BINARY_DIR})
 include_directories(${Boost_INCLUDE_DIRS})
-include_directories("${PROJECT_BINARY_DIR}/src")
-include_directories("${PROJECT_SOURCE_DIR}/src")
-include_directories("${PROJECT_BINARY_DIR}/src/libraries")
-include_directories("${PROJECT_SOURCE_DIR}/src/libraries")
-include_directories(${CMAKE_BINARY_DIR})
+#include_directories("${PROJECT_BINARY_DIR}/src")
+#include_directories("${PROJECT_SOURCE_DIR}/src")
+#include_directories("${PROJECT_BINARY_DIR}/src/libraries")
+#include_directories("${PROJECT_SOURCE_DIR}/src/libraries")
+#include_directories(${CMAKE_BINARY_DIR})
 include_directories(${CAIRO_INCLUDE_DIR})
 ######DIRECTORIES#################################################
 
@@ -150,7 +91,9 @@ flex_target(MyScanner "${PROJECT_SOURCE_DIR}/src/libraries/NHX.l"
 add_flex_bison_dependency(MyScanner MyParser)
 
 #QT5 DIRECTIVES
-set(FORMS "${PROJECT_SOURCE_DIR}/resources/primetv.ui" "${PROJECT_SOURCE_DIR}/resources/parameters.ui")
+set(FORMS "${PROJECT_SOURCE_DIR}/resources/ui/primetv.ui" 
+          "${PROJECT_SOURCE_DIR}/resources/ui/parameters.ui")
+          
 set(RESOURCES "${PROJECT_SOURCE_DIR}/resources/application.qrc")
 
 qt5_wrap_ui(QT_FORMS ${FORMS})
@@ -167,17 +110,17 @@ set(PARSER_SOURCES "${PROJECT_SOURCE_DIR}/src/libraries/NHXnode.c"
                    "${PROJECT_SOURCE_DIR}/src/libraries/NHXtree.c" 
                    "${PROJECT_SOURCE_DIR}/src/libraries/NHXannotation.c" 
                    "${BISON_MyParser_OUTPUTS}" 
-                   "${FLEX_MyScanner_OUTPUTS}" )
+                   "${FLEX_MyScanner_OUTPUTS}")
 
 set(MAIN_SOURCES windows.cpp edge.cpp layoutrees.cpp mainops.cpp 
                  parameters.cpp phyltr.cpp Color.cpp Colours.cpp 
-                 DrawTree_time.cc canvas.cpp Layout.cpp GraphicView.cpp)
+                 DrawTree_time.cc canvas.cpp GraphicView.cpp)
 		  
 foreach(i ${PARSER_SOURCES})
  set_source_files_properties(${i} PROPERTIES LANGUAGE C)
 endforeach(i)
 
-add_library(primetvlib STATIC ${PARSER_SOURCES} ${Libraries} )
+add_library(primetvlib STATIC ${PARSER_SOURCES} ${Libraries})
 
 if(WIN32)
   add_executable(primetv WIN32 primetv.cc ${MAIN_SOURCES} ${QT_FORMS} ${QT_RESOURCES})
@@ -188,111 +131,202 @@ else()
 endif()
 
 qt5_use_modules(${PROJECT_NAME} Widgets Core Gui PrintSupport) 
-target_link_libraries(${PROJECT_NAME} primetvlib ${CAIRO_LIBRARIES} ${Boost_LIBRARIES} ) 
+target_link_libraries(${PROJECT_NAME} primetvlib ${CAIRO_LIBRARIES} ${Boost_LIBRARIES}) 
 
-if(APPLE)
-  set_property(TARGET ${PROJECT_NAME} PROPERTY LINK_SEARCH_END_STATIC ON)
-endif(APPLE)
-
-#TODO : take into consideration when using windows, make use of globals
-install(FILES ${PROJECT_SOURCE_DIR}/resources/images/header.png 
-        DESTINATION ${CMAKE_INSTALL_PREFIX}/share/primetv 
-        PERMISSIONS OWNER_READ GROUP_READ WORLD_READ)
-
-install(TARGETS ${PROJECT_NAME} 
-        BUNDLE DESTINATION . COMPONENT Runtime
-        RUNTIME DESTINATION bin COMPONENT Runtime)
-
-##BUILDING AND INSTALLING #############################################################
-
-if(APPLE)
-  
-  include(InstallRequiredSystemLibraries)
-  
-  # install a qt.conf file
-  ADD_CUSTOM_COMMAND(TARGET ${PROJECT_NAME} POST_BUILD
-                     COMMAND ${CMAKE_COMMAND} -E copy ${PROJECT_SOURCE_DIR}/resources/qt.conf
-                                                      ${QTCONF}/qt.conf)
-
-  message(STATUS "Deploying MAC BUNDLE in ${APPS}/Contents/MacOS")                                                
-
-  # Clean up our main executable
-  OS_X_CLEAN_UP_FILE_WITH_QT_DEPENDENCIES(${APPS}/Contents/MacOS ${PROJECT_NAME}
-                                          QtWidgets QtCore QtGui QtPrintSupport)
-
-  # Deploy our Qt dependencies
-  OS_X_DEPLOY_QT_LIBRARIES(QtWidgets QtCore QtGui QtQuick QtV8 QtQml QtOpenGL QtSql QtPrintSupport)
-
-  # Deploy some plugin
-  OS_X_DEPLOY_QT_PLUGIN(imageformats qgif qico qjpeg qmng qsvg qtga qtiff qwbmp)
-  OS_X_DEPLOY_QT_PLUGIN(platforms qcocoa)
-  
-elseif(WIN32 OR MINGW)
-  #to fill here
-else()
-  #to fill here
-endif()
+##################################################################INSTALLATION###########################################################################
 
 # PACKAGING OPTIONS: GENERAL
-set(PACKAGE_NICKNAME "primetv")
-set(CPACK_SET_DESTDIR TRUE) # Enabling absolute paths for CPack (important!)
-set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "PrimeTV a tool to visualize reconciled trees.")
-set(CPACK_INSTALL_CMAKE_PROJECTS "${CMAKE_CURRENT_BINARY_DIR};${CMAKE_PROJECT_NAME};ALL;/")
-set(CPACK_PACKAGE_NAME ${PACKAGE_NICKNAME})
 set(CPACK_PACKAGE_VERSION_MAJOR "${PROJECT_VERSION_MAJOR}")
 set(CPACK_PACKAGE_VERSION_MINOR "${PROJECT_VERSION_MINOR}")
 set(CPACK_PACKAGE_VERSION_PATCH "${PROJECT_VERSION_PATCH}")
 set(CPACK_PACKAGE_VERSION "${PROJECT_VERSION}")
 set(CPACK_PACKAGE_VENDOR "${PROJECT_VENDOR}")
-set(CPACK_RESOURCE_FILE_README "${CMAKE_SOURCE_DIR}/${README_FILE}")
+set(CPACK_RESOURCE_FILE_WELCOME "${CMAKE_SOURCE_DIR}/WELCOME")
+set(CPACK_RESOURCE_FILE_README "${CMAKE_SOURCE_DIR}/README")
+set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSE")
 
-if(WIN32)  ## consider using external nsi script
-  set(CPACK_GENERATOR "NSIS")
-  set(CPACK_PACKAGE_EXECUTABLES "${PROJECT_NAME}" "${PROJECT_NAME}")
-  set(CPACK_PACKAGE_INSTALL_DIRECTORY "${PROJECT_NAME}")
-  set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME} ${PROJECT_VERSION}")
-  set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/${LICENSE_FILE}")
-  set(CPACK_NSIS_EXECUTABLES_DIRECTORY "${BIN_INSTALL_DIR}")
-  set(CPACK_NSIS_MUI_ICON "${ICONS_DIR}/NSIS.ico")
-  set(CPACK_PACKAGE_ICON "${ICONS_DIR}\\\\NSISHeader.bmp")
-  set(CPACK_NSIS_URL_INFO_ABOUT "http://${PROJECT_DOMAIN}")
-  set(CPACK_NSIS_INSTALLED_ICON_NAME "${PROJECT_NAME}${CMAKE_EXECUTABLE_SUFFIX}")
-  set(CPACK_NSIS_MENU_LINKS "${LICENSE_FILE}" "License" "${README_FILE}" "Readme")
-  set(CPACK_NSIS_MUI_FINISHPAGE_RUN "${CPACK_NSIS_INSTALLED_ICON_NAME}")
-elseif(APPLE)
-  set(MACOSX_BUNDLE_INFO_STRING "${PROJECT_NAME} ${PROJECT_VERSION}")
-  set(MACOSX_BUNDLE_BUNDLE_VERSION "${PROJECT_NAME} ${PROJECT_VERSION}")
-  set(MACOSX_BUNDLE_LONG_VERSION_STRING "${PROJECT_NAME} ${PROJECT_VERSION}")
-  set(MACOSX_BUNDLE_SHORT_VERSION_STRING "${PROJECT_VERSION}")
-  set(MACOSX_BUNDLE_COPYRIGHT "${PROJECT_COPYRIGHT_YEAR} ${PROJECT_VENDOR}")
-  set(MACOSX_BUNDLE_ICON_FILE "icon.png")
-  set(MACOSX_BUNDLE_GUI_IDENTIFIER "${PROJECT_DOMAIN_SECOND}.${PROJECT_DOMAIN_FIRST}")
-  set(MACOSX_BUNDLE_BUNDLE_NAME "${PROJECT_NAME}")
-  set(MACOSX_BUNDLE_RESOURCES "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.app/Contents/Resources")
-  set(MACOSX_BUNDLE_ICON "${ICONS_DIR}/${MACOSX_BUNDLE_ICON_FILE}")
-  execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${MACOSX_BUNDLE_RESOURCES})
-  execute_process(COMMAND ${CMAKE_COMMAND} -E copy_if_different ${MACOSX_BUNDLE_ICON} ${MACOSX_BUNDLE_RESOURCES})
-  set(CPACK_GENERATOR "DragNDrop")
-  set(CPACK_DMG_FORMAT "UDBZ")
-  set(CPACK_DMG_VOLUME_NAME "${PROJECT_NAME}")
-  set(CPACK_SYSTEM_NAME "OSX")
-  set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-${PROJECT_VERSION}")
-#   set(CPACK_PACKAGE_ICON "${ICONS_DIR}/DMG.icns")
-#   set(CPACK_DMG_DS_STORE "${ICONS_DIR}/DMGDSStore")
-#   set(CPACK_DMG_BACKGROUND_IMAGE "${ICONS_DIR}/DMGBackground.png")
-elseif(UNIX)
-  set(CPACK_SYSTEM_NAME "${CMAKE_SYSTEM_NAME}-${CMAKE_SYSTEM_PROCESSOR}")
-  set(CPACK_GENERATOR "DEB")
-  set(CPACK_DEBIAN_PACKAGE_DEBUG ON)
-  set(CPACK_DEBIAN_PACKAGE_DEPENDS ${PACKAGE_REQUIRES})
-#   set(CPACK_DEBIAN_PACKAGE_DEPENDS "libqt4-gui ( >= 4.6 ), libqt4-core ( >= 4.6 ), libqt4-network ( >= 4.6 )")
-  set(CPACK_DEBIAN_PACKAGE_DESCRIPTION ${CPACK_PACKAGE_DESCRIPTION_SUMMARY})
-  set(CPACK_DEBIAN_PACKAGE_MAINTAINER "${CPACK_PACKAGE_VENDOR} <${CPACK_PACKAGE_CONTACT}>")
-  set(CPACK_DEBIAN_PACKAGE_NAME ${CPACK_PACKAGE_NAME})
-  set(CPACK_DEBIAN_PACKAGE_PRIORITY "optional")
-  set(CPACK_DEBIAN_PACKAGE_VERSION ${CPACK_PACKAGE_VERSION})
-  set(CPACK_SET_DESTDIR TRUE)
+if(UNIX AND NOT APPLE)
+
+    # use, i.e. don't skip the full RPATH for the build tree
+    set(CMAKE_SKIP_BUILD_RPATH FALSE)
+
+    # when building, don't use the install RPATH already
+    # (but later on when installing)
+    set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
+    set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+    set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib;${CMAKE_INSTALL_PREFIX}/plugins")
+
+    # add the automatically determined parts of the RPATH
+    # which point to directories outside the build tree to the install RPATH
+    set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+
+    # the RPATH to be used when installing, but only if it's not a system directory
+    list(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${CMAKE_INSTALL_PREFIX}/lib" isSystemDir)
+    if("${isSystemDir}" STREQUAL "-1")
+        set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+    endif("${isSystemDir}" STREQUAL "-1")
+
+    # Select TGZ and DEB as the packager on Linux
+    set(CPACK_GENERATOR "DEB;TGZ")
+    set(CPACK_SYSTEM_NAME "Linux")
+    set(CPACK_SOURCE_IGNORE_FILES "/CVS/;/.svn/;/.swp$/;cscope.*;/.git/;${CMAKE_CURRENT_BINARY_DIR}/;/.bzr/;/.settings/;${DOT_FILES_BEGIN};${TILD_FILES}")
+
+    # PACKAGING OPTIONS: DEB
+    set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Jose Fernandez <jose.fernandez.navarro@scilifelab.se>")
+    set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE ${TARGET_ARCH})
+    set(CPACK_DEBIAN_PACKAGE_DEPENDS "libstdc++6, libglu1-mesa-dev, freeglut3-dev, mesa-common-dev, libboost-dev, libcairo-dev, flex, bison")
+
+    if(32BIT_MODE)
+        set(CPACK_SYSTEM_NAME "${CPACK_SYSTEM_NAME}32")
+    else()
+        set(CPACK_SYSTEM_NAME "${CPACK_SYSTEM_NAME}64")
+    endif()
+
+    # Qt libraries required by PrimeTV2
+    # Note: unlike for Windows and OS X, we don't have a macro for deploying our
+    # Qt libraries. Indeed, on Linux, the version of a file is appended to
+    # its suffix, so unless making the macro unnecessarily cumbersome to
+    # use, it's better to do things ourselves...
+
+    foreach(QT_LIBRARY Core DBus Gui Help PrintSupport Qml Quick Sql Svg V8 Widgets) #
+        install(FILES ${QT_LIBRARY_DIR}/${CMAKE_SHARED_LIBRARY_PREFIX}Qt${QT_VERSION_MAJOR}${QT_LIBRARY}${CMAKE_SHARED_LIBRARY_SUFFIX}.${QT_VERSION_MAJOR}.${QT_VERSION_MINOR}.${QT_VERSION_PATCH}
+                DESTINATION lib
+                RENAME ${CMAKE_SHARED_LIBRARY_PREFIX}Qt${QT_VERSION_MAJOR}${QT_LIBRARY}${CMAKE_SHARED_LIBRARY_SUFFIX}.${QT_VERSION_MAJOR})
+    endforeach()
+
+    foreach(QT_FILE icudata icui18n icuuc)
+        install(FILES ${QT_LIBRARY_DIR}/${CMAKE_SHARED_LIBRARY_PREFIX}${QT_FILE}${CMAKE_SHARED_LIBRARY_SUFFIX}.49.1.2
+                DESTINATION lib
+                RENAME ${CMAKE_SHARED_LIBRARY_PREFIX}${QT_FILE}${CMAKE_SHARED_LIBRARY_SUFFIX}.49)
+    endforeach()
+
+    # Qt plugins required by PrimeTV2
+    LINUX_DEPLOY_QT_PLUGIN(accessible qtaccessiblequick qtaccessiblewidgets)
+    LINUX_DEPLOY_QT_PLUGIN(imageformats qgif qico qjpeg qmng qsvg qtga qtiff qwbmp)
+    LINUX_DEPLOY_QT_PLUGIN(platforms qlinuxfb qminimal qxcb)
+    LINUX_DEPLOY_QT_PLUGIN(printsupport cupsprintersupport)
+
+    install(FILES ${CMAKE_SOURCE_DIR}/cmake/linux/qt.conf DESTINATION bin)
+    install(TARGETS ${PROJECT_NAME} DESTINATION bin)
+    #install(FILES ${QT_LOCALES} DESTINATION share/${PROJECT_NAME}/translations)
+    install(FILES ${PROJECT_SOURCE_DIR}/resources/images/header.png 
+            DESTINATION ${CMAKE_INSTALL_PREFIX}/share/primetv 
+            PERMISSIONS OWNER_READ GROUP_READ WORLD_READ)
+            
+    # Shell script to run PrimeTV2
+
+    set(ShellFile ${CMAKE_BINARY_DIR}/${PROJECT_NAME}.sh)
+
+    configure_file(${CMAKE_SOURCE_DIR}/cmake/linux/application.sh.in ${ShellFile})
+
+    install(FILES ${ShellFile} RENAME ${PROJECT_NAME}
+            DESTINATION .
+            PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
+
 endif()
 
+if(APPLE)
+
+  set(InfoPlistFile ${CMAKE_BINARY_DIR}/Info.plist)
+
+  execute_process(COMMAND date "+%Y"
+                  OUTPUT_VARIABLE YEAR
+                  OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+  configure_file(${CMAKE_SOURCE_DIR}/cmake/mac/Info.plist.in ${InfoPlistFile})
+
+  set_target_properties(${PROJECT_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${InfoPlistFile})
+
+  # MACOSX sets
+  #set(MACOSX_BUNDLE_ICON_FILE "${CMAKE_SOURCE_DIR}/assets/images/stVi.icns")
+  set(MACOSX_BUNDLE_INFO_STRING "PrimeTV2 : Phylogenetic trees viewer")
+  set(MACOSX_BUNDLE_GUI_IDENTIFIER "name.elemc.${PROJECT_NAME}")
+  set(MACOSX_BUNDLE_LONG_VERSION_STRING "${PROJECT_VERSION}")
+  set(MACOSX_BUNDLE_SHORT_VERSION_STRING "${PROJECT_VERSION}")
+  set(MACOSX_BUNDLE_VERSION "${PROJECT_VERSION}")
+  set(MACOSX_BUNDLE_BUNDLE_NAME "${PROJECT_NAME}")
+
+  set(CMAKE_OSX_ARCHITECTURES "ppc;i386")
+  set(CMAKE_CXX_FLAGS "--sysroot ${CMAKE_OSX_SYSROOT} ${CMAKE_CXX_FLAGS}")
+
+  set(BUNDLE_DIR ${OS_X_PROJECT_BINARY_DIR})
+  set(CMAKE_INSTALL_PREFIX ${BUNDLE_DIR}/Contents)
+        
+  add_custom_command (TARGET ${PROJECT_NAME}
+      #COMMAND mkdir -p ${CMAKE_INSTALL_PREFIX}/Resources/translations
+      #COMMAND install -m 644 ${CMAKE_SOURCE_DIR}/resources/icons/icon.png ${CMAKE_INSTALL_PREFIX}/Resources/
+      #COMMAND install -m 644 ${QT_LOCALES} ${CMAKE_INSTALL_PREFIX}/Resources/translations/
+      COMMAND install -m 644 ${PROJECT_SOURCE_DIR}/resources/images/header.png ${OS_X_PROJECT_BINARY_DIR}/share/primetv 
+      COMMAND install -m 644 ${CMAKE_SOURCE_DIR}/cmake/mac/qt.conf ${OS_X_PROJECT_BINARY_DIR}/Contents/Resources/
+      #COMMAND ${MACDEPLOYQT} ${BUNDLE_DIR}
+      )
+
+  set(DMG_DIR ${CMAKE_BINARY_DIR}/${PROJECT_NAME})
+
+  #### Plugins ####
+  OS_X_CLEAN_UP_FILE_WITH_QT_DEPENDENCIES(${OS_X_PROJECT_BINARY_DIR}/Contents/MacOS ${PROJECT_NAME}
+                                            QtCore QtGui QtHelp QtPrintSupport
+                                            QtQml QtQuick QtSvg QtWidgets)
+
+  # Deploy Qt dependencies
+  OS_X_DEPLOY_QT_LIBRARIES(QtCore QtGui QtHelp
+                           QtPrintSupport QtQml QtQuick QtSql QtSvg QtV8
+                           QtWidgets)
+
+  # Deploy some plugins
+  OS_X_DEPLOY_QT_PLUGIN(imageformats qgif qico qjpeg qmng qsvg qtga qtiff qwbmp)
+  OS_X_DEPLOY_QT_PLUGIN(platforms qcocoa)
+  OS_X_DEPLOY_QT_PLUGIN(printsupport cocoaprintersupport)
+
+  add_custom_target(dmg
+      COMMAND mkdir -p ${DMG_DIR}
+      COMMAND cp -R ${BUNDLE_DIR} ${DMG_DIR}/
+      COMMAND ln -sf /Applications ${DMG_DIR}
+      COMMAND cp ${PROJECT_SOURCE_DIR}/resources/images/header.png .
+      #COMMAND cp ${CMAKE_SOURCE_DIR}/assets/images/stVi.icns .VolumeIcon.icns
+      COMMAND hdiutil create ${CMAKE_BINARY_DIR}/${PROJECT_NAME}-${PROJECT_VERSION}.dmg -srcfolder ${DMG_DIR}
+      DEPENDS ${PROJECT_NAME}
+      COMMENT "Create DMG image"
+  )
+
+endif(APPLE)
+
+if(WIN32)
+
+    set(CPACK_GENERATOR "NSIS") # Distribution packaging formats ("make package")
+    set(CPACK_NSIS_MODIFY_PATH "ON")
+    set(CPACK_NSIS_CONTACT "Jose Fernandez <jose.fernandez.navarro@scilifelab.se>")
+    #set(CPACK_PACKAGE_ICON "")
+    #set(CPACK_NSIS_MUI_ICON "")
+    #set(CPACK_NSIS_PACKAGE_NAME "")
+
+    # Qt libraries required by PrimeTV2
+
+    WINDOWS_DEPLOY_QT_LIBRARIES(Qt5Core Qt5Gui Qt5Help Qt5Multimedia Qt5MultimediaWidgets Qt5OpenGL
+                                Qt5PrintSupport Qt5Qml Qt5Quick Qt5Sql Qt5Svg Qt5V8 Qt5Widgets)
+    #WINDOWS_DEPLOY_QT_LIBRARIES(icudt49 icuin49 icuuc49)
+
+    # Qt plugins required by PrimeTV2
+
+    WINDOWS_DEPLOY_QT_PLUGIN(accessible qtaccessiblequick qtaccessiblewidgets)
+    WINDOWS_DEPLOY_QT_PLUGIN(imageformats qgif qico qjpeg qmng qsvg qtga qtiff qwbmp)
+
+    foreach(QT_PLUGIN_FILE qminimal qwindows)
+        install(FILES ${QT_PLUGINS_DIR}/platforms/${CMAKE_SHARED_LIBRARY_PREFIX}${QT_PLUGIN_FILE}${CMAKE_SHARED_LIBRARY_SUFFIX}
+                DESTINATION bin/platforms)
+        # Note: yes, the platforms plugin must be installed in the bin folder
+        # and not the plugins folder...
+    endforeach()
+
+    WINDOWS_DEPLOY_QT_PLUGIN(printsupport windowsprintersupport)
+    WINDOWS_DEPLOY_QT_PLUGIN(sqldrivers qsqlite)
+
+    install(TARGETS ${PROJECT_NAME} DESTINATION bin)
+    #install(FILES ${QT_LOCALES} DESTINATION translations)
+    install(FILES ${PROJECT_SOURCE_DIR}/resources/images/header.png 
+            DESTINATION /share/primetv)
+            
+endif(WIN32)
+
 include(CPack)
-#####CPACK###################################################
+

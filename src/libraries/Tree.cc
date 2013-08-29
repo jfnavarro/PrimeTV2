@@ -1,3 +1,25 @@
+/*
+    PrimeTV2 : a visualizer for phylogenetic reconciled trees.
+    Copyright (C) 2011  <Jose Fernandez Navarro> <jc.fernandez.navarro@gmail.com>
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License along
+    with this program; if not, write to the Free Software Foundation, Inc.,
+    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+    
+    Author : Jose Fernandez Navarro  -  jc.fernandez.navarro@gmail.com
+             Lars Arvestad, © the MCMC-club, SBC, all rights reserved
+ */
+
 #include <cassert>
 #include <iostream>
 #include <sstream>
@@ -71,24 +93,24 @@
   Tree::operator=(const Tree& T)
   {
     if(this != &T)
-      {
-	clear();
-	noOfNodes = T.noOfNodes;
-	noOfLeaves = T.noOfLeaves;
-	if(noOfNodes > all_nodes.size())
-	  {
-	    all_nodes.resize(noOfNodes, NULL);
-	  }
-	name = T.name;
-	if(T.getRootNode())
-	  {
-	    setRootNode(copyAllNodes(T.getRootNode()));
-	  }
-	//NOTE what should I do with the times,lenghts and rates?
-	//times = T.times;
-	//lengths = T.lengths;
-	//rates = T.rates;
-      }
+    {
+        clear();
+        noOfNodes = T.noOfNodes;
+        noOfLeaves = T.noOfLeaves;
+        if(noOfNodes > all_nodes.size())
+        {
+            all_nodes.resize(noOfNodes, NULL);
+        }
+        name = T.name;
+        if(T.getRootNode())
+        {
+            setRootNode(copyAllNodes(T.getRootNode()));
+        }
+        //NOTE what should I do with the times,lenghts and rates?
+        //times = T.times;
+        //lengths = T.lengths;
+        //rates = T.rates;
+    }
     return *this;
   }
 
@@ -138,10 +160,10 @@
   {
     bool ret = n.getNumber() < getNumberOfNodes();
     if(n.isLeaf() == false)
-      {
-	ret = ret && IDnumbersAreSane(*n.getLeftChild()) &&
-	  IDnumbersAreSane(*n.getRightChild());
-      }
+    {
+        ret = ret && IDnumbersAreSane(*n.getLeftChild()) &&
+	    IDnumbersAreSane(*n.getRightChild());
+    }
     return ret;
   }
 
@@ -178,26 +200,26 @@
   Tree::getNode(unsigned no)
   {
     if (no >= all_nodes.size()) 
-      {
-	return NULL;
-      }
+    {
+        return NULL;
+    }
     else
-      {
-	return all_nodes[no];
-      }
+    {
+        return all_nodes[no];
+    }
   }
 
   Node* 
   Tree::getNode(unsigned no) const
   {
     if (no >= all_nodes.size()) 
-      {
-	return NULL;
-      }
+    {
+        return NULL;
+    }
     else
-      {
-	return all_nodes[no];
-      }
+    {
+        return all_nodes[no];
+    }
   }
 
   // Accessing nodes from a name
@@ -206,14 +228,14 @@
   Tree::findNode(const string& name) const
   {
     if(name2node.count(name) > 0)
-      {
+    {
         map<string, Node*>::const_iterator iter = name2node.find(name);
-	return iter->second;
-      }
+        return iter->second;
+    }
     else
-      {
-	return NULL;
-      }
+    {
+        return NULL;
+    }
   }
   // Accessing leaves from a name
   //----------------------------------------------------------------------
@@ -222,14 +244,14 @@
   {
     Node* ret = findNode(name);
     if(ret->isLeaf())
-      {
-	return ret;
-      }
+    {
+        return ret;
+    }
     else
-      {
-	throw AnError("Found interior node when looking for a leaf name ", 
+    {
+        throw AnError("Found interior node when looking for a leaf name ", 
 		      name, 1); 
-      }
+    }
   }
 
   // The main tool for constructing the tree
@@ -244,25 +266,24 @@
     assert(rightChild==NULL || rightChild->getNumber()<all_nodes.size());
     noOfNodes++;
     if (leftChild == NULL && rightChild == NULL)
-      {
-	noOfLeaves++;
-      }
+    {
+        noOfLeaves++;
+    }
 
     Node *v = new Node(node_id, name);
     v->setTree(*this);
     v->setChildren(leftChild, rightChild);
     while(all_nodes.size() <= node_id)
-      {
-	all_nodes.resize(2 * all_nodes.size(), NULL);
-      }
+    {
+        all_nodes.resize(2 * all_nodes.size(), NULL);
+    }
     if(all_nodes[node_id] != NULL)
-      {
-	std::ostringstream id_str;
-	id_str << node_id;
-	throw AnError("There seems to be two nodes with the same id!", 
+    {
+        std::ostringstream id_str;
+        id_str << node_id;
+        throw AnError("There seems to be two nodes with the same id!", 
 		      id_str.str(), 1);
-      }
-
+    }
     all_nodes[node_id] = v;
     name2node.insert(pair<string, Node*>(name, v));
     return v;
@@ -272,20 +293,20 @@
   Tree::clearNodeAttributes()
   {
     if(times)
-      {
-	delete times;
-	times = 0;
-      }
+    {
+        delete times;
+        times = 0;
+    }
     if(rates)  // rates is owned by EdgeRateModel
-      {
-	delete rates;
-	rates = 0;
-      }
+    {
+        delete rates;
+        rates = 0;
+    }
     if(lengths)
-      {
-	delete lengths;
-	lengths = 0;
-      }
+    {
+        delete lengths;
+        lengths = 0;
+    }
     topTime = 0;
   }
 
@@ -309,16 +330,16 @@
     assert(b != NULL);
 
     while (a != b)
-      {
-	if (b->dominates(*a))
-	  {
-	    a = a->getParent();
-	  }
-	else 
-	  {
-	    b = b->getParent();
-	  }
-      }
+    {
+        if (b->dominates(*a))
+        {
+            a = a->getParent();
+        }
+        else 
+        {
+            b = b->getParent();
+        }
+    }
     return a;
   }
 
@@ -331,16 +352,16 @@
     assert(b != NULL);
 
     while (a != b)
-      {
-	if (b->dominates(*a))
-	  {
-	    a = a->getParent();
-	  }
-	else 
-	  {
-	    b = b->getParent();
-	  }
-      }
+    {
+        if (b->dominates(*a))
+        {
+            a = a->getParent();
+        }
+        else 
+        {
+            b = b->getParent();
+        }
+    }
     return a;
   }
   
@@ -379,13 +400,13 @@
   Tree::getEdgeTime(const Node& v) const
   {
     if(v.isRoot())
-      {
-	return topTime;
-      }
+    {
+        return topTime;
+    }
     else
-      {
-	return (*times)[v.getParent()] - (*times)[v];
-      }
+    {
+        return (*times)[v.getParent()] - (*times)[v];
+    }
   }
   
   Real
@@ -393,10 +414,9 @@
   {
     Node *v = getRootNode();
     if (!v)   //assert?
-      {
-	throw AnError("rootToLeafTime: No root node! Not good...", 1);
-      }
-
+    {
+        throw AnError("rootToLeafTime: No root node! Not good...", 1);
+    }
     return v->getNodeTime();
 
   }
@@ -415,13 +435,13 @@
     Node& right = *root.getRightChild();
 
     if(getTime(left) > getTime(right) || getTime(right) > getTime(left))
-      {
-	return false;
-      }
+    {
+        return false;
+    }
     else
-      {
-	return checkTimeSanity(left) && checkTimeSanity(right);
-      }
+    {
+        return checkTimeSanity(left) && checkTimeSanity(right);
+    }
   }
 
 
@@ -453,13 +473,13 @@
   Tree::getRate(const Node& v) const
   {
     if(rates->size() == 1)
-      {
-	return (*rates)[0u];
-      }
+    {
+        return (*rates)[0u];
+    }
     else
-      {
-	return (*rates)[v];
-      }
+    {
+        return (*rates)[v];
+    }
   }
 
   // Sets the divergence time of node v
@@ -475,7 +495,6 @@
   Tree::setTime(const Node& v, Real time) const
   {
     (*times)[v] = time;
-
     assert(v.isLeaf() || (*times)[v] >= (*times)[v.getLeftChild()]);
     assert(v.isLeaf() || (*times)[v] >= (*times)[v.getRightChild()]);
     assert(v.isRoot() || (*times)[v.getParent()] >= (*times)[v]);
@@ -487,16 +506,15 @@
   Tree::setEdgeTime(const Node& v, Real time) const
   {
     if(v.isRoot())
-      {
-	topTime = time;
-      }
+    {
+        topTime = time;
+    }
     else
-      {
-	(*times)[v] = (*times)[v.getParent()] - time;
-
-	assert((*times)[v] > (*times)[v.getLeftChild()]);
-	assert((*times)[v] > (*times)[v.getRightChild()]);
-      }
+    {
+        (*times)[v] = (*times)[v.getParent()] - time;
+        assert((*times)[v] > (*times)[v.getLeftChild()]);
+        assert((*times)[v] > (*times)[v.getRightChild()]);
+    }
   }
 
   // Sets the weight of node v
@@ -505,15 +523,15 @@
   Tree::setLength(const Node& v, Real weight) const
   {
     if(weight < 2 * std::numeric_limits< double >::min())
-      {
-	weight = 2 * std::numeric_limits< double >::min();
-      }
+    {
+        weight = 2 * std::numeric_limits< double >::min();
+    }
     if(v.isRoot() == false && v.getParent()->isRoot())
-      {
-	Node& s = *v.getSibling();
-	weight = (weight + (*lengths)[s])/2;
-	(*lengths)[s] = weight;
-      }
+    {
+        Node& s = *v.getSibling();
+        weight = (weight + (*lengths)[s])/2;
+        (*lengths)[s] = weight;
+    }
     (*lengths)[v] = weight;
   }
 
@@ -523,13 +541,13 @@
   Tree::setRate(const Node& v, Real rate) const
   {
     if(rates->size() == 1)
-      {
-	(*rates)[0u] = rate;
-      }
+    {
+        (*rates)[0u] = rate;
+    }
     else
-      {
-	(*rates)[v] = rate;
-      }
+    {
+        (*rates)[v] = rate;
+    }
   }
 
   // Handle to time, lengths and rates
@@ -553,10 +571,10 @@
   Tree::setTimes(RealVector& v) const
   {
     if(times)
-      {
-	delete times;
-	times = 0;
-      }
+    {
+        delete times;
+        times = 0;
+    }
     times = &v;
   }
 
@@ -564,10 +582,10 @@
   Tree::setRates(RealVector& v) const
   {
     if(rates)
-      {
-	delete rates;
-	rates = 0;
-      }
+    {
+        delete rates;
+        rates = 0;
+    }
     rates = &v;
   }
 
@@ -575,11 +593,10 @@
   Tree::setLengths(RealVector& v) const
   {
     if(lengths)
-      {
-	delete lengths;
-	lengths = 0;
-      }
-
+    {
+        delete lengths;
+        lengths = 0;
+    }
     lengths = &v;
   }
 
@@ -609,18 +626,17 @@
     assert(u->getNumber()<all_nodes.size());
     all_nodes[u->getNumber()] = u;
     if (v->isLeaf())
-      {
-	name2node[u->getName()] = u;
-	return u;
-      }
+    {
+        name2node[u->getName()] = u;
+        return u;
+    }
     else
-      {
-	Node *l = copyAllNodes(v->getLeftChild());
-	Node *r = copyAllNodes(v->getRightChild());
-	u->setChildren(l, r);	// Notice that setChildren changes (or corrects) porder here!
-	return u;
-      }
-
+    {
+        Node *l = copyAllNodes(v->getLeftChild());
+        Node *r = copyAllNodes(v->getRightChild());
+        u->setChildren(l, r);	// Notice that setChildren changes (or corrects) porder here!
+        return u;
+    }
     return NULL;
   }
   // Recursively copy all nodes in a tree. And keep track of names etc while
@@ -633,12 +649,12 @@
     assert(v != NULL);
     string name = v->getName();
     if(name != "")
-      {
-	while(name2node.find(name) != name2node.end())
-	  {
-	    name = name + "a";
-	  }
-      }
+    {
+        while(name2node.find(name) != name2node.end())
+        {
+            name = name + "a";
+        }
+    }
     Node *u = addNode(NULL, NULL, name);
     u->setTree(*this);
 
@@ -646,17 +662,17 @@
     all_nodes[u->getNumber()] = u;
 
     if (v->isLeaf())
-      {
-	name2node[u->getName()] = u;
-	return u;
-      }
+    {
+        name2node[u->getName()] = u;
+        return u;
+    }
     else
-      {
-	Node *l = copySubtree(v->getLeftChild());
-	Node *r = copySubtree(v->getRightChild());
-	u->setChildren(l, r);	// Notice that setChildren changes (or corrects) porder here!
-	return u;
-      }
+    {
+        Node *l = copySubtree(v->getLeftChild());
+        Node *r = copySubtree(v->getRightChild());
+        u->setChildren(l, r);	// Notice that setChildren changes (or corrects) porder here!
+        return u;
+    }
   }
 
 
@@ -666,11 +682,11 @@
   Tree::clearTree()
   {
     if(rootNode != NULL)
-      {
-	rootNode->deleteSubtree();    
-	delete rootNode;
-	rootNode = NULL;
-      }
+    {
+        rootNode->deleteSubtree();    
+        delete rootNode;
+        rootNode = NULL;
+    }
     noOfNodes = noOfLeaves = 0;
     name2node.clear();
     all_nodes.clear();
@@ -682,26 +698,28 @@
   Tree::imbalance(Node *v)
   {
     if (v->isLeaf()) 
-      {
-	return 0;
-      } 
+    {
+        return 0;
+    } 
     else
-      {
-	Node *l = v->getLeftChild();
-	Node *r = v->getRightChild();
-	Real my_imbalance = fabs(l->getNodeTime() + l->getTime() - 
-				 r->getNodeTime()-r->getTime());
-	Real l_imbalance = imbalance(l);
-	Real r_imbalance = imbalance(r);
-	#define MAX(A, B) ((A>B) ? A : B)
-	return MAX(my_imbalance, MAX(l_imbalance, r_imbalance));
-      }
+    {
+        Node *l = v->getLeftChild();
+        Node *r = v->getRightChild();
+        Real my_imbalance = fabs(l->getNodeTime() + l->getTime() - 
+                    r->getNodeTime()-r->getTime());
+        Real l_imbalance = imbalance(l);
+        Real r_imbalance = imbalance(r);
+        #define MAX(A, B) ((A>B) ? A : B)
+        return MAX(my_imbalance, MAX(l_imbalance, r_imbalance));
+    }
   }
 
   unsigned 
   Tree::getHeight(Node* v) const
   {
-    if (v == NULL) return 0;
-    else return 1 + max(getHeight(v->getLeftChild()),
+    if (v == NULL) 
+        return 0;
+    else 
+        return 1 + max(getHeight(v->getLeftChild()),
 			getHeight(v->getRightChild()));
   }

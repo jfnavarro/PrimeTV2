@@ -1,25 +1,25 @@
 /*
-    <one line to give the library's name and an idea of what it does.>
-    Copyright (C) <year>  <name of author>
+    PrimeTV2 : a visualizer for phylogenetic reconciled trees.
+    Copyright (C) 2011  <Jose Fernandez Navarro> <jc.fernandez.navarro@gmail.com>
 
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
 
-    This library is distributed in the hope that it will be useful,
+    This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+    You should have received a copy of the GNU General Public License along
+    with this program; if not, write to the Free Software Foundation, Inc.,
+    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+    
     Author : Jose Fernandez Navarro  -  jc.fernandez.navarro@gmail.com
-*/
-
-/* Reimplementation of the class LambdaMap created by Bengt Sennblad where
- * the Lateral Gene transfer has been added */
+             Lars Arvestad, © the MCMC-club, SBC, all rights reserved
+             Bengt Sennblad, © the MCMC-club, SBC, all rights reserved
+ */
 
 /* LambdaMap implements the map between gene node and species node,
    called \sigma in our JACM paper. For historical reasons, however,
@@ -113,18 +113,16 @@ private:
   {
       try
       {
-	recursiveLambda(G.getRootNode(),S,gs);
+        recursiveLambda(G.getRootNode(),S,gs);
       }
       catch (AnError& err)
       {
-	err.action();
+        err.action();
       }
-    ostringstream oss;
-    oss << "LambdaMap between guest tree" << G.getName() 
-	<< " and host tree " << S.getName();
-    
-    description = oss.str();
-    
+      ostringstream oss;
+      oss << "LambdaMap between guest tree" << G.getName() 
+	  << " and host tree " << S.getName();
+      description = oss.str();
   }
 
   template <class T>   
@@ -149,10 +147,10 @@ private:
   LambdaMapEx<T>::operator=(const LambdaMapEx<T>& l)
   {
     if(&l != this)
-      {
-	NodeVector::operator=(l);
-	description = l.description;
-      }
+    {
+        NodeVector::operator=(l);
+        description = l.description;
+    }
     return *this;
   }
   
@@ -166,16 +164,14 @@ private:
   void LambdaMapEx<T>::update(const TreeExtended& G, const TreeExtended& S, StrStrMap* gs)
   {
     if(gs)
-      {
-	recursiveLambda(G.getRootNode(), S, *gs);
-      }
+    {
+        recursiveLambda(G.getRootNode(), S, *gs);
+    }
     else
-      {
-	recursiveLambda(G.getRootNode(), S);
-
-      }
+    {
+        recursiveLambda(G.getRootNode(), S);
+    }
     return;
-
   }
   
   template <class T>
@@ -191,27 +187,26 @@ private:
         {
             /* Take care of gene tree leaves and continue. */
             if (u->isLeaf())
-                {
-                    pv[u->getNumber()] = S.getNode(sigma[u->getNumber()]);
-                    continue;
-                }
+            {
+                pv[u->getNumber()] = S.getNode(sigma[u->getNumber()]);
+                continue;
+            }
             Node *v = u->getLeftChild();
             Node *w = u->getRightChild();
 
-	    if ((bool)transfer_edges[v->getNumber()])
-                {
-                    pv[u->getNumber()] = pv[w->getNumber()];
-                }
-	    else if ((bool)transfer_edges[w->getNumber()])
-                {
-                    pv[u->getNumber()] = pv[v->getNumber()];
-                }
+            if ((bool)transfer_edges[v->getNumber()])
+            {
+                pv[u->getNumber()] = pv[w->getNumber()];
+            }
+            else if ((bool)transfer_edges[w->getNumber()])
+            {
+                pv[u->getNumber()] = pv[v->getNumber()];
+            }
             else
-                {
-                    pv[u->getNumber()] = S.lca(pv[w->getNumber()],pv[v->getNumber()]);
-                }
+            {
+                pv[u->getNumber()] = S.lca(pv[w->getNumber()],pv[v->getNumber()]);
+            }
         }
-
   }	
   
   template <class T>
@@ -240,9 +235,9 @@ private:
     std::ostringstream oss;
     oss << description << ":\n";
     for(unsigned i = 0; i < pv.size(); i++)
-      {
-	oss << "\tLambda[" << i << "] = " << pv[i]->getNumber() << ";\n";
-      }
+    {
+        oss << "\tLambda[" << i << "] = " << pv[i]->getNumber() << ";\n";
+    }
     return oss.str();
   }
 
@@ -263,7 +258,6 @@ private:
       T *s = S.mostRecentCommonAncestor(ls,rs);
       pv[g->getNumber()] = s;
       return s;
-
     }
   }
 
@@ -293,26 +287,26 @@ private:
     string genename = g->getName();
     const string sp_name = gs.find(genename);
     if (sp_name.empty()) 
-      {
-	throw AnError("Input inconsistency: "
+    {
+        throw AnError("Input inconsistency: "
 		      "Leaf name missing in gene-to-species data.", 
 		      genename, 1);
-      }
+    }
     
     try 
-      {
-	T *s = S.findLeaf(sp_name);
-	pv[g->getNumber()] = s;
-	return s;
-      }
+    {
+        T *s = S.findLeaf(sp_name);
+        pv[g->getNumber()] = s;
+        return s;
+    }
     catch (AnError& e) 
-      {
-	cerr << "An error occured when trying to map genes to species.\n"
-	     << "Please verify that gene and species names are correct\n"
-	     << "and complete!\n\n";
-	e.action();
-	return NULL;
-      }
+    {
+        cerr << "An error occured when trying to map genes to species.\n"
+            << "Please verify that gene and species names are correct\n"
+            << "and complete!\n\n";
+        e.action();
+        return NULL;
+    }
   }
   
   template <class T>
@@ -321,7 +315,7 @@ private:
      for (unsigned i = 0; i < pv.size(); i++)
      {
        if(pv[i]->isRoot())
-	 return true;
+           return true;
      }
      return false;
   }

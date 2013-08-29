@@ -1,23 +1,24 @@
 /*
-    <one line to give the library's name and an idea of what it does.>
-    Copyright (C) <year>  <name of author>
+    PrimeTV2 : a visualizer for phylogenetic reconciled trees.
+    Copyright (C) 2011  <Jose Fernandez Navarro> <jc.fernandez.navarro@gmail.com>
 
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
 
-    This library is distributed in the hope that it will be useful,
+    This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+    You should have received a copy of the GNU General Public License along
+    with this program; if not, write to the Free Software Foundation, Inc.,
+    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+    
     Author : Jose Fernandez Navarro  -  jc.fernandez.navarro@gmail.com
-
-*/
+             Lars Arvestad, © the MCMC-club, SBC, all rights reserved
+ */
 
 #ifndef GAMMAMAPEX_H
 #define GAMMAMAPEX_H
@@ -30,8 +31,6 @@
 
 using namespace std;
 
-/* This class is an extension and modification of the original GammaMap class
-created by Lars Arvestad */
 /* Implement the map gamma : species node --> gene nodes */
 
 template <class T>
@@ -204,16 +203,15 @@ private:
   GammaMapEx<T>::readGamma(T* sn, vector<SetOfNodesEx<T> >& AC_info)
   {
     if(sn->isLeaf() == false) 
-      {
-	readGamma(sn->getLeftChild(), AC_info);
-	readGamma(sn->getRightChild(), AC_info);
-      }
+    {
+        readGamma(sn->getLeftChild(), AC_info);
+        readGamma(sn->getRightChild(), AC_info);
+    }
     SetOfNodesEx<T> son = AC_info[sn->getNumber()];
-
     for (unsigned j = 0; j < son.size(); j++)
-      {
-	addToSet(sn, *son[j]);
-      }
+    {
+        addToSet(sn, *son[j]);
+    }
     return;
   }
   
@@ -222,12 +220,12 @@ private:
   {
       if (this != &gm)
       {
- 	Gtree = gm.Gtree;
- 	Stree = gm.Stree;
-	lambdaex = gm.lambdaex;
-	gamma = gm.gamma;
-	chainsOnNode = gm.chainsOnNode;
-	transfer_edges = gm.transfer_edges;
+        Gtree = gm.Gtree;
+        Stree = gm.Stree;
+        lambdaex = gm.lambdaex;
+        gamma = gm.gamma;
+        chainsOnNode = gm.chainsOnNode;
+        transfer_edges = gm.transfer_edges;
       }
     return *this;
 
@@ -240,56 +238,56 @@ private:
     T* sn = getLowestGammaPath(*gn); 
 
     if(gn->isLeaf()) 
-      {
-	// Lowest antichain of a leaf in G should always be a leaf in S
-	if(sn == 0)
-	  {
-	    ostringstream oss;
-	    oss << "Reconciliation error:\nGuest tree leaf '" 
-		<< gn->getNumber() 
-		<< "' with label '" 
-		<< gn->getName()
-		<< "' is not mapped to a species node.";
-	    throw AnError(oss.str(), 1);
-	  }
-	if(!sn->isLeaf()) 
-	  {
-	    ostringstream oss;
-	    oss << "Reconciliation error:\nGuest tree leaf '" 
-		<< gn->getNumber() 
-		<< "' with label '" 
-		<< gn->getName()
-		<< "' is not mapped to a species tree leaf.\n"
-		<< "The current mapping is to '" 
-		<< sn 
-		<< "', curiously!\n";
-	    throw AnError(oss.str(), 1);
-	  }
+    {
+        // Lowest antichain of a leaf in G should always be a leaf in S
+        if(sn == 0)
+        {
+            ostringstream oss;
+            oss << "Reconciliation error:\nGuest tree leaf '" 
+            << gn->getNumber() 
+            << "' with label '" 
+            << gn->getName()
+            << "' is not mapped to a species node.";
+            throw AnError(oss.str(), 1);
+        }
+        if(!sn->isLeaf()) 
+        {
+            ostringstream oss;
+            oss << "Reconciliation error:\nGuest tree leaf '" 
+            << gn->getNumber() 
+            << "' with label '" 
+            << gn->getName()
+            << "' is not mapped to a species tree leaf.\n"
+            << "The current mapping is to '" 
+            << sn 
+            << "', curiously!\n";
+            throw AnError(oss.str(), 1);
+        }
       }
     else
-      {
-	// pass recursion on
-	T* gl = gn->getLeftChild();
-	T* gr = gn->getRightChild();
-	T* sl = checkGamma(gl);
-	T* sr = checkGamma(gr);
+    {
+        // pass recursion on
+        T* gl = gn->getLeftChild();
+        T* gr = gn->getRightChild();
+        T* sl = checkGamma(gl);
+        T* sr = checkGamma(gr);
 
-	if(sl == sr) // i.e., gn is a duplication
-	  {
-	      T *temp = checkGammaForDuplication(gn, sn, sl, sr);
-	      sn = temp;
-	  } 
-	  
-	else 
-	  {
-	    T *temp = checkGammaForSpeciation(gn, sn, sl, sr);
-	    sn = temp;
-	  }
-      }
-      
-    T *temp = checkGammaMembership(gn, sn);
-    sn = temp;
-    return sn;
+        if(sl == sr) // i.e., gn is a duplication
+        {
+            T *temp = checkGammaForDuplication(gn, sn, sl, sr);
+            sn = temp;
+        } 
+        
+        else 
+        {
+            T *temp = checkGammaForSpeciation(gn, sn, sl, sr);
+            sn = temp;
+        }
+     }
+        
+     T *temp = checkGammaMembership(gn, sn);
+     sn = temp;
+     return sn;
   }
   
   
@@ -305,7 +303,6 @@ private:
     {
       bool right = transfer_edges[u.getRightChild()->getNumber()];
       bool left = transfer_edges[u.getLeftChild()->getNumber()];
-
       return (bool)(right || left);
     }
   }
@@ -342,9 +339,9 @@ private:
     // Now make sure that the root of the species tree got mapped.
     T *sroot = Stree->getRootNode();
     if (getSize(sroot) == 0)
-      {
-	assignGammaBound(v, sroot);
-      }
+    {
+        assignGammaBound(v, sroot);
+    }
   }
       
   template <class T>
@@ -354,37 +351,35 @@ private:
     assert(v != NULL);
 
     if (v->isLeaf())
-      {
-	addToSet(lambdaex[v], *v);
-        
-      }
+    {
+        addToSet(lambdaex[v], *v);    
+    }
     else
-      {
-	T *left = v->getLeftChild();
-	T *right = v->getRightChild();
+    {
+        T *left = v->getLeftChild();
+        T *right = v->getRightChild();
 
-	computeGammaBoundBelow(left);
-	computeGammaBoundBelow(right);
+        computeGammaBoundBelow(left);
+        computeGammaBoundBelow(right);
 
-	T *x = lambdaex[v];
-	T *xl = lambdaex[left];
-	T *xr = lambdaex[right];
-	if (x != xl && x != xr)
-	  {
-	    addToSet(x, *v);
-	    assignGammaBound(left, x->getDominatingChild(xl));
-	    assignGammaBound(right,  x->getDominatingChild(xr));
-	  }
-	else if (x != xl) //lateral transfer in xl
-	  {
-	      assignGammaBound(left, x); // Include x!
-	  }
-	else if (x != xr) //lateral transfer in xr
-	  {
-	      assignGammaBound(right, x); // Include x!
-	  }
-	  
-      }
+        T *x = lambdaex[v];
+        T *xl = lambdaex[left];
+        T *xr = lambdaex[right];
+        if (x != xl && x != xr)
+        {
+            addToSet(x, *v);
+            assignGammaBound(left, x->getDominatingChild(xl));
+            assignGammaBound(right,  x->getDominatingChild(xr));
+        }
+        else if (x != xl) //lateral transfer in xl
+        {
+            assignGammaBound(left, x); // Include x!
+        }
+        else if (x != xr) //lateral transfer in xr
+        {
+            assignGammaBound(right, x); // Include x!
+        }  
+    }
   }
   
   template <class T>
@@ -410,13 +405,13 @@ private:
   {
     const deque<T*>& anti_chains = chainsOnNode[u.getNumber()];
     if (anti_chains.empty())
-      {
-	return NULL;
-      }
+    {
+        return NULL;
+    }
     else
-      {
-	return anti_chains.back();
-      }
+    {
+        return anti_chains.back();
+    }
   }
 
   template <class T> T* 
@@ -424,13 +419,13 @@ private:
   {
     const deque<T*> &anti_chains = chainsOnNode[u.getNumber()];
     if (anti_chains.empty())
-      {
-	return NULL;
-      }
+    {
+        return NULL;
+    }
     else
-      {
-	return anti_chains.front();
-      }
+    {
+        return anti_chains.front();
+    }
   }
   
   template <class T>  unsigned
@@ -449,41 +444,41 @@ private:
   GammaMapEx<T>::checkGammaForDuplication(T *gn, T *sn, T *sl, T *sr)
   {
     while(sn == sl) 
-      {
-	removeFromSet(sn, gn);
-	sn = getLowestGammaPath(*gn); 
-      }
+    {
+        removeFromSet(sn, gn);
+        sn = getLowestGammaPath(*gn); 
+    }
     
     if(sn != 0) 
-      {
-	if(*sn < *sl)
-	  {
-	    ostringstream oss;
-	    oss << "Reconciliation error:\nThe host nodes that the "
-		<< "children of guest node '"
-		<< gn->getNumber() 
-		<< "' are ancestral\nto the host node that guest node '"
-		<< gn->getNumber()
-		<< "' itself is mapped to\n";
-	    throw AnError(oss.str(), 1);
-	  }
-	else if(sn != sl->getParent()) 
-	  {
-	    ostringstream oss;
-	    oss << "Reconcilation error:\nThe subtree rooted at guest node '"
-		<< gn->getNumber() 
-		<< "' is missing from gamma("
-		<< sl->getParent()->getNumber()
-		<< ")\n";
-	    throw AnError(oss.str(), 1);
-	  }
+    {
+        if(*sn < *sl)
+        {
+            ostringstream oss;
+            oss << "Reconciliation error:\nThe host nodes that the "
+            << "children of guest node '"
+            << gn->getNumber() 
+            << "' are ancestral\nto the host node that guest node '"
+            << gn->getNumber()
+            << "' itself is mapped to\n";
+            throw AnError(oss.str(), 1);
+        }
+        else if(sn != sl->getParent()) 
+        {
+            ostringstream oss;
+            oss << "Reconcilation error:\nThe subtree rooted at guest node '"
+            << gn->getNumber() 
+            << "' is missing from gamma("
+            << sl->getParent()->getNumber()
+            << ")\n";
+            throw AnError(oss.str(), 1);
+        }
 
-	return sn;
-      }
+        return sn;
+    }
     else 
-      {
-	return sl;
-      }
+    {
+        return sl;
+    }
   }
   
 
@@ -492,35 +487,34 @@ private:
   {
     T* sm = Stree->lca(sl, sr); // "lambda"
     while(sn == sl) 
-      {
-	removeFromSet(sn, gn);
-	sn = getLowestGammaPath(*gn); 
-      }
+    {
+        removeFromSet(sn, gn);
+        sn = getLowestGammaPath(*gn); 
+    }
+    
     if(sn == 0 || sn != sm) 
-      {
-	ostringstream oss;
-	oss << "Reconcilation error:\nGuest node '"
-	    << gn->getNumber() 
-	    << "' should be a speciation and map to host node '"
-	    << sm->getNumber() << "'\n";
-	throw AnError(oss.str(), 1);
-      }
-		
+    {
+        ostringstream oss;
+        oss << "Reconcilation error:\nGuest node '"
+            << gn->getNumber() 
+            << "' should be a speciation and map to host node '"
+            << sm->getNumber() << "'\n";
+        throw AnError(oss.str(), 1);
+    }	
     else if(sl->getParent() != sm || sr->getParent() != sm)
-      {
-	Node* gl = gn->getLeftChild();
-	Node* gr = gn->getRightChild();
-	ostringstream oss;
-	oss << "Reconciliation error:\nSubtrees rooted at guest nodes "
-	    << gl->getNumber()
-	    << " and/or "  
-	    << gr->getNumber()
-	    << " must map to\na child of host node "
-	    << sm->getNumber()
-	    << ", but not to any of their ancestors\n";
-	throw AnError(oss.str(), 1);		
-      }
-
+    {
+        Node* gl = gn->getLeftChild();
+        Node* gr = gn->getRightChild();
+        ostringstream oss;
+        oss << "Reconciliation error:\nSubtrees rooted at guest nodes "
+            << gl->getNumber()
+            << " and/or "  
+            << gr->getNumber()
+            << " must map to\na child of host node "
+            << sm->getNumber()
+            << ", but not to any of their ancestors\n";
+        throw AnError(oss.str(), 1);		
+    }
     return sn;
   }
 
@@ -555,12 +549,12 @@ private:
     T *y = lambdaex[v]->getParent();
 
     while (x->dominates(*y))	
-      {
-	addToSet(y, *v);
-	y = y->getParent();
-	if (!y)     
-	  break;    
-      }
+    {
+        addToSet(y, *v);
+        y = y->getParent();
+        if (!y)     
+        break;    
+    }
   }
   
   template <class T>  void
@@ -568,18 +562,18 @@ private:
   {
     assert(x != NULL);
     if(v == 0) 
-      {
-	return;
-      }
+    {
+        return;
+    }
 
     // Find iterator pos of x on v and remove x
     deque<T*>& dref = chainsOnNode[v->getNumber()];
     typename deque<T*>::iterator i = find(dref.begin(), dref.end(), x);
     if(i != dref.end())
-      {
-	dref.erase(i);
-	gamma[x->getNumber()].erase(v); 
-      }
+    {
+        dref.erase(i);
+        gamma[x->getNumber()].erase(v); 
+    }
     return;			       
   }
   
@@ -587,10 +581,12 @@ private:
   bool
   GammaMapEx<T>::valid() const
   {
-    try {
+    try 
+    {
       valid(Stree->getRootNode());
     } 
-    catch (int i) {
+    catch (int i) 
+    {
       return false;
     }
     return true;
@@ -600,23 +596,35 @@ private:
   bool
   GammaMapEx<T>::valid(T *x) const
   {
-    if (x->isLeaf()) {
-      if (getSize(x) > 0) {
-	return true;
-      } else {
-	return false;
+    if (x->isLeaf()) 
+    {
+      if (getSize(x) > 0) 
+      {
+        return true;
+      } 
+      else 
+      {
+        return false;
       }
-    } else {
+    } 
+    else 
+    {
       bool l = valid(x->getLeftChild());
       bool r = valid(x->getRightChild());
-      if (l || r) {
-	if (getSize(x) == 0) {
-	  throw 1;
-	} else {
-	  return true;
-	}
-      } else {
-	return false;
+      if (l || r)
+      {
+        if (getSize(x) == 0) 
+        {
+            throw 1;
+        } 
+        else 
+        {
+            return true;
+        }
+      } 
+      else 
+      {
+        return false;
       }
     }
   }
@@ -626,23 +634,33 @@ private:
   GammaMapEx<T>::validLGT() const
   {
     if(!transfer_edges.any())
+    {
       return this->valid();
+    }
     else
     {
       for( Node *n = Gtree->getPostOderBegin(); n != NULL; n = Gtree->postorder_next(n))
       {
-	if(transfer_edges[n->getNumber()])
-	{
-	   Node *destiny = lambdaex[n];
-	   Node *origin = lambdaex[n->getParent()->getLeftChild()];
-	   if(origin == destiny)
-	      origin = lambdaex[n->getParent()->getRightChild()];
-	   if(destiny->getNodeTime() > origin->getParent()->getNodeTime() || destiny->isRoot() 
-	     || origin->isRoot() || n->getParent()->isRoot())
-	      return false;
-	}
-	else if(n->isRoot() && lambdaex[n] != Stree->getRootNode())
-	  return false;
+        if(transfer_edges[n->getNumber()])
+        {
+            Node *destiny = lambdaex[n];
+            Node *origin = lambdaex[n->getParent()->getLeftChild()];
+            if(origin == destiny)
+            {
+                origin = lambdaex[n->getParent()->getRightChild()];
+            }
+            if(destiny->getNodeTime() > origin->getParent()->getNodeTime() 
+                || destiny->isRoot() 
+                || origin->isRoot() 
+                || n->getParent()->isRoot())
+            {
+                return false;
+            }
+        }
+        else if(n->isRoot() && lambdaex[n] != Stree->getRootNode())
+        {
+            return false;
+        }
       }
       return true && this->valid();
     }
@@ -661,14 +679,20 @@ private:
   unsigned 
   GammaMapEx<T>::sizeOfWidestSpeciesLeaf(T *x, unsigned current_max) const
   {
-    if (x->isLeaf()) {
+    if (x->isLeaf()) 
+    {
       unsigned w = getSize(x);
-      if (w > current_max) {
-	return w;
-      } else {
-	return current_max;
+      if (w > current_max) 
+      {
+        return w;
+      } 
+      else 
+      {
+        return current_max;
       }
-    } else {
+    } 
+    else 
+    {
       current_max = sizeOfWidestSpeciesLeaf(x->getLeftChild(), current_max);
       current_max = sizeOfWidestSpeciesLeaf(x->getRightChild(), current_max);
       return current_max;
@@ -688,48 +712,49 @@ private:
   {
 
     if (v->isLeaf() || x->isLeaf())
-      {
+    {
 	// Done
-      }
+    }
     else
-      {
-	T *vl = v->getLeftChild();
-	T *vr = v->getRightChild();
+    {
+        T *vl = v->getLeftChild();
+        T *vr = v->getRightChild();
 
-	T* xl = x->getLeftChild();
-	T* xr = x->getRightChild();
+        T* xl = x->getLeftChild();
+        T* xr = x->getRightChild();
 
-	T* vll = lambdaex[vl];
-	T* vrl = lambdaex[vr];
+        T* vll = lambdaex[vl];
+        T* vrl = lambdaex[vr];
 
-	if (vll != lambdaex[v]
-	    && vrl != lambdaex[v])
-	  {
-	    if (vll == xr && vrl == xl) {
-	      v->setChildren(vr, vl);
-	    }
-	  }
-	else if (vll != lambdaex[v])
-	  {
-	    T *rep = x->getDominatingChild(vll);
-	    
-	    if (rep == xr)
-	      {
-		v->setChildren(vr, vl);
-	      }
-	  }
-	else if (vrl != lambdaex[v])
-	  {
-	    T *rep = x->getDominatingChild(vrl);
-	    
-	    if (rep == xl)
-	      {
-		v->setChildren(vr, vl);
-	      }
-	  }
-	twistAndTurn(vl, vll);
-	twistAndTurn(vr, vrl);
-      }
+        if (vll != lambdaex[v]
+            && vrl != lambdaex[v])
+        {
+            if (vll == xr && vrl == xl) 
+            {
+                v->setChildren(vr, vl);
+            }
+        }
+        else if (vll != lambdaex[v])
+        {
+            T *rep = x->getDominatingChild(vll);
+            
+            if (rep == xr)
+            {
+                v->setChildren(vr, vl);
+            }
+        }
+        else if (vrl != lambdaex[v])
+        {
+            T *rep = x->getDominatingChild(vrl);
+            
+            if (rep == xl)
+            {
+                v->setChildren(vr, vl);
+            }
+        }
+        twistAndTurn(vl, vll);
+        twistAndTurn(vr, vrl);
+    }
   }
   
   template <class T>
@@ -737,13 +762,13 @@ private:
   GammaMapEx<T>::isSpeciation(T& u) const
   {
     if (lambdaex[u] == getLowestGammaPath(u))
-      {
-	return true;
-      }
+    {
+        return true;
+    }
     else
-      {
-	return false;
-      }
+    {
+        return false;
+    }
   }
 
   template <class T>
@@ -751,40 +776,41 @@ private:
   GammaMapEx<T>::print(const bool& full) const
   {
     if(gamma.empty())
-      {
-	return "no gamma defined\n";
-      }
+    {
+        return "no gamma defined\n";
+    }
     ostringstream oss;
     
     SetOfNodesEx<T> gammaset;
+    
     for (unsigned i = 0; i < gamma.size(); i++) 
-      {
-	if(full)
-	  {
-	    gammaset = getFullGamma(*Stree->getNode(i));
-	  }
-	else
-	  {
-	    gammaset = gamma[i];
-	  }
-	if (!gammaset.empty())
-	  {
-	    oss << i << "\t";  
-	    for (unsigned j = 0; j < gammaset.size(); j++) 
-	      {;
-		if(j != 0)
-		  {	
-		    oss << ", " ;
-		  }
-		oss << gammaset[j]->getNumber(); 
-	      }
-	    oss << "\n";
-	  }
-	else
-	  {
-	    oss << i << "\n"; //"\tnot mapped\n";
-	  }
-      }
+    {
+        if(full)
+	    {
+            gammaset = getFullGamma(*Stree->getNode(i));
+	    }
+        else
+	    {
+            gammaset = gamma[i];
+	    }
+        if (!gammaset.empty())
+	    {
+            oss << i << "\t";  
+            for (unsigned j = 0; j < gammaset.size(); j++) 
+	        {
+              if(j != 0)
+              {
+                  oss << ", " ;
+              } 
+              oss << gammaset[j]->getNumber(); 
+	        }
+	       oss << "\n";
+	    }
+        else
+	    {
+            oss << i << "\n"; //"\tnot mapped\n";
+        }
+    }
     return oss.str();
   }
   
@@ -796,36 +822,36 @@ private:
     SetOfNodesEx<T> full(reduced);
     T* u;
     if(x.isRoot())  // Then include subtree induced by reduced
-      {
-	for(unsigned i = 0; i < reduced.size(); i++) 
-	  {
-	    u = reduced[i];
+    {
+        for(unsigned i = 0; i < reduced.size(); i++) 
+        {
+            u = reduced[i];
 
-	    while(u->isRoot() == false)
-	      {
-		u = u->getParent();
-		full.insert(u);
-	      }
- 	  }
-      }
+            while(u->isRoot() == false)
+            {
+                u = u->getParent();
+                full.insert(u);
+            }
+        }
+    }
     else            
-      {
-	T* p_x = x.getParent();
-	
-	for(unsigned i = 0; i < reduced.size(); i++)
-	  {
-	    u = reduced[i]; // get the current node
+    {
+        T* p_x = x.getParent();
+        
+        for(unsigned i = 0; i < reduced.size(); i++)
+        {
+            u = reduced[i]; // get the current node
 
-	    while(isInGamma(u, p_x) == false) // else we've reached top of slice
-	      {
-		u = u->getParent();
-		if(x.dominates(*lambdaex[u])) // Don't include speciations
-		  {
-		    full.insert(u);
-		  }
-	      }	    
-	  }
-      }
+            while(isInGamma(u, p_x) == false) // else we've reached top of slice
+            {
+                u = u->getParent();
+                if(x.dominates(*lambdaex[u])) // Don't include speciations
+                {
+                    full.insert(u);
+                }
+            }	        
+        }
+    }
     return full;
   }
   

@@ -40,5 +40,3 @@ The UI also allows to save and load configuration, save the tree in a file (diff
 show/hide the parameters panel, modify the parameters in "in vivo", and load the trees to generate the drawing (generate tree 
 button).
 
-There are some compatibility issues with Qt4 and x11 that affects the user interface.
-This issues will be solved as soon as Qt releases Qt5.

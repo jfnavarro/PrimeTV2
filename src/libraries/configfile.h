@@ -1,6 +1,6 @@
 /*
-    <one line to give the program's name and a brief idea of what it does.>
-    Copyright (C) 2011  <copyright holder> <email>
+    PrimeTV2 : a visualizer for phylogenetic reconciled trees.
+    Copyright (C) 2011  <Jose Fernandez Navarro> <jc.fernandez.navarro@gmail.com>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,8 +17,7 @@
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
     
     Author : Jose Fernandez Navarro  -  jc.fernandez.navarro@gmail.com
-    
-*/
+ */
 
 
 #ifndef CONFIGFILE_H

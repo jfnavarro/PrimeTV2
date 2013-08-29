@@ -1,3 +1,26 @@
+/*
+    PrimeTV2 : a visualizer for phylogenetic reconciled trees.
+    Copyright (C) 2011  <Jose Fernandez Navarro> <jc.fernandez.navarro@gmail.com>
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License along
+    with this program; if not, write to the Free Software Foundation, Inc.,
+    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+    
+    Author : Jose Fernandez Navarro  -  jc.fernandez.navarro@gmail.com
+             Lars Arvestad, © the MCMC-club, SBC, all rights reserved
+             Bengt Sennblad, © the MCMC-club, SBC, all rights reserved
+ */
+
 #include "TreeIO.hh"
 #include "AnError.hh"
 #include "NHXannotation.h"
@@ -12,8 +35,6 @@
 #include <map>
 #include <cmath>
 #include <algorithm>
-
-// Author: Lars Arvestad, Bengt Sennblad, © the MCMC-club, SBC, all rights reserved
 
  using namespace std;
   
@@ -53,13 +74,13 @@
   TreeIO::fromFile(const std::string &f)
   {
     if (f=="") 
-      {
-	return TreeIO();
-      }
+    {
+        return TreeIO();
+    }
     else 
-      {
-	return TreeIO(readFromFile, f);
-      }
+    {
+        return TreeIO(readFromFile, f);
+    }
   }
 
 
@@ -108,32 +129,32 @@
 
     StrStrMap gene2species;
     if(is.peek() == '#') // gs may start with a '#'
-      {
-	char dummy[LINELENGTH];
-	is.getline(dummy, LINELENGTH);// >> dummy;
-      }
+    {
+        char dummy[LINELENGTH];
+        is.getline(dummy, LINELENGTH);// >> dummy;
+    }
+    
     while (is.good()) 
-      {
-	std::string gene;
-	std::string species;
-	if (is >> gene)
-	  {
-	    if (is >> species)
-	      {
-		gene2species.insert(gene, species);
-	      }
-	    else
-	      {
-		std::ostringstream line_str;
-		line_str << "Line " << lineno;
-		is.close();
-		throw AnError("The gene-to-species mapping seems to be "
-			      "badly formatted. ", line_str.str());
-	      }
-	  }
-	lineno++;
-      }
-
+    {
+        std::string gene;
+        std::string species;
+        if (is >> gene)
+        {
+            if (is >> species)
+            {
+                gene2species.insert(gene, species);
+            }
+            else
+            {
+                std::ostringstream line_str;
+                line_str << "Line " << lineno;
+                is.close();
+                throw AnError("The gene-to-species mapping seems to be "
+                        "badly formatted. ", line_str.str());
+            }
+        }
+        lineno++;
+    }
     is.close();
     return gene2species;
   }
@@ -146,46 +167,46 @@
     // This yields warning that line is unused TODO: remove /bens
     //     char line[LINELENGTH];
     int lineno = 1;
-
     std::vector<StrStrMap> gene2speciesVec;
     StrStrMap gene2species;
     std::string gsmark;
     is >> gsmark;
     if(gsmark != "#")
-      {
-	std::cerr << "error in gs vector, every gs must be preceeded by '#' line\n";
-	exit(1);
-      }
+    {
+        std::cerr << "error in gs vector, every gs must be preceeded by '#' line\n";
+        exit(1);
+    }
+    
     while (is.good()) 
-      {
-	char dummy[LINELENGTH];
-	is.getline(dummy, LINELENGTH);
-	std::string gene;
-	std::string species;
-	if (is >> gene)
-	  {
-	    if(gene == "#")
-	      {
-		gene2speciesVec.push_back(gene2species);
-		gene2species.clearMap();
-	      }
-	    else
-	      {
-		if (is >> species)
-		  {
-		    gene2species.insert(gene, species);
-		  }
-		else
-		  {
-		    std::ostringstream line_str;
-		    line_str << "(Line " << lineno << ")";
-		    throw AnError("The gene-to-species mapping seems to be "
-				  "badly formatted. ", line_str.str());
-		  }
-	      }
-	  }
-	
-	lineno++;
+    {
+        char dummy[LINELENGTH];
+        is.getline(dummy, LINELENGTH);
+        std::string gene;
+        std::string species;
+        if (is >> gene)
+        {
+            if(gene == "#")
+            {
+                gene2speciesVec.push_back(gene2species);
+                gene2species.clearMap();
+            }
+            else
+            {
+                if (is >> species)
+                {
+                    gene2species.insert(gene, species);
+                }
+                else
+                {
+                    std::ostringstream line_str;
+                    line_str << "(Line " << lineno << ")";
+                    throw AnError("The gene-to-species mapping seems to be "
+                        "badly formatted. ", line_str.str());
+                }
+            }
+        }
+        
+        lineno++;
       }
     gene2speciesVec.push_back(gene2species);
     
@@ -219,22 +240,22 @@
     struct NHXtree* t = readTree();
     struct NHXtree* ct = t;
     if (ct == 0) 
-      {
-	throw AnError("The input tree is NULL!",
+    {
+        throw AnError("The input tree is NULL!",
 		      "TreeIO::checkTagsForTree()",
 		      1);
-      }
+    }
+    
     while(ct)
-      {
-	if(TreeIO::recursivelyCheckTags(ct->root, traits) == false)
-	  {
-	    throw AnError("The input tree was empty!",
-			  "TreeIO::checkTagsForTree()",
-			  1);
-	  }
-	ct= ct->next;
+    {
+        if(TreeIO::recursivelyCheckTags(ct->root, traits) == false)
+        {
+            throw AnError("The input tree was empty!",
+                "TreeIO::checkTagsForTree()",
+                1);
+        }
+        ct= ct->next;
       }
-
     return t;
   }
 
@@ -247,48 +268,47 @@
     Real edge_time = 0.0;
 
     if(traits.hasET()) // Use edge time info from file
-      {
-	if(traits.hasNWisET())
-	  {
-	    if(struct NHXannotation* a = find_annotation(v, "NW"))
-	      {
-		edge_time = a->arg.t;
-	      }
-	    else if (isRoot(v)) 
-	      {
-		edge_time = 0.0;
-	      } 
-	    else
-	      {
-		throw AnError("Edge without edge time found in tree.", 
-			      1);
-	      }
-	  }
-	else if(struct NHXannotation *a = find_annotation(v, "ET"))
-	  {
-	    edge_time = a->arg.t;
-	  }  
-	else if (isRoot(v)) 
-	  {
-	    edge_time = 0.0;
-	  } 
-	else
-	  {
-	    throw AnError("Edge without edge time found in tree.", 1);
-	  }
-	// Check for sanity
-	if(edge_time <= 0)
-	  {
-	    if(edge_time < 0)
-	      {
-		throw AnError("Tree contains an edge with negative time",1);
-	      }
-	    else if(isHY == false && !isRoot(v)) 
-	      {
-		throw AnError("Tree contains an edge with zero time.", 1);
-	      }
-	  }
-      }
+    {
+        if(traits.hasNWisET())
+        {
+            if(struct NHXannotation* a = find_annotation(v, "NW"))
+            {
+                edge_time = a->arg.t;
+            }
+            else if (isRoot(v)) 
+            {
+                edge_time = 0.0;
+            } 
+            else
+            {
+                throw AnError("Edge without edge time found in tree.", 1);
+            }
+        }
+        else if(struct NHXannotation *a = find_annotation(v, "ET"))
+        {
+            edge_time = a->arg.t;
+        }  
+        else if (isRoot(v)) 
+        {
+            edge_time = 0.0;
+        } 
+        else
+        {
+            throw AnError("Edge without edge time found in tree.", 1);
+        }
+        // Check for sanity
+        if(edge_time <= 0)
+        {
+            if(edge_time < 0)
+            {
+                throw AnError("Tree contains an edge with negative time",1);
+            }
+            else if(isHY == false && !isRoot(v)) 
+            {
+                throw AnError("Tree contains an edge with zero time.", 1);
+            }
+        }
+   }
     
     return edge_time;
   }
@@ -299,18 +319,17 @@
   {
     std::string name = "";		// Default name is empty
     if (v->name)		// Leaf names are always inserted into 'name'
-      {
-	name = v->name;
-      }
+    {
+        name = v->name;
+    }
     else			// Inner nodes might have a name. Go check
-      {
-	struct NHXannotation *a = find_annotation(v, "S");
-	if (a)			// Great, we found it
-	  {
-	    name = a->arg.str;	// Pick string from union 'arg'
-	  }
-      }
-    
+    {
+        struct NHXannotation *a = find_annotation(v, "S");
+        if (a)			// Great, we found it
+	    {
+            name = a->arg.str;	// Pick string from union 'arg'
+	    }
+    }
     return name;
   }
 
@@ -318,25 +337,25 @@
   TreeIO::handleBranchLengths(Node *node, struct NHXnode *v, bool NWIsET)
   {
     if(struct NHXannotation *a = find_annotation(v, "BL")) 
-      {
-	node->setLength(a->arg.t);
-      }
+    {
+        node->setLength(a->arg.t);
+    }
     else if(NWIsET)
-      {
-	throw AnError("TreeIO::extendBeepTree(...):\n"
+    {
+        throw AnError("TreeIO::extendBeepTree(...):\n"
 		      "No branch length info found either in 'BL' and 'NW' is used for 'ET'",
 		      234);
-      }
+    }
     else if(struct NHXannotation *a = find_annotation(v, "NW"))  
-      {           // use info in 'NW'
-	node->setLength(a->arg.t);
-      }
+    {           // use info in 'NW'
+        node->setLength(a->arg.t);
+    }
     else if (v->parent)		// If not root...
-      {
-	throw AnError("TreeIO::extendBeepTree(...):\n"
+    {
+        throw AnError("TreeIO::extendBeepTree(...):\n"
 		      "No branch length info found either in 'BL' or 'NW'",
 		      234);
-      }
+    }
   }
 
   // Recursively checks what tags are given for all nodes in subtree T_v
@@ -374,53 +393,53 @@
     // Determine if NW is given
     //-------------------------------------------------------------------
     if(!find_annotation(&v, "NW") && !isRoot(&v))
-      {
-	traits.setNW(false);
-      }
+    {
+        traits.setNW(false);
+    }
     
     // Determine if ET is given
     //-------------------------------------------------------------------
     if(!find_annotation(&v, "ET") && !isRoot(&v))
-      {
-	traits.setET(false);
-      }
+    {
+        traits.setET(false);
+    }
     
     // Check if NT is given
     //-------------------------------------------------------------------
     if(!find_annotation(&v, "NT") && !isLeaf(&v))
-      {
-	traits.setNT(false);
-      }
+    {
+        traits.setNT(false);
+    }
     
     // Check if BL is given
     //-------------------------------------------------------------------
     if(!find_annotation(&v, "BL") && !isRoot(&v)) 
-      {
-	traits.setBL(false);
-      }
+    {
+        traits.setBL(false);
+    }
     
     // Check if AC is given. 
     //! \todo{The AC check behaves conversely from other checks. Any presence of 
     //! AC makes the hasAC argument true.}
     //-------------------------------------------------------------------
     if(find_annotation(&v, "AC"))
-      {
-	traits.setAC(true);
-      }
+    {
+        traits.setAC(true);
+    }
     
     // Check if GS is given for leaves.
     //-------------------------------------------------------------------
     if (v.left == 0 && v.right == 0 && speciesName(&v) == 0) 
-      {
-	traits.setGS(false);
-      }
+    {
+        traits.setGS(false);
+    }
 
     // Check if there are hybrid annotations
     if(find_annotation(&v, "HY") || find_annotation(&v, "EX") || 
        find_annotation(&v, "OP"))
-      {
-	traits.setHY(true);
-      }
+    {
+        traits.setHY(true);
+    }
   }
 
 
@@ -430,20 +449,20 @@
   TreeIO::readTree()
   {
     if (source == readFromStdin)      
-      {
-	return read_tree(NULL);
-      }
+    {
+        return read_tree(NULL);
+    }
     else if (source == readFromFile)
-      {
-	return read_tree(stringThatWasPreviouslyNamedS.c_str());
-      }
+    {
+        return read_tree(stringThatWasPreviouslyNamedS.c_str());
+    }
     else if (source == readFromString)
-      {
-	return read_tree_string(stringThatWasPreviouslyNamedS.c_str());
-      }
+    {
+        return read_tree_string(stringThatWasPreviouslyNamedS.c_str());
+    }
     else
-      {
-	PROGRAMMING_ERROR("TreeIO not properly initialized!");
-	return NULL;
-      }
+    {
+        PROGRAMMING_ERROR("TreeIO not properly initialized!");
+        return NULL;
+    }
   }

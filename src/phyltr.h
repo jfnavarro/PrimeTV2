@@ -1,22 +1,24 @@
 /*
-    <one line to give the library's name and an idea of what it does.>
-    Copyright (C) <year>  <name of author>
+    PrimeTV2 : a visualizer for phylogenetic reconciled trees.
+    Copyright (C) 2011  <Jose Fernandez Navarro> <jc.fernandez.navarro@gmail.com>
 
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
 
-    This library is distributed in the hope that it will be useful,
+    This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+    You should have received a copy of the GNU General Public License along
+    with this program; if not, write to the Free Software Foundation, Inc.,
+    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+    
     Author : Jose Fernandez Navarro  -  jc.fernandez.navarro@gmail.com
     
+    *********************************************************************
     This class is based on the program created by : Ali Tofigh
     
     Copyright (C) 2010, 2011 Ali Tofigh
@@ -24,8 +26,9 @@
     This file is part of PhylTr, a package for phylogenetic analysis
     using duplications and transfers.
  
-   PhylTr is released under the terms of the license contained in the
-   file LICENSE.
+    PhylTr is released under the terms of the license contained in the
+    file LICENSE.
+    *********************************************************************
  
  */
 
@@ -48,12 +51,12 @@
 #include "libraries/treeextended.h"
 #include <fstream>
 
-using namespace     std;
-using               boost::shared_ptr;
-using               boost::dynamic_bitset;
-using               boost::multi_array;
-typedef unsigned         vid_t;
-typedef float            cost_type;
+using namespace std;
+using boost::shared_ptr;
+using boost::dynamic_bitset;
+using boost::multi_array;
+typedef unsigned vid_t;
+typedef float cost_type;
 
 //*****************************************************************************
 // global variables
@@ -128,19 +131,19 @@ public:
 
     Candidate();
     
-    void    compute_highest_mapping_(vector<vid_t> &) const;
-    void    set_transfer_edge(vid_t);
-    void    set_duplication(vid_t);
-    bool    is_transfer_edge(vid_t) const;
-    bool    is_duplication(vid_t)   const;
-    double  cost()                  const;
-    bool    is_elegant()            const;
-    vid_t   get_s_move()            const;
-    vid_t   lambda(vid_t)           const;
-    vid_t   parent(vid_t)           const;
-    vid_t   left(vid_t)             const;
-    vid_t   right(vid_t)            const;
-    std::vector<vid_t> getLambda()  const;
+    void compute_highest_mapping_(vector<vid_t> &) const;
+    void set_transfer_edge(vid_t);
+    void set_duplication(vid_t);
+    bool is_transfer_edge(vid_t) const;
+    bool is_duplication(vid_t) const;
+    double cost() const;
+    bool is_elegant() const;
+    vid_t get_s_move() const;
+    vid_t lambda(vid_t) const;
+    vid_t parent(vid_t) const;
+    vid_t left(vid_t) const;
+    vid_t right(vid_t) const;
+    std::vector<vid_t> getLambda() const;
     
     dynamic_bitset<> getTransferEdges();
     dynamic_bitset<> getDuplications();
@@ -151,14 +154,14 @@ public:
     void copy(Candidate *cp);
     
 private:
-    dynamic_bitset<>        duplications_;
-    dynamic_bitset<>        transfer_edges_;
-    double                  cost_;
-    vector<vid_t>           lambda_;
-    mutable vector<vid_t>   s_moves_;
-    vector<vid_t>           P_;
-    vector<vid_t>           left_;
-    vector<vid_t>           right_;
+    dynamic_bitset<> duplications_;
+    dynamic_bitset<> transfer_edges_;
+    double cost_;
+    vector<vid_t> lambda_;
+    mutable vector<vid_t> s_moves_;
+    vector<vid_t> P_;
+    vector<vid_t> left_;
+    vector<vid_t> right_;
 
     bool is_s_move_(vid_t) const;
 
@@ -274,33 +277,33 @@ class BacktrackElement {
 public:
     enum Event {S, S_REV, D, T_LEFT, T_RIGHT, BELOW_LEFT, BELOW_RIGHT, N_EVENTS};
 
-    bitset<N_EVENTS>    below_events;
-    vid_t               outside_sibling;
-    vid_t               outside_ancestor;
-    unsigned            min_transfers;
-    bool                scenarios_below_needed;
-    bool                scenarios_at_needed;
-    vector<vid_t>       below_placements;
-    vector<Scenario>    scenarios_at;
+    bitset<N_EVENTS> below_events;
+    vid_t outside_sibling;
+    vid_t outside_ancestor;
+    unsigned min_transfers;
+    bool scenarios_below_needed;
+    bool scenarios_at_needed;
+    vector<vid_t> below_placements;
+    vector<Scenario> scenarios_at;
 
     BacktrackElement();
 };
 struct ProgramInput {
-    string                  species_tree_fname;
-    string                  gene_tree_fname;
-    string                  sigma_fname;
-    double                  min_cost;
-    double                  max_cost;
-    TreeExtended   	    *species_tree;
-    TreeExtended 	    *gene_tree;
-    vector<unsigned>        sigma;
-    vector<unsigned>        gene_tree_numbering;
-    vector<unsigned> 	    species_tree_numbering;
-    double                  duplication_cost;
-    double                  transfer_cost;
-    bool                    unsorted;
-    bool 		    print_only_minimal_transfer_scenarios;
-    bool		    print_only_minimal_loss_scenarios;
+    string species_tree_fname;
+    string gene_tree_fname;
+    string sigma_fname;
+    double min_cost;
+    double max_cost;
+    TreeExtended *species_tree;
+    TreeExtended *gene_tree;
+    vector<unsigned> sigma;
+    vector<unsigned> gene_tree_numbering;
+    vector<unsigned> species_tree_numbering;
+    double duplication_cost;
+    double transfer_cost;
+    bool unsorted;
+    bool print_only_minimal_transfer_scenarios;
+    bool print_only_minimal_loss_scenarios;
 };
 
 class Phyltr
@@ -435,11 +438,11 @@ void combine_scenarios(const vector<Scenario> &, const vector<Scenario> &,
 /******************************************************************************/
 
 static vector<Scenario> scenarios;
-multi_array<cost_type, 2>           g_below;
-multi_array<cost_type, 2>           g_outside;
-multi_array<BacktrackElement, 2>    g_backtrack_matrix;
+multi_array<cost_type, 2> g_below;
+multi_array<cost_type, 2> g_outside;
+multi_array<BacktrackElement, 2> g_backtrack_matrix;
 static ProgramInput g_input;
-static const unsigned               NONE = -1;
+static const unsigned NONE = -1;
 
 
 

@@ -1,3 +1,25 @@
+/*
+    PrimeTV2 : a visualizer for phylogenetic reconciled trees.
+    Copyright (C) 2011  <Jose Fernandez Navarro> <jc.fernandez.navarro@gmail.com>
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License along
+    with this program; if not, write to the Free Software Foundation, Inc.,
+    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+    
+    Author : Jose Fernandez Navarro  -  jc.fernandez.navarro@gmail.com
+             Lars Arvestad, © the MCMC-club, SBC, all rights reserved
+ */
+
 #include <assert.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -13,17 +35,12 @@ extern unsigned int n_right_parens; /* Number of matched right parens ')' */
 
 void inform_parser(const char *, const char*);
 
-/*
-  Public
-*/
-
-
-
 void 
 delete_node(struct NHXnode *n)
 {
   delete_annotation_list(n->l);
-  if (n->name) {
+  if (n->name) 
+  {
     free(n->name);
   }
   free(n);
@@ -37,7 +54,6 @@ delete_tree_nodes(struct NHXnode *n)
     {
       struct NHXnode *left = n->left;
       struct NHXnode *right = n->right;
-
       delete_tree_nodes(left);
       delete_tree_nodes(right);
       delete_node(n);
@@ -55,20 +71,19 @@ find_annotation(struct NHXnode *v, const char *tag)
   struct NHXannotation *a;
 
   if (v == NULL) 
-    {
+  {
       return NULL;
-    }
+  }
   
   a = v->l;
   while (a != NULL) 
-    {
+  {
       if (annotation_isa(a, tag) == 0)
-	{
-	  return a;
-	}
+	  {
+        return a;
+	  }
       a = a->next;
-    }
-
+  }
   return NULL;
 }
 
@@ -80,16 +95,14 @@ isDuplication(struct NHXnode *v)
   struct NHXannotation *a = find_annotation(v, "D");
 
   if (a == NULL) 
-    {
+  {
       return 0;
-    }
+  }
   else
-    {
+  {
       return 1;
-    }
+  }
 }
-
-
 
 int 
 isLeaf(struct NHXnode *t)
@@ -118,21 +131,24 @@ speciesName(struct NHXnode *v)
  struct NHXannotation *a = find_annotation(v, "S");
 
   if (a == NULL) 
-    {
+  {
       return 0;
-    }
+  }
   else
-    {
+  {
       return a->arg.str;
-    }
+  }
 }
 
 unsigned 
 subtreeSize(struct NHXnode *n) /* Count the number of nodes in subtree rooted at n */
 {
-  if (n == NULL) {
+  if (n == NULL) 
+  {
     return 0;
-  } else {
+  } 
+  else 
+  {
     return 1 
       + subtreeSize(n->left) 
       + subtreeSize(n->right);
@@ -144,41 +160,42 @@ subtreeSize(struct NHXnode *n) /* Count the number of nodes in subtree rooted at
 void
 NHX_debug_print(struct NHXnode *v)
 {
-  if (v) {
+  if (v) 
+  {
     struct NHXannotation *l = v->l;
-    if (l) {
-      if (annotation_isa(l, "ID")) {
-	fprintf(stderr, "ID:\t%d\n", l->arg.i);
-      } else if (annotation_isa(l, "S")) {
-	fprintf(stderr, "S: \t%s\n", l->arg.str);
-      } else if (annotation_isa(l, "BW")) {
-	fprintf(stderr, "BW:\t%f\n", l->arg.t);
+    if (l) 
+    {
+      if (annotation_isa(l, "ID")) 
+      {
+        fprintf(stderr, "ID:\t%d\n", l->arg.i);
+      } 
+      else if (annotation_isa(l, "S")) 
+      {
+        fprintf(stderr, "S: \t%s\n", l->arg.str);
+      } 
+      else if (annotation_isa(l, "BW")) 
+      {
+        fprintf(stderr, "BW:\t%f\n", l->arg.t);
       }
     }
   } 
 }
 
-
-
-/*
-  PRIVATE functions!
-*/
-
-
-
 struct NHXnode *
 new_node(char *name) {
   struct NHXnode *v = (struct NHXnode*) malloc (sizeof(struct NHXnode));
-  if (v) {
+  if (v) 
+  {
     v->left = NULL;
     v->right = NULL;
     v->parent = NULL;
     v->name = name;
     v->l = NULL;
     return v;
-  } else {
+  } 
+  else 
+  {
     fprintf(stderr, "Out of memory! (%s:%d)\n", __FILE__, __LINE__);
     exit (1);
   }
 }
-  

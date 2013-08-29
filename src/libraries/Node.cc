@@ -1,3 +1,25 @@
+/*
+    PrimeTV2 : a visualizer for phylogenetic reconciled trees.
+    Copyright (C) 2011  <Jose Fernandez Navarro> <jc.fernandez.navarro@gmail.com>
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License along
+    with this program; if not, write to the Free Software Foundation, Inc.,
+    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+    
+    Author : Jose Fernandez Navarro  -  jc.fernandez.navarro@gmail.com
+             Lars Arvestad, © the MCMC-club, SBC, all rights reserved
+ */
+
 #include <cassert>
 #include <cmath>
 #include <iostream>
@@ -9,11 +31,6 @@
 #include "Node.hh"
 #include "Tree.hh"
 #include "BeepVector.hh"
-
-//----------------------------------------------------------------------
-// Author: Lars Arvestad
-// copyright: mcmc-klubben, SBC
-//----------------------------------------------------------------------
 
   using namespace std;
 
@@ -103,27 +120,26 @@
   Node::operator=(const Node &v)
   {
     if (this != &v)
-      {
-	number = v.number;
-	parent = v.parent;
-	leftChild = v.leftChild;
-	rightChild = v.rightChild;
-	porder = v.porder;
-	time = v.time;
-	nodeTime = v.nodeTime;
-	branchLength = v.branchLength;
-	name = v.name;
-	ownerTree = v.ownerTree;
-	color = v.color;
-	size = v.size;
-	x = v.size;
-	y = v.size;
-	hostParent = v.hostParent;
-	hostChild = v.hostChild;
-	reconcilation = v.reconcilation;
-	visited = v.visited;
-      }
-  
+    {
+        number = v.number;
+        parent = v.parent;
+        leftChild = v.leftChild;
+        rightChild = v.rightChild;
+        porder = v.porder;
+        time = v.time;
+        nodeTime = v.nodeTime;
+        branchLength = v.branchLength;
+        name = v.name;
+        ownerTree = v.ownerTree;
+        color = v.color;
+        size = v.size;
+        x = v.size;
+        y = v.size;
+        hostParent = v.hostParent;
+        hostChild = v.hostChild;
+        reconcilation = v.reconcilation;
+        visited = v.visited;
+    }
     return *this;
   }
   
@@ -155,13 +171,13 @@
     Node *parent = getParent();
     Node *left = parent->getLeftChild();
     if (this == left) 
-      {
-	return parent->getRightChild();
-      } 
+    {
+        return parent->getRightChild();
+    } 
     else 
-      {
-	return left;
-      }
+    {
+        return left;
+    }
   }
 
   // Retrieve the child of current node (x) that has y as a descendant. 
@@ -173,13 +189,13 @@
     assert(y != NULL);
 
     if (this == y) 
-      {
-	return this;		
-      }
+    {
+        return this;		
+    }
     while (y != leftChild && y != rightChild && !y->isRoot())
-      {
-	y = y->parent; 
-      }
+    {
+        y = y->parent; 
+    }
     return y;
   }
 
@@ -233,11 +249,11 @@
     if (isLeaf()) 
       return 1;
     else
-      {
-	unsigned left = leftChild->getNumberOfLeaves();
-	unsigned right = rightChild->getNumberOfLeaves();
-	return left + right;
-      }
+    {
+        unsigned left = leftChild->getNumberOfLeaves();
+        unsigned right = rightChild->getNumberOfLeaves();
+        return left + right;
+    }
   }
   
   Real Node::getBranchLength() const
@@ -250,27 +266,30 @@
   Node::getMaxPathToLeaf()
     {
       if(isLeaf())
-	return 0;
+        return 0;
       else
-	{
-	  unsigned left = leftChild->getMaxPathToLeaf();
-	  unsigned right = rightChild->getMaxPathToLeaf();
-	  return 1 + ((left > right)? left:right);
-	}
+      {
+        unsigned left = leftChild->getMaxPathToLeaf();
+        unsigned right = rightChild->getMaxPathToLeaf();
+        return 1 + ((left > right)? left:right);
+      }
     };
 
   SetOfNodesEx<Node>
   Node::getLeaves()
     {
         SetOfNodesEx<Node> nodes;
-        if( isLeaf() ){
+        if( isLeaf() )
+        {
             nodes.insert(this);
         }
-        else{
+        else
+        {
             //Find leaves recursively
             nodes = leftChild->getLeaves();
             SetOfNodesEx<Node> r = rightChild->getLeaves();
-            for(unsigned int i = 0; i < r.size(); i++){
+            for(unsigned int i = 0; i < r.size(); i++)
+            {
                 nodes.insert(r[i]);
             }
         }
@@ -306,21 +325,21 @@
     this->leftChild = l;
     this->rightChild = r;
     if (l)
-      {
-	l->parent = this;
-	if (l->porder >= porder)
-	  {
-	    porder = l->porder + 1;
-	  }
-      }
+    {
+        l->parent = this;
+        if (l->porder >= porder)
+	    {
+            porder = l->porder + 1;
+	    }
+    }
     if (r)
-      {
-	r->parent = this;
-	if (r->porder >= porder)
-	  {
-	    porder = r->porder + 1;
-	  }
-      }
+    {
+        r->parent = this;
+        if (r->porder >= porder)
+	    {
+            porder = r->porder + 1;
+        }
+    }
     return;
   }
 
@@ -350,15 +369,14 @@
   Node::deleteSubtree()
   {
     if(isLeaf() == false)
-      {
-	leftChild -> deleteSubtree();
-	delete leftChild;
-	leftChild = NULL;
-
-	rightChild -> deleteSubtree();
-	delete rightChild;
-	rightChild = NULL;
-      }
+    {
+        leftChild -> deleteSubtree();
+        delete leftChild;
+        leftChild = NULL;
+        rightChild -> deleteSubtree();
+        delete rightChild;
+        rightChild = NULL;
+    }
   }
 
 
@@ -368,13 +386,13 @@
   Node::isLeaf() const 
   {
     if (getLeftChild() == NULL && getRightChild() == NULL) 
-      {
-	return true;
-      }
+    {
+        return true;
+    }
     else
-      {
-	return false;
-      }
+    {
+        return false;
+    }
   }
 
   // Checks if the current node is the root. Only the root has no parent
@@ -383,25 +401,25 @@
   Node::isRoot() const
   {
     if (getParent() == NULL)
-      {
-	return true;
-      }
+    {
+        return true;
+    }
     else 
-      {
-	return false;
-      }
+    {
+        return false;
+    }
   }
 
   bool
   Node::operator<=(const Node& b) const
   {
     for(const Node* c = this; c != &b; c = c->getParent())
-      {
-	if(c->isRoot())
-	  {
-	    return false;
-	  }
-      }
+    {
+        if(c->isRoot())
+	    {
+            return false;
+	    }
+    }
     return true;
   }
 
@@ -410,13 +428,13 @@
   Node::operator<(const Node& b) const
   {
     if(this == &b)
-      {
-	return false;
-      }
+    {
+        return false;
+    }
     else
-      {
-	return operator<=(b);
-      }
+    {
+        return operator<=(b);
+    }
   }
 
   bool
@@ -430,26 +448,25 @@
   Node::operator>(const Node& b) const
   {
     if(this == &b)
-      {
-	return false;
-      }
+    {
+        return false;
+    }
     else
-      {
-	return b <= *this;;
-      }
+    {
+        return b <= *this;;
+    }
   }
-
 
   bool
   Node::dominates(const Node& v) const
   {
     for(const Node* w = &v; w != this; w = w->getParent())
-      {
-	if(w->isRoot())
-	  {
-	    return false;
-	  }
-      }
+    {
+        if(w->isRoot())
+        {
+            return false;
+        }
+    }
     return true;
   }
 
@@ -457,30 +474,30 @@
   Node::strictlyDominates(const Node& v) const
   {
     if(this == &v)
-      {
-	return false;
-      }
+    {
+        return false;
+    }
     else
-      {
-	return dominates(v);
-      }
+    {
+        return dominates(v);
+    }
   }
   
   Real 
   Node::getTime() const
   {
     if(this->isRoot())
-      {
-	return ownerTree->getTopTime();
-      }
+    {
+        return ownerTree->getTopTime();
+    }
     else if(ownerTree->hasTimes())
-      {
-	return ownerTree->getTime(*getParent()) - ownerTree->getTime(*this);
-      }
+    {
+        return ownerTree->getTime(*getParent()) - ownerTree->getTime(*this);
+    }
     else
-      {
-	return 0;
-      }
+    {
+        return 0;
+    }
   }
   
   void
@@ -488,13 +505,13 @@
   {
 
     if(getParent())
-      {
-	throw AnError("Currently we disallow using setTime for non-root nodes",1);
-      }
+    {
+        throw AnError("Currently we disallow using setTime for non-root nodes",1);
+    }
     else
-      {
-	ownerTree->setTopTime(t);
-      }
+    {
+        ownerTree->setTopTime(t);
+    }
   }
   
   // Set the branch length associated with the node
@@ -506,14 +523,14 @@
     assert(getTree()->hasLengths()); // assert lengths is modeled
 
     if(ownerTree->hasLengths())
-      {
-	ownerTree->setLength(*this, newLength);
-      }
+    {
+        ownerTree->setLength(*this, newLength);
+    }
     else
-      {
-	throw AnError("Node::setLength:\n"
+    {
+        throw AnError("Node::setLength:\n"
 		      "ownerTree->lengths is NULL",1);
-      }
+    }
   }
   
   Real 
@@ -529,13 +546,13 @@
   Node::getLength() const
   {
     if(ownerTree->hasLengths())
-      {
-	return ownerTree->getLengths()[this->getNumber()];//(*this);
-      }
+    {
+        return ownerTree->getLengths()[this->getNumber()];//(*this);
+    }
     else
-      {
-	return 0;
-      }
+    {
+        return 0;
+    }
   }
 
   std::ostream& 
@@ -546,13 +563,11 @@
     oss << v.stringify("NAME", v.getName())
 	<< v.stringify("NT", v.getNodeTime())
 	<< v.stringify("ET", v.getTime())
-	<< v.stringify("BL", v.getLength());
-      
+	<< v.stringify("BL", v.getLength());    
     oss << v.stringify("left", v.getLeftChild())
 	<< v.stringify("right", v.getRightChild())
 	<< v.stringify("parent", v.getParent());
     oss << endl;
-
     return o << oss.str();    
   }
 
@@ -571,13 +586,13 @@
     ostringstream oss;
     oss << "\t" << tag << "=";
     if (s.empty()) 
-      {
-	oss << "no";
-      }
+    {
+        oss << "no";
+    }
     else 
-      {
-	oss << "'" << s << "'";
-      }
+    {
+        oss << "'" << s << "'";
+    }
     return oss.str();
   }
 
@@ -587,13 +602,13 @@
     ostringstream oss;
     oss << "\t" << tag;
     if (v==NULL) 
-      {
-	oss << "=no";
-      }
+    {
+        oss << "=no";
+    }
     else 
-      {
-	oss << "=" << v->getNumber();
-      }
+    {
+        oss << "=" << v->getNumber();
+    }
     return oss.str();
   }
 
