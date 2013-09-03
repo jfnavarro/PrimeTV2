@@ -38,28 +38,27 @@ void inform_parser(const char *, const char*);
 void 
 delete_node(struct NHXnode *n)
 {
-  delete_annotation_list(n->l);
-  if (n->name) 
-  {
-    free(n->name);
-  }
-  free(n);
+    delete_annotation_list(n->l);
+    if (n->name) 
+    {
+      free(n->name);
+    }
+    free(n);
 }
 
 
 void
 delete_tree_nodes(struct NHXnode *n)
 {
-  if (n != NULL)
+    if (n != NULL)
     {
-      struct NHXnode *left = n->left;
-      struct NHXnode *right = n->right;
-      delete_tree_nodes(left);
-      delete_tree_nodes(right);
-      delete_node(n);
+        struct NHXnode *left = n->left;
+        struct NHXnode *right = n->right;
+        delete_tree_nodes(left);
+        delete_tree_nodes(right);
+        delete_node(n);
     }
 }
-
 
 /*
   Given a NHX node, see if it contains an annotation with the given tag.
@@ -68,91 +67,97 @@ delete_tree_nodes(struct NHXnode *n)
 struct NHXannotation *
 find_annotation(struct NHXnode *v, const char *tag)
 {
-  struct NHXannotation *a;
+    struct NHXannotation *a;
 
-  if (v == NULL) 
-  {
-      return NULL;
-  }
+    if (v == NULL) 
+    {
+        return NULL;
+    }
   
-  a = v->l;
-  while (a != NULL) 
-  {
-      if (annotation_isa(a, tag) == 0)
-	  {
-        return a;
-	  }
-      a = a->next;
-  }
-  return NULL;
+    a = v->l;
+    while (a != NULL) 
+    {
+        if (annotation_isa(a, tag) == 0)
+	    {
+          return a;
+	    }
+        a = a->next;
+    }
+    return NULL;
 }
-
-
 
 int 
 isDuplication(struct NHXnode *v)
 {
-  struct NHXannotation *a = find_annotation(v, "D");
+    struct NHXannotation *a = find_annotation(v, "D");
 
-  if (a == NULL) 
-  {
-      return 0;
-  }
-  else
-  {
-      return 1;
-  }
+    if (a == NULL) 
+    {
+        return 0;
+    }
+    else
+    {
+        return 1;
+    }
 }
 
 int 
 isLeaf(struct NHXnode *t)
 {
-  assert(t != NULL);
-  if (t->left == NULL && t->right == NULL)
-    return 1;
-  else
-    return 0;
+    assert(t != NULL);
+    if (t->left == NULL && t->right == NULL)
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
 }
 
 int
 isRoot(struct NHXnode *t)
 {
-  assert(t != NULL);
-  if (t->parent == NULL)
-    return 1;
-  else
-    return 0;
+    assert(t != NULL);
+    if (t->parent == NULL)
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
 }
 
 
 char *
 speciesName(struct NHXnode *v)
 {
- struct NHXannotation *a = find_annotation(v, "S");
+    struct NHXannotation *a = find_annotation(v, "S");
 
-  if (a == NULL) 
-  {
-      return 0;
-  }
-  else
-  {
-      return a->arg.str;
-  }
+    if (a == NULL) 
+    {
+        return 0;
+    }
+    else
+    {
+        return a->arg.str;
+    }
 }
 
 unsigned 
 subtreeSize(struct NHXnode *n) /* Count the number of nodes in subtree rooted at n */
 {
-  if (n == NULL) 
-  {
-    return 0;
-  } 
-  else 
-  {
-    return 1 
-      + subtreeSize(n->left) 
-      + subtreeSize(n->right);
-  }
+    if (n == NULL) 
+    {
+      return 0;
+    } 
+    else 
+    {
+      return 1 
+        + subtreeSize(n->left) 
+        + subtreeSize(n->right);
+    }
 }
 
 
@@ -160,42 +165,43 @@ subtreeSize(struct NHXnode *n) /* Count the number of nodes in subtree rooted at
 void
 NHX_debug_print(struct NHXnode *v)
 {
-  if (v) 
-  {
-    struct NHXannotation *l = v->l;
-    if (l) 
+    if (v) 
     {
-      if (annotation_isa(l, "ID")) 
-      {
-        fprintf(stderr, "ID:\t%d\n", l->arg.i);
-      } 
-      else if (annotation_isa(l, "S")) 
-      {
-        fprintf(stderr, "S: \t%s\n", l->arg.str);
-      } 
-      else if (annotation_isa(l, "BW")) 
-      {
-        fprintf(stderr, "BW:\t%f\n", l->arg.t);
-      }
-    }
-  } 
+        struct NHXannotation *l = v->l;
+        if (l) 
+        {
+            if (annotation_isa(l, "ID")) 
+            {
+                fprintf(stderr, "ID:\t%d\n", l->arg.i);
+            } 
+            else if (annotation_isa(l, "S")) 
+            {
+                fprintf(stderr, "S: \t%s\n", l->arg.str);
+            } 
+            else if (annotation_isa(l, "BW")) 
+            {
+                fprintf(stderr, "BW:\t%f\n", l->arg.t);
+            }
+        }
+    } 
 }
 
 struct NHXnode *
-new_node(char *name) {
-  struct NHXnode *v = (struct NHXnode*) malloc (sizeof(struct NHXnode));
-  if (v) 
-  {
-    v->left = NULL;
-    v->right = NULL;
-    v->parent = NULL;
-    v->name = name;
-    v->l = NULL;
-    return v;
-  } 
-  else 
-  {
-    fprintf(stderr, "Out of memory! (%s:%d)\n", __FILE__, __LINE__);
-    exit (1);
-  }
+new_node(char *name) 
+{
+    struct NHXnode *v = (struct NHXnode*) malloc (sizeof(struct NHXnode));
+    if (v) 
+    {
+        v->left = NULL;
+        v->right = NULL;
+        v->parent = NULL;
+        v->name = name;
+        v->l = NULL;
+        return v;
+    } 
+    else 
+    {
+        fprintf(stderr, "Out of memory! (%s:%d)\n", __FILE__, __LINE__);
+        exit (1);
+    }
 }

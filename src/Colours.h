@@ -31,8 +31,7 @@ using namespace std;
 class Colours
 {
 
-  
-  public:
+public:
     
     Color default_foreground_color; // Draw the sequence names
     Color gene_edge_color;
@@ -53,8 +52,9 @@ class Colours
     void setColors(const char *set);
     const char* getSet();
     
-private :
-   const char *set;
+private:
+    
+    const char *set;
 };
 
 

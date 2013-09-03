@@ -23,11 +23,11 @@
 
  Color Color::operator=(Color b)
  {
-   blue = b.blue;
-   green = b.green;
-   name = b.name;
-   red = b.red;
-   return *this;
+     blue = b.blue;
+     green = b.green;
+     name = b.name;
+     red = b.red;
+     return *this;
  }
  
  Color::Color()

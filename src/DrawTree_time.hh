@@ -57,7 +57,8 @@ template <class C> void FreeClear( C & cntr ) {
 }
 
   
-class DrawTree_time {
+class DrawTree_time 
+{
     
   public:
     

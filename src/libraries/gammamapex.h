@@ -17,7 +17,6 @@
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
     
     Author : Jose Fernandez Navarro  -  jc.fernandez.navarro@gmail.com
-             Lars Arvestad, © the MCMC-club, SBC, all rights reserved
  */
 
 #ifndef GAMMAMAPEX_H
@@ -148,60 +147,60 @@ private:
 /************************************************************************************************************************************/
 
 
-  template <class T>
-  GammaMapEx<T>::GammaMapEx(const TreeExtended &G,const TreeExtended &S, const StrStrMap& gs,
-		     std::vector<SetOfNodesEx<T> > &AC_info)
-      : Gtree(&G), 
-	Stree(&S),
-	lambdaex(G,S,gs),
-	gamma(S.getNumberOfNodes()),
-	chainsOnNode(G.getNumberOfNodes()),
-	transfer_edges(G.getNumberOfNodes())
-  {
-    readGamma(S.getRootNode(), AC_info);
-    checkGamma(G.getRootNode());
-  }
-  
-  template <class T>
-  GammaMapEx<T>::GammaMapEx(const TreeExtended &G,const TreeExtended &S, const StrStrMap& gs):
-      Gtree(&G), 
-      Stree(&S), 
-      lambdaex(G, S, gs),
-      gamma(S.getNumberOfNodes()), 
-      chainsOnNode(G.getNumberOfNodes()),
-      transfer_edges(G.getNumberOfNodes())
-  {
-  }
-  
-  
-  template <class T>
-  GammaMapEx<T>::GammaMapEx(const TreeExtended& G,const TreeExtended& S, const LambdaMapEx<T>& L)
+template <class T>
+GammaMapEx<T>::GammaMapEx(const TreeExtended &G,const TreeExtended &S, const StrStrMap& gs,
+            std::vector<SetOfNodesEx<T> > &AC_info)
     : Gtree(&G), 
-      Stree(&S),
-      lambdaex(L),
-      gamma(S.getNumberOfNodes()),
-      chainsOnNode(G.getNumberOfNodes()),
-      transfer_edges(G.getNumberOfNodes())
-  {
+    Stree(&S),
+    lambdaex(G,S,gs),
+    gamma(S.getNumberOfNodes()),
+    chainsOnNode(G.getNumberOfNodes()),
+    transfer_edges(G.getNumberOfNodes())
+{
+readGamma(S.getRootNode(), AC_info);
+checkGamma(G.getRootNode());
+}
 
-  }
-  
-  template <class T>
-  GammaMapEx<T>::GammaMapEx(const GammaMapEx<T>& original)
-    : Gtree(original.Gtree),
-      Stree(original.Stree),
-      lambdaex(original.lambdaex),
-      gamma(original.gamma),
-      chainsOnNode(original.chainsOnNode),
-      transfer_edges(original.transfer_edges)
-  {
+template <class T>
+GammaMapEx<T>::GammaMapEx(const TreeExtended &G,const TreeExtended &S, const StrStrMap& gs):
+    Gtree(&G), 
+    Stree(&S), 
+    lambdaex(G, S, gs),
+    gamma(S.getNumberOfNodes()), 
+    chainsOnNode(G.getNumberOfNodes()),
+    transfer_edges(G.getNumberOfNodes())
+{
+}
 
-  }
-  
-  template <class T>
-  void
-  GammaMapEx<T>::readGamma(T* sn, vector<SetOfNodesEx<T> >& AC_info)
-  {
+
+template <class T>
+GammaMapEx<T>::GammaMapEx(const TreeExtended& G,const TreeExtended& S, const LambdaMapEx<T>& L)
+: Gtree(&G), 
+    Stree(&S),
+    lambdaex(L),
+    gamma(S.getNumberOfNodes()),
+    chainsOnNode(G.getNumberOfNodes()),
+    transfer_edges(G.getNumberOfNodes())
+{
+
+}
+
+template <class T>
+GammaMapEx<T>::GammaMapEx(const GammaMapEx<T>& original)
+: Gtree(original.Gtree),
+    Stree(original.Stree),
+    lambdaex(original.lambdaex),
+    gamma(original.gamma),
+    chainsOnNode(original.chainsOnNode),
+    transfer_edges(original.transfer_edges)
+{
+
+}
+
+template <class T>
+void
+GammaMapEx<T>::readGamma(T* sn, vector<SetOfNodesEx<T> >& AC_info)
+{
     if(sn->isLeaf() == false) 
     {
         readGamma(sn->getLeftChild(), AC_info);
@@ -213,28 +212,26 @@ private:
         addToSet(sn, *son[j]);
     }
     return;
-  }
-  
-  template <class T>
-  GammaMapEx<T>& GammaMapEx<T>::operator=(const GammaMapEx<T>& gm)
-  {
-      if (this != &gm)
-      {
+}
+
+template <class T>
+GammaMapEx<T>& GammaMapEx<T>::operator=(const GammaMapEx<T>& gm)
+{
+    if (this != &gm)
+    {
         Gtree = gm.Gtree;
         Stree = gm.Stree;
         lambdaex = gm.lambdaex;
         gamma = gm.gamma;
         chainsOnNode = gm.chainsOnNode;
         transfer_edges = gm.transfer_edges;
-      }
+    }
     return *this;
+}
 
-  }
-
-  template <class T>
-  T* GammaMapEx<T>::checkGamma(T *gn)
-  {
-
+template <class T>
+T* GammaMapEx<T>::checkGamma(T *gn)
+{
     T* sn = getLowestGammaPath(*gn); 
 
     if(gn->isLeaf()) 
@@ -263,7 +260,7 @@ private:
             << "', curiously!\n";
             throw AnError(oss.str(), 1);
         }
-      }
+    }
     else
     {
         // pass recursion on
@@ -277,64 +274,64 @@ private:
             T *temp = checkGammaForDuplication(gn, sn, sl, sr);
             sn = temp;
         } 
-        
+
         else 
         {
             T *temp = checkGammaForSpeciation(gn, sn, sl, sr);
             sn = temp;
         }
-     }
-        
-     T *temp = checkGammaMembership(gn, sn);
-     sn = temp;
-     return sn;
-  }
-  
-  
-    // To determine whether a node is lateral transfer or not, we just need to 
-  // look a the set of lateral transfer nodes
-  
-  template <class T>
-  bool GammaMapEx<T>::isLateralTransfer(T& u) const
-  {
+    }
+    
+    T *temp = checkGammaMembership(gn, sn);
+    sn = temp;
+    return sn;
+}
+
+
+// To determine whether a node is lateral transfer or not, we just need to 
+// look a the set of lateral transfer nodes
+
+template <class T>
+bool GammaMapEx<T>::isLateralTransfer(T& u) const
+{
     if(u.isLeaf())
-      return false;
+    {
+        return false;
+    }
     else
     {
-      bool right = transfer_edges[u.getRightChild()->getNumber()];
-      bool left = transfer_edges[u.getLeftChild()->getNumber()];
-      return (bool)(right || left);
+        bool right = transfer_edges[u.getRightChild()->getNumber()];
+        bool left = transfer_edges[u.getLeftChild()->getNumber()];
+        return (bool)(right || left);
     }
-  }
+}
 
-  
-  template <class T>
-  GammaMapEx<T>
-  GammaMapEx<T>::MostParsimonious(const TreeExtended& G,const TreeExtended& S,const LambdaMapEx<T>& L)
-  {
+
+template <class T>
+GammaMapEx<T>
+GammaMapEx<T>::MostParsimonious(const TreeExtended& G,const TreeExtended& S,const LambdaMapEx<T>& L)
+{
     GammaMapEx gamma_star(G, S, L);
     gamma_star.computeGammaBound(G.getRootNode());
     return gamma_star;
-  }
-  
+}
 
-  
-  template <class T>
-  LambdaMapEx<T> GammaMapEx<T>::getLambda() const
-  {
+template <class T>
+LambdaMapEx<T> GammaMapEx<T>::getLambda() const
+{
     return lambdaex;
-  }
-  
-  template <class T>
-  LambdaMapEx<T> *GammaMapEx<T>::getLambda() 
-  {
+}
+
+template <class T>
+LambdaMapEx<T> *GammaMapEx<T>::getLambda() 
+{
     return &lambdaex;
-  }
-  
-   template <class T>
-  void
-  GammaMapEx<T>::computeGammaBound(T *v)
-  {
+}
+
+template <class T>
+void
+GammaMapEx<T>::computeGammaBound(T *v)
+{
     computeGammaBoundBelow(v);
     // Now make sure that the root of the species tree got mapped.
     T *sroot = Stree->getRootNode();
@@ -342,12 +339,12 @@ private:
     {
         assignGammaBound(v, sroot);
     }
-  }
-      
-  template <class T>
-  void
-  GammaMapEx<T>::computeGammaBoundBelow(T *v)
-  {
+}
+    
+template <class T>
+void
+GammaMapEx<T>::computeGammaBoundBelow(T *v)
+{
     assert(v != NULL);
 
     if (v->isLeaf())
@@ -380,29 +377,29 @@ private:
             assignGammaBound(right, x); // Include x!
         }  
     }
-  }
-  
-  template <class T>
-  void
-  GammaMapEx<T>::addToSet(T *x,  T *v) 
-  {
+}
+
+template <class T>
+void
+GammaMapEx<T>::addToSet(T *x,  T *v) 
+{
     assert(x != NULL);
     gamma[x->getNumber()].insert(v); 
     chainsOnNode[v->getNumber()].push_back(x); 
 
-  }
+}
 
-  template <class T>
-  void
-  GammaMapEx<T>::addToSet(T *x, T &v)
-  {
+template <class T>
+void
+GammaMapEx<T>::addToSet(T *x, T &v)
+{
     assert(x != NULL);
     addToSet(x, &v);
-  }
-  
-  template <class T>  T*
-  GammaMapEx<T>::getHighestGammaPath(T &u) const // Dominates all others on u
-  {
+}
+
+template <class T>  T*
+GammaMapEx<T>::getHighestGammaPath(T &u) const // Dominates all others on u
+{
     const deque<T*>& anti_chains = chainsOnNode[u.getNumber()];
     if (anti_chains.empty())
     {
@@ -412,11 +409,11 @@ private:
     {
         return anti_chains.back();
     }
-  }
+}
 
-  template <class T> T* 
-  GammaMapEx<T>::getLowestGammaPath(T &u) const // Dominated by others
-  {
+template <class T> T* 
+GammaMapEx<T>::getLowestGammaPath(T &u) const // Dominated by others
+{
     const deque<T*> &anti_chains = chainsOnNode[u.getNumber()];
     if (anti_chains.empty())
     {
@@ -426,29 +423,29 @@ private:
     {
         return anti_chains.front();
     }
-  }
-  
-  template <class T>  unsigned
-  GammaMapEx<T>::getSize(T& x) const   //version with reference
-  {
+}
+
+template <class T>  unsigned
+GammaMapEx<T>::getSize(T& x) const   //version with reference
+{
     return gamma[x.getNumber()].size();
-  }
-  
-  template <class T> unsigned
-  GammaMapEx<T>::getSize(T* x) const   //version with pointer
-  {
+}
+
+template <class T> unsigned
+GammaMapEx<T>::getSize(T* x) const   //version with pointer
+{
     return gamma[x->getNumber()].size();
-  }
-  
-  template <class T> T *
-  GammaMapEx<T>::checkGammaForDuplication(T *gn, T *sn, T *sl, T *sr)
-  {
+}
+
+template <class T> T *
+GammaMapEx<T>::checkGammaForDuplication(T *gn, T *sn, T *sl, T *sr)
+{
     while(sn == sl) 
     {
         removeFromSet(sn, gn);
         sn = getLowestGammaPath(*gn); 
     }
-    
+
     if(sn != 0) 
     {
         if(*sn < *sl)
@@ -479,19 +476,18 @@ private:
     {
         return sl;
     }
-  }
-  
+}
 
-  template <class T> T*
-  GammaMapEx<T>::checkGammaForSpeciation(T *gn, T *sn, T *sl, T *sr)   // gn is a speciation 
-  {
+template <class T> T*
+GammaMapEx<T>::checkGammaForSpeciation(T *gn, T *sn, T *sl, T *sr)   // gn is a speciation 
+{
     T* sm = Stree->lca(sl, sr); // "lambda"
     while(sn == sl) 
     {
         removeFromSet(sn, gn);
         sn = getLowestGammaPath(*gn); 
     }
-    
+
     if(sn == 0 || sn != sm) 
     {
         ostringstream oss;
@@ -516,11 +512,11 @@ private:
         throw AnError(oss.str(), 1);		
     }
     return sn;
-  }
+}
 
-  template <class T> T*
-  GammaMapEx<T>::checkGammaMembership(T *gn, T *sn)
-  {
+template <class T> T*
+GammaMapEx<T>::checkGammaMembership(T *gn, T *sn)
+{
     for (unsigned i = 1; i < chainsOnNode[gn->getNumber()].size(); i++)
     {
         if (sn->getParent() != chainsOnNode[gn->getNumber()][i])
@@ -538,11 +534,11 @@ private:
         sn = sn->getParent();
     }
     return sn;
-  }
-  
-  template <class T> void
-  GammaMapEx<T>::assignGammaBound(T *v, T *x)
-  {
+}
+
+template <class T> void
+GammaMapEx<T>::assignGammaBound(T *v, T *x)
+{
     assert(x != NULL);
     assert(v != NULL);
 
@@ -552,20 +548,21 @@ private:
     {
         addToSet(y, *v);
         y = y->getParent();
-        if (!y)     
-        break;    
+        if (!y)
+        {
+            break;
+        }
     }
-  }
-  
-  template <class T>  void
-  GammaMapEx<T>::removeFromSet(T *x, T *v)
-  {
+}
+
+template <class T>  void
+GammaMapEx<T>::removeFromSet(T *x, T *v)
+{
     assert(x != NULL);
     if(v == 0) 
     {
         return;
     }
-
     // Find iterator pos of x on v and remove x
     deque<T*>& dref = chainsOnNode[v->getNumber()];
     typename deque<T*>::iterator i = find(dref.begin(), dref.end(), x);
@@ -575,44 +572,44 @@ private:
         gamma[x->getNumber()].erase(v); 
     }
     return;			       
-  }
-  
-  template <class T>
-  bool
-  GammaMapEx<T>::valid() const
-  {
+}
+
+template <class T>
+bool
+GammaMapEx<T>::valid() const
+{
     try 
     {
-      valid(Stree->getRootNode());
+        valid(Stree->getRootNode());
     } 
     catch (int i) 
     {
-      return false;
+        return false;
     }
     return true;
-  }
-  
-  template <class T>
-  bool
-  GammaMapEx<T>::valid(T *x) const
-  {
+}
+
+template <class T>
+bool
+GammaMapEx<T>::valid(T *x) const
+{
     if (x->isLeaf()) 
     {
-      if (getSize(x) > 0) 
-      {
+    if (getSize(x) > 0) 
+    {
         return true;
-      } 
-      else 
-      {
-        return false;
-      }
     } 
     else 
     {
-      bool l = valid(x->getLeftChild());
-      bool r = valid(x->getRightChild());
-      if (l || r)
-      {
+        return false;
+    }
+    } 
+    else 
+    {
+    bool l = valid(x->getLeftChild());
+    bool r = valid(x->getRightChild());
+    if (l || r)
+    {
         if (getSize(x) == 0) 
         {
             throw 1;
@@ -621,26 +618,26 @@ private:
         {
             return true;
         }
-      } 
-      else 
-      {
+    } 
+    else 
+    {
         return false;
-      }
     }
-  }
-  
-  template <class T>
-  bool
-  GammaMapEx<T>::validLGT() const
-  {
+    }
+}
+
+template <class T>
+bool
+GammaMapEx<T>::validLGT() const
+{
     if(!transfer_edges.any())
     {
-      return this->valid();
+    return this->valid();
     }
     else
     {
-      for( Node *n = Gtree->getPostOderBegin(); n != NULL; n = Gtree->postorder_next(n))
-      {
+    for( Node *n = Gtree->getPostOderBegin(); n != NULL; n = Gtree->postorder_next(n))
+    {
         if(transfer_edges[n->getNumber()])
         {
             Node *destiny = lambdaex[n];
@@ -661,59 +658,58 @@ private:
         {
             return false;
         }
-      }
-      return true && this->valid();
     }
-  
-  }
- 
-  
-  template <class T>
-  unsigned
-  GammaMapEx<T>::sizeOfWidestSpeciesLeaf() const
-  {
-    return sizeOfWidestSpeciesLeaf(Stree->getRootNode(), 0);
-  }
+    return true && this->valid();
+    }
+}
 
-  template <class T>
-  unsigned 
-  GammaMapEx<T>::sizeOfWidestSpeciesLeaf(T *x, unsigned current_max) const
-  {
+
+template <class T>
+unsigned
+GammaMapEx<T>::sizeOfWidestSpeciesLeaf() const
+{
+    return sizeOfWidestSpeciesLeaf(Stree->getRootNode(), 0);
+}
+
+template <class T>
+unsigned 
+GammaMapEx<T>::sizeOfWidestSpeciesLeaf(T *x, unsigned current_max) const
+{
     if (x->isLeaf()) 
     {
-      unsigned w = getSize(x);
-      if (w > current_max) 
-      {
-        return w;
-      } 
-      else 
-      {
-        return current_max;
-      }
+        unsigned w = getSize(x);
+        if (w > current_max) 
+        {
+            return w;
+        } 
+        else 
+        {
+            return current_max;
+        }
     } 
     else 
-    {
-      current_max = sizeOfWidestSpeciesLeaf(x->getLeftChild(), current_max);
-      current_max = sizeOfWidestSpeciesLeaf(x->getRightChild(), current_max);
-      return current_max;
+        {
+        current_max = sizeOfWidestSpeciesLeaf(x->getLeftChild(), current_max);
+        current_max = sizeOfWidestSpeciesLeaf(x->getRightChild(), current_max);
+        return current_max;
     }
-  }
-  
-  template <class T>
-  void
-  GammaMapEx<T>::twistAndTurn()
-  {
-    twistAndTurn(Gtree->getRootNode(), Stree->getRootNode());
-  }
+}
 
-  template <class T>
-  void
-  GammaMapEx<T>::twistAndTurn(T *v, T *x)
-  {
+template <class T>
+void
+GammaMapEx<T>::twistAndTurn()
+{
+    twistAndTurn(Gtree->getRootNode(), Stree->getRootNode());
+}
+
+template <class T>
+void
+GammaMapEx<T>::twistAndTurn(T *v, T *x)
+{
 
     if (v->isLeaf() || x->isLeaf())
     {
-	// Done
+    // Done
     }
     else
     {
@@ -726,8 +722,7 @@ private:
         T* vll = lambdaex[vl];
         T* vrl = lambdaex[vr];
 
-        if (vll != lambdaex[v]
-            && vrl != lambdaex[v])
+        if (vll != lambdaex[v] && vrl != lambdaex[v])
         {
             if (vll == xr && vrl == xl) 
             {
@@ -737,7 +732,7 @@ private:
         else if (vll != lambdaex[v])
         {
             T *rep = x->getDominatingChild(vll);
-            
+        
             if (rep == xr)
             {
                 v->setChildren(vr, vl);
@@ -746,7 +741,7 @@ private:
         else if (vrl != lambdaex[v])
         {
             T *rep = x->getDominatingChild(vrl);
-            
+        
             if (rep == xl)
             {
                 v->setChildren(vr, vl);
@@ -755,12 +750,12 @@ private:
         twistAndTurn(vl, vll);
         twistAndTurn(vr, vrl);
     }
-  }
-  
-  template <class T>
-  bool
-  GammaMapEx<T>::isSpeciation(T& u) const
-  {
+}
+
+template <class T>
+bool
+GammaMapEx<T>::isSpeciation(T& u) const
+{
     if (lambdaex[u] == getLowestGammaPath(u))
     {
         return true;
@@ -769,55 +764,55 @@ private:
     {
         return false;
     }
-  }
+}
 
-  template <class T>
-  string
-  GammaMapEx<T>::print(const bool& full) const
-  {
+template <class T>
+string
+GammaMapEx<T>::print(const bool& full) const
+{
     if(gamma.empty())
     {
         return "no gamma defined\n";
     }
+    
     ostringstream oss;
-    
     SetOfNodesEx<T> gammaset;
-    
+
     for (unsigned i = 0; i < gamma.size(); i++) 
     {
         if(full)
-	    {
+        {
             gammaset = getFullGamma(*Stree->getNode(i));
-	    }
+        }
         else
-	    {
+        {
             gammaset = gamma[i];
-	    }
+        }
         if (!gammaset.empty())
-	    {
+        {
             oss << i << "\t";  
             for (unsigned j = 0; j < gammaset.size(); j++) 
-	        {
-              if(j != 0)
-              {
-                  oss << ", " ;
-              } 
-              oss << gammaset[j]->getNumber(); 
-	        }
-	       oss << "\n";
-	    }
+            {
+                if(j != 0)
+                {
+                    oss << ", " ;
+                } 
+                oss << gammaset[j]->getNumber(); 
+            }
+            oss << "\n";
+        }
         else
-	    {
+        {
             oss << i << "\n"; //"\tnot mapped\n";
         }
-    }
-    return oss.str();
-  }
-  
-  template <class T>
-  SetOfNodesEx<T>
-  GammaMapEx<T>::getFullGamma(const T& x) const
-  {
+}
+return oss.str();
+}
+
+template <class T>
+SetOfNodesEx<T>
+GammaMapEx<T>::getFullGamma(const T& x) const
+{
     const SetOfNodesEx<T>& reduced = gamma[x.getNumber()];
     SetOfNodesEx<T> full(reduced);
     T* u;
@@ -837,7 +832,7 @@ private:
     else            
     {
         T* p_x = x.getParent();
-        
+    
         for(unsigned i = 0; i < reduced.size(); i++)
         {
             u = reduced[i]; // get the current node
@@ -853,58 +848,57 @@ private:
         }
     }
     return full;
-  }
-  
-  template <class T>
-  bool
-  GammaMapEx<T>::isInGamma(T *u, T *x) const
-  {
+}
+
+template <class T>
+bool
+GammaMapEx<T>::isInGamma(T *u, T *x) const
+{
     const SetOfNodesEx<T> &target_set = gamma[x->getNumber()];
     return target_set.member(u);
-  }
-  
-  template <class T>
-  GammaMapEx<T>
-  GammaMapEx<T>::update(const TreeExtended& G, const TreeExtended& S, const std::vector< unsigned int > &sigma, 
-			 const dynamic_bitset<> &transfer_edges)
-  {
+}
+
+template <class T>
+GammaMapEx<T>
+GammaMapEx<T>::update(const TreeExtended& G, const TreeExtended& S, const std::vector< unsigned int > &sigma, 
+            const dynamic_bitset<> &transfer_edges)
+{
     lambdaex.update(G,S,sigma,transfer_edges);
     GammaMapEx gamma_star(G, S, lambdaex);
     gamma_star.setLGT(transfer_edges);
     gamma_star.computeGammaBound(G.getRootNode());
     return gamma_star;
-  }   
-  
-  template <class T>
-  unsigned 
-  GammaMapEx<T>::numberOfGammaPaths(Node &u) const
-  {
+}   
+
+template <class T>
+unsigned 
+GammaMapEx<T>::numberOfGammaPaths(Node &u) const
+{
     assert(chainsOnNode.size() > u.getNumber());
     const deque<T*> &anti_chains = chainsOnNode[u.getNumber()];
     return anti_chains.size();
-  }
-  
-  template <class T>
-  void GammaMapEx<T>::setLGT(dynamic_bitset< long unsigned int > lgt)
-  {
+}
+
+template <class T>
+void GammaMapEx<T>::setLGT(dynamic_bitset< long unsigned int > lgt)
+{
     this->transfer_edges = lgt;
-  }
-  
-  template <class T>
-  dynamic_bitset<> GammaMapEx<T>::getLGT()
-  {
+}
+
+template <class T>
+dynamic_bitset<> GammaMapEx<T>::getLGT()
+{
     return this->transfer_edges;
-  }
-  
-  
-  template <class T>
-  SetOfNodesEx<T>
-  GammaMapEx<T>::getGamma(T *x) const
-  {
+}
+
+template <class T>
+SetOfNodesEx<T>
+GammaMapEx<T>::getGamma(T *x) const
+{
     assert(x != NULL);
     assert(x->getNumber() < gamma.size());
     return gamma[x->getNumber()];
-  }
-  
+}
+
 
 #endif // GAMMAMAPEX_H

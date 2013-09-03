@@ -99,70 +99,70 @@ private:
 
 /******************************************************************************************************************************************/
 
- template <class T>
- LambdaMapEx<T>::LambdaMapEx(unsigned Nnodes)
-  :NodeVector(Nnodes),
-   description()
- {
- }
+template <class T>
+LambdaMapEx<T>::LambdaMapEx(unsigned Nnodes)
+:NodeVector(Nnodes),
+description()
+{
+}
 
- template <class T>
- LambdaMapEx<T>::LambdaMapEx(const TreeExtended& G,const TreeExtended& S, const StrStrMap &gs)
-   : NodeVector(G.getNumberOfNodes()),
-     description()
-  {
-      try
-      {
-        recursiveLambda(G.getRootNode(),S,gs);
-      }
-      catch (AnError& err)
-      {
-        err.action();
-      }
-      ostringstream oss;
-      oss << "LambdaMap between guest tree" << G.getName() 
-	  << " and host tree " << S.getName();
-      description = oss.str();
-  }
-
-  template <class T>   
-  LambdaMapEx<T>::LambdaMapEx(const LambdaMapEx& l)
-    : NodeVector(l),
-      description(l.description)
-  {
-   
-  }
-  
-  template <class T>
-  LambdaMapEx<T>::LambdaMapEx()
-    :NodeVector(0),
-     description()
-  {
-
-  }
-
-  
-  template <class T>
-  LambdaMapEx<T>&
-  LambdaMapEx<T>::operator=(const LambdaMapEx<T>& l)
-  {
-    if(&l != this)
+template <class T>
+LambdaMapEx<T>::LambdaMapEx(const TreeExtended& G,const TreeExtended& S, const StrStrMap &gs)
+: NodeVector(G.getNumberOfNodes()),
+    description()
+{
+    try
     {
-        NodeVector::operator=(l);
-        description = l.description;
+        recursiveLambda(G.getRootNode(),S,gs);
     }
-    return *this;
-  }
-  
-  template <class T>
-  LambdaMapEx<T>::~LambdaMapEx()
-  {
+    catch (AnError& err)
+    {
+        err.action();
+    }
+    ostringstream oss;
+    oss << "LambdaMap between guest tree" << G.getName() 
+    << " and host tree " << S.getName();
+    description = oss.str();
+}
 
-  }
-  
-  template <class T>
-  void LambdaMapEx<T>::update(const TreeExtended& G, const TreeExtended& S, StrStrMap* gs)
-  {
+template <class T>   
+LambdaMapEx<T>::LambdaMapEx(const LambdaMapEx& l)
+: NodeVector(l),
+    description(l.description)
+{
+
+}
+
+template <class T>
+LambdaMapEx<T>::LambdaMapEx()
+:NodeVector(0),
+    description()
+{
+
+}
+
+
+template <class T>
+LambdaMapEx<T>&
+LambdaMapEx<T>::operator=(const LambdaMapEx<T>& l)
+{
+if(&l != this)
+{
+    NodeVector::operator=(l);
+    description = l.description;
+}
+return *this;
+}
+
+template <class T>
+LambdaMapEx<T>::~LambdaMapEx()
+{
+
+}
+
+template <class T>
+void LambdaMapEx<T>::update(const TreeExtended& G, const TreeExtended& S, StrStrMap* gs)
+{
     if(gs)
     {
         recursiveLambda(G.getRootNode(), S, *gs);
@@ -172,18 +172,18 @@ private:
         recursiveLambda(G.getRootNode(), S);
     }
     return;
-  }
-  
-  template <class T>
-  void LambdaMapEx<T>::update(const TreeExtended& G, const TreeExtended& S, const std::vector< unsigned int > &sigma, 
-			 const dynamic_bitset<> &transfer_edges)
-  {
-    
+}
+
+template <class T>
+void LambdaMapEx<T>::update(const TreeExtended& G, const TreeExtended& S, const std::vector< unsigned int > &sigma, 
+            const dynamic_bitset<> &transfer_edges)
+{
+
     clearValues();
-    
+
     for (Node *u = G.getPostOderBegin(); 
-         u != NULL; 
-         u = G.postorder_next(u))
+            u != NULL; 
+            u = G.postorder_next(u))
         {
             /* Take care of gene tree leaves and continue. */
             if (u->isLeaf())
@@ -207,31 +207,29 @@ private:
                 pv[u->getNumber()] = S.lca(pv[w->getNumber()],pv[v->getNumber()]);
             }
         }
-  }	
-  
-  template <class T>
-  void LambdaMapEx<T>::update(const TreeExtended &G, const TreeExtended& S,const std::vector<unsigned> &lambda)
-  {
+}	
+
+template <class T>
+void LambdaMapEx<T>::update(const TreeExtended &G, const TreeExtended& S,const std::vector<unsigned> &lambda)
+{
     for (unsigned i = 0; i < lambda.size(); i++)
     {
-      pv[i] = S.getNode(lambda[i]);
+        pv[i] = S.getNode(lambda[i]);
     }
-    
-  }
 
-  
-  
-  template <class T>
-  std::ostream& 
-  operator<<(std::ostream &o, const LambdaMapEx<T>& l)
-  {
+}
+
+template <class T>
+std::ostream& 
+operator<<(std::ostream &o, const LambdaMapEx<T>& l)
+{
     return o << l.print();
-  };
-  
-  template <class T>
-  std::string 
-  LambdaMapEx<T>::print() const
-  {
+};
+
+template <class T>
+std::string 
+LambdaMapEx<T>::print() const
+{
     std::ostringstream oss;
     oss << description << ":\n";
     for(unsigned i = 0; i < pv.size(); i++)
@@ -239,60 +237,58 @@ private:
         oss << "\tLambda[" << i << "] = " << pv[i]->getNumber() << ";\n";
     }
     return oss.str();
-  }
+}
 
 
-  template <class T>
-  T* LambdaMapEx<T>::recursiveLambda(T *g,const TreeExtended& S, const StrStrMap& gs)
-  {
-    
+template <class T>
+T* LambdaMapEx<T>::recursiveLambda(T *g,const TreeExtended& S, const StrStrMap& gs)
+{
     if(g->isLeaf())
     { 
-      return compLeafLambda(g, S, gs);
+        return compLeafLambda(g, S, gs);
     }
     else
     {
 
-      T *ls = recursiveLambda(g->getLeftChild(), S, gs);
-      T *rs = recursiveLambda(g->getRightChild(), S, gs);
-      T *s = S.mostRecentCommonAncestor(ls,rs);
-      pv[g->getNumber()] = s;
-      return s;
+        T *ls = recursiveLambda(g->getLeftChild(), S, gs);
+        T *rs = recursiveLambda(g->getRightChild(), S, gs);
+        T *s = S.mostRecentCommonAncestor(ls,rs);
+        pv[g->getNumber()] = s;
+        return s;
     }
-  }
+}
 
-  template <class T>
-  T* LambdaMapEx<T>::recursiveLambda(T *g,const TreeExtended& S)
-  {
-    
+template <class T>
+T* LambdaMapEx<T>::recursiveLambda(T *g,const TreeExtended& S)
+{
     if(g->isLeaf())
     { 
-      return pv[g->getNumber()];
+        return pv[g->getNumber()];
     }
     else
     {
-      T *ls = recursiveLambda(g->getLeftChild(), S);
-      T *rs = recursiveLambda(g->getRightChild(), S);
-      T *s = S.mostRecentCommonAncestor(ls,rs);
-      pv[g->getNumber()] = s;
-      return s;
+        T *ls = recursiveLambda(g->getLeftChild(), S);
+        T *rs = recursiveLambda(g->getRightChild(), S);
+        T *s = S.mostRecentCommonAncestor(ls,rs);
+        pv[g->getNumber()] = s;
+        return s;
 
     }
-  }
-  
-  template <class T>
-  T*
-  LambdaMapEx<T>::compLeafLambda(T *g, const TreeExtended& S, const StrStrMap& gs)
-  {
+}
+
+template <class T>
+T*
+LambdaMapEx<T>::compLeafLambda(T *g, const TreeExtended& S, const StrStrMap& gs)
+{
     string genename = g->getName();
     const string sp_name = gs.find(genename);
     if (sp_name.empty()) 
     {
         throw AnError("Input inconsistency: "
-		      "Leaf name missing in gene-to-species data.", 
-		      genename, 1);
+                "Leaf name missing in gene-to-species data.", 
+                genename, 1);
     }
-    
+
     try 
     {
         T *s = S.findLeaf(sp_name);
@@ -307,17 +303,19 @@ private:
         e.action();
         return NULL;
     }
-  }
-  
-  template <class T>
-  bool LambdaMapEx<T>::valid() const
-  {
-     for (unsigned i = 0; i < pv.size(); i++)
-     {
-       if(pv[i]->isRoot())
-           return true;
-     }
-     return false;
-  }
+}
+
+template <class T>
+bool LambdaMapEx<T>::valid() const
+{
+    for (unsigned i = 0; i < pv.size(); i++)
+    {
+        if(pv[i]->isRoot())
+        {
+            return true;
+        }
+    }
+    return false;
+}
 
 #endif // LAMBDAMAPEX_H

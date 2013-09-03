@@ -28,23 +28,23 @@
 #include <map>
 #include "SetOfNodesEx.hh"
 
-    using namespace std;
-    class Tree;
-    
-    enum  Type{Leaf=0, Speciation=1, Duplication=2, LateralTransfer=3, Undefined=4};
-    
-    typedef float Real;
+using namespace std;
+class Tree;
 
-  class Node
-  {
+enum  Type{Leaf=0, Speciation=1, Duplication=2, LateralTransfer=3, Undefined=4};
 
-  public:
-    
+typedef float Real;
+
+class Node
+{
+
+public:
+
     Node(unsigned id);
     Node(unsigned id, const std::string& nodeName);
     virtual ~Node();
     Node(const Node &);
-	
+
     //Extra Methods aded by Jose Carlos Fernandez
     void setColor(Color c);
     void setSize(double s);
@@ -71,7 +71,7 @@
     void setRightChild(Node *);
     void setLeftChild(Node *);
     //Extra Methods aded by Jose Carlos Fernandez
-    
+
     void rotate();
     Node* getLeftChild() const;
     Node* getRightChild() const;
@@ -101,7 +101,7 @@
     bool operator>(const Node& b) const;
     bool dominates(const Node &b) const;
     bool strictlyDominates(const Node &b) const;
-    
+
     Real getNodeTime() const;
     Real getTime() const;
     Real getLength() const;
@@ -110,18 +110,18 @@
     void setNodeTime(const Real &t);
     void setTime(const Real &t); 
     void setLength(const Real &newLength);
-    
+
     friend std::ostream& operator<< (std::ostream& o, const Node &v);
     friend std::ostream& operator<< (std::ostream& o, const Node *v);
 
-  private:
+private:
 
     std::string stringify(std::string tag, Real val) const;
     std::string stringify(std::string tag, std::string val) const;
     std::string stringify(std::string tag, Node *v) const;
 
-  protected:
-    
+protected:
+
     unsigned number;      //! the number, the unique id in the tree.
 
     Node *parent;         //! pointer to the parent Node 
@@ -135,7 +135,7 @@
 
     std::string name;     //! the (leaf) name
     Tree* ownerTree;      //! The tree to which I belong
-    
+
     /* extra features Jose Carlos Fernandez */
     Color color;
     double size;
@@ -146,6 +146,6 @@
     Type reconcilation;
     unsigned visited;
 
-  };
+};
 
 #endif

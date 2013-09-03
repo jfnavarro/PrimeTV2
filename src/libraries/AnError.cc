@@ -25,31 +25,31 @@
 #include <csignal>
 #include "AnError.hh"
 
-  using namespace std;
+using namespace std;
 
-  AnError::AnError(const string &message, int err_code) throw()
-    : msg_str(message),
-      arg_str(""),
-      error_code(err_code)
-  {
+AnError::AnError(const string &message, int err_code) throw()
+: msg_str(message),
+    arg_str(""),
+    error_code(err_code)
+{
 
-  }
+}
 
-  AnError::AnError(const string &message, const string &arg, 
-		   int err_code) throw()
-    : msg_str(message),
-      arg_str(arg),
-      error_code(err_code)
-  {
-  }
+AnError::AnError(const string &message, const string &arg, 
+        int err_code) throw()
+: msg_str(message),
+    arg_str(arg),
+    error_code(err_code)
+{
+}
 
-  AnError::~AnError() throw()
-  {
-  }
+AnError::~AnError() throw()
+{
+}
 
-  void
-  AnError::action()
-  {
+void
+AnError::action()
+{
     cerr << "Error:\n" << message();
     cerr << endl;
 
@@ -57,28 +57,28 @@
     {
         exit(error_code);
     }
-  }
+}
 
-  std::string
-  AnError::message() const
-  {
-  
+std::string
+AnError::message() const
+{
+
     std::string s =  msg_str;
     if (arg_str.length() > 0) 
     {
         s = s + " (" + arg_str + ")";
     }
     return s;
-  }
+}
 
-  int
-  AnError::code() const
-  {
+int
+AnError::code() const
+{
     return error_code;
-  }
+}
 
-  const char*
-  AnError::what() const throw()
-  {
+const char*
+AnError::what() const throw()
+{
     return message().c_str();
-  }
+}

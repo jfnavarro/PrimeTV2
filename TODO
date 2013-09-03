@@ -26,6 +26,10 @@ Improve the UI
 
 Perform a battery of several tests and create a testing script (unitests)
 
+Improve general stability by testing and fixing errors
+
 Known bugs :
 
 * In the terminal version when scaling to more than 1.0 the tree gets out of the canvas
+* Terminal version is un-stable
+* -R option to remove crossing edges does not work for every scenario

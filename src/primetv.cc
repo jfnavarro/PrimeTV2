@@ -36,48 +36,55 @@
 #include <boost/tokenizer.hpp>
 #include <boost/token_functions.hpp>
 #include <boost/foreach.hpp>
+#include <boost/lexical_cast.hpp>
 
 #include <QApplication>
 #include "windows.h"
 #include "ui_primetv.h"
 
+#include "options_cmake.h"
 
-  using namespace boost;
-  namespace po = boost::program_options;
-  using namespace std;
+using namespace boost;
+namespace po = boost::program_options;
+using namespace std;
 
-  //member objects
-  static Parameters *parameters = 0;
-  static Mainops *mainops = 0;
-  
-  /* Helper function to sort vectors used in the parser of parameters */
-  template<class T>
-  ostream& operator<<(ostream& os, const vector<T>& v)
-  {
+static const std::string MAJOR = boost::lexical_cast<std::string>(VERSION_MAJOR);
+static const std::string MINOR = boost::lexical_cast<std::string>(VERSION_MINOR);
+static const std::string PATCH = boost::lexical_cast<std::string>(VERSION_REVISION);
+static const std::string VERSION =  ((MAJOR + "." + MINOR) + ".") + PATCH;
+
+//member objects
+static Parameters *parameters = 0;
+static Mainops *mainops = 0;
+
+/* Helper function to sort vectors used in the parser of parameters */
+template<class T>
+ostream& operator<<(ostream& os, const vector<T>& v)
+{
     copy(v.begin(), v.end(), ostream_iterator<T>(cout, " ")); 
     return os;
-  }
-  
-  /* Helper function that checks if a filename exists in the system */
-  int file_exist (const char *filename)
-  {
-    struct stat   buffer;   
-    return (stat (filename, &buffer) == 0);
-  }
+}
 
-  void cleanUp()
-  {
+/* Helper function that checks if a filename exists in the system */
+int file_exist(const char *filename)
+{
+    struct stat buffer;   
+    return(stat(filename, &buffer) == 0);
+}
+
+void cleanUp()
+{
     if(parameters)
     {
-      delete parameters;
-      parameters = 0;
+        delete parameters;
+        parameters = 0;
     }
     if(mainops)
     {
-      delete mainops;
-      mainops = 0;
+        delete mainops;
+        mainops = 0;
     }
-  }
+}
 
 int
 main (int ac, char *av[]) 
@@ -227,7 +234,7 @@ try
         
   if (!ifs && config_file != default_config_file)
   {
-      std::cerr << "can not open config file: " << config_file << "\n";
+      std::cerr << "can not open config file: " << config_file << std::endl;
   }
   else
   {
@@ -244,14 +251,15 @@ try
       return 0;
   }
 
-  if (vm.count("version")) {
-      cout << "PrimeTV, version 2.0\n";
+  if (vm.count("version")) 
+  {
+      cout << "PrimeTV, version " << VERSION << std::endl;
       return 0;
   }
   
   if(vm.count("color") == 1)
   {
-    parameters->colorConfig->setColors(vm["color"].as<string>().c_str());
+        parameters->colorConfig->setColors(vm["color"].as<string>().c_str());
   }
   
   if (vm.count("input-file"))
@@ -260,39 +268,40 @@ try
      
     if(size <= 1)
     {
-	std::cerr << "No trees given" << "\n";
-	return 0;
+        std::cerr << "No trees given" << std::endl;
+        return 0;
     }
     
     BOOST_FOREACH(string s,vm["input-file"].as< vector<string> >())
     {
-      if(!file_exist(s.c_str()))
-      {
-	std::cerr << "The file name given : " << s.c_str() << " does not exist " << std::endl;
-	return 0;
-      }
+        if(!file_exist(s.c_str()))
+        {
+            std::cerr << "The file name given : " << s.c_str() << " does not exist " << std::endl;
+            return 0;
+        }
     }
    
     if(!(bool)(parameters->isreconciled) && (size == 1 || size == 2))
     {
-      reconciledtree = vm["input-file"].as< vector<string> >().at(0).c_str();
-      
-      if (size == 1)
-      {
-	parameters->do_not_draw_species_tree = true;
-      }
-      else 
-      {
-	speciestree = vm["input-file"].as< vector<string> >().at(1).c_str();
-      }
+        reconciledtree = vm["input-file"].as< vector<string> >().at(0).c_str();
+        
+        if (size == 1)
+        {
+            parameters->do_not_draw_species_tree = true;
+        }
+        else 
+        {
+            speciestree = vm["input-file"].as< vector<string> >().at(1).c_str();
+        }
     }
     else if (parameters->isreconciled && size == 3 )
     {
-      genetree = vm["input-file"].as< vector<string> >().at(0).c_str();
-      speciestree = vm["input-file"].as< vector<string> >().at(1).c_str();
-      mapfile = vm["input-file"].as< vector<string> >().at(2).c_str();
+        genetree = vm["input-file"].as< vector<string> >().at(0).c_str();
+        speciestree = vm["input-file"].as< vector<string> >().at(1).c_str();
+        mapfile = vm["input-file"].as< vector<string> >().at(2).c_str();
       
-    }else
+    }
+    else
     {
       std::cerr << "Incorrect number of arguments" << std::endl;
       return 0;
@@ -319,9 +328,9 @@ try
   {
       if(parameters->do_not_draw_species_tree)
       {
-	parameters->scaleByTime = false; 
-	parameters->equalTimes = false;
-	parameters->noTimeAnnotation = true;
+        parameters->scaleByTime = false; 
+        parameters->equalTimes = false;
+        parameters->noTimeAnnotation = true;
   
       }
   }
@@ -345,13 +354,13 @@ try
      parameters->lateraltrancost = vm["event-costs"].as< vector<float> >().at(3);
      
      if(parameters->lateralmincost < 1.0 || parameters->lateralmincost > 10.0)
-	parameters->lateralmincost = 1.0;
+        parameters->lateralmincost = 1.0;
      if(parameters->lateralmaxcost < 1.0 || parameters->lateralmaxcost > 10.0)
-	parameters->lateralmaxcost = 1.0;
+        parameters->lateralmaxcost = 1.0;
      if(parameters->lateralduplicost < 1.0 || parameters->lateralduplicost > 10.0)
-	parameters->lateralduplicost = 1.0;
+        parameters->lateralduplicost = 1.0;
      if(parameters->lateraltrancost < 1.0 || parameters->lateraltrancost > 10.0)
-	parameters->lateraltrancost = 1.0;
+        parameters->lateraltrancost = 1.0;
      
      parameters->lattransfer = true;
      
@@ -361,7 +370,7 @@ try
   if (vm.count("fontscale") > 1)
   {
      if(parameters->fontscale >= 20 || parameters->fontscale < 1)
-	parameters->fontscale = 10; 
+        parameters->fontscale = 10; 
 
   }
  
@@ -380,10 +389,10 @@ try
       parameters->height = vm["size"].as< vector<float> >().at(1);
     
       if (parameters->width < 400 || parameters->width > 2000)
-	parameters->width = 800;
+        parameters->width = 800;
    
       if(parameters->height < 400 || parameters->height > 2000)
-	parameters->height = 1000;
+        parameters->height = 1000;
     } 
   }
   
@@ -396,10 +405,10 @@ try
       parameters->yoffset = vm["move"].as< vector<float> >().at(1);
     
       if (abs(parameters->xoffset) > parameters->width / 2)
-	parameters->xoffset = 0.0;
+        parameters->xoffset = 0.0;
    
       if(abs(parameters->yoffset) > parameters->height/2)
-	parameters->yoffset = 0.0;
+        parameters->yoffset = 0.0;
     } 
   }
   

@@ -28,13 +28,14 @@
 class Color
 {
 public:
-  double red;
-  double green;
-  double blue;
-  const char *name;
-  Color();
-  Color(double red, double green, double blue, const char *name);
-  Color operator=(Color a);
+
+    double red;
+    double green;
+    double blue;
+    const char *name;
+    Color();
+    Color(double red, double green, double blue, const char *name);
+    Color operator=(Color a);
 };
 
 #endif // COLOR_H

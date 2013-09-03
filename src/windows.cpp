@@ -27,6 +27,11 @@
 #include <QDesktopWidget>
 #include <QErrorMessage>
 #include <QTemporaryFile>
+#include <QShortcut>
+#if defined Q_OS_WIN
+    #include <windows.h>
+    #include "qt_windows.h"
+#endif
 
 #include "windows.h"
 
@@ -69,8 +74,35 @@ MainWindow::MainWindow(Parameters *p, Mainops *m, QWidget *parent)
     scene->addItem(canvas);
     
     #ifdef Q_WS_MAC
+    setUnifiedTitleAndToolBarOnMac(true); 
+    QApplication::setAttribute(Qt::AA_MacPluginApplication,false);
+    QApplication::setAttribute(Qt::AA_NativeWindows,true); //NOTE this is actually pretty important
+    QApplication::setAttribute(Qt::AA_DontShowIconsInMenus,false); //osx does not show icons on menus
+    QApplication::setAttribute(Qt::AA_SynthesizeTouchForUnhandledMouseEvents,false);
+    QApplication::setCursorFlashTime(0);
     toolBar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
     #endif
+    
+    #if defined(Q_OS_WIN)
+    actionExit->setShortcuts(QList<QKeySequence>()
+    << QKeySequence(Qt::ALT|Qt::Key_F4)
+    << QKeySequence(Qt::CTRL|Qt::Key_Q));
+    #elif defined(Q_OS_LINUX) || defined(Q_OS_MAC)
+    actionExit->setShortcut(QKeySequence::Quit);
+    #endif
+    
+    #if defined Q_OS_MAC
+    QShortcut *shortcut = new QShortcut(QKeySequence("Ctrl+M"), this);
+    connect(shortcut, SIGNAL(activated()), this, SLOT(showMinimized()));
+            actionExit->setShortcut(QKeySequence("Ctrl+W"));
+    #endif
+    
+    //some OSX variables
+    setAttribute(Qt::WA_MacShowFocusRect,false);
+    setAttribute(Qt::WA_MacOpaqueSizeGrip,false);
+    setAttribute(Qt::WA_MacNormalSize,false);
+    setAttribute(Qt::WA_MacVariableSize,true);
+    setAttribute(Qt::WA_OpaquePaintEvent,false);
 }
 
 MainWindow::MainWindow(const MainWindow& other)
@@ -220,7 +252,8 @@ void MainWindow::paintTree()
     if(file.exists())
     {
         QPixmap image = canvas->pixmap();
-        if (!image.load(file.fileName())) {
+        if (!image.load(file.fileName())) 
+        {
             QErrorMessage errorMessage;
             errorMessage.showMessage("Error loading image " + QString::fromStdString(filename));
             errorMessage.exec();
@@ -285,10 +318,13 @@ void MainWindow::update()
     parameters->do_not_draw_species_tree = checkBoxHost->isChecked();
 
     if (checkBoxLadderize->isChecked())
+    {
         parameters->ladd = 'l';
+    }
     else
+    {
         parameters->ladd = 'r';
-
+    }
     parameters->legend = checkBoxLegend->isChecked();
     parameters->ids_on_inner_nodes = checkBoxINodes->isChecked();
 
@@ -330,18 +366,27 @@ void MainWindow::update()
     parameters->all_font = QFontInfo(fontComboBoxAll->currentFont()).family().toUtf8().constData();
 
     if (radioButtonColor1->isChecked())
+    {
         parameters->colorConfig->setColors("1");
+    }
     else if (radioButtonColor2->isChecked())
+    {
         parameters->colorConfig->setColors("2");
+    }
     else if (radioButtonColor3->isChecked())
+    {
         parameters->colorConfig->setColors("3");
+    }
     else if (radioButtonColor4->isChecked())
+    {
         parameters->colorConfig->setColors("4");
-
+    }
     if (isPainted && hostTree && guestTree)
     { 
         if((bool)parameters->lattransfer)
+        {
             ops->lateralTransfer(mapfile,(parameters->lateralmincost == 1.0 && parameters->lateralmaxcost == 1.0));
+        }
         ops->drawBest(); //draw tree into temp file
         paintTree();
     }
@@ -359,7 +404,9 @@ void MainWindow::newImage()
     canvas = new Canvas(QPixmap());
     scene->addItem(canvas);
     if(parameters)
+    {
         delete parameters;
+    }
     parameters = new Parameters();
     loadParameters(parameters);
     parameters->format = "svg";
@@ -378,10 +425,13 @@ void MainWindow::loadParameters(Parameters *parameters)
     checkBoxMarkers->setChecked(parameters->markers);
 
     if (parameters->ladd == 'r')
+    {
         checkBoxLadderize->setChecked(false);
+    }
     else if (parameters->ladd == 'l')
+    {
         checkBoxLadderize->setChecked(true);
-
+    }
     checkBoxReconcile->setChecked(parameters->isreconciled);
     checkBoxGuest->setChecked(parameters->do_not_draw_guest_tree);
     checkBoxHV->setChecked(parameters->horiz);
@@ -395,21 +445,21 @@ void MainWindow::loadParameters(Parameters *parameters)
     int set = atoi(parameters->colorConfig->getSet());
     switch (set)
     {
-    case(1):
-        radioButtonColor1->setChecked(true);
-        break;
-    case(2):
-        radioButtonColor2->setChecked(true);
-        break;
-    case(3):
-        radioButtonColor3->setChecked(true);
-        break;
-    case(4):
-        radioButtonColor4->setChecked(true);
-        break;
+        case(1):
+            radioButtonColor1->setChecked(true);
+            break;
+        case(2):
+            radioButtonColor2->setChecked(true);
+            break;
+        case(3):
+            radioButtonColor3->setChecked(true);
+            break;
+        case(4):
+            radioButtonColor4->setChecked(true);
+            break;
 
-    default:
-        radioButtonColor1->setChecked(true);
+        default:
+            radioButtonColor1->setChecked(true);
     }
 
     lineEditHeaderText->setText(QString::fromStdString(parameters->titleText));
@@ -419,19 +469,19 @@ void MainWindow::loadParameters(Parameters *parameters)
     spinBoxDupliCost->setValue(parameters->lateralduplicost);
     spinBoxSpeCost->setValue(parameters->lateraltrancost);
     spinBoxMinCost->setValue(parameters->lateralmincost);
-    
-    
     spinBoxAllFontSize->setValue(parameters->fontsize);
     spinBoxGeneFontSize->setValue(parameters->gene_font_size);
     spinBoxSpeciesFontSize->setValue(parameters->species_font_size);
 
     if (parameters->noTimeAnnotation)
+    {
         comboBoxTime->setCurrentIndex(1);
+    }
     else if (parameters->timeAtEdges)
+    {
         comboBoxTime->setCurrentIndex(2);
+    }
 }
-
-
 
 void MainWindow::save()
 {
@@ -452,11 +502,14 @@ void MainWindow::save()
         if (fileinfo.baseName() == "")
         {
             if (parameters->isreconciled)
+            {
                 fileinfo = QFileInfo(genetree);
+            }
             else
+            {
                 fileinfo = QFileInfo(reconciledtree);
+            }
         }
-
 
         if (!QImageWriter::supportedImageFormats().contains(QByteArray(suffix)))
         {
@@ -519,7 +572,8 @@ void MainWindow::loadMap()
 
 QString MainWindow::openFile(QString header)
 {
-    if (lastVisitedDir.isEmpty()) {
+    if (lastVisitedDir.isEmpty()) 
+    {
         lastVisitedDir = QDir::currentPath();
     }
     QString filename = QFileDialog::getOpenFileName( this, header, lastVisitedDir,
@@ -531,7 +585,9 @@ QString MainWindow::openFile(QString header)
         return filename;
     }
     else
+    {
         return "";
+    }
 }
 
 void MainWindow::showParameters()
@@ -575,7 +631,9 @@ void MainWindow::print()
         statusBar()->showMessage(tr("Error Printing"));
     }
     else
+    {
         statusBar()->showMessage(tr("Tree Printed"));
+    }
 }
 
 void MainWindow::loadFontColor()

@@ -34,10 +34,10 @@ using namespace std;
 #define WARNING2(arg1,arg2) {std::cerr << "Warning: " << arg1 << arg2 << std::endl;}
 #define WARNING3(arg1,arg2,arg3) {std::cerr << "Warning: " << arg1 << arg2 << arg3 << std::endl;}
 
-  class AnError : public std::exception 
-  {
-  
-  public:
+class AnError : public std::exception 
+{
+
+    public:
 
     AnError(const std::string& message, int err_code = 0) throw();
     AnError(const std::string &message, const std::string &arg, int err_code = 0) throw();
@@ -48,10 +48,10 @@ using namespace std;
     int code() const;	
     const char* what() const throw();
 
-  protected:
+    protected:
     const std::string msg_str;
     std::string arg_str;
     int error_code;
-  };
+};
 
 #endif

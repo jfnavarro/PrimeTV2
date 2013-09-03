@@ -34,35 +34,34 @@ LayoutTrees::LayoutTrees(TreeExtended *r,TreeExtended *g,
 
 void LayoutTrees::start()
 {
-  if (parameters->ladd == 'r') 
-  {  
-    Ladderize_right();
-    equal = parameters->equalTimes;
-  }
-  else if (parameters->ladd == 'l') 
-  {
-    Ladderize_left();
-    equal = false;
-  }
-  
-
-  parameters->maxLeafNameSize = biggestLabel() * parameters->fontsize;
-  // we calculate the separation between the tree and the margin of the canvas
-  // according to the size of the picture and the size of the biggest leaf
-  parameters->separation = (parameters->width / 10) + parameters->maxLeafNameSize;
-  parameters->root_sep = (parameters->separation / 2) - parameters->maxLeafNameSize;
-  //scale by time and do it equally distributed
-  nodetime = parameters->scaleByTime;
-  
-  calculateSizes();
-  calculateIntervals();
+    if (parameters->ladd == 'r') 
+    {  
+        Ladderize_right();
+        equal = parameters->equalTimes;
+    }
+    else if (parameters->ladd == 'l') 
+    {
+        Ladderize_left();
+        equal = false;
+    }
     
-  currentY = YCanvasSize - (yspace / 2.0);
-  
-  CountSpeciesCoordinates(species->getRootNode(),0);
-  FindDuplications(gene->getRootNode());
-  MapDuplications(gene->getRootNode(),species->getRootNode()->getNumber()+1);
-  CountGeneCoordinates(gene->getRootNode());
+    parameters->maxLeafNameSize = biggestLabel() * parameters->fontsize;
+    // we calculate the separation between the tree and the margin of the canvas
+    // according to the size of the picture and the size of the biggest leaf
+    parameters->separation = (parameters->width / 10) + parameters->maxLeafNameSize;
+    parameters->root_sep = (parameters->separation / 2) - parameters->maxLeafNameSize;
+    //scale by time and do it equally distributed
+    nodetime = parameters->scaleByTime;
+    
+    calculateSizes();
+    calculateIntervals();
+        
+    currentY = YCanvasSize - (yspace / 2.0);
+    
+    CountSpeciesCoordinates(species->getRootNode(),0);
+    FindDuplications(gene->getRootNode());
+    MapDuplications(gene->getRootNode(),species->getRootNode()->getNumber()+1);
+    CountGeneCoordinates(gene->getRootNode());
 }
 
 
@@ -73,114 +72,119 @@ LayoutTrees::~LayoutTrees()
 
 void LayoutTrees::calculateSizes()
 {
-  //extra espace from the root to the margin to draw gene nodes mapped to the root
-  xCanvasXtra = parameters->root_sep * gamma->getSize(species->getRootNode());
-  
-  if(parameters->horiz)
-    yspace =  (parameters->width - parameters->separation) / species->getNumberOfLeaves() ;
-  else
-    yspace =  (parameters->height - parameters->separation) / species->getNumberOfLeaves() ; 
-  
-  NodeHeight = yspace / 2.5;
+    //extra espace from the root to the margin to draw gene nodes mapped to the root
+    xCanvasXtra = parameters->root_sep * gamma->getSize(species->getRootNode());
     
-  //max numbers of gene nodes mapped to a Species node
-  int maxnodesmapped = MostGenes();
-
-  //check if the tree is too big to fit in the actual canvas size
-  if(NodeHeight <  (parameters->min_node_height * maxnodesmapped))
-  {
-    double yrate = ((parameters->min_node_height * maxnodesmapped) - NodeHeight) * species->getNumberOfLeaves();
-    parameters->height += yrate;
-    yspace =  (parameters->height - parameters->separation) / species->getNumberOfLeaves();
+    if(parameters->horiz)
+    {
+        yspace =  (parameters->width - parameters->separation) / species->getNumberOfLeaves() ;
+    }
+    else
+    {
+        yspace =  (parameters->height - parameters->separation) / species->getNumberOfLeaves() ; 
+    }
+    
     NodeHeight = yspace / 2.5;
-    //assuming the x ampliation will be equal to the y ampliation
-    parameters->width += yrate;  
-  }
-  
-  if(parameters->horiz)
-  {
-    YCanvasSize = parameters->width - parameters->separation;
-    XCanvasSize = parameters->height - xCanvasXtra - parameters->separation;
-  }
-  else
-  {
-    YCanvasSize = parameters->height - parameters->separation;
-    XCanvasSize = parameters->width - xCanvasXtra - parameters->separation;
-  }
+        
+    //max numbers of gene nodes mapped to a Species node
+    int maxnodesmapped = MostGenes();
+
+    //check if the tree is too big to fit in the actual canvas size
+    if(NodeHeight <  (parameters->min_node_height * maxnodesmapped))
+    {
+        double yrate = ((parameters->min_node_height * maxnodesmapped) - NodeHeight) * species->getNumberOfLeaves();
+        parameters->height += yrate;
+        yspace =  (parameters->height - parameters->separation) / species->getNumberOfLeaves();
+        NodeHeight = yspace / 2.5;
+        //assuming the x ampliation will be equal to the y ampliation
+        parameters->width += yrate;  
+    }
+    
+    if(parameters->horiz)
+    {
+        YCanvasSize = parameters->width - parameters->separation;
+        XCanvasSize = parameters->height - xCanvasXtra - parameters->separation;
+    }
+    else
+    {
+        YCanvasSize = parameters->height - parameters->separation;
+        XCanvasSize = parameters->width - xCanvasXtra - parameters->separation;
+    }
   
 }
 
 
 void LayoutTrees::calculateIntervals()
 {
-  maxdeepleaf = species->getRootNode()->getMaxPathToLeaf() + 1;
-  
-  if(equal)
-  {
-      maxdeepleaftimes = maptimes();
-  
-      for(int i=0; i<maxdeepleaftimes;++i)
-      {
-	double ratio = (double)i / (maxdeepleaftimes);
-	double value = ratio * XCanvasSize;
-	double time = maptime[i];
-	numXPositionsTimes.insert(pair<double,double>(time,value));    
-      }
-  }
-  
-  for(int i=0; i<maxdeepleaf;++i)
-  {
-    double ratio = (double)i / (maxdeepleaf-1);
-    double value = ratio * XCanvasSize;
-    numXPositions.push_back(value);    
-  }
+    maxdeepleaf = species->getRootNode()->getMaxPathToLeaf() + 1;
+    
+    if(equal)
+    {
+        maxdeepleaftimes = maptimes();
+    
+        for(int i=0; i<maxdeepleaftimes;++i)
+        {
+            double ratio = (double)i / (maxdeepleaftimes);
+            double value = ratio * XCanvasSize;
+            double time = maptime[i];
+            numXPositionsTimes.insert(pair<double,double>(time,value));    
+        }
+    }
+    
+    for(int i=0; i<maxdeepleaf;++i)
+    {
+        double ratio = (double)i / (maxdeepleaf-1);
+        double value = ratio * XCanvasSize;
+        numXPositions.push_back(value);    
+    }
   
 }
 
 
 static bool sort_double(double u, double v)
 {
-  return u > v;
+    return u > v;
 }
 
 unsigned LayoutTrees::maptimes()
 {
-  for (unsigned i = 0; i < species->getNumberOfNodes(); i++)
-  {
-    Node *n = species->getNode(i);
-    double time = n->getNodeTime();
-    std::vector<double>::iterator it = std::find(maptime.begin(),maptime.end(),time);    
-    if( it == maptime.end())
-      maptime.push_back(n->getNodeTime());
-  }
-  std::sort(maptime.begin(),maptime.end(),sort_double);
-  return maptime.size();
-  
+    for (unsigned i = 0; i < species->getNumberOfNodes(); i++)
+    {
+        Node *n = species->getNode(i);
+        double time = n->getNodeTime();
+        std::vector<double>::iterator it = std::find(maptime.begin(),maptime.end(),time);    
+        if(it == maptime.end())
+        {
+            maptime.push_back(n->getNodeTime());
+        }
+    }
+    std::sort(maptime.begin(),maptime.end(),sort_double);
+    return maptime.size();
 }
 
 double LayoutTrees::getRightMostCoordinate (Node* o)
 {
    if (o->isLeaf())
    {
-    return o->getY();
+       return o->getY();
    }
     
    else
    {
-    return getRightMostCoordinate(o->getRightChild());
+       return getRightMostCoordinate(o->getRightChild());
    }
 }
 
 double LayoutTrees::getLeftMostCoordinate (Node* o)
 {
-   if (o->isLeaf())
+   if(o->isLeaf())
    {
-     return o->getY();
+       return o->getY();
    }
     
    else
    {
-    return getLeftMostCoordinate(o->getRightChild());
+       return getLeftMostCoordinate(o->getRightChild());
    }
 }
 
@@ -196,61 +200,59 @@ void LayoutTrees::CountSpeciesCoordinates(Node *n, int depth)
 
     if (n->isLeaf()) 
     {
-      n->setY(currentY);
-      currentY -= yspace;
-      n->setX(XCanvasSize + xCanvasXtra);
+        n->setY(currentY);
+        currentY -= yspace;
+        n->setX(XCanvasSize + xCanvasXtra);
     } 
     else
     {
+        Node *left = n->getLeftChild();
+        Node *right = n->getRightChild();
       
-      Node *left = n->getLeftChild();
-      Node *right = n->getRightChild();
+        CountSpeciesCoordinates(left, depth + 1);
+        CountSpeciesCoordinates(right, depth + 1);
       
-      CountSpeciesCoordinates(left, depth + 1);
-      CountSpeciesCoordinates(right, depth + 1);
-      
-      double sumyleft = getRightMostCoordinate(left);
-      double sumyright = getLeftMostCoordinate(right);
-      double yposition = (sumyleft + sumyright) / 2;
-      double time = n->getNodeTime();
-      double xposition;
+        double sumyleft = getRightMostCoordinate(left);
+        double sumyright = getLeftMostCoordinate(right);
+        double yposition = (sumyleft + sumyright) / 2;
+        double time = n->getNodeTime();
+        double xposition;
 
-      if(nodetime && !equal)
-      {
-	xposition = ((1-time) * XCanvasSize) + xCanvasXtra;
-      }
-      else if(nodetime && equal)
-      {
-	xposition = numXPositionsTimes[time] + xCanvasXtra;
-      }
-      else
-      {
-	xposition = numXPositions.at(depth) + xCanvasXtra;
-      }
+        if(nodetime && !equal)
+        {
+            xposition = ((1-time) * XCanvasSize) + xCanvasXtra;
+        }
+        else if(nodetime && equal)
+        {
+            xposition = numXPositionsTimes[time] + xCanvasXtra;
+        }
+        else
+        {
+            xposition = numXPositions.at(depth) + xCanvasXtra;
+        }
 
-      n->setY(yposition);
-      n->setX(xposition);
+        n->setY(yposition);
+        n->setX(xposition);
       
-      CalcLegIntersection(left,right,n);
-
+        CalcLegIntersection(left,right,n);
     }
     
 }
 
 
 int LayoutTrees::MostGenes()
-  {
-     int currentMax = 0;
-
-     for(Node *n = species->getPostOderBegin(); n != NULL; n = species->postorder_next(n))
-     {
-       int size = gamma->getSize(n);
-       if( size > currentMax)
-	 currentMax = size;
-     }
-    
+{
+    int currentMax = 0;
+    for(Node *n = species->getPostOderBegin(); n != NULL; n = species->postorder_next(n))
+    {
+        int size = gamma->getSize(n);
+        if( size > currentMax )
+        {
+            currentMax = size;
+        }
+    }
     return currentMax;
-  }
+}
 
 /* each species node has a visited atribute, if the size (number os nodes mapped)
  * of a species node is > 1 then the nodeheight will be divided by the number
@@ -258,7 +260,6 @@ int LayoutTrees::MostGenes()
  */
 void LayoutTrees::AssignLeafGene(Node *n)
 {
-  
     Node *spn = gamma->getLowestGammaPath(*n);
     n->setX(spn->getX());
     double y;
@@ -266,327 +267,326 @@ void LayoutTrees::AssignLeafGene(Node *n)
     
     if(size > 1)
     {
-      int yoffset = spn->getVisited();
-      int delta = NodeHeight / (size - 1);
-      y = (spn->getY() - NodeHeight/2) + (delta * yoffset); 
+        int yoffset = spn->getVisited();
+        int delta = NodeHeight / (size - 1);
+        y = (spn->getY() - NodeHeight/2) + (delta * yoffset); 
     }
     else
-      y = spn->getY();
+    {
+        y = spn->getY();
+    }
     
     spn->incVisited(); 
     n->setY(y);
-    
     n->setHostChild(spn);
     
     if(!n->isRoot() && gamma->isLateralTransfer(*n->getParent()) 
       && ((*lambda)[n] == (*lambda)[n->getParent()]))
     {
-      Node *destiny = (*lambda)[getHighestMappedLGT(n)];
-      n->setHostParent(destiny);
+        Node *destiny = (*lambda)[getHighestMappedLGT(n)];
+        n->setHostParent(destiny);
     }
     else
     {
-      n->setHostParent(spn);
+        n->setHostParent(spn);
     }
 }
 
 void LayoutTrees::CountGeneCoordinates(Node* n)
 {
-   if(n->isLeaf())
-   {
-      n->setReconcilation(Leaf);
-      AssignLeafGene(n);
-   }
-   else
-   {
-      Node *left = n->getLeftChild();
-      Node *right = n->getRightChild();
-      
-      CountGeneCoordinates(left);
-      CountGeneCoordinates(right);
-   
-      if(gamma->isSpeciation(*n) && !gamma->isLateralTransfer(*n)) //speciation
-      {
-	n->setReconcilation(Speciation);
-	AssignLeafGene(n);
-      }
-      else if (gamma->isLateralTransfer(*n)) //lateral transfer
-      {
-	AssignGeneLGT(n);
-      }
-      else //duplication
-      {
-	AssignGeneDuplication(n);
-      }
-   }
+    if(n->isLeaf())
+    {
+        n->setReconcilation(Leaf);
+        AssignLeafGene(n);
+    }
+    else
+    {
+        Node *left = n->getLeftChild();
+        Node *right = n->getRightChild();
+        
+        CountGeneCoordinates(left);
+        CountGeneCoordinates(right);
+    
+        if(gamma->isSpeciation(*n) && !gamma->isLateralTransfer(*n)) //speciation
+        {
+            n->setReconcilation(Speciation);
+            AssignLeafGene(n);
+        }
+        else if (gamma->isLateralTransfer(*n)) //lateral transfer
+        {
+            AssignGeneLGT(n);
+        }
+        else //duplication
+        {
+            AssignGeneDuplication(n);
+        }
+    }
 }
 
- void LayoutTrees::AssignGeneDuplication(Node *n)
- {
-   Node *spb = Adress[n];
-   double proportion = 0;
-   double delta = 0;
-   double edge = 0;
-   if(!spb->isRoot())
-   {
-     Node *spbP = spb->getParent();
-     edge = spb->getX() - spbP->getX();
-     proportion = ((spbP->getY() - spb->getY()) / edge);
-     n->setHostParent(spbP);
-   }
-   else
-   {
-     edge = spb->getX();
-   }
-   
-   /* we obtain the number of duplication and the duplications levels
-    * to figure out the x position of the node, we use the left most and right
-    * most cordinates of the duplication to figure out the y position
-    */
-   double ndupli = bv[spb]+1;
-   unsigned duplilevel = Duplevel(n,spb->getNumber());
-   delta = (edge/ndupli)*duplilevel;
-   
-   n->setX(spb->getX()-delta);
-   
-   double rightMost = RightMostCoordinate(n,spb,duplilevel);
-   double leftMost = LeftMostCoordinate(n,spb,duplilevel);
-   
-   n->setY( ((rightMost + leftMost) /2) + (proportion * delta) );
-   n->setReconcilation(Duplication);
-   n->setHostChild(spb);
-     
- }
+void LayoutTrees::AssignGeneDuplication(Node *n)
+{
+    Node *spb = Adress[n];
+    double proportion = 0;
+    double delta = 0;
+    double edge = 0;
+    if(!spb->isRoot())
+    {
+        Node *spbP = spb->getParent();
+        edge = spb->getX() - spbP->getX();
+        proportion = ((spbP->getY() - spb->getY()) / edge);
+        n->setHostParent(spbP);
+    }
+    else
+    {
+        edge = spb->getX();
+    }
+    
+    /* we obtain the number of duplication and the duplications levels
+        * to figure out the x position of the node, we use the left most and right
+        * most cordinates of the duplication to figure out the y position
+        */
+    double ndupli = bv[spb]+1;
+    unsigned duplilevel = Duplevel(n,spb->getNumber());
+    delta = (edge/ndupli)*duplilevel;
+    
+    n->setX(spb->getX()-delta);
+    
+    double rightMost = RightMostCoordinate(n,spb,duplilevel);
+    double leftMost = LeftMostCoordinate(n,spb,duplilevel);
+  
+    n->setY( ((rightMost + leftMost) /2) + (proportion * delta) );
+    n->setReconcilation(Duplication);
+    n->setHostChild(spb);     
+}
  
- void LayoutTrees::AssignGeneLGT(Node *n)
- {
-   n->setReconcilation(LateralTransfer);
-   
-   Node *SoriginLT = (*lambda)[n];
-   Node *SdestinyLT = (*lambda)[n->getLeftChild()];
-   
-   if(SoriginLT == SdestinyLT)
-   {  
-     SdestinyLT = (*lambda)[n->getRightChild()];
-   }
- 
-   n->setHostParent(SdestinyLT);
-   n->setHostChild(SoriginLT);  
-   
- }
+void LayoutTrees::AssignGeneLGT(Node *n)
+{
+    n->setReconcilation(LateralTransfer);
+    
+    Node *SoriginLT = (*lambda)[n];
+    Node *SdestinyLT = (*lambda)[n->getLeftChild()];
+    
+    if(SoriginLT == SdestinyLT)
+    {  
+        SdestinyLT = (*lambda)[n->getRightChild()];
+    }
+    
+    n->setHostParent(SdestinyLT);
+    n->setHostChild(SoriginLT);     
+}
 
- Node*
- LayoutTrees::FindDuplications(Node* node) 
- {
-   if(gamma->isSpeciation(*node) || gamma->isLateralTransfer(*node)) 
-   {
-       if(!node->isLeaf()) {
-	    FindDuplications(node->getLeftChild());
-	    FindDuplications(node->getRightChild());
-       }
-      
-       Node *top = gamma->getHighestGammaPath(*node);
-       return top;	
-   } 
-   else 
-   {      
-     Node *top_dup_l = FindDuplications(node->getLeftChild());
-     Node *top_dup_r = FindDuplications(node->getRightChild());
-     Node *top_l = gamma->getHighestGammaPath(*(node->getLeftChild()));
-     Node *top_r = gamma->getHighestGammaPath(*(node->getRightChild()));
+Node*
+LayoutTrees::FindDuplications(Node* node) 
+{
+    if(gamma->isSpeciation(*node) || gamma->isLateralTransfer(*node)) 
+    {
+        if(!node->isLeaf()) 
+        {
+            FindDuplications(node->getLeftChild());
+            FindDuplications(node->getRightChild());
+        }
+        
+        Node *top = gamma->getHighestGammaPath(*node);
+        return top;	
+    } 
+    else 
+    {      
+        Node *top_dup_l = FindDuplications(node->getLeftChild());
+        Node *top_dup_r = FindDuplications(node->getRightChild());
+        Node *top_l = gamma->getHighestGammaPath(*(node->getLeftChild()));
+        Node *top_r = gamma->getHighestGammaPath(*(node->getRightChild()));
 
-     if (top_l == NULL) {
-       top_l = top_dup_l;
-     }
-     if (top_r == NULL) {
-       top_r = top_dup_r;
-     }
-       
-     Adress[node] = species->mostRecentCommonAncestor(top_l, top_r);
-     return Adress[node];
-   }
- }
- 
-
- 
-  Node*
-  LayoutTrees::MapDuplications(Node* de, unsigned line) 
-  {
+        if (top_l == NULL) 
+        {
+            top_l = top_dup_l;
+        }
+        if (top_r == NULL) 
+        {
+            top_r = top_dup_r;
+        }
+        
+        Adress[node] = species->mostRecentCommonAncestor(top_l, top_r);
+        return Adress[node];
+    }
+}
+  
+Node*
+LayoutTrees::MapDuplications(Node* de, unsigned line) 
+{
     if(de->isLeaf())
-      {
-	return de->getParent();
-      }
+    {
+        return de->getParent();
+    }
 
     else
-      {
-	if(!gamma->isSpeciation(*de) && !gamma->isLateralTransfer(*de))
-	  {
-	    unsigned testlineage = Adress[de]->getNumber();
-	  
-	    if(testlineage != line)
-	      {
-		Node* nd = Adress[de];
-		unsigned n_levels = Duplevel(de,testlineage);
-		if (n_levels > bv[nd]) {
-		  bv[nd] = n_levels;
-		}
-	      }
+    {
+        if(!gamma->isSpeciation(*de) && !gamma->isLateralTransfer(*de))
+        {
+            unsigned testlineage = Adress[de]->getNumber();
+        
+            if(testlineage != line)
+            {
+                Node* nd = Adress[de];
+                unsigned n_levels = Duplevel(de,testlineage);
+                if (n_levels > bv[nd]) 
+                {
+                    bv[nd] = n_levels;
+                }
+            }
 
-	    line = testlineage;
-	  }
-	
-	Node* newNode = MapDuplications(de->getLeftChild(), line);
-	Node* newNode2 = MapDuplications(newNode->getRightChild(), line);
+            line = testlineage;
+        }
+        
+        Node* newNode = MapDuplications(de->getLeftChild(), line);
+        Node* newNode2 = MapDuplications(newNode->getRightChild(), line);
 
-	return newNode2->getParent();
-	
-      }
-   }
-
+        return newNode2->getParent();
+    }
+}
 
 
-  unsigned 
-  LayoutTrees::Duplevel(Node* nd, int levellineage) 
-                                                         
-  {      
+
+unsigned 
+LayoutTrees::Duplevel(Node* nd, int levellineage)                                                          
+{      
     if(gamma->isSpeciation(*nd) || Adress[nd]->getNumber() != unsigned(levellineage))
-      {
-	return 0;
-      }
-
+    {
+        return 0;
+    }
     else 
-      {
-	int left = Duplevel(nd->getLeftChild(), levellineage);
-	int right = Duplevel(nd->getRightChild(), levellineage);
-	return max(left, right) + 1;  
-      }
-  }
+    {
+        int left = Duplevel(nd->getLeftChild(), levellineage);
+        int right = Duplevel(nd->getRightChild(), levellineage);
+        return max(left, right) + 1;  
+    }
+}
   
-  
-  
-  double 
-  LayoutTrees::LeftMostCoordinate(Node* o, Node *end_of_slice, int duplevel)
-  {
+double 
+LayoutTrees::LeftMostCoordinate(Node* o, Node *end_of_slice, int duplevel)
+{
     if (gamma->isSpeciation(*o)) 
     {
-      if(gamma->getLowestGammaPath(*o) != end_of_slice) 
-      {
-	double size = gamma->getSize(end_of_slice);
-	double delta = NodeHeight / size - 1;
-	double y = (end_of_slice->getY() - NodeHeight/2) + ((duplevel) * delta);
-	return y;
-      } 
-      else 
-      {
-	return o->getY();
-      }
-    } else 
+        if(gamma->getLowestGammaPath(*o) != end_of_slice) 
+        {
+            double size = gamma->getSize(end_of_slice);
+            double delta = NodeHeight / size - 1;
+            double y = (end_of_slice->getY() - NodeHeight/2) + ((duplevel) * delta);
+            return y;
+        } 
+        else 
+        {
+            return o->getY();
+        }
+    } 
+    else 
     {
-      if (end_of_slice == Adress[o]) 
-      {
-	return LeftMostCoordinate(o->getLeftChild(), end_of_slice,duplevel);
-      } 
-      else 
-      {
-	double size = gamma->getSize(end_of_slice);
-	double delta = NodeHeight / size - 1;
-	double y = (end_of_slice->getY() - NodeHeight/2) + ((duplevel) * delta);
-	return y;
-      }
+        if (end_of_slice == Adress[o]) 
+        {
+            return LeftMostCoordinate(o->getLeftChild(), end_of_slice,duplevel);
+        } 
+        else 
+        {
+            double size = gamma->getSize(end_of_slice);
+            double delta = NodeHeight / size - 1;
+            double y = (end_of_slice->getY() - NodeHeight/2) + ((duplevel) * delta);
+            return y;
+        }
     }
-  }
+}
   
 
-  double
-  LayoutTrees::RightMostCoordinate (Node* o, Node *end_of_slice, int duplevel)
-  {
+double
+LayoutTrees::RightMostCoordinate (Node* o, Node *end_of_slice, int duplevel)
+{
     if (gamma->isSpeciation(*o)) 
     {
-      if(gamma->getLowestGammaPath(*o) != end_of_slice) 
-      {
-	double size = gamma->getSize(end_of_slice);
-	double delta = NodeHeight / size - 1;
-	double y = (end_of_slice->getY()- NodeHeight/2) + ((duplevel) * delta);
-	return y; 
-      } 
-      else 
-      {
-	return o->getY();
-      }
-    } else
+        if(gamma->getLowestGammaPath(*o) != end_of_slice) 
+        {
+            double size = gamma->getSize(end_of_slice);
+            double delta = NodeHeight / size - 1;
+            double y = (end_of_slice->getY()- NodeHeight/2) + ((duplevel) * delta);
+            return y; 
+        } 
+        else 
+        {
+            return o->getY();
+        }
+    } 
+    else
     {
-      if (end_of_slice == Adress[o]) 
-      {
-	return RightMostCoordinate(o->getRightChild(), end_of_slice,duplevel);
-      } else 
-      {
-	double size = gamma->getSize(end_of_slice);
-	double delta = NodeHeight / size - 1;
-	double y = (end_of_slice->getY()- NodeHeight/2) + ((duplevel) * delta);
-	return y; ;
-      }
+        if (end_of_slice == Adress[o]) 
+        {
+            return RightMostCoordinate(o->getRightChild(), end_of_slice,duplevel);
+        } 
+        else 
+        {
+            double size = gamma->getSize(end_of_slice);
+            double delta = NodeHeight / size - 1;
+            double y = (end_of_slice->getY()- NodeHeight/2) + ((duplevel) * delta);
+            return y; ;
+        }
     }
-  }
+}
 
-  double LayoutTrees::getNodeHeight()
-  {
+double LayoutTrees::getNodeHeight()
+{
     return NodeHeight;
-
-  }
+}
  
-  int
-  LayoutTrees::Ladderize_left() 
-  {
-   return Ladderize_left(species->getRootNode());
-  }
+int
+LayoutTrees::Ladderize_left() 
+{
+    return Ladderize_left(species->getRootNode());
+}
 
-  int
-  LayoutTrees::Ladderize_left(Node* n) 
-  {
+int
+LayoutTrees::Ladderize_left(Node* n) 
+{
     if(n->isLeaf()) 
     {
-      return 1;
+        return 1;
     } 
     else 
     {
-      int leftsize = Ladderize_left(n->getLeftChild());
-      int rightsize = Ladderize_left(n->getRightChild());
-      if(leftsize > rightsize) 
-      {
-	n->rotate();
-      }
-      return leftsize + rightsize;
+        int leftsize = Ladderize_left(n->getLeftChild());
+        int rightsize = Ladderize_left(n->getRightChild());
+        if(leftsize > rightsize) 
+        {
+            n->rotate();
+        }
+        return leftsize + rightsize;
     }
-  }
+}
 
-  int
-  LayoutTrees::Ladderize_right() {
-   return Ladderize_right(species->getRootNode());
-  }
+int
+LayoutTrees::Ladderize_right() 
+{
+    return Ladderize_right(species->getRootNode());
+}
 
-  int
-  LayoutTrees::Ladderize_right(Node* n)
-  {
+int
+LayoutTrees::Ladderize_right(Node* n)
+{
     if(n->isLeaf()) 
     {
-	return 1;
+        return 1;
     } 
     else 
     {
-	int leftsize = Ladderize_right(n->getLeftChild());
-	int rightsize = Ladderize_right(n->getRightChild());
-	if(rightsize > leftsize) 
-	{
-	    n->rotate();
-	}
-	return leftsize + rightsize;
+        int leftsize = Ladderize_right(n->getLeftChild());
+        int rightsize = Ladderize_right(n->getRightChild());
+        if(rightsize > leftsize) 
+        {
+            n->rotate();
+        }
+        return leftsize + rightsize;
     }
-  }
+}
   
   
-  void
-  LayoutTrees::CalcLegIntersection(Node *left, Node *right, Node *u)
-  {
+void
+LayoutTrees::CalcLegIntersection(Node *left, Node *right, Node *u)
+{
     double x0, y0, x1, y1, x2, y2, x3, y3;
 
     x0 = left->getX();
@@ -610,66 +610,64 @@ void LayoutTrees::CountGeneCoordinates(Node* n)
 
     u->setX(x0 + D_L);
     u->setY(y0 + k_L * D_L);
-  }
+}
   
-   //get the highest not LGT mapped node of n
- Node* LayoutTrees::getHighestMappedLGT(Node *n)
- {
-   Node *parent = n->getParent();
+//get the highest not LGT mapped node of n
+Node* LayoutTrees::getHighestMappedLGT(Node *n)
+{
+    Node *parent = n->getParent();
    
-   while(gamma->isLateralTransfer(*parent) && !parent->isRoot())
-     parent = parent->getParent();
+    while(gamma->isLateralTransfer(*parent) && !parent->isRoot())
+        parent = parent->getParent();
    
-   while(!species->descendant((*lambda)[n],(*lambda)[parent]) && !parent->isRoot())
-     parent = parent->getParent();
+    while(!species->descendant((*lambda)[n],(*lambda)[parent]) && !parent->isRoot())
+        parent = parent->getParent();
    
-   return parent;
-   
- }
+    return parent;
+}
  
- double LayoutTrees::biggestLabel()
- {
-   double size = 0.0;
-   
-   for(unsigned i = 0; i < gene->getNumberOfNodes(); i++)
-   {
-      Node *n = gene->getNode(i);
-      if(n->isLeaf())
-      {
-	size = max(size,(double)n->getName().size()); 
-      }
-   }
-   
-   for(unsigned i = 0; i < species->getNumberOfNodes(); i++)
-   {
-      Node *n = species->getNode(i);
-      if(n->isLeaf())
-      {
-	size = max(size,(double)n->getName().size()); 
-      }
-   }
-   
-   return size;
- }
+double LayoutTrees::biggestLabel()
+{
+    double size = 0.0;
+    
+    for(unsigned i = 0; i < gene->getNumberOfNodes(); i++)
+    {
+        Node *n = gene->getNode(i);
+        if(n->isLeaf())
+        {
+            size = max(size,(double)n->getName().size()); 
+        }
+    }
+    
+    for(unsigned i = 0; i < species->getNumberOfNodes(); i++)
+    {
+        Node *n = species->getNode(i);
+        if(n->isLeaf())
+        {
+            size = max(size,(double)n->getName().size()); 
+        }
+    }
+    
+    return size;
+}
 
- void LayoutTrees::replaceNodes(const std::map<int,int>& replacements)
- {
-   for(std::map<int,int>::const_iterator it = replacements.begin();
-       it != replacements.end(); ++it)
-       {
-	 Node *first = gene->getNode(it->first);
-	 Node *second = gene->getNode(it->second);
-	 std::cout << "Replacing Node " << it->first << " with Node " << it->second << std::endl;
-	 if(first && second)
-	 {
-	  //HostParent and HostChild should not change
-	   double temp_x = first->getX();
-	   double temp_y = first->getY();
-	   first->setX(second->getX());
-	   first->setY(second->getY());
-	   second->setX(temp_x);
-	   second->setY(temp_y);
-	 }
-       }
- }
-
+void LayoutTrees::replaceNodes(const std::map<int,int>& replacements)
+{
+    for(std::map<int,int>::const_iterator it = replacements.begin();
+        it != replacements.end(); ++it)
+        {
+            Node *first = gene->getNode(it->first);
+            Node *second = gene->getNode(it->second);
+            std::cout << "Replacing Node " << it->first << " with Node " << it->second << std::endl;
+            if(first && second)
+            {
+                //HostParent and HostChild should not change
+                double temp_x = first->getX();
+                double temp_y = first->getY();
+                first->setX(second->getX());
+                first->setY(second->getY());
+                second->setX(temp_x);
+                second->setY(temp_y);
+            }
+        }
+}

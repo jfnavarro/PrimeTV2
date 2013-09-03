@@ -154,9 +154,7 @@ private:
     std::vector<double> maptime;
 
     bool nodetime;
-    bool equal;
-    
-
+    bool equal;  
 };
 
 #endif // LAYOUTSPECIESTREE_H

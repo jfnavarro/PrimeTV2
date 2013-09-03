@@ -31,9 +31,12 @@
 
 using std::string;
 
-class ConfigFile {
+class ConfigFile 
+{
+    
 // Data
 protected:
+    
 	string myDelimiter;  // separator between key and value
 	string myComment;    // separator between value and comments
 	string mySentry;     // optional string to signal end of file
@@ -44,6 +47,7 @@ protected:
 
 // Methods
 public:
+    
 	ConfigFile( string filename,
 	            string delimiter = "=",
 	            string comment = "#",
@@ -78,18 +82,20 @@ public:
 	friend std::istream& operator>>( std::istream& is, ConfigFile& cf );
 	
 protected:
+    
 	template<class T> static string T_as_string( const T& t );
 	template<class T> static T string_as_T( const string& s );
 	static void trim( string& s );
 
-
 // Exception types
 public:
-	struct file_not_found {
+	struct file_not_found 
+	{
 		string filename;
 		file_not_found( const string& filename_ = string() )
 			: filename(filename_) {} };
-	struct key_not_found {  // thrown only by T read(key) variant of read()
+            
+        struct key_not_found {  // thrown only by T read(key) variant of read()
 		string key;
 		key_not_found( const string& key_ = string() )
 			: key(key_) {} };
@@ -163,7 +169,7 @@ T ConfigFile::read( const string& key ) const
 template<class T>
 T ConfigFile::read( const string& key, const T& value ) const
 {
-	// Return the value corresponding to key or given default value
+    // Return the value corresponding to key or given default value
 	// if key is not found
 	mapci p = myContents.find(key);
 	if( p == myContents.end() ) return value;

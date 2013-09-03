@@ -65,13 +65,7 @@ find_package(Cairo REQUIRED)
 ####PACKAGES##################################################
 
 ##DIRECTORIES#################################################
-#include_directories(${CMAKE_CURRENT_BINARY_DIR})
 include_directories(${Boost_INCLUDE_DIRS})
-#include_directories("${PROJECT_BINARY_DIR}/src")
-#include_directories("${PROJECT_SOURCE_DIR}/src")
-#include_directories("${PROJECT_BINARY_DIR}/src/libraries")
-#include_directories("${PROJECT_SOURCE_DIR}/src/libraries")
-#include_directories(${CMAKE_BINARY_DIR})
 include_directories(${CAIRO_INCLUDE_DIR})
 ######DIRECTORIES#################################################
 
@@ -123,11 +117,11 @@ endforeach(i)
 add_library(primetvlib STATIC ${PARSER_SOURCES} ${Libraries})
 
 if(WIN32)
-  add_executable(primetv WIN32 primetv.cc ${MAIN_SOURCES} ${QT_FORMS} ${QT_RESOURCES})
+  add_executable(${PROJECT_NAME} WIN32 primetv.cc ${MAIN_SOURCES} ${QT_FORMS} ${QT_RESOURCES})
 elseif(APPLE)
-  add_executable(primetv MACOSX_BUNDLE primetv.cc ${MAIN_SOURCES} ${QT_FORMS} ${QT_RESOURCES})
+  add_executable(${PROJECT_NAME} MACOSX_BUNDLE primetv.cc ${MAIN_SOURCES} ${QT_FORMS} ${QT_RESOURCES})
 else()
-  add_executable(primetv primetv.cc ${MAIN_SOURCES} ${QT_FORMS} ${QT_RESOURCES})
+  add_executable(${PROJECT_NAME} primetv.cc ${MAIN_SOURCES} ${QT_FORMS} ${QT_RESOURCES})
 endif()
 
 qt5_use_modules(${PROJECT_NAME} Widgets Core Gui PrintSupport) 
@@ -188,7 +182,7 @@ if(UNIX AND NOT APPLE)
     # its suffix, so unless making the macro unnecessarily cumbersome to
     # use, it's better to do things ourselves...
 
-    foreach(QT_LIBRARY Core DBus Gui Help PrintSupport Qml Quick Sql Svg V8 Widgets) #
+    foreach(QT_LIBRARY Core DBus Gui Help PrintSupport Widgets) #Qml Quick Sql Svg V8
         install(FILES ${QT_LIBRARY_DIR}/${CMAKE_SHARED_LIBRARY_PREFIX}Qt${QT_VERSION_MAJOR}${QT_LIBRARY}${CMAKE_SHARED_LIBRARY_SUFFIX}.${QT_VERSION_MAJOR}.${QT_VERSION_MINOR}.${QT_VERSION_PATCH}
                 DESTINATION lib
                 RENAME ${CMAKE_SHARED_LIBRARY_PREFIX}Qt${QT_VERSION_MAJOR}${QT_LIBRARY}${CMAKE_SHARED_LIBRARY_SUFFIX}.${QT_VERSION_MAJOR})
@@ -202,7 +196,7 @@ if(UNIX AND NOT APPLE)
 
     # Qt plugins required by PrimeTV2
     LINUX_DEPLOY_QT_PLUGIN(accessible qtaccessiblequick qtaccessiblewidgets)
-    LINUX_DEPLOY_QT_PLUGIN(imageformats qgif qico qjpeg qmng qsvg qtga qtiff qwbmp)
+    LINUX_DEPLOY_QT_PLUGIN(imageformats qgif qico qjpeg qtiff qsvg) #qmng  qtga  qwbmp)
     LINUX_DEPLOY_QT_PLUGIN(platforms qlinuxfb qminimal qxcb)
     LINUX_DEPLOY_QT_PLUGIN(printsupport cupsprintersupport)
 
@@ -253,11 +247,11 @@ if(APPLE)
   set(CMAKE_INSTALL_PREFIX ${BUNDLE_DIR}/Contents)
         
   add_custom_command (TARGET ${PROJECT_NAME}
-      #COMMAND mkdir -p ${CMAKE_INSTALL_PREFIX}/Resources/translations
+      COMMAND mkdir -p ${CMAKE_INSTALL_PREFIX}/Resources/translations
       #COMMAND install -m 644 ${CMAKE_SOURCE_DIR}/resources/icons/icon.png ${CMAKE_INSTALL_PREFIX}/Resources/
       #COMMAND install -m 644 ${QT_LOCALES} ${CMAKE_INSTALL_PREFIX}/Resources/translations/
-      COMMAND install -m 644 ${CMAKE_SOURCE_DIR}/resources/images/header.png ${OS_X_PROJECT_BINARY_DIR}/Contents/Resources/ 
-      COMMAND install -m 644 ${CMAKE_SOURCE_DIR}/cmake/mac/qt.conf ${OS_X_PROJECT_BINARY_DIR}/Contents/Resources/
+      COMMAND install -m 644 ${CMAKE_SOURCE_DIR}/resources/images/header.png ${CMAKE_INSTALL_PREFIX}/Resources/ 
+      COMMAND install -m 644 ${CMAKE_SOURCE_DIR}/cmake/mac/qt.conf ${CMAKE_INSTALL_PREFIX}/Resources/
       #COMMAND ${MACDEPLOYQT} ${BUNDLE_DIR}
       )
 
@@ -266,18 +260,18 @@ if(APPLE)
   #### Plugins ####
   OS_X_CLEAN_UP_FILE_WITH_QT_DEPENDENCIES(${OS_X_PROJECT_BINARY_DIR}/Contents/MacOS ${PROJECT_NAME}
                                             QtCore QtGui QtHelp QtPrintSupport
-                                            QtQml QtQuick QtSvg QtWidgets)
+                                            QtWidgets QtSvg) #QtQml QtQuick QtSql QtV8
 
   # Deploy Qt dependencies
   OS_X_DEPLOY_QT_LIBRARIES(QtCore QtGui QtHelp
-                           QtPrintSupport QtQml QtQuick QtSql QtSvg QtV8
-                           QtWidgets)
+                           QtPrintSupport QtSvg
+                           QtWidgets) # QtQml QtQuick QtSql QtV8
 
   # Deploy some plugins
-  OS_X_DEPLOY_QT_PLUGIN(imageformats qgif qico qjpeg qmng qsvg qtga qtiff qwbmp)
+  OS_X_DEPLOY_QT_PLUGIN(imageformats qgif qico qjpeg qsvg qtiff) #qmng  qtga  qwbmp
   OS_X_DEPLOY_QT_PLUGIN(platforms qcocoa)
   OS_X_DEPLOY_QT_PLUGIN(printsupport cocoaprintersupport)
-
+  
   add_custom_target(dmg
       COMMAND mkdir -p ${DMG_DIR}
       COMMAND cp -R ${BUNDLE_DIR} ${DMG_DIR}/
@@ -302,14 +296,14 @@ if(WIN32)
 
     # Qt libraries required by PrimeTV2
 
-    WINDOWS_DEPLOY_QT_LIBRARIES(Qt5Core Qt5Gui Qt5Help Qt5Multimedia Qt5MultimediaWidgets Qt5OpenGL
-                                Qt5PrintSupport Qt5Qml Qt5Quick Qt5Sql Qt5Svg Qt5V8 Qt5Widgets)
+    WINDOWS_DEPLOY_QT_LIBRARIES(Qt5Core Qt5Gui Qt5Help 
+                                Qt5PrintSupport Qt5Svg Qt5Widgets) # Qt5Multimedia Qt5MultimediaWidgets  Qt5Qml Qt5Quick Qt5Sql Qt5V8
     #WINDOWS_DEPLOY_QT_LIBRARIES(icudt49 icuin49 icuuc49)
 
     # Qt plugins required by PrimeTV2
 
     WINDOWS_DEPLOY_QT_PLUGIN(accessible qtaccessiblequick qtaccessiblewidgets)
-    WINDOWS_DEPLOY_QT_PLUGIN(imageformats qgif qico qjpeg qmng qsvg qtga qtiff qwbmp)
+    WINDOWS_DEPLOY_QT_PLUGIN(imageformats qgif qico qjpeg qsvg qtiff) #qmng  qtga  qwbmp
 
     foreach(QT_PLUGIN_FILE qminimal qwindows)
         install(FILES ${QT_PLUGINS_DIR}/platforms/${CMAKE_SHARED_LIBRARY_PREFIX}${QT_PLUGIN_FILE}${CMAKE_SHARED_LIBRARY_SUFFIX}

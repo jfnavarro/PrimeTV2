@@ -30,41 +30,41 @@
 
 // // Author: Lars Arvestad, © the MCMC-club, SBC, all rights reserved
 
-  using namespace std;
+using namespace std;
 
-  StrStrMap::StrStrMap() 
-    : avbildning()
-  {
-  }
+StrStrMap::StrStrMap() 
+: avbildning()
+{
+}
 
-  StrStrMap::~StrStrMap() 
-  {
-  }
+StrStrMap::~StrStrMap() 
+{
+}
 
-  StrStrMap::StrStrMap(const StrStrMap& sm)
-    : avbildning(sm.avbildning)
-  {    
-  }
+StrStrMap::StrStrMap(const StrStrMap& sm)
+: avbildning(sm.avbildning)
+{    
+}
 
-  StrStrMap& 
-  StrStrMap::operator=(const StrStrMap &sm)
-  {
+StrStrMap& 
+StrStrMap::operator=(const StrStrMap &sm)
+{
     if(&sm != this)
     {
         avbildning = sm.avbildning;
     }
     return *this;
-  }
+}
 
-  void
-  StrStrMap::insert(const string &x, const string &y)
-  {
+void
+StrStrMap::insert(const string &x, const string &y)
+{
     avbildning.insert(pair<string,string>(x, y));
-  }
+}
 
-  void
-  StrStrMap::change(const string &x, const string &y)
-  {
+void
+StrStrMap::change(const string &x, const string &y)
+{
     if(avbildning.find(x) != avbildning.end())
     {
         avbildning[x] = y;
@@ -73,12 +73,12 @@
     {
         avbildning.insert(pair<string,string>(x, y));
     }
-  }
+}
 
-  // Retrieval
-  string
-  StrStrMap::find(const string &s) const
-  {
+// Retrieval
+string
+StrStrMap::find(const string &s) const
+{
     map<string, string>::const_iterator iter;
 
     iter = avbildning.find(s);
@@ -90,11 +90,11 @@
     {
         return iter->second;
     }
-  }
+}
 
-  std::string
-  StrStrMap::getNthItem(unsigned idx) const
-  {
+std::string
+StrStrMap::getNthItem(unsigned idx) const
+{
     for (map<string,string>::const_iterator i = avbildning.begin();i != avbildning.end(); i++)
     {
         if (idx == 0)
@@ -108,24 +108,25 @@
     }
     //PROGRAMMING_ERROR("Out of bounds.");
     return("");  
-  }
+}
 
-  // reset map
-  void
-  StrStrMap::clearMap()
-  {
+// reset map
+void
+StrStrMap::clearMap()
+{
     avbildning.clear();
-  }
+}
 
-  // Diagnostics. Find how many relations are stored
-  unsigned
-  StrStrMap::size() const
-  {
+// Diagnostics. Find how many relations are stored
+unsigned
+StrStrMap::size() const
+{
     return avbildning.size();
-  }
-  unsigned 
-  StrStrMap::reverseSize() const
-  {
+}
+
+unsigned 
+StrStrMap::reverseSize() const
+{
     set<string> reverse;
     for(map<string,string>::const_iterator i = avbildning.begin(); i != avbildning.end(); i++)
     {
@@ -133,11 +134,11 @@
             reverse.insert(i->second);
     }
     return reverse.size();
-  }
+}
 
-  std::ostream& 
-  operator<<(std::ostream &o, const StrStrMap &m)
-  {
+std::ostream& 
+operator<<(std::ostream &o, const StrStrMap &m)
+{
     string res;
 
     for (map<string,string>::const_iterator i = m.avbildning.begin(); i != m.avbildning.end();i++)
@@ -145,4 +146,4 @@
         res.append(i->first + "\t" + i->second + "\n");
     }
     return o << res;
-  }
+}

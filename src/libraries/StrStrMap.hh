@@ -26,11 +26,11 @@
 #include <map>
 #include <stdexcept>
 
-  using namespace std;
+using namespace std;
 
-  class StrStrMap 
-  {
-  public:
+class StrStrMap 
+{
+public:
 
     StrStrMap();
     virtual ~StrStrMap();
@@ -56,19 +56,19 @@
     //! Diagnostics. The number of relations
     unsigned size() const;		
     unsigned reverseSize() const;	
-    
+
     //! returns the mapping
     std::map<std::string, std::string> getMapping() const
     {
-      return avbildning;
+        return avbildning;
     }
-    
+
     friend std::ostream& operator<<(std::ostream &o, const StrStrMap &);
 
-  private:
-    
+private:
+
     std::map<std::string, std::string> avbildning;	// Stores the mapping
-    
-  };
+
+};
 
 #endif

@@ -25,6 +25,8 @@ if(COMMAND cmake_policy)
   cmake_policy(SET CMP0003 NEW)
 endif(COMMAND cmake_policy)
 
+SET(OS_X_PROJECT_BINARY_DIR "${CMAKE_BINARY_DIR}/${PROJECT_NAME}.app")
+
 # Some in-house CMake functions/macros
 include(${CMAKE_SOURCE_DIR}/cmake/utils.cmake)
 

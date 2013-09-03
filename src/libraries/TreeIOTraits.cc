@@ -55,53 +55,63 @@ TreeIOTraits::TreeIOTraits(const TreeIOTraits &tr)
 bool 
 TreeIOTraits::hasNW() const 
 {
-	return traits[nw];
+    return traits[nw];
 }
+
 bool 
 TreeIOTraits::hasET() const 
 {
 	return traits[et];
 }
+
 bool 
 TreeIOTraits::hasNWisET() const 
 {
 	return traits[nwiset];
 }
+
 bool 
 TreeIOTraits::hasNT() const
 {
 	return traits[nt];
 }
+
 bool 
 TreeIOTraits::hasBL() const
 {
 	return traits[bl];
 }
+
 bool 
 TreeIOTraits::hasAC() const 
 {
 	return traits[ac];
 }
+
 bool 
 TreeIOTraits::hasGS() const 
 {
 	return traits[gs];
 }
+
 bool 
 TreeIOTraits::hasHY() const
 {
 	return traits[hy];
 }
+
 bool 
 TreeIOTraits::hasID() const
 {
 	return traits[id];
 }
+
 bool 
 TreeIOTraits::hasName() const
 {
 	return traits[name];
 }
+
 bool 
 TreeIOTraits::hasTT() const
 {
@@ -113,58 +123,66 @@ TreeIOTraits::setNW(bool b)
 { 
 	traits[nw] = b;
 }
+
 void 
 TreeIOTraits::setET(bool b)
 {
 	traits[et] = b;
 }
+
 void 
 TreeIOTraits::setNWisET(bool b)
 { 
 	traits[nwiset] = b;
 }
+
 void 
 TreeIOTraits::setNT(bool b)
 {
 	traits[nt] = b;
 }
+
 void 
 TreeIOTraits::setBL(bool b)
 {
 	traits[bl] = b;
 }
+
 void 
 TreeIOTraits::setAC(bool b)
 { 
 	traits[ac] = b;
 }
+
 void 
 TreeIOTraits::setGS(bool b) 
 {
 	traits[gs] = b;
 }
+
 void 
 TreeIOTraits::setHY(bool b)
 {
 	traits[hy] = b;
 }
+
 void 
 TreeIOTraits::setID(bool b)
 { 
 	traits[id] = b;
 }
+
 void 
 TreeIOTraits::setName(bool b)
 {
 	traits[name] = b;
 }
+
 void 
 TreeIOTraits::setTT(bool b) 
 {
 	traits[tt] = b;
 }
-
-
 
 void 
 TreeIOTraits::logicAnd(const TreeIOTraits &t)
@@ -174,7 +192,6 @@ TreeIOTraits::logicAnd(const TreeIOTraits &t)
 		traits[i] = traits[i] && t.traits[i];
 	}
 }
-
 
 void 
 TreeIOTraits::enforceStandardSanity()

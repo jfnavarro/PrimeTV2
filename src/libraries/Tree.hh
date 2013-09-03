@@ -27,22 +27,22 @@
 #include <string>
 #include <vector>
 
-  // Forward declarations.
-  class Node;
-  class RealVector;
-  using namespace std;
-  typedef float Real;
+// Forward declarations.
+class Node;
+class RealVector;
+using namespace std;
+typedef float Real;
 
-  const unsigned DEF_NODE_VEC_SIZE = 100;
-  
-  class Tree 
-  {
-  public:
+const unsigned DEF_NODE_VEC_SIZE = 100;
+
+class Tree 
+{
+public:
 
     Tree();
     Tree(const Tree &T);
     static Tree EmptyTree(const Real& RootTime = 1.0, std::string leafname = "Leaf");
-    
+
     virtual ~Tree();
     virtual Tree& operator=(const Tree& T);
     std::string getName() const; 
@@ -86,7 +86,7 @@
     Real rootToLeafTime() const;
     Real getTopToLeafTime() const;
 
-    
+
     typedef std::vector<Node*>::iterator iterator;
     typedef std::vector<Node*>::const_iterator const_iterator;
     typedef std::vector<Node*>::reverse_iterator reverse_iterator;
@@ -94,41 +94,41 @@
 
     iterator begin()                      
     {
-      return all_nodes.begin(); 
+        return all_nodes.begin(); 
     };
     const_iterator begin() const          
     {
-      return all_nodes.begin(); 
+        return all_nodes.begin(); 
     };
     iterator end()                      
     {
-      return (all_nodes.begin()+noOfNodes); 
+        return (all_nodes.begin()+noOfNodes); 
     };
     const_iterator end() const            
     {
-      return (all_nodes.begin()+noOfNodes); 
+        return (all_nodes.begin()+noOfNodes); 
     };
     reverse_iterator rbegin()             
     {
-      return (all_nodes.rbegin()+(all_nodes.size()-noOfNodes)); 
+        return (all_nodes.rbegin()+(all_nodes.size()-noOfNodes)); 
     };
     const_reverse_iterator rbegin() const 
     {
-      return (all_nodes.rbegin()+(all_nodes.size()-noOfNodes)); 
+        return (all_nodes.rbegin()+(all_nodes.size()-noOfNodes)); 
     };
     reverse_iterator rend()               
     {
-      return all_nodes.rend(); 
+        return all_nodes.rend(); 
     };
     const_reverse_iterator rend() const   
     {
-      return all_nodes.rend(); 
+        return all_nodes.rend(); 
     };
 
     Node* mostRecentCommonAncestor(Node* a, Node* b) const;
     const Node* mostRecentCommonAncestor(const Node* a, const Node* b) const;
     Real imbalance();
-    
+
     //friend std::ostream& operator<<(std::ostream &o, const Tree& T);
     //virtual std::string print(bool useET, bool useNT, bool useBL, bool useER) const;
     //virtual std::string print() const;
@@ -139,22 +139,22 @@
     void clearNodeAttributes();
     Real imbalance(Node *v);
     unsigned getHeight(Node* v) const;
-    
-  protected:
-    
+
+protected:
+
     unsigned noOfNodes;		            
     unsigned noOfLeaves;	               
     Node * rootNode;                        
     std::map<std::string, Node*> name2node; 
     std::vector<Node*> all_nodes;           
     std::string name;		
-    
+
     /* puag, mutable, really? */
     mutable RealVector* times;
     mutable RealVector* lengths;
     mutable RealVector* rates;
     mutable Real topTime;   
-    
-  };
+
+};
 
 #endif

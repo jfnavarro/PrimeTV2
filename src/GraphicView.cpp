@@ -58,10 +58,13 @@ void GraphicView::wheelEvent ( QWheelEvent* event )
 
     //Scale the view ie. do the zoom
     double scaleFactor = 1.15; //How fast we zoom
-    if ( event->delta() > 0 ) {
+    if ( event->delta() > 0 ) 
+    {
         //Zoom in
         scale ( scaleFactor, scaleFactor );
-    } else {
+    } 
+    else 
+    {
         //Zooming out
         scale ( 1.0 / scaleFactor, 1.0 / scaleFactor );
     }
@@ -107,28 +110,39 @@ void GraphicView::SetCenter ( const QPointF& centerPoint )
     //The max boundary that the centerPoint can be to
     QRectF bounds ( boundX, boundY, boundWidth, boundHeight );
 
-    if ( bounds.contains ( centerPoint ) ) {
+    if ( bounds.contains ( centerPoint ) ) 
+    {
         //We are within the bounds
         CurrentCenterPoint = centerPoint;
-    } else {
+    } else 
+    {
         //We need to clamp or use the center of the screen
-        if ( visibleArea.contains ( sceneBounds ) ) {
+        if ( visibleArea.contains ( sceneBounds ) ) 
+        {
             //Use the center of scene ie. we can see the whole scene
             CurrentCenterPoint = sceneBounds.center();
-        } else {
+        }
+        else 
+        {
 
             CurrentCenterPoint = centerPoint;
 
             //We need to clamp the center. The centerPoint is too large
-            if ( centerPoint.x() > bounds.x() + bounds.width() ) {
+            if ( centerPoint.x() > bounds.x() + bounds.width() ) 
+            {
                 CurrentCenterPoint.setX ( bounds.x() + bounds.width() );
-            } else if ( centerPoint.x() < bounds.x() ) {
+            } 
+            else if ( centerPoint.x() < bounds.x() ) 
+            {
                 CurrentCenterPoint.setX ( bounds.x() );
             }
 
-            if ( centerPoint.y() > bounds.y() + bounds.height() ) {
+            if ( centerPoint.y() > bounds.y() + bounds.height() ) 
+            {
                 CurrentCenterPoint.setY ( bounds.y() + bounds.height() );
-            } else if ( centerPoint.y() < bounds.y() ) {
+            } 
+            else if ( centerPoint.y() < bounds.y() ) 
+            {
                 CurrentCenterPoint.setY ( bounds.y() );
             }
 

@@ -30,13 +30,13 @@
 #include <sstream>
 #include "AnError.hh"
 
-  using namespace std;
-  
-  template <class T>
-  class SetOfNodesEx
-  {
-    
-  public:
+using namespace std;
+
+template <class T>
+class SetOfNodesEx
+{
+
+public:
     SetOfNodesEx();
     SetOfNodesEx(const SetOfNodesEx<T>& SON);
     ~SetOfNodesEx();
@@ -55,131 +55,129 @@
     std::ostream& operator<<(std::ostream& os);
     std::string strRep() const;
     std::string set4os() const;
+private:
+    typename std::set<T*> theSet;
+};
 
-  private:
-    
-     typename std::set<T*> theSet;
-  };
 
-  
-  
-  //************************************************************************************************///
-  // IMPLEMENTATION //
 
-    template <class T>
-    std::ostream& SetOfNodesEx<T>::operator<<(std::ostream& os)
+//************************************************************************************************///
+// IMPLEMENTATION //
+
+template <class T>
+std::ostream& SetOfNodesEx<T>::operator<<(std::ostream& os)
+{
+    return os << "Class SetOfNodes:\n"  
+    << "Holds and provides access (using operator[]) to a set\n"
+    << " of nodes.\n"
+    << "Attributes:\n"
+    << "   theSet: \n"
+    << set4os()
+;
+};
+
+template <class T>
+std::string SetOfNodesEx<T>::strRep() const
+{
+    std::stringstream ss;
+    for(unsigned int i = 0; i < theSet.size(); i++)
     {
-      return os << "Class SetOfNodes:\n"  
-		<< "Holds and provides access (using operator[]) to a set\n"
-		<< " of nodes.\n"
-		<< "Attributes:\n"
-		<< "   theSet: \n"
-		<< set4os()
-	;
-    };
-  
-    template <class T>
-    std::string SetOfNodesEx<T>::strRep() const
-    {
-        std::stringstream ss;
-        for(unsigned int i = 0; i < theSet.size(); i++)
-        {
-            const T *node = operator[](i);
-            ss << node->getNumber() << " ";
-        }
-        return ss.str();
-    };
+        const T *node = operator[](i);
+        ss << node->getNumber() << " ";
+    }
+    return ss.str();
+};
 
-    // helper function for operator <<
-    //----------------------------------------------------------------------
-  
-  template <class T> std::string 
-  SetOfNodesEx<T>::set4os() const
-  {
+// helper function for operator <<
+//----------------------------------------------------------------------
+
+template <class T> std::string 
+SetOfNodesEx<T>::set4os() const
+{
     std::ostringstream os;
     os << "   ";
 
     for(typename std::set<T*>::const_iterator i = theSet.begin();
-	i != theSet.end(); i++)
-	{
-	  if(*i)
-	    os << (*i)->getNumber();
-	  else
-	    os << "NULL";
-	  os << "\t";
-	}
-      os << "\n";
-      return os.str();
-  }
-   
-  template <class T> bool 
-  SetOfNodesEx<T>::operator==(const SetOfNodesEx<T> &s1) const
-  {
+    i != theSet.end(); i++)
+    {
+        if(*i)
+        os << (*i)->getNumber();
+        else
+        os << "NULL";
+        os << "\t";
+    }
+    os << "\n";
+    return os.str();
+}
+
+template <class T> bool 
+SetOfNodesEx<T>::operator==(const SetOfNodesEx<T> &s1) const
+{
     return (this->theSet == s1.theSet);
-  };
-  
-  template <class T> bool 
-  SetOfNodesEx<T>::operator<(const SetOfNodesEx<T> &s1) const
-  {
-     return (this->theSet < s1.theSet);
-  };
-  
-  template <class T>
-  SetOfNodesEx<T>::SetOfNodesEx()
-  {
-    // Start with empty set!
-  }
+};
 
-  template <class T>
-  SetOfNodesEx<T>::SetOfNodesEx(const SetOfNodesEx<T>& SON)
-    : theSet(SON.theSet)
-  {
-  }
+template <class T> bool 
+SetOfNodesEx<T>::operator<(const SetOfNodesEx<T> &s1) const
+{
+    return (this->theSet < s1.theSet);
+};
 
-  template <class T>
-  SetOfNodesEx<T>::~SetOfNodesEx()
-  {
-  }
+template <class T>
+SetOfNodesEx<T>::SetOfNodesEx()
+{
+// Start with empty set!
+}
 
-  template <class T>
-  SetOfNodesEx<T>& 
-  SetOfNodesEx<T>::operator=(const SetOfNodesEx<T> &son)
-  {
+template <class T>
+SetOfNodesEx<T>::SetOfNodesEx(const SetOfNodesEx<T>& SON)
+: theSet(SON.theSet)
+{
+}
+
+template <class T>
+SetOfNodesEx<T>::~SetOfNodesEx()
+{
+}
+
+template <class T>
+SetOfNodesEx<T>& 
+SetOfNodesEx<T>::operator=(const SetOfNodesEx<T> &son)
+{
     if (this != &son)
     {
         theSet = son.theSet;
     }
 
     return *this;
-  }
+}
 
-  template <class T>
-  void
-  SetOfNodesEx<T>::insert(T *u)
-  {
+template <class T>
+void
+SetOfNodesEx<T>::insert(T *u)
+{
     theSet.insert(u);
-  }
+}
 
-  template <class T>
-  void
-  SetOfNodesEx<T>::insertVector(std::vector<T*>& v)
-  {
+template <class T>
+void
+SetOfNodesEx<T>::insertVector(std::vector<T*>& v)
+{
     //I am simply not sure how sets work, so I hope this ugly thing works
     theSet.insert(v.begin(), v.end());
-  }
+}
 
-  template <class T>
-  void
-  SetOfNodesEx<T>::erase(T *u)
-  {
+template <class T>
+void
+SetOfNodesEx<T>::erase(T *u)
+{
     typename std::set<T *>::iterator iter = theSet.find(u);
     theSet.erase(iter);
-  }
+}
 
-  template <class T>
-  bool
-  SetOfNodesEx<T>::member(T *u) const
-  {
+template <class T>
+bool
+SetOfNodesEx<T>::member(T *u) const
+{
     if (theSet.find(u) == theSet.end())
     {
         return false;
@@ -188,35 +186,35 @@
     {
         return true;
     }
-  }
+}
 
-  template <class T>
-  bool
-  SetOfNodesEx<T>::empty() const
-  {
+template <class T>
+bool
+SetOfNodesEx<T>::empty() const
+{
     return theSet.empty();
-  }
+}
 
-  template <class T>
-  unsigned
-  SetOfNodesEx<T>::size() const
-  {
+template <class T>
+unsigned
+SetOfNodesEx<T>::size() const
+{
     return theSet.size();
-  }
+}
 
 
-  template <class T>
-  T* 
-  SetOfNodesEx<T>::operator[](unsigned i) const
-  {
+template <class T>
+T* 
+SetOfNodesEx<T>::operator[](unsigned i) const
+{
     unsigned j;
     typename std::set<T*>::iterator iter;
     for (j = 0, iter = theSet.begin(); j < i; iter++, j++)
-      {
-	// Walk on up
-      }
+        {
+        // Walk on up
+        }
     return *iter;   
-  }
+}
 
 
 #endif

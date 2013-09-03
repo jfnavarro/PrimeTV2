@@ -51,11 +51,11 @@ public:
 
     void setSize(int _sizeW,int _sizeH);
 
-  protected:
+protected:
 
     virtual QRectF boundingRect() const;
     
-  public slots:
+public slots:
  
     
     void rotateRightCentered();

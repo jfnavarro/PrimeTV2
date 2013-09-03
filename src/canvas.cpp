@@ -30,7 +30,7 @@
 
 Canvas::Canvas( const QPixmap& pixmap,
                QGraphicsItem* parent, QGraphicsScene* scene ) :
-QObject(), QGraphicsPixmapItem ( pixmap,parent )
+               QObject(), QGraphicsPixmapItem ( pixmap,parent )
 {
     setTransformationMode(Qt::SmoothTransformation);
     setFlags(QGraphicsItem::ItemIsMovable);
@@ -73,7 +73,9 @@ bool Canvas::print()
         return true;
     }
     else
+    {
         return false;
+    }
 }
 
 QRectF Canvas::boundingRect() const
