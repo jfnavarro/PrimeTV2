@@ -22,11 +22,13 @@ improve the way the LGT cordinates are being calculated by including a time even
 
 Get rid/redo the Newick/PRIME tree parser, the current one uses C code and bison and flex.
 
-Improve the UI
-
 Perform a battery of several tests and create a testing script (unitests)
 
 Improve general stability by testing and fixing errors
+
+Update GUI parameters to recently added parameters for terminal version (find a way to link them)
+
+Improve GUI (refactor)
 
 Known bugs :
 
