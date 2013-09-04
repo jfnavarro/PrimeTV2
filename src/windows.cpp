@@ -73,14 +73,15 @@ MainWindow::MainWindow(Parameters *p, Mainops *m, QWidget *parent)
     canvas = new Canvas(QPixmap());
     scene->addItem(canvas);
     
-    #ifdef Q_WS_MAC
+    #if defined Q_OS_MAC
     setUnifiedTitleAndToolBarOnMac(true); 
     QApplication::setAttribute(Qt::AA_MacPluginApplication,false);
     QApplication::setAttribute(Qt::AA_NativeWindows,true); //NOTE this is actually pretty important
     QApplication::setAttribute(Qt::AA_DontShowIconsInMenus,false); //osx does not show icons on menus
     QApplication::setAttribute(Qt::AA_SynthesizeTouchForUnhandledMouseEvents,false);
     QApplication::setCursorFlashTime(0);
-    toolBar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+    //toolBar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+    toolBar->setStyleSheet("background-color : transparent ; color:white; border-color: transparent;");
     #endif
     
     #if defined(Q_OS_WIN)
