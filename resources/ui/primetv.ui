@@ -96,7 +96,7 @@
   </widget>
   <action name="actionLoad_Guest_Tree">
    <property name="icon">
-    <iconset resource="application.qrc">
+    <iconset resource="../application.qrc">
      <normaloff>:/images/fileopen-256.png</normaloff>:/images/fileopen-256.png</iconset>
    </property>
    <property name="text">
@@ -105,7 +105,7 @@
   </action>
   <action name="actionLoad_Host_Tree">
    <property name="icon">
-    <iconset resource="application.qrc">
+    <iconset resource="../application.qrc">
      <normaloff>:/images/fileopen-256.png</normaloff>:/images/fileopen-256.png</iconset>
    </property>
    <property name="text">
@@ -114,7 +114,7 @@
   </action>
   <action name="actionGenerate_Tree">
    <property name="icon">
-    <iconset resource="application.qrc">
+    <iconset resource="../application.qrc">
      <normaloff>:/images/button_blue_play.png</normaloff>:/images/button_blue_play.png</iconset>
    </property>
    <property name="text">
@@ -128,7 +128,7 @@
   </action>
   <action name="actionSave">
    <property name="icon">
-    <iconset resource="application.qrc">
+    <iconset resource="../application.qrc">
      <normaloff>:/images/filesave-48.png</normaloff>:/images/filesave-48.png</iconset>
    </property>
    <property name="text">
@@ -137,7 +137,7 @@
   </action>
   <action name="actionLoad_Map_File">
    <property name="icon">
-    <iconset resource="application.qrc">
+    <iconset resource="../application.qrc">
      <normaloff>:/images/fileopen-256.png</normaloff>:/images/fileopen-256.png</iconset>
    </property>
    <property name="text">
@@ -146,7 +146,7 @@
   </action>
   <action name="actionNewImage">
    <property name="icon">
-    <iconset resource="application.qrc">
+    <iconset resource="../application.qrc">
      <normaloff>:/images/file-new-icon.png</normaloff>:/images/file-new-icon.png</iconset>
    </property>
    <property name="text">
@@ -158,7 +158,7 @@
   </action>
   <action name="actionShow_Parameters">
    <property name="icon">
-    <iconset resource="application.qrc">
+    <iconset resource="../application.qrc">
      <normaloff>:/images/Actions-format-indent-more-icon.png</normaloff>:/images/Actions-format-indent-more-icon.png</iconset>
    </property>
    <property name="text">
@@ -180,7 +180,7 @@
   </action>
   <action name="actionSave_configuration">
    <property name="icon">
-    <iconset resource="application.qrc">
+    <iconset resource="../application.qrc">
      <normaloff>:/images/filesave-48.png</normaloff>:/images/filesave-48.png</iconset>
    </property>
    <property name="text">
@@ -189,7 +189,7 @@
   </action>
   <action name="actionPrint">
    <property name="icon">
-    <iconset resource="application.qrc">
+    <iconset resource="../application.qrc">
      <normaloff>:/images/print-printer-icone-7769-64.png</normaloff>:/images/print-printer-icone-7769-64.png</iconset>
    </property>
    <property name="text">
@@ -203,7 +203,7 @@
   </action>
   <action name="actionLoad_configuration">
    <property name="icon">
-    <iconset resource="application.qrc">
+    <iconset resource="../application.qrc">
      <normaloff>:/images/print-printer-icone-7769-64.png</normaloff>:/images/print-printer-icone-7769-64.png</iconset>
    </property>
    <property name="text">
@@ -215,11 +215,11 @@
   <customwidget>
    <class>GraphicView</class>
    <extends>QGraphicsView</extends>
-   <header>../src/GraphicView.h</header>
+   <header>../src/gui/GraphicView.h</header>
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="application.qrc"/>
+  <include location="../application.qrc"/>
  </resources>
  <connections/>
 </ui>

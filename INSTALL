@@ -2,11 +2,13 @@ The program has only been tested in UBUNTU and MAC.
 
 It's compiled using CMAKE.
 
-For example
+For example (to build) :
 
 git clone https://github.com/jfnavarro/PrimeTV2.github
 
 mkdir primetv_build
+
+cd primetv_build
 
 cmake ../PrimeTV2
 
@@ -20,15 +22,17 @@ The list of packages needed to compile PrimeTV2 are :
 	Cairo >= 1.0
 	BOOST >=1.42
 
-They can be installed in Ubuntu by using the following commands :
+To install the dependencies :
+
+- They can be installed in Ubuntu by using the following commands :
 
 sudo apt-get install build-essential cmake libboost-dev libboost-serialization-dev libboost-program-options-dev libcairo2-dev bison flex
 
-They can be installed in Fedora by using the following commands :
+- They can be installed in Fedora by using the following commands :
 
 sudo yum install cairo-devel boost-devel cmake-devel
 
-They can be installed in MAC by using the following commands :
+- They can be installed in MAC by using the following commands :
 
 sudo port install cmake
 sudo port install cairo

@@ -696,9 +696,7 @@
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="application.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>checkBoxHV</sender>

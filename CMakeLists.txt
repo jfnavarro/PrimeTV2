@@ -23,6 +23,9 @@ set(PROJECT_DOMAIN "${PROJECT_DOMAIN_FIRST}.${PROJECT_DOMAIN_SECOND}")
 
 if(COMMAND cmake_policy)
   cmake_policy(SET CMP0003 NEW)
+  if(WIN32)
+    cmake_policy(SET CMP0020 NEW)
+  endif(WIN32)
 endif(COMMAND cmake_policy)
 
 SET(OS_X_PROJECT_BINARY_DIR "${CMAKE_BINARY_DIR}/${PROJECT_NAME}.app")

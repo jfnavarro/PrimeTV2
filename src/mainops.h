@@ -26,14 +26,20 @@
 
 #ifndef MAINOPS_H
 #define MAINOPS_H
-#include "phyltr.h"
+
+#include "lgt/Phyltr.h"
+#include "reconcilation/GammaMapEx.h"
+#include "reconcilation/LambdaMapEx.h"
+#include "reconcilation/SetOfNodesEx.hh"
+#include "draw/DrawTreeCairo.h"
+
 #include <boost/dynamic_bitset.hpp>
-#include "libraries/Node.hh"
-#include <parameters.h>
-#include "libraries/TreeIO.hh"
-#include "libraries/AnError.hh"
-#include "DrawTree_time.hh"
-#include "libraries/gammamapex.h"
+
+class TreeIO;
+class AnError;
+class Node;
+class Parameters;
+class StrStrMap;
 
 class Mainops
 {
@@ -111,7 +117,7 @@ protected:
     TreeExtended *Host;
     GammaMapEx<Node> *gamma;
     LambdaMapEx<Node> *lambdamap;
-    DrawTree_time *dt; //drawing
+    DrawTreeCairo *dt; //drawing
     Parameters *parameters;
 
     std::vector<Scenario> scenarios;
@@ -124,6 +130,5 @@ protected:
     StrStrMap gs;
 
 };  
-
 
 #endif // MAINOPS_H

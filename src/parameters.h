@@ -23,9 +23,12 @@
 
 #ifndef PARAMETERS_H
 #define PARAMETERS_H
-#include "Colours.h"
+
 #include <vector>
 #include <boost/dynamic_bitset.hpp>
+
+#include "draw/Colours.h"
+#include "draw/Color.h"
 
 using namespace std;
 using boost::dynamic_bitset;
@@ -33,70 +36,70 @@ using boost::dynamic_bitset;
 class Parameters
 {
 public:
-  
-  Parameters();
-  ~Parameters();
-  Parameters& operator=(const Parameters &ts);
-  
-  string species_font;
-  string gene_font;
-  string all_font;
-  bool ids_on_inner_nodes;
-  bool do_not_draw_species_tree;
-  bool do_not_draw_guest_tree;
-  float fontscale;		
-  float imagescale;
-  float xoffset;
-  float yoffset;
-  float ufontsize;
-  float species_font_size;
-  float gene_font_size;
-  float all_font_size;
-  int markerscale;
-  bool isMarkerColor;
-  bool header;
-  bool legend;
-  bool title;
-  bool lattransfer;
-  float lateralmincost;
-  float lateralmaxcost;
-  float lateralduplicost;
-  float lateraltrancost;
-  bool show_event_count;
-  bool UI;
-  bool scaleByTime;
-  bool timeAtEdges;	
-  bool noTimeAnnotation;
-  bool markers;
-  bool horiz;
-  string format; 
-  Colours *colorConfig;
-  string outfile; 
-  string titleText;
-  std::vector<double> uMarker;
-  char ladd;  
-  bool isreconciled;
-  float um_fontsize;
-  float ux_offset;
-  float uy_offset;
-  float width;
-  float height;
-  float fontsize;
-  double leafwidth;
-  dynamic_bitset<> transferedges;
-  dynamic_bitset<> duplications;
-  bool equalTimes;
-  double linewidth;
-  double s_contour_width;
-  double separation;
-  double root_sep;
-  double min_node_height;
-  double maxLeafNameSize;
-  Color speciesFontColor;
-  Color geneFontColor;
-  Color allFontColor;
-  bool reduce;
-  bool drawAll;
+
+    Parameters();
+    ~Parameters();
+    Parameters& operator=(const Parameters &ts);
+
+    string species_font;
+    string gene_font;
+    string all_font;
+    bool ids_on_inner_nodes;
+    bool do_not_draw_species_tree;
+    bool do_not_draw_guest_tree;
+    float fontscale;
+    float imagescale;
+    float xoffset;
+    float yoffset;
+    float ufontsize;
+    float species_font_size;
+    float gene_font_size;
+    float all_font_size;
+    int markerscale;
+    bool isMarkerColor;
+    bool header;
+    bool legend;
+    bool title;
+    bool lattransfer;
+    float lateralmincost;
+    float lateralmaxcost;
+    float lateralduplicost;
+    float lateraltrancost;
+    bool show_event_count;
+    bool UI;
+    bool scaleByTime;
+    bool timeAtEdges;
+    bool noTimeAnnotation;
+    bool markers;
+    bool horiz;
+    string format;
+    Colours *colorConfig;
+    string outfile;
+    string titleText;
+    std::vector<double> uMarker;
+    char ladd;
+    bool isreconciled;
+    float um_fontsize;
+    float ux_offset;
+    float uy_offset;
+    float width;
+    float height;
+    float fontsize;
+    double leafwidth;
+    dynamic_bitset<> transferedges;
+    dynamic_bitset<> duplications;
+    bool equalTimes;
+    double linewidth;
+    double s_contour_width;
+    double separation;
+    double root_sep;
+    double min_node_height;
+    double maxLeafNameSize;
+    Color speciesFontColor;
+    Color geneFontColor;
+    Color allFontColor;
+    bool reduce;
+    bool drawAll;
 };
 
 

@@ -5,7 +5,7 @@ Version 0.1.0 (Alpha)
 
 /*********************************************************************/
 
-The utility of this program is to draw reconciled trees and it is well explained in :
+The utility of this program is to draw reconciled trees and it is explained in :
 
 http://www.biomedcentral.com/1471-2105/8/148
 
@@ -16,7 +16,8 @@ a map file won't be needed whereas if the tree is not reconciled the option "Rec
 be activated and a map file(gene to species nodes) will have to be given, the program will reconcile it by itself.
 
 The list of parameters and their functions can be seen running the script or including --help, /? ect..
-A list of parameters will be automatically loaded if they are included in the file config.cfg
+A list of parameters will be automatically loaded if they are included in a file config.cfg placed
+on the same location the program is being executed.
 
 To launch the User Interface the option --gui must be added.
 
