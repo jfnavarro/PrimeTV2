@@ -218,8 +218,7 @@ TreeIOTraits::enforceHostTree()
 	}
 	else if(hasET() == false)
 	{
-		throw AnError("TreeIOTraits::enforceHostTree:\n"
-				"no time info in tree", 1);
+        throw AnError("TreeIOTraits::enforceHostTree:\n no time info in tree", 1);
 	}
 }
 

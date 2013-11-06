@@ -61,13 +61,13 @@ public:
     bool lateralTransfer(const std::string &mapname, bool dp = false /*dynamic programming*/);
 
     /* load the reconciled gene tree and obtatins its information */
-    void OpenReconciled(const char* reconciled);
+    void OpenReconciled(const string &gene);
 
     /* load the species tree and obtain its information */
-    void OpenHost(const char* species);
+    void OpenHost(const string &species);
 
     /* reconcile the gene tree given as input, the species tree and the map file are needed */
-    void reconcileTrees(const char* gene, const char* species, const char* mapfile);
+    void reconcileTrees(const string &gene, const string &species, const string &mapfile);
 
     /* calculate the gamma map and the lambda map of the trees loaded */
     void CalculateGamma();
@@ -106,7 +106,7 @@ public:
     void loadPreComputedScenario(const std::string &filename,const std::string &mapname); 
 
     /* check if there are scenarios with LGT in the set of scenarios given */
-    bool thereAreLGT(std::vector<Scenario> scenarios);
+    bool thereAreLGT(const std::vector<Scenario> &scenarios) const;
 
     /* check whether there is a scenario valid on the vector of scenarios */
     bool getValidityLGT();

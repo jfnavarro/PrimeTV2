@@ -14,6 +14,8 @@ cmake ../PrimeTV2
 
 make && make install
 
+(you can run tests by typing "make test")
+
 The list of packages needed to compile PrimeTV2 are :
 
 	BISON
@@ -51,3 +53,4 @@ NOTE : Remember to tell cmake where qt5 cmake libraries are installed using -DCM
 The exec file "primetv" will be placed in usr/bin (Ubuntu) or Applications/primetv.app (Mac) or an alternative location indicated in CMake by -DCMAKE_INSTALL_PREFIX
 
 NOTE : it is possible to create MAC OSX bundles by typing : make dmg on a mac machine
+

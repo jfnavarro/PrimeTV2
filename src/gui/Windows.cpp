@@ -43,7 +43,8 @@
 
 MainWindow::MainWindow(Parameters *p, Mainops *m, QWidget *parent)
     :QMainWindow(parent),lastVisitedDir(),ops(m),parameters(p),guestTree(false),
-      hostTree(false),menuparameters(false),isPainted(false),mapfileStatus(false),config(0)
+      hostTree(false),menuparameters(false),isPainted(false),mapfileStatus(false),config(0),
+      speciestree(""), genetree(""), reconciledtree(""),mapfile("")
 {
 
     Ui_MainWindow::setupUi(this);
@@ -67,7 +68,6 @@ MainWindow::MainWindow(Parameters *p, Mainops *m, QWidget *parent)
     QString message = tr("PrimeTV GUI");
     statusBar()->showMessage(message);
 
-    mapfile = "";
     QRect screen = QApplication::desktop()->screenGeometry();
     resize((unsigned)((screen.width())/2),(unsigned)((screen.height())/2));
 
@@ -133,24 +133,19 @@ void MainWindow::loadGuest()
 {
     QString temp = openFile(tr("Open Gene Tree"));
 
-    char* text = new char[temp.length() + 1];
-    strcpy(text, temp.toLatin1().constData());
-
     if (!checkBoxReconcile->checkState())
     {
-        reconciledtree = text;
+        reconciledtree = temp;
     }
     else
     {
-        genetree = text;
+        genetree = temp;
     }
 
-    if (strcmp(text,"") != 0)
+    if (temp != "")
     {
         guestTree = true;
-        std::stringstream ss;
-        ss << "Guest Tree : LOADED " << text;
-        statusBar()->showMessage(tr(ss.str().c_str()));
+        statusBar()->showMessage(QString("Guest Tree : LOADED ") + temp);
     }
     else
     {
@@ -161,19 +156,12 @@ void MainWindow::loadGuest()
 
 void MainWindow::loadHost()
 {
-    QString temp = openFile(tr("Open Species Tree"));
+    speciestree = openFile(tr("Open Species Tree"));
 
-    char* text = new char[temp.length() + 1];
-    strcpy(text, temp.toLatin1().constData());
-
-    speciestree = text;
-
-    if (strcmp(text,"") != 0)
+    if (speciestree != "")
     {
         hostTree = true;
-        std::stringstream ss;
-        ss << "Host Tree : LOADED " << text;
-        statusBar()->showMessage(tr(ss.str().c_str()));
+        statusBar()->showMessage(QString("Host Tree : LOADED ") + speciestree);
     }
     else
     {
@@ -205,17 +193,17 @@ void MainWindow::generateTree()
             
             if (!checkBoxReconcile->checkState())
             {
-                ops->OpenReconciled(reconciledtree);
-                ops->OpenHost(speciestree);
+                ops->OpenReconciled(reconciledtree.toStdString());
+                ops->OpenHost(speciestree.toStdString());
             }
             else
             {
-                ops->reconcileTrees(genetree,speciestree,mapfile);
+                ops->reconcileTrees(genetree.toStdString(),speciestree.toStdString(),mapfile.toStdString());
             }
 
             if ((bool)parameters->lattransfer)
             {
-                ops->lateralTransfer(mapfile,(parameters->lateralmincost == 1.0 && parameters->lateralmaxcost == 1.0));
+                ops->lateralTransfer(mapfile.toStdString(),(parameters->lateralmincost == 1.0 && parameters->lateralmaxcost == 1.0));
             }
             
             ops->drawBest(); //draw tree into temp file
@@ -295,7 +283,6 @@ void MainWindow::closeEvent(QCloseEvent *e)
 
 void MainWindow::update()
 {
-    
     parameters->lattransfer = checkBoxLGT->isChecked();
     parameters->lateralmincost = (float)spinBoxMinCost->value();
     parameters->lateralmaxcost = (float)spinBoxMaxCost->value();
@@ -390,7 +377,7 @@ void MainWindow::update()
     {
         if((bool)parameters->lattransfer)
         {
-            ops->lateralTransfer(mapfile,(parameters->lateralmincost == 1.0 && parameters->lateralmaxcost == 1.0));
+            ops->lateralTransfer(mapfile.toStdString(),(parameters->lateralmincost == 1.0 && parameters->lateralmaxcost == 1.0));
         }
         ops->drawBest(); //draw tree into temp file
         paintTree();
@@ -555,18 +542,11 @@ void MainWindow::save()
 
 void MainWindow::loadMap()
 {
-    QString temp = openFile(tr("Open Map File"));
+    mapfile = openFile(tr("Open Map File"));
 
-    char* text = new char[temp.length() + 1];
-    strcpy(text, temp.toLatin1().constData());
-
-    mapfile = text;
-
-    if (strcmp(mapfile,"") != 0)
+    if (mapfile != "")
     {
-        std::stringstream ss;
-        ss << "Map File : LOADED " << text;
-        statusBar()->showMessage(tr(ss.str().c_str()));
+        statusBar()->showMessage(QString("Map File : LOADED ") + mapfile);
         mapfileStatus = true;
     }
     else

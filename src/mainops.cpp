@@ -64,11 +64,11 @@ void Mainops::cleanTrees()
     }
     Host = 0;
 
-    if(io)
-    {
-        delete(io);
-    }
-    io = 0;
+    //if(io)
+    //{
+        //delete(io);
+    //}
+    //io = 0;
 
     io = new TreeIO();
     AC.clear();
@@ -96,6 +96,13 @@ Mainops::~Mainops()
     }
     gamma = 0;
 
+    //if(lambdamap)
+    //{
+        //delete(lambdamap);
+
+    //}
+    //lambdamap = 0;
+
     if(dt)
     {
         delete(dt);
@@ -112,7 +119,7 @@ Mainops::~Mainops()
 
 bool Mainops::lateralTransfer(const std::string &mapname, bool dp)
 {
-    Phyltr late =  Phyltr();
+    Phyltr late = Phyltr();
     late.g_input.duplication_cost = parameters->lateralduplicost;
     late.g_input.transfer_cost = parameters->lateraltrancost;
     late.g_input.max_cost = parameters->lateralmaxcost;
@@ -157,7 +164,7 @@ bool Mainops::lateralTransfer(const std::string &mapname, bool dp)
     else
     {
         parameters->lattransfer = false;
-        std::cout << "Not valid LGT scenarios found.." << std::endl;
+        std::cerr << "Not valid LGT scenarios found.." << std::endl;
         return false;
     }
 }
@@ -171,9 +178,9 @@ void Mainops::printLGT()
     }
 }
 
-bool Mainops::thereAreLGT(std::vector<Scenario> scenarios)
+bool Mainops::thereAreLGT(const std::vector<Scenario> &scenarios) const
 {
-    BOOST_FOREACH(Scenario &sc, scenarios)
+    BOOST_FOREACH(const Scenario &sc, scenarios)
     {
         if(sc.transfer_edges.any())
         {
@@ -183,18 +190,18 @@ bool Mainops::thereAreLGT(std::vector<Scenario> scenarios)
     return false;
 }
 
-void Mainops::OpenReconciled(const char* reconciled)
+void Mainops::OpenReconciled(const string &reconciled)
 {
     io->setSourceFile(reconciled);
     Guest = new TreeExtended(io->readBeepTree<TreeExtended,Node>(&AC, &gs));
 }
 
-void Mainops::OpenHost(const char* species)
+void Mainops::OpenHost(const string &species)
 {    
     TreeIOTraits traits;
     io->setSourceFile(species);
 
-/*    io->checkTagsForTree(traits);
+    io->checkTagsForTree(traits);
     if(traits.containsTimeInformation() == false)
     {
         throw AnError("Host tree lacks time information for some of its nodes\n" + traits.print(), 1);
@@ -203,7 +210,7 @@ void Mainops::OpenHost(const char* species)
     {
         traits.enforceHostTree();
     }
-*/
+
     Host = new TreeExtended(io->readBeepTree<TreeExtended,Node>(traits,0,0));
     Node *root = Host->getRootNode();
 
@@ -244,15 +251,14 @@ void Mainops::CalculateGamma()
     }
 }
 
-
-void Mainops::reconcileTrees(const char* gene, const char* species, const char* mapfile)
+void Mainops::reconcileTrees(const string &gene, const string &species, const string &mapfile)
 {
     io->setSourceFile(gene);
     Guest = new TreeExtended(io->readBeepTree<TreeExtended,Node>(&AC, &gs));
     io->setSourceFile(species);
     Host = new TreeExtended(io->readNewickTree<TreeExtended,Node>());
 
-    if(strcmp(mapfile,"")!=0)
+    if(mapfile != "")
     {
         gs = TreeIO::readGeneSpeciesInfo(mapfile);
     }
@@ -459,9 +465,13 @@ void Mainops::loadPreComputedScenario(const std::string &filename,const std::str
         if(scenario_file.good())
         {
             if(line.size() == 0)  // Skip any blank lines
+            {
                 continue;
+            }
             else if(line[0] == '#')  // Skip any comment lines
+            {
                 continue;
+            }
             else if ((line.find("Transfer") != std::string::npos))
             {
                 const std::size_t start_pos = line.find(":");

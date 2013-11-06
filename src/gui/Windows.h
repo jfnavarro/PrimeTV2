@@ -128,10 +128,10 @@ private:
     QString lastVisitedDir;
     Mainops *ops; // main operations
     Parameters *parameters;
-    const char* reconciledtree;
-    const char* speciestree;
-    const char* genetree;
-    const char* mapfile;
+    QString reconciledtree;
+    QString speciestree;
+    QString genetree;
+    QString mapfile;
     bool guestTree;
     bool hostTree;
     bool menuparameters;
