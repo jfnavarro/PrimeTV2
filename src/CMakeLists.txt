@@ -116,7 +116,7 @@ set(INC_TREE
 set(SRC_TREE
     tree/Node.cc
     tree/Tree.cc
-    tree/TreeExtended.cpp
+    tree/Treeextended.cpp
     tree/TreeIO.cc
     tree/TreeIOTraits.cc
 )
