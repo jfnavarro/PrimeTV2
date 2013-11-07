@@ -108,7 +108,7 @@ set(SRC_RECONCILATION
 set(INC_TREE
     tree/Node.hh
     tree/Tree.hh
-    tree/TreeExtended.h
+    tree/Treeextended.h
     tree/TreeIO.hh
     tree/TreeIOTraits.hh
 )
