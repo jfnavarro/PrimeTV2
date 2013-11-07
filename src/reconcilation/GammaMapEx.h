@@ -25,7 +25,7 @@
 #include "SetOfNodesEx.hh"
 #include "LambdaMapEx.h"
 
-#include "../tree/TreeExtended.h"
+#include "../tree/Treeextended.h"
 
 #include "../Parameters.h"
 
