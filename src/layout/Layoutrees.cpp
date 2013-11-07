@@ -20,7 +20,7 @@
 
 */
 
-#include "layoutrees.h"
+#include "Layoutrees.h"
 
 #include "../tree/TreeExtended.h"
 #include "../Parameters.h"
