@@ -52,7 +52,7 @@
 
 #include <fstream>
 
-#include "../tree/TreeExtended.h"
+#include "../tree/Treeextended.h"
 
 using namespace std;
 using boost::shared_ptr;
