@@ -34,7 +34,7 @@
 
 using namespace std;
 
-TreeIO::TreeIO(enum TreeSource source, const std::string s)
+TreeIO::TreeIO(enum TreeSource source, const std::string &s)
     : source(source),
       stringThatWasPreviouslyNamedS(s)
 {}
@@ -43,7 +43,7 @@ TreeIO::TreeIO(enum TreeSource source, const std::string s)
 // anything, I will now allow instantiating the empty object.
 //--------------------------------------------------------------------
 TreeIO::TreeIO()
-    :    source(readFromStdin),
+    : source(readFromStdin),
       stringThatWasPreviouslyNamedS("")
 {}
 
@@ -118,9 +118,6 @@ StrStrMap
 TreeIO::readGeneSpeciesInfo(const std::string &filename)
 {
     ifstream is(filename.c_str());
-
-    // This yields warning that line is unused TODO: remove /bens
-    //     char line[LINELENGTH];
     int lineno = 1;
 
     StrStrMap gene2species;
@@ -159,9 +156,6 @@ std::vector<StrStrMap>
 TreeIO::readGeneSpeciesInfoVector(const std::string &filename)
 {
     ifstream is(filename.c_str());
-
-    // This yields warning that line is unused TODO: remove /bens
-    //     char line[LINELENGTH];
     int lineno = 1;
     std::vector<StrStrMap> gene2speciesVec;
     StrStrMap gene2species;
@@ -226,7 +220,6 @@ struct NHXtree *
     traits.setNT(true);
     traits.setBL(true);
     traits.setGS(true);
-
     traits.setAC(false);
     traits.setHY(false);
 
@@ -299,7 +292,9 @@ TreeIO::decideEdgeTime(struct NHXnode *v, const TreeIOTraits& traits,
             }
             else if(isHY == false && !isRoot(v))
             {
-                throw AnError("Tree contains an edge with zero time.", 1);
+                //TOFIX this is strange, this error is present only when using MAC and the GUI
+                std::cerr << "Warning : Edge " << v->name << " has a node with no time" << std::endl;
+                //throw AnError("Tree contains an edge with zero time.", 1);
             }
         }
     }
@@ -369,10 +364,8 @@ TreeIO::recursivelyCheckTags(struct NHXnode* v, TreeIOTraits& traits)
 
     recursivelyCheckTags(v->left, traits);
     recursivelyCheckTags(v->right, traits);
-
     checkTags(*v, traits);
     return true;
-
 }
 
 
@@ -456,7 +449,7 @@ TreeIO::readTree()
     }
     else
     {
-        PROGRAMMING_ERROR("TreeIO not properly initialized!");
+        throw AnError("TreeIO not properly initialized!");
         return NULL;
     }
 }

@@ -80,7 +80,6 @@ std::string
 StrStrMap::find(const string &s) const
 {
     map<string, string>::const_iterator iter;
-
     iter = avbildning.find(s);
     if (iter == avbildning.end())
     {
@@ -95,7 +94,8 @@ StrStrMap::find(const string &s) const
 std::string
 StrStrMap::getNthItem(unsigned idx) const
 {
-    for (map<string,string>::const_iterator i = avbildning.begin();i != avbildning.end(); i++)
+    for (map<string,string>::const_iterator i = avbildning.begin();
+         i != avbildning.end(); i++)
     {
         if (idx == 0)
         {
@@ -106,7 +106,6 @@ StrStrMap::getNthItem(unsigned idx) const
             idx--;
         }
     }
-    //PROGRAMMING_ERROR("Out of bounds.");
     return("");
 }
 
@@ -131,7 +130,9 @@ StrStrMap::reverseSize() const
     for(map<string,string>::const_iterator i = avbildning.begin(); i != avbildning.end(); i++)
     {
         if(reverse.find(i->second) != reverse.end())
+        {
             reverse.insert(i->second);
+        }
     }
     return reverse.size();
 }
@@ -140,7 +141,6 @@ std::ostream&
 operator<<(std::ostream &o, const StrStrMap &m)
 {
     string res;
-
     for (map<string,string>::const_iterator i = m.avbildning.begin(); i != m.avbildning.end();i++)
     {
         res.append(i->first + "\t" + i->second + "\n");

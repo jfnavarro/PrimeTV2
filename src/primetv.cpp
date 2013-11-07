@@ -460,7 +460,7 @@ main (int ac, char *av[])
 
         if((bool)(parameters->drawAll) && !(bool)(parameters->lattransfer))
         {
-            std::cerr << "The option -Y(draw-all-lgt) cannot be used together with the option -l(lgt).." << std::endl;
+            std::cerr << "The option -Y(draw-all-lgt) has to be used together with the option -l(lgt).." << std::endl;
             return EXIT_FAILURE;
         }
 

@@ -64,11 +64,11 @@ void Mainops::cleanTrees()
     }
     Host = 0;
 
-    //if(io)
-    //{
-        //delete(io);
-    //}
-    //io = 0;
+    if(io)
+    {
+        delete(io);
+    }
+    io = 0;
 
     io = new TreeIO();
     AC.clear();
@@ -198,20 +198,8 @@ void Mainops::OpenReconciled(const string &reconciled)
 
 void Mainops::OpenHost(const string &species)
 {    
-    TreeIOTraits traits;
     io->setSourceFile(species);
-
-    io->checkTagsForTree(traits);
-    if(traits.containsTimeInformation() == false)
-    {
-        throw AnError("Host tree lacks time information for some of its nodes\n" + traits.print(), 1);
-    }
-    else
-    {
-        traits.enforceHostTree();
-    }
-
-    Host = new TreeExtended(io->readBeepTree<TreeExtended,Node>(traits,0,0));
+    Host = new TreeExtended(io->readBeepTree<TreeExtended,Node>());
     Node *root = Host->getRootNode();
 
     if ((double)root->getTime() != (double)0.0)

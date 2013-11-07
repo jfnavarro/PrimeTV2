@@ -52,7 +52,7 @@ public:
     ~Mainops();
     //instantiates objects
     void start();
-
+    //destroy and create trees
     void cleanTrees();
 
     /* calculate the Lateral transfer scenarios using parameters,
@@ -81,7 +81,7 @@ public:
     /* Draw the tree using Cairo */
     void DrawTree(cairo_t *cr = 0);
 
-    /* save the tree on a file */
+    /* save the tree on a file, returns 1 if ok of 0 it if failed */
     int RenderImage();
 
     /* return the parameters object */

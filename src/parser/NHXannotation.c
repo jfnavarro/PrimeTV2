@@ -201,7 +201,8 @@ struct int_list*
     else if (il->next == NULL)
     {
         return il;
-    } else
+    }
+    else
     {
         reversed = int_list_reverse(il->next);
         il->next->next = il;

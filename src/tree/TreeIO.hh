@@ -44,44 +44,29 @@
 class Tree;
 
 using namespace std;
-//--------------------------------------------------------------------
+
+// Provides methods for reading and writing phylo trees.
 //
-// TreeIO
-//
-//! Provides methods for reading and writing phylo trees. 
-//!
-//! + When reading gene trees, any edge weight (time) annotations are 
-//!   totally disregarded.
-//! + For species trees, edge weights are honoured, and if they would 
-//!   be missing, a negative time is inserted.
-//
-//--------------------------------------------------------------------
+// + When reading gene trees, any edge weight (time) annotations are
+//   totally disregarded.
+// + For species trees, edge weights are honoured, and if they would
+//   be missing, a negative time is inserted.
+
 class TreeIO 
 {
-    //! convenience alias
+
     enum TreeSource {notInitialized, readFromStdin, readFromFile, readFromString};
 
-    //! Only create TreeIO objects through *named constructors* (see C++ FAQ
-    //! lite). Actual constructor is protected, and does actually not do
-    //! anything! There is one exception: If you want to read from STDIN,
-    //! use the empty constructor, TreeIO(). But you get the same behaviour
-    //! if the filename is empty.
-    //--------------------------------------------------------------------
 protected:
-    TreeIO(enum TreeSource src, const std::string s);
+    TreeIO(enum TreeSource src, const std::string &s);
 
 public:
-    TreeIO();	    	//! "Empty" constructor, allows reading from STDIN.
+
+    TreeIO();	    	// "Empty" constructor, allows reading from STDIN.
     virtual ~TreeIO();
     TreeIO(const TreeIO &io);
     virtual TreeIO& operator=(const TreeIO &io);
 
-    //! Usage:
-    //!   TreeIO io = fromFile("Nisse"); /* read from file Nisse */
-    //!   TreeIO io = fromString("(a,(b,c));"); /* read from this string */
-    //!   TreeIO io = fromFile("");      /* read from STDIN  */
-    //!   TreeIO io;                     /* read from STDIN  */
-    //--------------------------------------------------------------------
     static TreeIO fromFile(const std::string &filename);
     static TreeIO fromString(const std::string &treeString);
 
@@ -90,13 +75,21 @@ public:
     void setSourceFile(const std::string &filename);
     void setSourceString(const std::string &str);
 
-public:
+    static StrStrMap readGeneSpeciesInfo(const std::string& filename);
+    static std::vector<StrStrMap> readGeneSpeciesInfoVector(const std::string& filename);
 
-    //! Basic function for reading trees in PRIME format
-    //! ID and name of nodes are always read, reads everything there is,
-    //! unless told otherwise by traits.
-    //! precondition: (useET && useNT) != true
-    //----------------------------------------------------------------------
+    //! Precheck what tags are present in the read NHX-tree. Since ID,
+    //! Names of nodes and trees are always read - these are not checked
+    struct NHXtree* checkTagsForTree(TreeIOTraits &traits);
+
+    template <class T,class U>
+    T readBeepTree()
+    {
+        TreeIOTraits traits;
+        checkTagsForTree(traits); // Also reads the tree, apparently!
+        traits.enforceStandardSanity();
+        return readBeepTree<T,U>(traits, 0, 0);
+    }
 
     template <class T,class U>
     T readBeepTree(std::vector<SetOfNodesEx<U> > *AC, StrStrMap *gs)
@@ -120,62 +113,8 @@ public:
         return readBeepTree<T,U>(t, tr, AC, gs);
     }
 
-    //! Convenience front to readBeepTree(...)
-    //! Reads times from NT, ET or NW and nothing more
-    //----------------------------------------------------------------------
-    template <class T,class U>
-    T readHostTree()
-    {
-        TreeIOTraits traits;
-        struct NHXtree *t = checkTagsForTree(traits);
-        if(traits.containsTimeInformation() == false)
-        {
-            throw AnError("Host tree lacks time information for some of it nodes", 1);
-        }
-
-        traits.enforceHostTree();
-        std::vector<SetOfNodesEx<U> > *AC = 0;
-        StrStrMap *gs = 0;
-        return readBeepTree<T,U>(t, traits, AC, gs);
-    }
-
-
-    //! Convenience front to readBeepTree(...)
-    //! Reads edge lengths from BL or NW and what else there is
-    //! Reads antichains info and gene species maps
-    //----------------------------------------------------------------------
-    template <class T,class U>
-    T readGuestTree(std::vector<SetOfNodesEx<U> >* AC, StrStrMap* gs)
-    {
-        TreeIOTraits traits;
-        struct NHXtree *t = checkTagsForTree(traits);
-        if(traits.hasGS() == false)
-        {
-            gs = 0;
-        }
-        if(traits.hasAC() == false)
-        {
-            AC = 0;
-        }
-        traits.enforceGuestTree();
-        return readBeepTree<T,U>(t, traits, AC, gs);
-    }
-
-    //! Convenience front to readGuestTree(...)
-    //! Reads edge lengths from BL or NW and what else there is
-    //! Doese not read antichains info and gene species maps
-    //----------------------------------------------------------------------
-    template <class T,class U>
-    T readGuestTree()
-    {
-        std::vector<SetOfNodesEx<U> > *AC = 0;
-        StrStrMap *gs = 0;
-        return readGuestTree<T,U>(AC, gs);
-    }
-
-    //! Convenience front to readBeepTree(...)
-    //! Reads a plain newick tree with branch lengths from NW only
-    //----------------------------------------------------------------------
+    // Convenience front to readBeepTree(...)
+    // Reads a plain newick tree with branch lengths from NW only
     template <class T,class U>
     T readNewickTree()
     {
@@ -190,15 +129,12 @@ public:
         return readBeepTree<T,U>(t, traits, AC,gs);
     }
 
-    //! Basic function for writing tree T in newick format, with the tags
-    //! indicated by traits included in PRIME markup. If gamma != NULL then AC
-    //! markup will also be included.
-    //! Precondition: (useET && useNT) == false
-    //----------------------------------------------------------------------
+    // Basic function for writing tree T in newick format, with the tags
+    // indicated by traits included in PRIME markup. If gamma != NULL then AC
+    // markup will also be included.
+    // Precondition: (useET && useNT) == false
     template <class T,class U>
-    static std::string writeBeepTree(const T& G,
-                                     const TreeIOTraits& traits,
-                                     const GammaMapEx<U>* gamma)
+    std::string writeBeepTree(const T& G,const TreeIOTraits& traits,const GammaMapEx<U>* gamma)
     {
         assert((traits.hasET() && traits.hasNT()) == false);
         std::string least = "";
@@ -227,11 +163,10 @@ public:
                                         gamma, 0, 0, 0) + name.str();
     }
 
-    //! convenience front function for writeBeepTree(...)
-    //! writes tree S with all attributes
-    //----------------------------------------------------------------------
+    // convenience front function for writeBeepTree(...)
+    // writes tree S with all attributes
     template <class T,class U>
-    static std::string writeBeepTree(const T& G, const U* gamma=0)
+    std::string writeBeepTree(const T& G, const U* gamma=0)
     {
         TreeIOTraits traits;
         traits.setID(true);
@@ -246,30 +181,10 @@ public:
         return writeBeepTree(G, traits, gamma);
     }
 
-    //! convenience front function for writeBeepTree(...)
-    //! writes tree S with edge times
-    //----------------------------------------------------------------------
-    template <class T>
-    static std::string writeHostTree(const T& S)
-    {
-        TreeIOTraits traits;
-        traits.setID(true);
-        if(S.hasTimes())
-        {
-            traits.setNT(true);
-        }
-        if(S.getName() != "")
-        {
-            traits.setName(true);
-        }
-        return writeBeepTree(S, traits, 0);
-    }
-
-    //! convenience front function for writeBeepTree(...)
-    //! writes tree G with lengths and with gamma/AC info
-    //----------------------------------------------------------------------
+    // convenience front function for writeBeepTree(...)
+    // writes tree G with lengths and with gamma/AC info
     template <class T,class U>
-    static std::string writeGuestTree(const T& G, const GammaMapEx<U>* gamma)
+    std::string writeGuestTree(const T& G, const GammaMapEx<U>* gamma)
     {
         TreeIOTraits traits;
         traits.setID(true);
@@ -280,47 +195,37 @@ public:
         return writeBeepTree(G, traits, gamma);
     }
 
-    //! convenience front function for writeGeneTree(...)
-    //! writes tree G with lkengths but without AC info
-    //----------------------------------------------------------------------
+    // convenience front function for writeGeneTree(...)
+    // writes tree G with lkengths but without AC info
     template <class T>
-    static std::string writeGuestTree(const T& G)
+    std::string writeGuestTree(const T& G)
     {
         return writeGuestTree(G, 0);
     }
 
-    //! convenience front function for writeBeepTree(...)
-    //! writes plain newick tree T with branch lengths
-    //----------------------------------------------------------------------
-    template <class T>
-    static std::string writeNewickTree(const T& G)
-    {
-        TreeIOTraits traits;
-        if(G.hasLengths())
-        {
-            traits.setBL(true);
-            traits.setNWisET(false);
-        }
-        return writeBeepTree(G, traits, 0);
-    }
-
-    //! Map leaves in the gene tree to leaves in the species tree
-    //! \todo{This is a bit incongruent with the rest of the code and should
-    //! probably get its own class! /arve}
-    //! \todo{ It should definitely have its name changed /bens}
-    //--------------------------------------------------------------------
-    static StrStrMap readGeneSpeciesInfo(const std::string& filename);
-    static std:: vector<StrStrMap>
-    readGeneSpeciesInfoVector(const std::string& filename);
-
-    //! Precheck what tags are present in the read NHX-tree. Since ID,
-    //! Names of nodes and trees are always read - these are not checked
-    struct NHXtree* checkTagsForTree(TreeIOTraits &traits);
-
 protected:
     
-    //! The basic function for reading NHX trees
-    //----------------------------------------------------------------------
+    // Handle the various rules for how to set the time over an edge
+    Real decideEdgeTime(struct NHXnode *v, const TreeIOTraits& traits, bool isHY);
+    std::string decideNodeName(struct NHXnode *v);
+    void handleBranchLengths(Node *node, struct NHXnode *v, bool NWIsET);
+    // Recursively checks what tags are given for all nodes in subtree T_v
+    // Precondition: All bool argument has proper values. Assume a specific
+    // bool argument, 'A' has incoming value 'a', and the value for the
+    // current subtree is 'b', then on return, A = a && b, i.e., false if
+    // either a or b is false.
+    // postcondition: return statement is true if v != 0
+    bool recursivelyCheckTags(struct NHXnode* v, TreeIOTraits& traits);
+
+    // Checks what tags are given for node v
+    void checkTags(struct NHXnode& v, TreeIOTraits& traits);
+
+    // Helper function that reads NHXtrees:
+    NHXtree* readTree();
+
+
+
+    // The basic function for reading NHX trees
     template <class T,class U>
     T readBeepTree(struct NHXtree *t, const TreeIOTraits& traits,
                    std::vector<SetOfNodesEx<U> > *AC, StrStrMap *gs)
@@ -372,8 +277,7 @@ protected:
         return tree;
     }
 
-    //! The basic recursion function for reading node info from NHX structs
-    //----------------------------------------------------------------------
+    // The basic recursion function for reading node info from NHX structs
     template <class T,class U>
     U* extendBeepTree(T &S, struct NHXnode *v,
                       const TreeIOTraits& traits,
@@ -549,10 +453,6 @@ protected:
         }
     }
 
-    //! Handle the various rules for how to set the time over an edge
-    Real  decideEdgeTime(struct NHXnode *v, const TreeIOTraits& traits, bool isHY);
-    std::string decideNodeName(struct NHXnode *v);
-
     template <class T, class U>
     void sanityCheckOnTimes(T& S, U *node, struct NHXnode *v, const TreeIOTraits& traits)
     {
@@ -586,17 +486,15 @@ protected:
             }
             else
             {
-                throw AnError("Edge without node time found in tree.", 1);
+                std::cerr << "Warning : Edge " << v->name << "  without node time found in tree " << std::endl;
+                //throw AnError("Edge without node time found in tree.", 1);
             }
         }
 
     }
 
-    void handleBranchLengths(Node *node, struct NHXnode *v, bool NWIsET);
-
     // Basic helper function for writing trees in PRIME format
-    
-    static std::string
+    std::string
     recursivelyWriteBeepTree(Node &u, std::string& least,
                              const TreeIOTraits& traits,
                              const GammaMapEx<Node>* gamma,
@@ -781,7 +679,7 @@ protected:
     }
     
     template <class U>
-    static void decideSubtreeOrder(U &u, std::map<U*, std::string> order)
+    void decideSubtreeOrder(U &u, std::map<U*, std::string> order)
     {
         if(order.find(&u) != order.end())
         {
@@ -801,7 +699,7 @@ protected:
     }
 
     template <class T,class U>
-    static std::string
+    std::string
     recursivelyWriteBeepTree(U& u, std::map<U*, std::string> least,
                              const TreeIOTraits& traits,
                              const T* gamma,
@@ -986,7 +884,7 @@ protected:
     //! Compute markup for the anti-chains on node u
     //----------------------------------------------------------------------
     template <class T,class U>
-    static std::string getAntiChainMarkup(T &u, const GammaMapEx<U> &gamma)
+    std::string getAntiChainMarkup(T &u, const GammaMapEx<U> &gamma)
     {
         std::string ac = "";
 
@@ -1020,25 +918,6 @@ protected:
         return ac;
     }
 
-    //! Recursively checks what tags are given for all nodes in subtree T_v
-    //! Precondition: All bool argument has proper values. Assume a specific
-    //! bool argument, 'A' has incoming value 'a', and the value for the
-    //! current subtree is 'b', then on return, A = a && b, i.e., false if
-    //! either a or b is false.
-    //! postcondition: return statement is true if v != 0
-    //----------------------------------------------------------------------
-    bool recursivelyCheckTags(struct NHXnode* v, TreeIOTraits& traits);
-
-    //! Checks what tags are given for node v
-    //----------------------------------------------------------------------
-    void checkTags(struct NHXnode& v, TreeIOTraits& traits);
-
-    //! Helper function that reads NHXtrees:
-    //----------------------------------------------------------------------
-    NHXtree* readTree();
-
-    //! \todo{add comments on what this do /bens}
-    //----------------------------------------------------------------------
     template<class U>
     void updateACInfo(struct NHXnode *v, U *new_node,
                       std::vector<SetOfNodesEx<U> > &AC)
@@ -1055,11 +934,10 @@ protected:
         }
     }
 
-protected:
+private:
 
-    enum TreeSource source; //!< Where do we read trees from?
-    std::string stringThatWasPreviouslyNamedS;          //!< filename of current file to read from
-    static std::string antiChainMarkupTag; //!< \todo{is this used? /bens
+    enum TreeSource source; // Where do we read trees from?
+    std::string stringThatWasPreviouslyNamedS;  //filename of current file to read from
 
 };
 

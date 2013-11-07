@@ -62,7 +62,6 @@ AnError::action()
 std::string
 AnError::message() const
 {
-
     std::string s =  msg_str;
     if (arg_str.length() > 0) 
     {

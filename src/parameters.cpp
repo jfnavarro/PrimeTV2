@@ -133,6 +133,7 @@ Parameters& Parameters::operator=(const Parameters& p)
         markers = p.markers;
         horiz = p.horiz;
         format = p.format;
+        //assigning reference, dangerous
         colorConfig = p.colorConfig;
         outfile = p.outfile;
         titleText = p.titleText;
