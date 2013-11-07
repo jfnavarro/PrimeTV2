@@ -23,9 +23,11 @@
 #define GENERALTESTS_H
 
 #include <QObject>
+#include <iostream>
+#include <stdio.h>
 
 class QTemporaryFile;
-
+class QString;
 namespace unit
 {
 
@@ -48,7 +50,7 @@ public:
         }
     }
 
-    QString createTempFile(QTemporaryFile &temp_file, const std::string &content);
+    void createTempFile(QTemporaryFile &temp_file, const std::string &input, QString &output);
 
 private:
 
@@ -58,7 +60,7 @@ private:
     QString test_reconciled;
     QString test_precomputed;
 
-private Q_SLOTS:
+private slots:
 
     void initTestCase();
     void cleanupTestCase();

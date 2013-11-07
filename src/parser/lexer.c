@@ -1,6 +1,6 @@
-#line 2 "/Users/josefernandeznavarro/Projects/primetv2/PrimeTV2/src/parser/lexer.c"
+#line 2 "/home/ubuntu/PrimeTV2/src/parser/lexer.c"
 
-#line 4 "/Users/josefernandeznavarro/Projects/primetv2/PrimeTV2/src/parser/lexer.c"
+#line 4 "/home/ubuntu/PrimeTV2/src/parser/lexer.c"
 
 #define  YY_INT_ALIGNED short int
 
@@ -66,7 +66,6 @@ typedef int16_t flex_int16_t;
 typedef uint16_t flex_uint16_t;
 typedef int32_t flex_int32_t;
 typedef uint32_t flex_uint32_t;
-typedef uint64_t flex_uint64_t;
 #else
 typedef signed char flex_int8_t;
 typedef short int flex_int16_t;
@@ -74,7 +73,6 @@ typedef int flex_int32_t;
 typedef unsigned char flex_uint8_t; 
 typedef unsigned short int flex_uint16_t;
 typedef unsigned int flex_uint32_t;
-#endif /* ! C99 */
 
 /* Limits of integral types. */
 #ifndef INT8_MIN
@@ -104,6 +102,8 @@ typedef unsigned int flex_uint32_t;
 #ifndef UINT32_MAX
 #define UINT32_MAX             (4294967295U)
 #endif
+
+#endif /* ! C99 */
 
 #endif /* ! FLEXINT_H */
 
@@ -161,7 +161,15 @@ typedef unsigned int flex_uint32_t;
 
 /* Size of default input buffer. */
 #ifndef YY_BUF_SIZE
+#ifdef __ia64__
+/* On IA-64, the buffer size is 16k, not 8k.
+ * Moreover, YY_BUF_SIZE is 2*YY_READ_BUF_SIZE in the general case.
+ * Ditto for the __ia64__ case accordingly.
+ */
+#define YY_BUF_SIZE 32768
+#else
 #define YY_BUF_SIZE 16384
+#endif /* __ia64__ */
 #endif
 
 /* The state buf must be large enough to hold one state per character in the main buffer.
@@ -173,12 +181,7 @@ typedef unsigned int flex_uint32_t;
 typedef struct yy_buffer_state *YY_BUFFER_STATE;
 #endif
 
-#ifndef YY_TYPEDEF_YY_SIZE_T
-#define YY_TYPEDEF_YY_SIZE_T
-typedef size_t yy_size_t;
-#endif
-
-extern yy_size_t yytree_leng;
+extern int yytree_leng;
 
 extern FILE *yytree_in, *yytree_out;
 
@@ -204,6 +207,11 @@ extern FILE *yytree_in, *yytree_out;
 
 #define unput(c) yyunput( c, (yytext_ptr)  )
 
+#ifndef YY_TYPEDEF_YY_SIZE_T
+#define YY_TYPEDEF_YY_SIZE_T
+typedef size_t yy_size_t;
+#endif
+
 #ifndef YY_STRUCT_YY_BUFFER_STATE
 #define YY_STRUCT_YY_BUFFER_STATE
 struct yy_buffer_state
@@ -221,7 +229,7 @@ struct yy_buffer_state
 	/* Number of characters read into yy_ch_buf, not including EOB
 	 * characters.
 	 */
-	yy_size_t yy_n_chars;
+	int yy_n_chars;
 
 	/* Whether we "own" the buffer - i.e., we know we created it,
 	 * and can realloc() it to grow it, and should free() it to
@@ -291,8 +299,8 @@ static YY_BUFFER_STATE * yy_buffer_stack = 0; /**< Stack as an array. */
 
 /* yy_hold_char holds the character lost when yytree_text is formed. */
 static char yy_hold_char;
-static yy_size_t yy_n_chars;		/* number of characters read into yy_ch_buf */
-yy_size_t yytree_leng;
+static int yy_n_chars;		/* number of characters read into yy_ch_buf */
+int yytree_leng;
 
 /* Points to current character in buffer. */
 static char *yy_c_buf_p = (char *) 0;
@@ -320,7 +328,7 @@ static void yytree__init_buffer (YY_BUFFER_STATE b,FILE *file  );
 
 YY_BUFFER_STATE yytree__scan_buffer (char *base,yy_size_t size  );
 YY_BUFFER_STATE yytree__scan_string (yyconst char *yy_str  );
-YY_BUFFER_STATE yytree__scan_bytes (yyconst char *bytes,yy_size_t len  );
+YY_BUFFER_STATE yytree__scan_bytes (yyconst char *bytes,int len  );
 
 void *yytree_alloc (yy_size_t  );
 void *yytree_realloc (void *,yy_size_t  );
@@ -378,7 +386,7 @@ static void yy_fatal_error (yyconst char msg[]  );
  */
 #define YY_DO_BEFORE_ACTION \
 	(yytext_ptr) = yy_bp; \
-	yytree_leng = (yy_size_t) (yy_cp - yy_bp); \
+	yytree_leng = (size_t) (yy_cp - yy_bp); \
 	(yy_hold_char) = *yy_cp; \
 	*yy_cp = '\0'; \
 	(yy_c_buf_p) = yy_cp;
@@ -516,7 +524,7 @@ int yytree__flex_debug = 0;
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytree_text;
-#line 1 "/Users/josefernandeznavarro/Projects/primetv2/PrimeTV2/src/parser/NHX.l"
+#line 1 "/home/ubuntu/PrimeTV2/src/parser/NHX.l"
 /* 
   The NHX extensions are from Zmasek-Eddy: http://www.genetics.wustl.edu/eddy/forester/NHX.html.
 */
@@ -526,7 +534,7 @@ char *yytree_text;
 * To accomodate for multiple lexers/parsers in the program, yy-identifiers have been 
 * renamed to 'yytree_'-something instead. 
 */ 
-#line 13 "/Users/josefernandeznavarro/Projects/primetv2/PrimeTV2/src/parser/NHX.l"
+#line 13 "/home/ubuntu/PrimeTV2/src/parser/NHX.l"
 #include "NHXparse.h"
 
 
@@ -549,7 +557,7 @@ YY_BUFFER_STATE prev_buf;
 /* 
    Some shortcuts
 */
-#line 553 "/Users/josefernandeznavarro/Projects/primetv2/PrimeTV2/src/parser/lexer.c"
+#line 561 "/home/ubuntu/PrimeTV2/src/parser/lexer.c"
 
 #define INITIAL 0
 #define comment 1
@@ -590,7 +598,7 @@ FILE *yytree_get_out (void );
 
 void yytree_set_out  (FILE * out_str  );
 
-yy_size_t yytree_get_leng (void );
+int yytree_get_leng (void );
 
 char *yytree_get_text (void );
 
@@ -632,7 +640,12 @@ static int input (void );
 
 /* Amount of stuff to slurp up with each read. */
 #ifndef YY_READ_BUF_SIZE
+#ifdef __ia64__
+/* On IA-64, the buffer size is 16k, not 8k */
+#define YY_READ_BUF_SIZE 16384
+#else
 #define YY_READ_BUF_SIZE 8192
+#endif /* __ia64__ */
 #endif
 
 /* Copy whatever the last rule matched to the standard output. */
@@ -640,7 +653,7 @@ static int input (void );
 /* This used to be an fputs(), but since the string might contain NUL's,
  * we now use fwrite().
  */
-#define ECHO fwrite( yytree_text, yytree_leng, 1, yytree_out )
+#define ECHO do { if (fwrite( yytree_text, yytree_leng, 1, yytree_out )) {} } while (0)
 #endif
 
 /* Gets input and stuffs it into "buf".  number of characters read, or YY_NULL,
@@ -651,7 +664,7 @@ static int input (void );
 	if ( YY_CURRENT_BUFFER_LVALUE->yy_is_interactive ) \
 		{ \
 		int c = '*'; \
-		yy_size_t n; \
+		size_t n; \
 		for ( n = 0; n < max_size && \
 			     (c = getc( yytree_in )) != EOF && c != '\n'; ++n ) \
 			buf[n] = (char) c; \
@@ -733,9 +746,9 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 45 "/Users/josefernandeznavarro/Projects/primetv2/PrimeTV2/src/parser/NHX.l"
+#line 45 "/home/ubuntu/PrimeTV2/src/parser/NHX.l"
 
-#line 739 "/Users/josefernandeznavarro/Projects/primetv2/PrimeTV2/src/parser/lexer.c"
+#line 752 "/home/ubuntu/PrimeTV2/src/parser/lexer.c"
 
 	if ( !(yy_init) )
 		{
@@ -820,153 +833,153 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 46 "/Users/josefernandeznavarro/Projects/primetv2/PrimeTV2/src/parser/NHX.l"
+#line 46 "/home/ubuntu/PrimeTV2/src/parser/NHX.l"
 { n_left_parens++; return LEFT_PAREN; }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 47 "/Users/josefernandeznavarro/Projects/primetv2/PrimeTV2/src/parser/NHX.l"
+#line 47 "/home/ubuntu/PrimeTV2/src/parser/NHX.l"
 { n_right_parens++; return RIGHT_PAREN; }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 48 "/Users/josefernandeznavarro/Projects/primetv2/PrimeTV2/src/parser/NHX.l"
+#line 48 "/home/ubuntu/PrimeTV2/src/parser/NHX.l"
 { return COLON; }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 49 "/Users/josefernandeznavarro/Projects/primetv2/PrimeTV2/src/parser/NHX.l"
+#line 49 "/home/ubuntu/PrimeTV2/src/parser/NHX.l"
 { return COMMA; }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 50 "/Users/josefernandeznavarro/Projects/primetv2/PrimeTV2/src/parser/NHX.l"
+#line 50 "/home/ubuntu/PrimeTV2/src/parser/NHX.l"
 { /*return SEMICOLON; Do not bother! */ }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 51 "/Users/josefernandeznavarro/Projects/primetv2/PrimeTV2/src/parser/NHX.l"
+#line 51 "/home/ubuntu/PrimeTV2/src/parser/NHX.l"
 { return APOSTROPHE; }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 52 "/Users/josefernandeznavarro/Projects/primetv2/PrimeTV2/src/parser/NHX.l"
+#line 52 "/home/ubuntu/PrimeTV2/src/parser/NHX.l"
 { yytree_lval.integer = atoi(yytree_text); return INTEGER; }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 53 "/Users/josefernandeznavarro/Projects/primetv2/PrimeTV2/src/parser/NHX.l"
+#line 53 "/home/ubuntu/PrimeTV2/src/parser/NHX.l"
 { yytree_lval.branch_time = atof(yytree_text); return FLOAT; }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 54 "/Users/josefernandeznavarro/Projects/primetv2/PrimeTV2/src/parser/NHX.l"
+#line 54 "/home/ubuntu/PrimeTV2/src/parser/NHX.l"
 { yytree_lval.str = strdup(yytree_text); return STRING; }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 55 "/Users/josefernandeznavarro/Projects/primetv2/PrimeTV2/src/parser/NHX.l"
+#line 55 "/home/ubuntu/PrimeTV2/src/parser/NHX.l"
 { BEGIN(annotation); return NHX_ANNOTATION_START; }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 56 "/Users/josefernandeznavarro/Projects/primetv2/PrimeTV2/src/parser/NHX.l"
+#line 56 "/home/ubuntu/PrimeTV2/src/parser/NHX.l"
 { BEGIN(annotation); return BEEP_ANNOTATION_START; }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 57 "/Users/josefernandeznavarro/Projects/primetv2/PrimeTV2/src/parser/NHX.l"
+#line 57 "/home/ubuntu/PrimeTV2/src/parser/NHX.l"
 { BEGIN(annotation); return BEEP_ANNOTATION_START; }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 58 "/Users/josefernandeznavarro/Projects/primetv2/PrimeTV2/src/parser/NHX.l"
+#line 58 "/home/ubuntu/PrimeTV2/src/parser/NHX.l"
 { BEGIN(comment); }
 	YY_BREAK
 case 14:
 /* rule 14 can match eol */
 YY_RULE_SETUP
-#line 59 "/Users/josefernandeznavarro/Projects/primetv2/PrimeTV2/src/parser/NHX.l"
+#line 59 "/home/ubuntu/PrimeTV2/src/parser/NHX.l"
 { lineno++;}
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 60 "/Users/josefernandeznavarro/Projects/primetv2/PrimeTV2/src/parser/NHX.l"
+#line 60 "/home/ubuntu/PrimeTV2/src/parser/NHX.l"
 /* Do nothing */
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 63 "/Users/josefernandeznavarro/Projects/primetv2/PrimeTV2/src/parser/NHX.l"
+#line 63 "/home/ubuntu/PrimeTV2/src/parser/NHX.l"
 { BEGIN(INITIAL); return ANNOTATION_END; }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 64 "/Users/josefernandeznavarro/Projects/primetv2/PrimeTV2/src/parser/NHX.l"
+#line 64 "/home/ubuntu/PrimeTV2/src/parser/NHX.l"
 { return EQUAL; }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 65 "/Users/josefernandeznavarro/Projects/primetv2/PrimeTV2/src/parser/NHX.l"
+#line 65 "/home/ubuntu/PrimeTV2/src/parser/NHX.l"
 { return LEFT_PAREN; }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 66 "/Users/josefernandeznavarro/Projects/primetv2/PrimeTV2/src/parser/NHX.l"
+#line 66 "/home/ubuntu/PrimeTV2/src/parser/NHX.l"
 { return RIGHT_PAREN; }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 67 "/Users/josefernandeznavarro/Projects/primetv2/PrimeTV2/src/parser/NHX.l"
+#line 67 "/home/ubuntu/PrimeTV2/src/parser/NHX.l"
 { return SEPARATOR; }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 68 "/Users/josefernandeznavarro/Projects/primetv2/PrimeTV2/src/parser/NHX.l"
+#line 68 "/home/ubuntu/PrimeTV2/src/parser/NHX.l"
 { yytree_lval.integer = atoi(yytree_text); return INTEGER;}
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 69 "/Users/josefernandeznavarro/Projects/primetv2/PrimeTV2/src/parser/NHX.l"
+#line 69 "/home/ubuntu/PrimeTV2/src/parser/NHX.l"
 { yytree_lval.branch_time = atof(yytree_text); return FLOAT; }
 	YY_BREAK
 case 23:
 /* rule 23 can match eol */
 YY_RULE_SETUP
-#line 70 "/Users/josefernandeznavarro/Projects/primetv2/PrimeTV2/src/parser/NHX.l"
+#line 70 "/home/ubuntu/PrimeTV2/src/parser/NHX.l"
 { yytree_lval.str = strdup(yytree_text+1); *(strstr(yytree_lval.str, "'")) = '\0'; return STRING; }
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 71 "/Users/josefernandeznavarro/Projects/primetv2/PrimeTV2/src/parser/NHX.l"
+#line 71 "/home/ubuntu/PrimeTV2/src/parser/NHX.l"
 { yytree_lval.str = strdup(yytree_text);  ; return STRING; }
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 72 "/Users/josefernandeznavarro/Projects/primetv2/PrimeTV2/src/parser/NHX.l"
+#line 72 "/home/ubuntu/PrimeTV2/src/parser/NHX.l"
 /* Ignore spaces and such */
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 74 "/Users/josefernandeznavarro/Projects/primetv2/PrimeTV2/src/parser/NHX.l"
+#line 74 "/home/ubuntu/PrimeTV2/src/parser/NHX.l"
 { BEGIN(INITIAL); }
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 75 "/Users/josefernandeznavarro/Projects/primetv2/PrimeTV2/src/parser/NHX.l"
+#line 75 "/home/ubuntu/PrimeTV2/src/parser/NHX.l"
 /* eat comment */
 	YY_BREAK
 case 28:
 /* rule 28 can match eol */
 YY_RULE_SETUP
-#line 76 "/Users/josefernandeznavarro/Projects/primetv2/PrimeTV2/src/parser/NHX.l"
+#line 76 "/home/ubuntu/PrimeTV2/src/parser/NHX.l"
 { lineno++;}
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 78 "/Users/josefernandeznavarro/Projects/primetv2/PrimeTV2/src/parser/NHX.l"
+#line 78 "/home/ubuntu/PrimeTV2/src/parser/NHX.l"
 ECHO;
 	YY_BREAK
-#line 970 "/Users/josefernandeznavarro/Projects/primetv2/PrimeTV2/src/parser/lexer.c"
+#line 983 "/home/ubuntu/PrimeTV2/src/parser/lexer.c"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(comment):
 case YY_STATE_EOF(annotation):
@@ -1154,7 +1167,7 @@ static int yy_get_next_buffer (void)
 
 	else
 		{
-			yy_size_t num_to_read =
+			int num_to_read =
 			YY_CURRENT_BUFFER_LVALUE->yy_buf_size - number_to_move - 1;
 
 		while ( num_to_read <= 0 )
@@ -1168,7 +1181,7 @@ static int yy_get_next_buffer (void)
 
 			if ( b->yy_is_our_buffer )
 				{
-				yy_size_t new_size = b->yy_buf_size * 2;
+				int new_size = b->yy_buf_size * 2;
 
 				if ( new_size <= 0 )
 					b->yy_buf_size += b->yy_buf_size / 8;
@@ -1199,7 +1212,7 @@ static int yy_get_next_buffer (void)
 
 		/* Read in more data. */
 		YY_INPUT( (&YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[number_to_move]),
-			(yy_n_chars), num_to_read );
+			(yy_n_chars), (size_t) num_to_read );
 
 		YY_CURRENT_BUFFER_LVALUE->yy_n_chars = (yy_n_chars);
 		}
@@ -1309,7 +1322,7 @@ static int yy_get_next_buffer (void)
 	if ( yy_cp < YY_CURRENT_BUFFER_LVALUE->yy_ch_buf + 2 )
 		{ /* need to shift things up to make room */
 		/* +2 for EOB chars. */
-		register yy_size_t number_to_move = (yy_n_chars) + 2;
+		register int number_to_move = (yy_n_chars) + 2;
 		register char *dest = &YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[
 					YY_CURRENT_BUFFER_LVALUE->yy_buf_size + 2];
 		register char *source =
@@ -1358,7 +1371,7 @@ static int yy_get_next_buffer (void)
 
 		else
 			{ /* need more input */
-			yy_size_t offset = (yy_c_buf_p) - (yytext_ptr);
+			int offset = (yy_c_buf_p) - (yytext_ptr);
 			++(yy_c_buf_p);
 
 			switch ( yy_get_next_buffer(  ) )
@@ -1382,7 +1395,7 @@ static int yy_get_next_buffer (void)
 				case EOB_ACT_END_OF_FILE:
 					{
 					if ( yytree_wrap( ) )
-						return 0;
+						return EOF;
 
 					if ( ! (yy_did_buffer_switch_on_eof) )
 						YY_NEW_FILE;
@@ -1634,7 +1647,7 @@ void yytree_pop_buffer_state (void)
  */
 static void yytree_ensure_buffer_stack (void)
 {
-	yy_size_t num_to_alloc;
+	int num_to_alloc;
     
 	if (!(yy_buffer_stack)) {
 
@@ -1726,16 +1739,17 @@ YY_BUFFER_STATE yytree__scan_string (yyconst char * yystr )
 
 /** Setup the input buffer state to scan the given bytes. The next call to yytree_lex() will
  * scan from a @e copy of @a bytes.
- * @param bytes the byte buffer to scan
- * @param len the number of bytes in the buffer pointed to by @a bytes.
+ * @param yybytes the byte buffer to scan
+ * @param _yybytes_len the number of bytes in the buffer pointed to by @a bytes.
  * 
  * @return the newly allocated buffer state object.
  */
-YY_BUFFER_STATE yytree__scan_bytes  (yyconst char * yybytes, yy_size_t  _yybytes_len )
+YY_BUFFER_STATE yytree__scan_bytes  (yyconst char * yybytes, int  _yybytes_len )
 {
 	YY_BUFFER_STATE b;
 	char *buf;
-	yy_size_t n, i;
+	yy_size_t n;
+	int i;
     
 	/* Get memory for full buffer, including space for trailing EOB's. */
 	n = _yybytes_len + 2;
@@ -1817,7 +1831,7 @@ FILE *yytree_get_out  (void)
 /** Get the length of the current token.
  * 
  */
-yy_size_t yytree_get_leng  (void)
+int yytree_get_leng  (void)
 {
         return yytree_leng;
 }
@@ -1965,7 +1979,7 @@ void yytree_free (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 78 "/Users/josefernandeznavarro/Projects/primetv2/PrimeTV2/src/parser/NHX.l"
+#line 78 "/home/ubuntu/PrimeTV2/src/parser/NHX.l"
 
 
 /*

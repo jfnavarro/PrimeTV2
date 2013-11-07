@@ -24,6 +24,7 @@
 #include "Node.hh"
 
 using namespace std;
+static const unsigned NONE = -1;
 
 TreeExtended::TreeExtended():
     Tree(),lca_is_valid(false)
@@ -242,7 +243,8 @@ void TreeExtended::build_lca() const
     create_EL(*this, getRootNode()->getNumber(), 0, E, L);
 
     /* Create the R-vector. */
-    Ref.clear(); Ref.resize(this->getNumberOfNodes(), NONE);
+    Ref.clear();
+    Ref.resize(this->getNumberOfNodes(), NONE);
     for (unsigned i = 0; i < E.size(); ++i)
     {
         if (Ref[E[i]] == NONE)

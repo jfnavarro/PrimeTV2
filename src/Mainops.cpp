@@ -199,7 +199,7 @@ void Mainops::OpenReconciled(const string &reconciled)
 void Mainops::OpenHost(const string &species)
 {    
     io->setSourceFile(species);
-    Host = new TreeExtended(io->readBeepTree<TreeExtended,Node>());
+    Host = new TreeExtended(io->readHostTree<TreeExtended,Node>());
     Node *root = Host->getRootNode();
 
     if ((double)root->getTime() != (double)0.0)

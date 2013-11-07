@@ -80,18 +80,18 @@ MACRO(INITIALISE_PROJECT)
     ENDIF()
     
     #enable c++11
-    check_for_cxx11_compiler(CXX11_COMPILER)
+    #check_for_cxx11_compiler(CXX11_COMPILER)
 
     # If a C++11 compiler is available, then set the appropriate flags
-    if(CXX11_COMPILER)
-        enable_cxx11()
-    else()
-        message(FATAL_ERROR "Your compiler does not support c++11, UPDATE!!")
-    endif()
+    #if(CXX11_COMPILER)
+    #    enable_cxx11()
+    #else()
+    #    message(FATAL_ERROR "Your compiler does not support c++11, UPDATE!!")
+    #endif()
     
     if(APPLE)
-        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mmacosx-version-min=10.7 -stdlib=libc++")
-        SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -mmacosx-version-min=10.7 -stdlib=libc++")       
+        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mmacosx-version-min=10.7")
+        SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -mmacosx-version-min=10.7")       
     endif()
     
 ENDMACRO()

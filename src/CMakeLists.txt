@@ -232,7 +232,7 @@ else()
   add_executable(${PROJECT_NAME} primetv.cpp ${QT_RESOURCES})
 endif()
 
-qt5_use_modules(${PROJECT_NAME} Widgets Core Gui PrintSupport) 
+qt5_use_modules(${PROJECT_NAME} Core Gui Widgets WebKitWidgets LinguistTools) 
 target_link_libraries(${PROJECT_NAME} primetvlib ${CAIRO_LIBRARIES} ${Boost_LIBRARIES}) 
 
 
@@ -290,7 +290,7 @@ if(UNIX AND NOT APPLE)
         set(CPACK_SYSTEM_NAME "${CPACK_SYSTEM_NAME}64")
     endif()
 
-    foreach(QT_LIBRARY Core DBus Gui Help PrintSupport Widgets)
+    foreach(QT_LIBRARY Core Gui Widgets WebKitWidgets LinguistTools)
         install(FILES ${QT_LIBRARY_DIR}/${CMAKE_SHARED_LIBRARY_PREFIX}Qt${QT_VERSION_MAJOR}${QT_LIBRARY}${CMAKE_SHARED_LIBRARY_SUFFIX}.${QT_VERSION_MAJOR}.${QT_VERSION_MINOR}.${QT_VERSION_PATCH}
                 DESTINATION lib
                 RENAME ${CMAKE_SHARED_LIBRARY_PREFIX}Qt${QT_VERSION_MAJOR}${QT_LIBRARY}${CMAKE_SHARED_LIBRARY_SUFFIX}.${QT_VERSION_MAJOR})

@@ -82,13 +82,55 @@ public:
     //! Names of nodes and trees are always read - these are not checked
     struct NHXtree* checkTagsForTree(TreeIOTraits &traits);
 
+    // Convenience front to readBeepTree(...)
+    // Reads times from NT, ET or NW and nothing more
     template <class T,class U>
-    T readBeepTree()
+    T readHostTree()
     {
         TreeIOTraits traits;
-        checkTagsForTree(traits); // Also reads the tree, apparently!
-        traits.enforceStandardSanity();
-        return readBeepTree<T,U>(traits, 0, 0);
+        struct NHXtree *t = checkTagsForTree(traits);
+        if(traits.containsTimeInformation() == false)
+        {
+            throw AnError("Host tree lacks time information for some of it nodes", 1);
+        }
+        
+        traits.enforceHostTree();
+        std::vector<SetOfNodesEx<U> > *AC = 0;
+        StrStrMap *gs = 0;
+        return readBeepTree<T,U>(t, traits, AC, gs);
+    }
+    
+    
+    // Convenience front to readBeepTree(...)
+    // Reads edge lengths from BL or NW and what else there is
+    // Reads antichains info and gene species maps
+    template <class T,class U>
+    T readGuestTree(std::vector<SetOfNodesEx<U> >* AC, StrStrMap* gs)
+    {
+        TreeIOTraits traits;
+        struct NHXtree *t = checkTagsForTree(traits);
+        if(traits.hasGS() == false)
+        {
+            gs = 0;
+        }
+        if(traits.hasAC() == false)
+        {
+            AC = 0;
+        }
+        traits.enforceGuestTree();
+        return readBeepTree<T,U>(t, traits, AC, gs);
+    }
+    
+    //! Convenience front to readGuestTree(...)
+    //! Reads edge lengths from BL or NW and what else there is
+    //! Doese not read antichains info and gene species maps
+    //----------------------------------------------------------------------
+    template <class T,class U>
+    T readGuestTree()
+    {
+        std::vector<SetOfNodesEx<U> > *AC = 0;
+        StrStrMap *gs = 0;
+        return readGuestTree<T,U>(AC, gs);
     }
 
     template <class T,class U>

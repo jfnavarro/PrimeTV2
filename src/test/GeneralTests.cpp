@@ -28,6 +28,7 @@
 #include <QTemporaryFile>
 #include <QFile>
 #include <QtTest/QTest>
+#include <QDebug>
 
 #include "unistd.h"
 
@@ -95,23 +96,23 @@ void GeneralTests::initTestCase()
 
     //create files
     QTemporaryFile temp_file_species;
-    test_species = createTempFile(temp_file_species, test_species_text);
+    createTempFile(temp_file_species, test_species_text, test_species);
     //QFINDTESTDATA(test_species);
 
     QTemporaryFile temp_file_gene;
-    test_gene = createTempFile(temp_file_gene, test_gene_text);
+    createTempFile(temp_file_gene, test_gene_text, test_gene);
     //QFINDTESTDATA(test_gene);
 
     QTemporaryFile temp_file_map;
-    test_map = createTempFile(temp_file_map, mapfile_text);
+    createTempFile(temp_file_map, mapfile_text, test_map);
     //QFINDTESTDATA(test_map);
 
     QTemporaryFile temp_file_reconciled;
-    test_reconciled = createTempFile(temp_file_reconciled, test_reconciled_text);
+    createTempFile(temp_file_reconciled, test_reconciled_text, test_reconciled);
     //QFINDTESTDATA(test_reconciled);
 
     QTemporaryFile temp_file_precomputed;
-    test_precomputed = createTempFile(temp_file_precomputed, test_precomputed_text);
+    createTempFile(temp_file_precomputed, test_precomputed_text, test_precomputed);
     //QFINDTESTDATA(test_precomputed);
 
     //Test default parameters
@@ -144,14 +145,14 @@ void GeneralTests::initTestCase()
     QVERIFY2(run() == true,"Default parameters and reducing crossing lines");
 }
 
-QString GeneralTests::createTempFile(QTemporaryFile &temp_file, const std::string &content)
+void GeneralTests::createTempFile(QTemporaryFile &temp_file, const std::string &input, QString &output)
 {
     temp_file.setAutoRemove(false);
     QVERIFY(temp_file.open());
     QTextStream out(&temp_file);
-    out << QString::fromStdString(content);
+    out << QString::fromStdString(input);
     temp_file.close();
-    return temp_file.fileName();
+    output = temp_file.fileName();
 }
 
 bool GeneralTests::run()

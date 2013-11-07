@@ -85,7 +85,6 @@ public:
 private:
 
     mutable bool lca_is_valid;
-    static const unsigned NONE = -1;
     mutable std::vector<unsigned> E; /* Euler-path for lca-compuatation. */
     mutable std::vector<unsigned> L; /* Level array corresponding to E. */
     mutable std::vector<std::vector<unsigned>::size_type> Ref;/* Representative array for lca-computation */
@@ -93,7 +92,6 @@ private:
     struct Invalid_id : public std::exception {const char *what() const throw();};
     static unsigned most_significant_bit(unsigned v);
     void build_lca() const;
-    
 };
 
 #endif // TREEEXTENDED_H
