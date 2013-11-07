@@ -26,7 +26,7 @@
 #include <QtPrintSupport/QPrinter>
 #include <QtPrintSupport/QPrintEngine>
 #include <QtPrintSupport/QPrintDialog>
-#include "canvas.h"
+#include "Canvas.h"
 
 Canvas::Canvas( const QPixmap& pixmap,
                 QGraphicsItem* parent, QGraphicsScene* scene ) :
