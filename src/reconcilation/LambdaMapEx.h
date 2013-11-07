@@ -38,7 +38,7 @@
 #ifndef LAMBDAMAPEX_H
 #define LAMBDAMAPEX_H
 
-#include "../tree/TreeExtended.h"
+#include "../tree/Treeextended.h"
 #include "../utils/AnError.hh"
 #include "../Parameters.h"
 #include "../reconcilation/BeepVector.hh"
