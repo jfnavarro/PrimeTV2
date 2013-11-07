@@ -534,8 +534,6 @@ void DrawTreeCairo::DrawSpeciesEdgesWithContour()
     }
 }
 
-
-
 void DrawTreeCairo::DrawSpeciesEdges()
 {
 

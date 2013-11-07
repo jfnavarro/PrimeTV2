@@ -292,9 +292,8 @@ TreeIO::decideEdgeTime(struct NHXnode *v, const TreeIOTraits& traits,
             }
             else if(isHY == false && !isRoot(v))
             {
-                //TOFIX this is strange, this error is present only when using MAC and the GUI
-                std::cerr << "Warning : Edge " << v->name << " has a node with no time" << std::endl;
-                //throw AnError("Tree contains an edge with zero time.", 1);
+                //TOFIX this is strange, this error is present only when using MAC
+                throw AnError("Tree contains an edge with zero time.", 1);
             }
         }
     }

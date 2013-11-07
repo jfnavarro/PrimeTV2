@@ -44,7 +44,7 @@ const cost_type COST_INF = numeric_limits<cost_type>::infinity();
 
 void Phyltr::fpt_algorithm()
 {
-    typedef shared_ptr<Candidate> cand_ptr;
+    typedef std::shared_ptr<Candidate> cand_ptr;
     scenarios.clear();
 
     // We will do a depth first search, so we need a stack.
