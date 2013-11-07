@@ -22,7 +22,7 @@
 
 #include "Layoutrees.h"
 
-#include "../tree/TreeExtended.h"
+#include "../tree/Treeextended.h"
 #include "../Parameters.h"
 #include "../tree/Node.hh"
 
