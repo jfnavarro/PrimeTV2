@@ -30,7 +30,7 @@
 
 #include "Colours.h"
 #include "../tree/Node.hh"
-#include "../tree/treeextended.h"
+#include "../tree/Treeextended.h"
 #include "../lgt/Phyltr.h"
 #include "../Parameters.h"
 #include "../layout/Edge.h"
