@@ -19,7 +19,7 @@
     Author : Jose Fernandez Navarro  -  jc.fernandez.navarro@gmail.com
  */
 
-#include "configfile.h"
+#include "Configfile.h"
 
 using std::string;
 
