@@ -20,7 +20,7 @@
              Lars Arvestad, © the MCMC-club, SBC, all rights reserved
  */
 
-#include "treeextended.h"
+#include "Treeextended.h"
 #include "Node.hh"
 
 using namespace std;
