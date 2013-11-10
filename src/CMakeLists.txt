@@ -177,9 +177,9 @@ use_qt5lib(Qt5Gui)
 use_qt5lib(Qt5PrintSupport)
 
 #find boost    
-set(Boost_USE_STATIC_LIBS ON)
-set(Boost_USE_MULTITHREADED ON) 
-set(Boost_USE_STATIC_RUNTIME ON)
+set(Boost_USE_STATIC_LIBS OFF)
+set(Boost_USE_MULTITHREADED OFF)
+set(Boost_USE_STATIC_RUNTIME OFF)
 find_package(Boost REQUIRED COMPONENTS system program_options)  
 include_directories(${Boost_INCLUDE_DIRS})
 #find bison flex and cairo
@@ -358,7 +358,6 @@ if(APPLE)
   add_custom_command (TARGET ${PROJECT_NAME}
       COMMAND mkdir -p ${CMAKE_INSTALL_PREFIX}/Resources/translations
       #COMMAND install -m 644 ${CMAKE_SOURCE_DIR}/resources/icons/icon.png ${CMAKE_INSTALL_PREFIX}/Resources/
-      #COMMAND install -m 644 ${QT_LOCALES} ${CMAKE_INSTALL_PREFIX}/Resources/translations/
       COMMAND install -m 644 ${CMAKE_SOURCE_DIR}/resources/images/header.png ${CMAKE_INSTALL_PREFIX}/Resources/ 
       COMMAND install -m 644 ${CMAKE_SOURCE_DIR}/cmake/mac/qt.conf ${CMAKE_INSTALL_PREFIX}/Resources/
       COMMAND ${MACDEPLOYQT} ${OS_X_PROJECT_BINARY_DIR}

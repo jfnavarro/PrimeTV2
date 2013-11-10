@@ -58,6 +58,7 @@ class TreeIO
     enum TreeSource {notInitialized, readFromStdin, readFromFile, readFromString};
 
 protected:
+
     TreeIO(enum TreeSource src, const std::string &s);
 
 public:
@@ -70,16 +71,15 @@ public:
     static TreeIO fromFile(const std::string &filename);
     static TreeIO fromString(const std::string &treeString);
 
-    //! Change source using these utilities:
-    //--------------------------------------------------------------------
+    // Change source using these utilities:
     void setSourceFile(const std::string &filename);
     void setSourceString(const std::string &str);
 
     static StrStrMap readGeneSpeciesInfo(const std::string& filename);
     static std::vector<StrStrMap> readGeneSpeciesInfoVector(const std::string& filename);
 
-    //! Precheck what tags are present in the read NHX-tree. Since ID,
-    //! Names of nodes and trees are always read - these are not checked
+    // Precheck what tags are present in the read NHX-tree. Since ID,
+    // Names of nodes and trees are always read - these are not checked
     struct NHXtree* checkTagsForTree(TreeIOTraits &traits);
 
     // Convenience front to readBeepTree(...)
@@ -264,8 +264,6 @@ protected:
 
     // Helper function that reads NHXtrees:
     NHXtree* readTree();
-
-
 
     // The basic function for reading NHX trees
     template <class T,class U>
@@ -528,8 +526,7 @@ protected:
             }
             else
             {
-                std::cerr << "Warning : Edge " << v->name << "  without node time found in tree " << std::endl;
-                //throw AnError("Edge without node time found in tree.", 1);
+                throw AnError("Edge without node time found in tree.", 1);
             }
         }
 

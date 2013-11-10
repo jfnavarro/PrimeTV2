@@ -202,15 +202,6 @@ TreeIO::readGeneSpeciesInfoVector(const std::string &filename)
     return gene2speciesVec;
 }
 
-
-//----------------------------------------------------------------------
-// Check trees
-//----------------------------------------------------------------------
-
-// READ THE TREE, then
-// precheck what tags are present in the read NHX-tree. Since ID,
-// names of nodes and trees are always read - these are not checked
-//----------------------------------------------------------------------
 struct NHXtree *
         TreeIO::checkTagsForTree(TreeIOTraits& traits)
 {
