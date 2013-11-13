@@ -85,7 +85,7 @@ private slots:
     void newImage();
     
     /* show or hide the parameters panel*/
-    void showParameters();
+    void showParameters(bool);
     
     /* to activate the reconcilation mode, therefore the open map button will be enabled, because a map file is needed
      * to reconcile*/
@@ -134,11 +134,9 @@ private:
     QString mapfile;
     bool guestTree;
     bool hostTree;
-    bool menuparameters;
     bool isPainted;
     bool mapfileStatus;
     ConfigFile *config;
-
 };
 
 #endif // WINDOWS_H

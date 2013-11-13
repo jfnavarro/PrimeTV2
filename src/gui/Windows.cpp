@@ -30,6 +30,7 @@
 #include <QErrorMessage>
 #include <QTemporaryFile>
 #include <QShortcut>
+#include <QStyle>
 #if defined Q_OS_WIN
 #include <windows.h>
 #include "qt_windows.h"
@@ -43,7 +44,7 @@
 
 MainWindow::MainWindow(Parameters *p, Mainops *m, QWidget *parent)
     :QMainWindow(parent),lastVisitedDir(),ops(m),parameters(p),guestTree(false),
-      hostTree(false),menuparameters(false),isPainted(false),mapfileStatus(false),config(0),
+      hostTree(false),isPainted(false),mapfileStatus(false),config(0),
       speciestree(""), genetree(""), reconciledtree(""),mapfile("")
 {
 
@@ -57,6 +58,8 @@ MainWindow::MainWindow(Parameters *p, Mainops *m, QWidget *parent)
     parameters->format = "png";
     loadParameters(parameters);
     
+    actionShow_Parameters->setCheckable(true);
+
     createActions();
 
     actionLoad_Map_File->setEnabled(false);
@@ -388,7 +391,6 @@ void MainWindow::newImage()
 {
     guestTree = false;
     hostTree = false;
-    menuparameters = false;
     isPainted = false;
     mapfileStatus = false;
     scene->clear();
@@ -575,12 +577,11 @@ QString MainWindow::openFile(QString header)
     }
 }
 
-void MainWindow::showParameters()
+void MainWindow::showParameters(bool show)
 {
-    menuparameters = !menuparameters;
-
-    if (menuparameters)
+    if(show)
     {
+        params->setGeometry(QStyle::alignedRect(Qt::LeftToRight, Qt::AlignCenter, params->size(), QApplication::desktop()->availableGeometry()));
         params->setVisible(true);
 
     }
@@ -596,7 +597,6 @@ void MainWindow::activateReconcilation()
     parameters->isreconciled = checkBoxReconcile->isChecked();
     guestTree = false;
     hostTree = false;
-    menuparameters = false;
     mapfile = "";;
     scene->clear();
     scene->update();
@@ -802,7 +802,7 @@ void MainWindow::createActions()
     connect(actionNewImage, SIGNAL(triggered(bool)), this, SLOT(newImage()));
     connect(actionSave, SIGNAL(triggered(bool)), this, SLOT(save()));
     connect(actionLoad_Map_File, SIGNAL(triggered(bool)), this, SLOT(loadMap()));
-    connect(actionShow_Parameters, SIGNAL(triggered(bool)), this, SLOT(showParameters()));
+    connect(actionShow_Parameters, SIGNAL(triggered(bool)), this, SLOT(showParameters(bool)));
     connect(actionPrint, SIGNAL(triggered(bool)), this, SLOT(print()));
     connect(checkBoxHV, SIGNAL(stateChanged(int)), this, SLOT(update()));
     connect(checkBoxGuest, SIGNAL(stateChanged(int)), this, SLOT(update()));
