@@ -327,6 +327,12 @@ if(APPLE)
       COMMENT "Create DMG image"
   )
 
+    install(FILES ${CMAKE_SOURCE_DIR}/cmake/linux/qt.conf DESTINATION bin)
+    install(TARGETS ${PROJECT_NAME} DESTINATION bin)
+    install(FILES ${PROJECT_SOURCE_DIR}/resources/images/header.png
+            DESTINATION ${CMAKE_INSTALL_PREFIX}/share/primetv
+            PERMISSIONS OWNER_READ GROUP_READ WORLD_READ)
+
 endif(APPLE)
 
 include(CPack)
