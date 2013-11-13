@@ -255,25 +255,6 @@ set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSE")
 
 if(UNIX AND NOT APPLE)
 
-    # use, i.e. don't skip the full RPATH for the build tree
-    set(CMAKE_SKIP_BUILD_RPATH FALSE)
-
-    # when building, don't use the install RPATH already
-    # (but later on when installing)
-    set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
-    set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
-    set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib;${CMAKE_INSTALL_PREFIX}/plugins")
-
-    # add the automatically determined parts of the RPATH
-    # which point to directories outside the build tree to the install RPATH
-    set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
-
-    # the RPATH to be used when installing, but only if it's not a system directory
-    list(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${CMAKE_INSTALL_PREFIX}/lib" isSystemDir)
-    if("${isSystemDir}" STREQUAL "-1")
-        set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
-    endif("${isSystemDir}" STREQUAL "-1")
-
     # Select TGZ and DEB as the packager on Linux
     set(CPACK_GENERATOR "DEB;TGZ")
     set(CPACK_SYSTEM_NAME "Linux")
@@ -290,39 +271,11 @@ if(UNIX AND NOT APPLE)
         set(CPACK_SYSTEM_NAME "${CPACK_SYSTEM_NAME}64")
     endif()
 
-    foreach(QT_LIBRARY Core Gui Widgets WebKitWidgets LinguistTools)
-        install(FILES ${QT_LIBRARY_DIR}/${CMAKE_SHARED_LIBRARY_PREFIX}Qt${QT_VERSION_MAJOR}${QT_LIBRARY}${CMAKE_SHARED_LIBRARY_SUFFIX}.${QT_VERSION_MAJOR}.${QT_VERSION_MINOR}.${QT_VERSION_PATCH}
-                DESTINATION lib
-                RENAME ${CMAKE_SHARED_LIBRARY_PREFIX}Qt${QT_VERSION_MAJOR}${QT_LIBRARY}${CMAKE_SHARED_LIBRARY_SUFFIX}.${QT_VERSION_MAJOR})
-    endforeach()
-
-    set(ICU_VERSION "51.1") #qt5.1.1 icu is 51 for lower versions of qt5 icu is 49
-
-    #qt needs ICU libaries in Linux
-    foreach(QT_FILE icudata icui18n icuuc)
-        install(FILES ${QT_LIBRARY_DIR}/${CMAKE_SHARED_LIBRARY_PREFIX}${QT_FILE}${CMAKE_SHARED_LIBRARY_SUFFIX}.${ICU_VERSION}
-                DESTINATION lib
-                RENAME ${CMAKE_SHARED_LIBRARY_PREFIX}${QT_FILE}${CMAKE_SHARED_LIBRARY_SUFFIX}.5)
-    endforeach()
-
-    # Qt plugins required by PrimeTV2
-    LINUX_DEPLOY_QT_PLUGIN(accessible qtaccessiblequick qtaccessiblewidgets)
-    LINUX_DEPLOY_QT_PLUGIN(imageformats qgif qico qjpeg qtiff qsvg) #qmng  qtga  qwbmp)
-    LINUX_DEPLOY_QT_PLUGIN(platforms qlinuxfb qminimal qxcb)
-    LINUX_DEPLOY_QT_PLUGIN(printsupport cupsprintersupport)
-
     install(FILES ${CMAKE_SOURCE_DIR}/cmake/linux/qt.conf DESTINATION bin)
     install(TARGETS ${PROJECT_NAME} DESTINATION bin)
     install(FILES ${PROJECT_SOURCE_DIR}/resources/images/header.png 
             DESTINATION ${CMAKE_INSTALL_PREFIX}/share/primetv 
             PERMISSIONS OWNER_READ GROUP_READ WORLD_READ)
-            
-    # Shell script to run PrimeTV2
-    set(ShellFile ${CMAKE_BINARY_DIR}/${PROJECT_NAME}.sh)
-    configure_file(${CMAKE_SOURCE_DIR}/cmake/linux/application.sh.in ${ShellFile})
-    install(FILES ${ShellFile} RENAME ${PROJECT_NAME}
-            DESTINATION .
-            PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 
 endif()
 

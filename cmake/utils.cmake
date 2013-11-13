@@ -12,13 +12,6 @@ MACRO(INITIALISE_PROJECT)
     SET(QT_VERSION_MAJOR ${Qt5Widgets_VERSION_MAJOR})
     SET(QT_VERSION_MINOR ${Qt5Widgets_VERSION_MINOR})
     SET(QT_VERSION_PATCH ${Qt5Widgets_VERSION_PATCH})
-    
-    # Some settings which depend on whether we want a debug or release version
-    # of stVi
-    IF(WIN32)
-        STRING(REPLACE "/W3" "/W3 /WX" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-        SET(LINK_FLAGS_PROPERTIES "/STACK:10000000 /MACHINE:X86")
-    ENDIF()
 
     IF(CMAKE_BUILD_TYPE MATCHES [Dd][Ee][Bb][Uu][Gg])
         MESSAGE("Building a debug version...")
@@ -65,19 +58,6 @@ MACRO(INITIALISE_PROJECT)
 
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${DISABLED_WARNINGS} ${WARNING_ERROR}")
     SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} ${DISABLED_WARNINGS_DEBUG}")
-
-    # Ask for Unicode to be used
-    ADD_DEFINITIONS(-DUNICODE)
-
-    IF(WIN32)
-        ADD_DEFINITIONS(-D_UNICODE)
-    ENDIF()
-
-    # Set the RPATH information on Linux
-    # Note: this prevent us from having to use the uncool LD_LIBRARY_PATH...
-    IF(NOT WIN32 AND NOT APPLE)
-        SET(CMAKE_INSTALL_RPATH "$ORIGIN/../lib:$ORIGIN/../plugins/${PROJECT_NAME}")
-    ENDIF()
     
     #enable c++11
     check_for_cxx11_compiler(CXX11_COMPILER)
@@ -101,19 +81,6 @@ MACRO(use_qt5lib qt5lib)
     include_directories(${${qt5lib}_INCLUDE_DIRS})
     add_definitions(${${qt5lib}_DEFINITIONS})
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${${qt5lib}_EXECUTABLE_COMPILE_FLAGS}")
-ENDMACRO()
-
-MACRO(LINUX_DEPLOY_QT_PLUGIN PLUGIN_CATEGORY)
-    FOREACH(PLUGIN_NAME ${ARGN})
-        # Deploy the Qt plugin itself
-        INSTALL(FILES ${QT_PLUGINS_DIR}/${PLUGIN_CATEGORY}/${CMAKE_SHARED_LIBRARY_PREFIX}${PLUGIN_NAME}${CMAKE_SHARED_LIBRARY_SUFFIX}
-                DESTINATION plugins/${PLUGIN_CATEGORY})
-    ENDFOREACH()
-ENDMACRO()
-
-MACRO(PROJECT_GROUP TARGET_NAME FOLDER_PATH)
-    #Organize projects into folders
-    SET_PROPERTY(TARGET ${TARGET_NAME} PROPERTY FOLDER ${FOLDER_PATH})
 ENDMACRO()
 
 # Determines whether or not the compiler supports C++11
