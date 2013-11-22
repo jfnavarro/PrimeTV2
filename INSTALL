@@ -42,15 +42,21 @@ sudo port install boost
 sudo port install bison
 sudo port install flex
 
-As well as the C++ compiler and developer essentials.
+NOTE : you must have XCode, mac ports and Command Line Tools installed
+in your MAC.
 
-You can install qt5 from binaries :
+For all platforms you can install qt5 from binaries :
 
 http://qt-project.org/downloads
 
 NOTE : Remember to tell cmake where qt5 cmake libraries are installed using -DCMAKE_PREFIX_PATH
-
-The exec file "primetv" will be placed in usr/bin (Ubuntu) or Applications/primetv.app (Mac) or an alternative location indicated in CMake by -DCMAKE_INSTALL_PREFIX
+For example in MAC : 
+-DCMAKE_PREFIX_PATH=~/Qt5.1.1/5.1.1/clang_64/lib/cmake/ 
+For example in Ubuntu :
+-DCMAKE_PREFIX_PATH=~/Qt5.1.1/5.1.1/gcc/lib/cmake
+ 
+The exec file "primetv" will be placed in usr/bin (Ubuntu) or Applications/primetv.app (Mac) 
+or an alternative location indicated in CMake by -DCMAKE_INSTALL_PREFIX
 
 NOTE : it is possible to create MAC OSX bundles by typing : make dmg on a mac machine
 
