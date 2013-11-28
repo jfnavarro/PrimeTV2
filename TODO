@@ -22,10 +22,6 @@ improve the way the LGT cordinates are being calculated by including a time even
 
 Get rid/redo the Newick/PRIME tree parser, the current one uses C code and bison and flex.
 
-Perform a battery of several tests and create a testing script (unitests)
-
-Improve general stability by testing and fixing errors
-
 Update GUI parameters to recently added parameters for terminal version (find a way to link them)
 
 Improve GUI (refactor)
@@ -33,5 +29,6 @@ Improve GUI (refactor)
 Known bugs :
 
 * In the terminal version when scaling to more than 1.0 the tree gets out of the canvas
-* Terminal version is un-stable
-* -R option to remove crossing edges does not work for every scenario
+* Some option in terminal version are un-stable
+* -R option to remove crossing edges has not been tested carefully
+* Sometimes in OSX the tree parsing fail with the message : "host tree lacks time in one of its edges"

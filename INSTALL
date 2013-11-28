@@ -1,6 +1,6 @@
 The program has only been tested in UBUNTU and MAC.
 
-It's compiled using CMAKE.
+PrimetV2 is compiled using CMAKE.
 
 For example (to build) :
 
@@ -28,11 +28,7 @@ To install the dependencies :
 
 - They can be installed in Ubuntu by using the following commands :
 
-sudo apt-get install build-essential cmake libboost-dev libboost-serialization-dev libboost-program-options-dev libcairo2-dev bison flex
-
-- They can be installed in Fedora by using the following commands :
-
-sudo yum install cairo-devel boost-devel cmake-devel
+sudo apt-get install build-essential cmake libboost-dev libboost-system-dev libboost-serialization-dev libboost-program-options-dev libcairo2-dev bison flex
 
 - They can be installed in MAC by using the following commands :
 

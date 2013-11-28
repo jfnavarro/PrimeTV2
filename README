@@ -2,9 +2,6 @@ PRIMETV2 : a visualization tool for Phylogenetic Reconciled Trees
 
 Version 0.1.0 (Alpha)
 
-
-/*********************************************************************/
-
 The utility of this program is to draw reconciled trees and it is explained in :
 
 http://www.biomedcentral.com/1471-2105/8/148
@@ -12,7 +9,7 @@ http://www.biomedcentral.com/1471-2105/8/148
 The program can be run using an User Interface(experimental) or the console/script version.
 
 Either way the input will be a species tree and a gene tree. If the gene tree is reconciled already
-a map file won't be needed whereas if the tree is not reconciled the option "Reconcile" will have to 
+a map file will not be needed whereas if the tree is not reconciled the option "Reconcile" will have to 
 be activated and a map file(gene to species nodes) will have to be given, the program will reconcile it by itself.
 
 The list of parameters and their functions can be seen running the script or including --help, /? ect..
