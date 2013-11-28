@@ -39,19 +39,19 @@ class AnError : public std::exception
 
     public:
 
-    AnError(const std::string& message, int err_code = 0) throw();
-    AnError(const std::string &message, const std::string &arg, int err_code = 0) throw();
+    AnError(const std::string& message, unsigned err_code = 0) throw();
+    AnError(const std::string &message, const std::string &arg, unsigned err_code = 0) throw();
     ~AnError() throw();
 
     virtual void action();	
     std::string message() const;
-    int code() const;	
+    unsigned code() const;	
     const char* what() const throw();
 
     protected:
     const std::string msg_str;
     std::string arg_str;
-    int error_code;
+    unsigned error_code;
 };
 
 #endif

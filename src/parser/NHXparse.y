@@ -17,6 +17,8 @@
 
 extern FILE *yytree_in;
 extern char *yytree_text;
+extern void close_string_buffer();
+extern void read_from_string(const char *str);
 extern unsigned int lineno; /* Current line number in input file */
 extern unsigned int n_left_parens; /* Number of matched left parens '(' */
 extern unsigned int n_right_parens; /* Number of matched right parens ')' */
@@ -332,10 +334,10 @@ read_tree(const char *filename) {
 
   if (filename == NULL) {
     yytree_in = stdin;
-    set_globals("STDIN");	/* For better error messages */
+    //set_globals("STDIN");	/* For better error messages */
   } else {
     f = fopen(filename, "r");
-    set_globals(filename);	/* For better error messages */
+    //set_globals(filename);	/* For better error messages */
     if (!f) {
       fprintf(stderr, "Could not open tree file '%s' for reading.\n", filename);
       return NULL;
@@ -348,7 +350,8 @@ read_tree(const char *filename) {
 
   /* Cleanup */
   if (f != NULL) {
-    close(f);
+    //close(f);
+    fclose(f);
     yytree_in = stdin;
   }
 

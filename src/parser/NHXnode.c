@@ -29,9 +29,9 @@
 #include "NHXannotation.h"
 
 extern struct NHXnode *root_node;
-extern unsigned int lineno; /* Current line number in input file */
-extern unsigned int n_left_parens; /* Number of matched left parens '(' */
-extern unsigned int n_right_parens; /* Number of matched right parens ')' */
+extern int lineno; /* Current line number in input file */
+extern int n_left_parens; /* Number of matched left parens '(' */
+extern int n_right_parens; /* Number of matched right parens ')' */
 
 void inform_parser(const char *, const char*);
 
@@ -64,8 +64,7 @@ delete_tree_nodes(struct NHXnode *n)
   Given a NHX node, see if it contains an annotation with the given tag.
   Returns NULL, if not present, or if v is NULL.
 */
-struct NHXannotation *
-        find_annotation(struct NHXnode *v, const char *tag)
+struct NHXannotation* find_annotation(const struct NHXnode *v, const char *tag)
 {
     struct NHXannotation *a;
 
@@ -86,8 +85,8 @@ struct NHXannotation *
     return NULL;
 }
 
-int 
-isDuplication(struct NHXnode *v)
+int
+isDuplication(const struct NHXnode *v)
 {
     struct NHXannotation *a = find_annotation(v, "D");
 
@@ -101,8 +100,8 @@ isDuplication(struct NHXnode *v)
     }
 }
 
-int 
-isLeaf(struct NHXnode *t)
+int
+isLeaf(const struct NHXnode *t)
 {
     assert(t != NULL);
     if (t->left == NULL && t->right == NULL)
@@ -116,7 +115,7 @@ isLeaf(struct NHXnode *t)
 }
 
 int
-isRoot(struct NHXnode *t)
+isRoot(const struct NHXnode *t)
 {
     assert(t != NULL);
     if (t->parent == NULL)
@@ -131,7 +130,7 @@ isRoot(struct NHXnode *t)
 
 
 char *
-speciesName(struct NHXnode *v)
+speciesName(const struct NHXnode *v)
 {
     struct NHXannotation *a = find_annotation(v, "S");
 
@@ -145,8 +144,8 @@ speciesName(struct NHXnode *v)
     }
 }
 
-unsigned 
-subtreeSize(struct NHXnode *n) /* Count the number of nodes in subtree rooted at n */
+int
+subtreeSize(const struct NHXnode *n) /* Count the number of nodes in subtree rooted at n */
 {
     if (n == NULL)
     {

@@ -72,7 +72,7 @@ public:
     DrawTreeCairo();
     
     void start(const Parameters *p, TreeExtended *g, TreeExtended *s,
-               const GammaMapEx<Node> *ga,const LambdaMapEx<Node> *la, cairo_t* cr_ = 0);
+               const GammaMapEx *ga,const LambdaMapEx *la, cairo_t* cr_ = 0);
     
     void cleanUp();
     
@@ -81,7 +81,7 @@ public:
     
     /* this function create a file and render the cairo surface into
      * that file */
-    int RenderImage();
+    const bool RenderImage();
     
     /*this function make the affine matrix tranformation over the surface
      * according to the parameters given */
@@ -171,7 +171,7 @@ private:
     
     /* this function checks wheter there exist or not an edge
      * with the origin x */
-    bool existLGTEdge(double x);
+    const bool existLGTEdge(double x);
     
     /* this function returns a pair of x cordinates, the origin x
      * and destiny x of the Lateral Transfer */
@@ -183,15 +183,16 @@ private:
     
     /* this function check if there is a collision between the two spaces given
      * as inputs */
-    bool checkCollision(double x00,double y00, double x01,
-                        double y01, double x10, double y10, double x11,double y11);
+    const bool checkCollision(double x00,double y00, double x01,
+                              double y01, double x10, double y10,
+                              double x11,double y11);
     
     /* this function add a new edge to the vector of edges */
     void addEdge(Node *spO,Node *spE,Node *gO,Node *gE,
                  double xo,double yo,double xe,double ye,Edge::category m);
     
     /* this function returns the number of LT for a given child son */
-    unsigned NumberLT(Node *son);
+    const unsigned NumberLT(Node *son);
 
     /* Computer the intersection of two lines, given four points. */
     void intersection(double x1, double y1,
@@ -202,11 +203,11 @@ private:
 
     
     //external attributes
-    const LambdaMapEx<Node> *lambda;
+    const LambdaMapEx *lambda;
     const Parameters *parameters;
     TreeExtended *gene;
     TreeExtended *species;
-    const GammaMapEx<Node> *gamma;
+    const GammaMapEx *gamma;
     Colours *config;
     
     //Cairo objects
@@ -233,8 +234,8 @@ private:
     /* During layout, the guest tree is traversed and the number
    * of duplications/transfers are counted and stored here:
    */
-    int nDupl;
-    int nTrans;
+    unsigned nDupl;
+    unsigned nTrans;
     
     bool image;
 };

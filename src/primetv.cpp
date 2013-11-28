@@ -28,7 +28,7 @@
 
 #include "Parameters.h"
 #include "Mainops.h"
-#include "utils/AnError.hh"
+#include "utils/AnError.h"
 #include "assert.h"
 
 #include <boost/program_options/options_description.hpp>
@@ -54,20 +54,20 @@ static const std::string MINOR = boost::lexical_cast<std::string>(VERSION_MINOR)
 static const std::string PATCH = boost::lexical_cast<std::string>(VERSION_REVISION);
 static const std::string VERSION =  ((MAJOR + "." + MINOR) + ".") + PATCH;
 
-//member objects
+//member objects //TODO make them singleton
 static Parameters *parameters = 0;
 static Mainops *mainops = 0;
 
 /* Helper function to sort vectors used in the parser of parameters */
-template<class T>
-ostream& operator<<(ostream& os, const vector<T>& v)
+template<class TreeExtended>
+ostream& operator<<(ostream& os, const vector<TreeExtended>& v)
 {
-    copy(v.begin(), v.end(), ostream_iterator<T>(cout, " "));
+    copy(v.begin(), v.end(), ostream_iterator<TreeExtended>(cout, " "));
     return os;
 }
 
 /* Helper function that checks if a filename exists in the system */
-int file_exist(const char *filename)
+unsigned file_exist(const char *filename)
 {
     struct stat buffer;
     return(stat(filename, &buffer) == 0);
@@ -88,7 +88,7 @@ void cleanUp()
 }
 
 int
-main (int ac, char *av[]) 
+main (int ac, char *av[])
 {
 
 /* The boost progam options object is being used to capture all the parameters from console
@@ -102,14 +102,14 @@ main (int ac, char *av[])
     try
     {
         parameters = new Parameters();
-        string config_file;
-        string default_config_file;
-        const char* reconciledtree;
-        const char* speciestree;
-        const char* genetree;
-        const char* mapfile = "";
+        std::string config_file = "";
+        std::string default_config_file = "";
+        std::string reconciledtree = "";
+        std::string speciestree = "";
+        std::string genetree = "";
+        std::string mapfile = "";
         std::string precomputed_scenario_file = "";
-        string colorconfig;
+        std::string colorconfig = "";
         bool show_lgt_scenarios = false;
         bool load_precomputed_lgt_scenario = false;
         // Create path to default config file
@@ -186,11 +186,11 @@ main (int ac, char *av[])
                  "<string> ladderize right (r) or left (l)")
                 ("legend,L", po::bool_switch(&parameters->legend), "Activate the legend")
                 ("header,H", po::bool_switch(&parameters->header), "Activate the header")
-                ("text,T", po::value<string>(&parameters->titleText),
+                ("text,TreeExtended", po::value<string>(&parameters->titleText),
                  "<string> include the text on the top of the image.")
                 ("mark,x", po::value<std::vector<double> >(&parameters->uMarker)->multitoken(),
-                 "<int>....<int> Highlight the nodes indicated.")
-                ("marksize,z", po::value<int>(&parameters->markerscale), "<int> change the size of guest tree markers.")
+                 "<unsigned>....<unsigned> Highlight the nodes indicated.")
+                ("marksize,z", po::value<unsigned>(&parameters->markerscale), "<unsigned> change the size of guest tree markers.")
                 ("lgt,l", po::bool_switch(&parameters->lattransfer),
                  "Allow lateral transfer (LGT) when reconciling.")
                 ("event-costs,P", po::value<std::vector<float> >()->multitoken(),
@@ -265,7 +265,7 @@ main (int ac, char *av[])
 
         if (vm.count("input-file"))
         {
-            int size = vm["input-file"].as< vector<string> >().size();
+            unsigned size = vm["input-file"].as< vector<string> >().size();
 
             if(size <= 1)
             {
@@ -284,7 +284,7 @@ main (int ac, char *av[])
 
             if(!(bool)(parameters->isreconciled) && (size == 1 || size == 2))
             {
-                reconciledtree = vm["input-file"].as< vector<string> >().at(0).c_str();
+                reconciledtree = vm["input-file"].as< vector<string> >().at(0);
 
                 if (size == 1)
                 {
@@ -292,14 +292,14 @@ main (int ac, char *av[])
                 }
                 else
                 {
-                    speciestree = vm["input-file"].as< vector<string> >().at(1).c_str();
+                    speciestree = vm["input-file"].as< vector<string> >().at(1);
                 }
             }
             else if (parameters->isreconciled && size == 3 )
             {
-                genetree = vm["input-file"].as< vector<string> >().at(0).c_str();
-                speciestree = vm["input-file"].as< vector<string> >().at(1).c_str();
-                mapfile = vm["input-file"].as< vector<string> >().at(2).c_str();
+                genetree = vm["input-file"].as< vector<string> >().at(0);
+                speciestree = vm["input-file"].as< vector<string> >().at(1);
+                mapfile = vm["input-file"].as< vector<string> >().at(2);
 
             }
             else

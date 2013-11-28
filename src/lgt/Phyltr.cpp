@@ -33,7 +33,7 @@
  */
 
 #include "Phyltr.h"
-#include "../tree/Node.hh"
+#include "../tree/Node.h"
 
 using namespace std;
 
@@ -315,9 +315,9 @@ operator<(const Scenario &sc1, const Scenario &sc2)
         return false;
     }
 
-    int losses1 = count_losses(*Phyltr::g_input.species_tree, *Phyltr::g_input.gene_tree,
+    unsigned losses1 = count_losses(*Phyltr::g_input.species_tree, *Phyltr::g_input.gene_tree,
                                Phyltr::g_input.sigma, sc1.transfer_edges);
-    int losses2 = count_losses(*Phyltr::g_input.species_tree, *Phyltr::g_input.gene_tree,
+    unsigned losses2 = count_losses(*Phyltr::g_input.species_tree, *Phyltr::g_input.gene_tree,
                                Phyltr::g_input.sigma, sc2.transfer_edges);
     if (losses1 < losses2)
     {
@@ -492,12 +492,12 @@ Candidate::Candidate() :
     }
 }
 
-dynamic_bitset< long unsigned int > Candidate::getDuplications()
+dynamic_bitset< long unsigned > Candidate::getDuplications()
 {
     return duplications_;
 }
 
-dynamic_bitset< long unsigned int > Candidate::getTransferEdges()
+dynamic_bitset< long unsigned > Candidate::getTransferEdges()
 {
     return transfer_edges_;
 }
@@ -955,7 +955,7 @@ void compute_lambda(const TreeExtended &S,
     }
 }
 
-int count_losses(const TreeExtended &S,
+unsigned count_losses(const TreeExtended &S,
                  const TreeExtended &G,
                  const std::vector<unsigned> &sigma,
                  const boost::dynamic_bitset<> &transfer_edges)
@@ -970,7 +970,7 @@ int count_losses(const TreeExtended &S,
     // speciations that we pass from lambda(u) to lambda(v).  A loss
     // is also incurred if u is a duplication and lambda(u) !=
     // lambda(v).
-    int losses = 0;
+    unsigned losses = 0;
     for (unsigned u = 0; u < G.getNumberOfNodes(); ++u)
     {
         if(G.getNode(u) == G.getRootNode())
@@ -1327,7 +1327,7 @@ Phyltr::backtrack()
 
     // Find the minimum number of losses of placing root of G below
     // root of S.
-    int max_losses = numeric_limits<int>::max();
+    unsigned max_losses = numeric_limits<unsigned>::max();
     if (Phyltr::g_input.print_only_minimal_loss_scenarios)
     {
         BOOST_FOREACH(vid_t x, matrix[G.getRootNode()->getNumber()][S.getRootNode()->getNumber()].below_placements)

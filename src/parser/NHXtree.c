@@ -27,25 +27,25 @@
 #include <stdlib.h>
 
 void
-delete_trees(struct NHXtree *T)
+delete_trees(struct NHXtree *TreeExtended)
 {
-    if (T)
+    if (TreeExtended)
     {
-        delete_trees(T->next);
-        delete_tree_nodes(T->root);
-        free(T);
+        delete_trees(TreeExtended->next);
+        delete_tree_nodes(TreeExtended->root);
+        free(TreeExtended);
     }
 }
 
 struct NHXtree *
         new_tree(struct NHXnode *root, struct NHXtree *next_tree)
 {
-    struct NHXtree *T = (struct NHXtree *) malloc(sizeof(struct NHXtree));
-    if (T)
+    struct NHXtree *TreeExtended = (struct NHXtree *) malloc(sizeof(struct NHXtree));
+    if (TreeExtended)
     {
-        T->root = root;
-        T->next = next_tree;
-        return T;
+        TreeExtended->root = root;
+        TreeExtended->next = next_tree;
+        return TreeExtended;
     }
     else
     {
@@ -56,14 +56,14 @@ struct NHXtree *
 
 
 unsigned 
-treeSize(const struct NHXtree *T)
+treeSize(const struct NHXtree *TreeExtended)
 {
-    if (T == NULL)
+    if (TreeExtended == NULL)
     {
         return 0;
     }
 
-    struct NHXnode *r = T->root;
+    struct NHXnode *r = TreeExtended->root;
     if (r == NULL)
     {
         return 0;

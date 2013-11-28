@@ -20,15 +20,14 @@
              Lars Arvestad, © the MCMC-club, SBC, all rights reserved
  */
 
-#include  "StrStrMap.hh"
-
+#include  "StrStrMap.h"
 #include <string.h>
 #include <set>
 #include <map>
 #include <iostream>
-#include "../utils/AnError.hh"
+#include "../utils/AnError.h"
 
-// // Author: Lars Arvestad, © the MCMC-club, SBC, all rights reserved
+// Author: Lars Arvestad, the MCMC-club, SBC, all rights reserved
 
 using namespace std;
 
@@ -117,13 +116,13 @@ StrStrMap::clearMap()
 }
 
 // Diagnostics. Find how many relations are stored
-unsigned
+const unsigned
 StrStrMap::size() const
 {
     return avbildning.size();
 }
 
-unsigned 
+const unsigned
 StrStrMap::reverseSize() const
 {
     set<string> reverse;

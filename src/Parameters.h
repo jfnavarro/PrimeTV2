@@ -55,7 +55,7 @@ public:
     float species_font_size;
     float gene_font_size;
     float all_font_size;
-    int markerscale;
+    unsigned markerscale;
     bool isMarkerColor;
     bool header;
     bool legend;

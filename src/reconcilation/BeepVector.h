@@ -17,7 +17,7 @@
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
     
     Author : Jose Fernandez Navarro  -  jc.fernandez.navarro@gmail.com
-             Bengt Sennblad, © the MCMC-club, SBC, all rights reserved
+             Bengt Sennblad, the MCMC-club, SBC, all rights reserved
  */
 
 #ifndef BEEPVECTOR_HH
@@ -27,63 +27,53 @@
 #include <vector>
 #include <sstream>
 
-#include "../tree/Node.hh"
-#include "../tree/Tree.hh"
+#include "../tree/Node.h"
+#include "../tree/Tree.h"
 
 using namespace std;
 
-//--------------------------------------------------------------
-//
-//! Simple vector template, on top of vector template, indexed by Nodes
-//! This will always has elements in it but the value of the 
-//! elements may be empty
-//! This is handy in many ways!! Some 'aliases' for typed 
-//! BeepVectors are given below!
-//! \todo{Would it be better to implement BeepVector using inheritance?}
-//
-//--------------------------------------------------------------
+// Simple vector template, on top of vector template, indexed by Nodes
+// This will always has elements in it but the value of the
+// elements may be empty
+// This is handy in many ways!! Some 'aliases' for typed
+// BeepVectors are given below!
 
 template<typename Type>
 class BeepVector
 {
 
-    public:
-    //--------------------------------------------------------------
-    //
-    // Construction/Destruction
-    //
-    //--------------------------------------------------------------
-    BeepVector(unsigned n_elems)	//!< All elems are initialized to zero.
+public:
+    BeepVector(unsigned n_elems)	// All elems are initialized to zero.
         : pv(n_elems)
     {
     }
 
-    BeepVector(unsigned n_elems, Type& T) //!< All elems are initialized to T.
+    BeepVector(unsigned n_elems, Type& T) // All elems are initialized to T.
         : pv(n_elems, T)
     {
     }
 
-    BeepVector(unsigned n_elems, const Type& T) //!< All elems are initialized to T.
+    BeepVector(unsigned n_elems, const Type& T) // All elems are initialized to T.
         : pv(n_elems, T)
     {
     }
 
-    BeepVector(const Tree& T)	//!< All elems are initialized to zero.
+    BeepVector(const Tree& T)	// All elems are initialized to zero.
         : pv(T.getNumberOfNodes())
     {
     }
 
-    BeepVector(const Tree& T, Type& type) //!< All elems are initialized to type.
+    BeepVector(const Tree& T, Type& type) // All elems are initialized to type.
         : pv(T.getNumberOfNodes(), type)
     {
     }
 
-    BeepVector(const Tree& T, const Type& type) //!< All elems are initialized to type.
+    BeepVector(const Tree& T, const Type& type) // All elems are initialized to type.
         : pv(T.getNumberOfNodes(), type)
     {
     }
 
-    BeepVector(const BeepVector<Type>& bv)	
+    BeepVector(const BeepVector<Type>& bv)
         : pv(bv.pv)
     {
     }
@@ -101,9 +91,7 @@ class BeepVector
         return *this;
     }
 
-
-    //! equality operator turned out to be practical when debugging
-    //--------------------------------------------------------------
+    // equality operator turned out to be practical when debugging
     bool operator==(const BeepVector<Type>& bv) const
     {
         bool ret = true;
@@ -112,10 +100,9 @@ class BeepVector
         return ret;
     }
 
-    //! Vector is indexed by nodes or pointers to node!. 
-    //! Also please note return value: 
-    //! You can do v[node] = 0.5;
-    //--------------------------------------------------------------
+    // Vector is indexed by nodes or pointers to node!.
+    // Also please note return value:
+    // You can do v[node] = 0.5;
     Type& operator[](const Node& i)
     {
         return this->operator[](i.getNumber());
@@ -138,83 +125,75 @@ class BeepVector
         return this->operator[](*i);
     }
 
-    //! Vector can also accessed by unsgined corresponding to node's number
-    //--------------------------------------------------------------
+    // Vector can also accessed by unsgined corresponding to node's number
     Type& operator[](unsigned i)
     {
         assert(i < pv.size());
-    #ifndef NDEBUG
-        return pv.at(i);
-    #else
+        //return pv.at(i);
         return pv[i];
-    #endif
     }
 
     Type operator[](unsigned i) const
     {
         assert(i < pv.size());
-    #ifndef NDEBUG
-        return pv.at(i);
-    #else
+        //return pv.at(i);
         return pv[i];
-    #endif
     }
 
-    //! Iterator for vector.
+    // Iterator for vector.
     typedef typename std::vector<Type>::iterator iterator;
 
-    //! Const iterator for vector.
+    // Const iterator for vector.
     typedef typename std::vector<Type>::const_iterator const_iterator;
 
-    //! Reverse iterator for vector.
+    // Reverse iterator for vector.
     typedef typename std::vector<Type>::reverse_iterator reverse_iterator;
-        
-    //! Const reverse iterator for vector.
+
+    // Const reverse iterator for vector.
     typedef typename std::vector<Type>::const_reverse_iterator const_reverse_iterator;
 
-    //! Iterator to first element in vector.
+    // Iterator to first element in vector.
     iterator begin() { return pv.begin(); }
 
-    //! Const iterator to first element in vector.
+    // Const iterator to first element in vector.
     const_iterator begin() const { return pv.begin(); }
 
-    //! Iterator to end of vector.
+    // Iterator to end of vector.
     iterator end() { return pv.end(); }
 
-    //! Const iterator to end of vector.
+    // Const iterator to end of vector.
     const_iterator end() const { return pv.end(); }
 
-    //! Reverse iterator to last element in vector.
+    // Reverse iterator to last element in vector.
     reverse_iterator rbegin() { return pv.rbegin(); }
 
-    //! Const reverse iterator to last element in vector.
+    // Const reverse iterator to last element in vector.
     const_reverse_iterator rbegin() const { return pv.rbegin(); }
-        
-    //! Reverse iterator to reverse end of vector.
+
+    // Reverse iterator to reverse end of vector.
     reverse_iterator rend() { return pv.rend(); }
 
-    //! Const reverse iterator to reverse end of vector.
+    // Const reverse iterator to reverse end of vector.
     const_reverse_iterator rend() const { return pv.rend(); }
 
-    //! Size of Vector
+    // Size of Vector
     virtual unsigned size() const
     {
         return pv.size();
     }
-    //! reset all values
+
+    // reset all values
     void clearValues()
     {
         pv = ::std::vector<Type>(pv.size());
     }
 
-    friend std::ostream& operator<<(std::ostream &o, 
-                    const BeepVector<Type>& e)
+    friend std::ostream& operator<<(std::ostream &o,
+                                    const BeepVector<Type>& e)
     {
         return o << e.print();
-    };
+    }
 
-    //! \todo{This could perhaps be improved to give a table mapping
-    //! a node to its content}
     std::string print() const
     {
         std::ostringstream oss;
@@ -225,65 +204,65 @@ class BeepVector
         return oss.str();
     }
 
-    protected:
+protected:
 
-        std::vector<Type> pv; //!< The storage
+    std::vector<Type> pv;
 };
 
 typedef BeepVector<unsigned> UnsignedVector;//initializes elems to 0
 typedef BeepVector<Node*> NodeVector; //initializes elems to NULL
 
-class RealVector: public BeepVector<Real>
+class RealVector: public BeepVector<double>
 {
-    public:
-        
-    RealVector(unsigned n_elems)	//!< All elems are initialized to zero.
-        : BeepVector<Real>(n_elems),
-    theSize(n_elems)
+public:
+
+    RealVector(unsigned n_elems)	// All elems are initialized to zero.
+        : BeepVector<double>(n_elems),
+          theSize(n_elems)
     {
 
     }
 
-    RealVector(unsigned n_elems, Real& T) //!< All elems are initialized to T.
-        : BeepVector<Real>(n_elems, T),
-    theSize(n_elems)
+    RealVector(unsigned n_elems, double& T) // All elems are initialized to T.
+        : BeepVector<double>(n_elems, T),
+          theSize(n_elems)
     {
 
     }
 
-    RealVector(unsigned n_elems, const Real& T) //!< All elems are initialized to T.
-        : BeepVector<Real>(n_elems, T),
-    theSize(n_elems)
+    RealVector(unsigned n_elems, const double& T) // All elems are initialized to T.
+        : BeepVector<double>(n_elems, T),
+          theSize(n_elems)
     {
 
     }
 
-    RealVector(const Tree& T)	//!< All elems are initialized to zero.
-        : BeepVector<Real>(T),
-    theSize(T.getNumberOfNodes())
+    RealVector(const Tree& T)	// All elems are initialized to zero.
+        : BeepVector<double>(T),
+          theSize(T.getNumberOfNodes())
     {
 
     }
 
-    RealVector(const Tree& T, Real& type) //!< All elems are initialized to type.
-        : BeepVector<Real>(T, type),
-    theSize(T.getNumberOfNodes())
-
-    {
-
-    }
-
-    RealVector(const Tree& T, const Real& type) //!< All elems are initialized to type.
-        : BeepVector<Real>(T, type),
-    theSize(T.getNumberOfNodes())
+    RealVector(const Tree& T, double& type) // All elems are initialized to type.
+        : BeepVector<double>(T, type),
+          theSize(T.getNumberOfNodes())
 
     {
 
     }
 
-    RealVector(const RealVector& bv)	
-        : BeepVector<Real>(bv),
-    theSize(bv.theSize)
+    RealVector(const Tree& T, const double& type) // All elems are initialized to type.
+        : BeepVector<double>(T, type),
+          theSize(T.getNumberOfNodes())
+
+    {
+
+    }
+
+    RealVector(const RealVector& bv)
+        : BeepVector<double>(bv),
+          theSize(bv.theSize)
 
     {
 
@@ -294,7 +273,7 @@ class RealVector: public BeepVector<Real>
 
     }
 
-    void addElement(unsigned i, const Real& T) 
+    void addElement(unsigned i, const double& T)
     {
         assert(i <= theSize);
         if(theSize == i)
@@ -315,15 +294,14 @@ class RealVector: public BeepVector<Real>
         theSize--;
     }
 
-    //! Size of Vector
     unsigned size() const
     {
         return theSize;
     }
     
-    protected:
+protected:
 
-        unsigned theSize;
+    unsigned theSize;
 
 };
 

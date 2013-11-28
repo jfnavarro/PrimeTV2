@@ -27,8 +27,8 @@
 #ifndef TREEEXTENDED_H
 #define TREEEXTENDED_H
 
-#include "../utils/AnError.hh"
-#include "Tree.hh"
+#include "../utils/AnError.h"
+#include "Tree.h"
 
 #include <boost/multi_array.hpp>
 #include <boost/static_assert.hpp>
@@ -42,18 +42,18 @@ public:
     
     //constructors
     TreeExtended();
-    TreeExtended(const TreeExtended &T);
-    TreeExtended(const Tree& T);
-    TreeExtended(TreeExtended *T);
-    TreeExtended(const TreeExtended *T);
-    TreeExtended(Tree *T);
-    TreeExtended(const Tree *T);
+    TreeExtended(const TreeExtended &TreeExtended);
+    TreeExtended(const Tree& TreeExtended);
+    TreeExtended(TreeExtended *TreeExtended);
+    TreeExtended(const TreeExtended *TreeExtended);
+    TreeExtended(Tree *TreeExtended);
+    TreeExtended(const Tree *TreeExtended);
     
     //overload of =
-    TreeExtended& operator=(const TreeExtended& T);
-    TreeExtended& operator=(const Tree& T);
-    TreeExtended& operator=(const TreeExtended *T);
-    TreeExtended& operator=(const Tree *T);
+    TreeExtended& operator=(const TreeExtended& TreeExtended);
+    TreeExtended& operator=(const Tree& TreeExtended);
+    TreeExtended& operator=(const TreeExtended *TreeExtended);
+    TreeExtended& operator=(const Tree *TreeExtended);
 
     /* returns the first node in a postorder configuration */
     Node* getPostOderBegin() const;
@@ -71,13 +71,13 @@ public:
     Node* lca(Node *v1, Node *v2) const;
     
     /* true is v1 is descendant of v2 */
-    bool descendant(Node *v1, Node *v2) const;
+    const bool descendant(Node *v1, Node *v2) const;
     
     /* returns the maximum distance from leaf to node*/
-    double findMaximumDistanceToLeaf(Node *n) const;
+    const double findMaximumDistanceToLeaf(Node *n) const;
     
     /* returns the number of children of node n*/
-    unsigned getNumberOfChildren(Node *n) const;
+    const unsigned getNumberOfChildren(Node *n) const;
     
     /* reset the tree information*/
     void reset();

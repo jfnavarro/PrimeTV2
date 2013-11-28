@@ -17,17 +17,17 @@
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
     
     Author : Jose Fernandez Navarro  -  jc.fernandez.navarro@gmail.com
-             Lars Arvestad, © the MCMC-club, SBC, all rights reserved
+             Lars Arvestad, the MCMC-club, SBC, all rights reserved
  */
 
 #include <iostream>
 #include <cstdlib>
 #include <csignal>
-#include "AnError.hh"
+#include "AnError.h"
 
 using namespace std;
 
-AnError::AnError(const string &message, int err_code) throw()
+AnError::AnError(const string &message, unsigned err_code) throw()
 : msg_str(message),
     arg_str(""),
     error_code(err_code)
@@ -36,7 +36,7 @@ AnError::AnError(const string &message, int err_code) throw()
 }
 
 AnError::AnError(const string &message, const string &arg, 
-        int err_code) throw()
+        unsigned err_code) throw()
 : msg_str(message),
     arg_str(arg),
     error_code(err_code)
@@ -70,7 +70,7 @@ AnError::message() const
     return s;
 }
 
-int
+unsigned
 AnError::code() const
 {
     return error_code;

@@ -41,7 +41,7 @@ Canvas::~Canvas()
 {
 }
 
-bool Canvas::saveCanvas(const QString& fileName, const char* format, int quality)
+bool Canvas::saveCanvas(const QString& fileName, const char* format, unsigned quality)
 {
     return pixmap().save(fileName,format,quality);
 }
@@ -124,7 +124,7 @@ void Canvas::invert()
     setTransform(temp,true);
 }
 
-void Canvas::setSize ( int sizeW, int sizeH )
+void Canvas::setSize ( unsigned sizeW, unsigned sizeH )
 {
     prepareGeometryChange();
     QPixmap scaledP = pixmap().scaled(sizeW,sizeH,Qt::KeepAspectRatio,Qt::SmoothTransformation);

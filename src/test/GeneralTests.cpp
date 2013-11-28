@@ -23,7 +23,7 @@
 
 #include "../Parameters.h"
 #include "../Mainops.h"
-#include "../utils/AnError.hh"
+#include "../utils/AnError.h"
 
 #include <QTemporaryFile>
 #include <QFile>

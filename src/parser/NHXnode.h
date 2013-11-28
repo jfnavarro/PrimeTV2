@@ -40,19 +40,19 @@ void delete_tree_nodes(struct NHXnode *n);
 /*
     Find the annotation of a certain type
 */
-struct NHXannotation *find_annotation(struct NHXnode *v, const char *tag);
+struct NHXannotation* find_annotation(const struct NHXnode *v, const char *tag);
 
 /*
   isDuplication returns non-zero if the provided node is annotated
   as a duplication.
 */
 
-int isDuplication(struct NHXnode *t); /* Returns 1 if is _annotated_ as duplication, 0 o.w.  */
-int isLeaf(struct NHXnode *t);	/* Returns 1 if t is leaf, 0 otherwise */
-int isRoot(struct NHXnode *t);	/* Returns 1 if t is a root (no parent), 0 otherwise */
-char *speciesName(struct NHXnode *t);
+int isDuplication(const struct NHXnode *t); /* Returns 1 if is _annotated_ as duplication, 0 o.w.  */
+int isLeaf(const struct NHXnode *t);	/* Returns 1 if t is leaf, 0 otherwise */
+int isRoot(const struct NHXnode *t);	/* Returns 1 if t is a root (no parent), 0 otherwise */
+char *speciesName(const struct NHXnode *t);
 
-unsigned subtreeSize(struct NHXnode *n); /* Count the number of nodes in tree rooted at n */
+int subtreeSize(const struct NHXnode *n); /* Count the number of nodes in tree rooted at n */
 
 /* Bad form, but a necessary temporary hack. /arve */
 void NHX_debug_print(struct NHXnode *l);

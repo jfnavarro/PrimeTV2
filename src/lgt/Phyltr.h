@@ -459,7 +459,7 @@ void compute_lambda(const TreeExtended &species_tree,
 
 /* count the number of losses of the scenario with the lateral transfer
  * given*/
-int count_losses(const TreeExtended  &species_tree,
+unsigned count_losses(const TreeExtended  &species_tree,
                  const TreeExtended &gene_tree,
                  const std::vector<unsigned> &sigma,
                  const boost::dynamic_bitset<> &transfer_edges);

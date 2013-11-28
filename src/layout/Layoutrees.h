@@ -43,8 +43,8 @@ public:
 
     /*constructor : gene tree, species tree and parameters are going to be modified */
     LayoutTrees(TreeExtended *r,TreeExtended *g,
-                Parameters *p,const GammaMapEx<Node> *gm,
-                const LambdaMapEx<Node> *l);
+                Parameters *p,const GammaMapEx *gm,
+                const LambdaMapEx *l);
     
     void start();
     
@@ -55,20 +55,20 @@ public:
     
     /* this functions takes a map of node->node and replaces their cordinates in
      * the gene tree */
-    void replaceNodes(const std::map<int,int> &replacements);
+    void replaceNodes(const std::map<unsigned,unsigned> &replacements);
     
 private:
 
     /* this function ladderize the tree to the right, it swapes the nodes */
-    int Ladderize_right();
-    int Ladderize_right(Node *n);
+    const unsigned Ladderize_right() const;
+    const unsigned Ladderize_right(Node *n) const;
     
     /* the same to the left */
-    int Ladderize_left();
-    int Ladderize_left(Node *n);
+    const unsigned Ladderize_left() const;
+    const unsigned Ladderize_left(Node *n) const;
     
     /* this function calculates the Species node cordinates using three different time approaches */
-    void CountSpeciesCoordinates(Node *n, int depth);
+    void CountSpeciesCoordinates(Node *n, unsigned depth);
     
     /* this function calculates the gene cordinates according to the species node cordinates calculated
      * previously */
@@ -87,17 +87,17 @@ private:
     
     /* this function returns the number of nodes of the species node that has the most nodes
      * mapped */
-    int  MostGenes();
+    const unsigned MostGenes() const;
     
     /* this function maps all the times of the tree to distribute them equally in groups to
      * be used to calculte the x cordinates of the species nodes */
-    unsigned maptimes();
+    const unsigned maptimes();
     
     /* this function returns the left most y cordinate of the node given */
-    double getLeftMostCoordinate (Node* o);
+    const double getLeftMostCoordinate (Node* o) const;
     
     /* the same but the right most cordiante */
-    double getRightMostCoordinate (Node* o);
+    const double getRightMostCoordinate (Node* o) const;
     
     /* this function maps all the duplications of the tree in the vector Adress */
     Node* FindDuplications(Node* node);
@@ -106,14 +106,14 @@ private:
     Node* MapDuplications(Node* de, unsigned line);
     
     /* this function returns the level in the tree of the duplication node given */
-    unsigned Duplevel(Node* nd, int levellineage);
+    const unsigned Duplevel(Node* nd, unsigned levellineage) const;
     
     /* this function returns the right most cordiante node for a duplication
      * node given as input */
-    double RightMostCoordinate(Node* o, Node *end_of_slice, int duplevel);
+    const double RightMostCoordinate(Node* o, Node *end_of_slice, unsigned duplevel) const;
     
     /* the same for the left*/
-    double LeftMostCoordinate(Node* o, Node *end_of_slice, int duplevel);
+    const double LeftMostCoordinate(Node* o, Node *end_of_slice, unsigned duplevel) const;
     
     /* this function displaces the species node if it is colliding with another node*/
     void CalcLegIntersection(Node *left, Node *right, Node *u);
@@ -129,14 +129,14 @@ private:
     Node* getHighestMappedLGT(Node *n);
     
     /* this function returns the size of the biggest name label on both trees */
-    double biggestLabel();
+    const double biggestLabel() const;
     
     //external attributes
     TreeExtended *species;
     TreeExtended *gene;
     Parameters *parameters;
-    const GammaMapEx<Node> *gamma;
-    const LambdaMapEx<Node> *lambda;
+    const GammaMapEx *gamma;
+    const LambdaMapEx *lambda;
     BeepVector<unsigned> bv;
     BeepVector<Node*> Adress;
     
@@ -147,13 +147,12 @@ private:
     double YCanvasSize;
     double XCanvasSize;
     double xCanvasXtra;
-    int maxdeepleaf;
-    int maxdeepleaftimes;
+    unsigned maxdeepleaf;
+    unsigned maxdeepleaftimes;
     unsigned leveltime;
     std::vector<double> numXPositions; //equally distributed no time
     std::map<double,double> numXPositionsTimes; //distributed equally by time
     std::vector<double> maptime;
-
     bool nodetime;
     bool equal;
 };

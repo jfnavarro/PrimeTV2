@@ -37,14 +37,14 @@ namespace unit
         return TestHandle(this, name);
     }
 
-    int TestSuite::exec()
+    unsigned TestSuite::exec()
     {
         QScopedPointer<Linearizer> linearizer(new BreadthFirstTopDown());
 
         QList<QObject *> list = linearizer->list(&m_root);
         list.removeFirst(); // pop dummy root object
 
-        int exitCode = 0;
+        unsigned exitCode = 0;
         foreach (QObject *object, list)
         {
             if (QTest::qExec(object))

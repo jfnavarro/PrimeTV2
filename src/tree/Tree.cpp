@@ -25,11 +25,11 @@
 #include <sstream>
 #include <cmath>
 
-#include "../utils/AnError.hh"
-#include "../reconcilation/BeepVector.hh"
-#include "Tree.hh"
-#include "Node.hh"
-#include "TreeIO.hh"
+#include "../utils/AnError.h"
+#include "../reconcilation/BeepVector.h"
+#include "Tree.h"
+#include "Node.h"
+#include "TreeIO.h"
 
 using namespace std;
 
@@ -59,57 +59,57 @@ Tree::~Tree()
     //clearNodeAttributes();
 }
 
-Tree::Tree(const Tree &T)
-    : noOfNodes(T.noOfNodes),
-      noOfLeaves(T.noOfLeaves),
+Tree::Tree(const Tree &TreeExtended)
+    : noOfNodes(TreeExtended.noOfNodes),
+      noOfLeaves(TreeExtended.noOfLeaves),
       rootNode(NULL),
       name2node(),                                       // Initialization
       all_nodes(max(noOfNodes,DEF_NODE_VEC_SIZE), NULL), // Allocate vector
-      name(T.name),
+      name(TreeExtended.name),
       //NOTE what should I do with the times,lenghts and rates?
-      //times(T.times),
-      //lengths(T.lengths),
-      //rates(T.rates),
-      topTime(T.topTime)
+      //times(TreeExtended.times),
+      //lengths(TreeExtended.lengths),
+      //rates(TreeExtended.rates),
+      topTime(TreeExtended.topTime)
 {
-    if(T.getRootNode())
+    if(TreeExtended.getRootNode())
     {
-        setRootNode(copyAllNodes(T.getRootNode()));
+        setRootNode(copyAllNodes(TreeExtended.getRootNode()));
     }
 }
 
 Tree
-Tree::EmptyTree(const Real& rootTime, string leafname)
+Tree::EmptyTree(const double& rootTime, string leafname)
 {
-    Tree T;
+    Tree TreeExtended;
     string name = leafname;
-    T.setRootNode(T.addNode(0, 0, 0, name));
-    T.topTime = rootTime;
-    T.setName("Tree");
-    return T;
+    TreeExtended.setRootNode(TreeExtended.addNode(0, 0, 0, name));
+    TreeExtended.topTime = rootTime;
+    TreeExtended.setName("Tree");
+    return TreeExtended;
 }
 
 Tree&
-Tree::operator=(const Tree& T)
+Tree::operator=(const Tree& TreeExtended)
 {
-    if(this != &T)
+    if(this != &TreeExtended)
     {
         clear();
-        noOfNodes = T.noOfNodes;
-        noOfLeaves = T.noOfLeaves;
+        noOfNodes = TreeExtended.noOfNodes;
+        noOfLeaves = TreeExtended.noOfLeaves;
         if(noOfNodes > all_nodes.size())
         {
             all_nodes.resize(noOfNodes, NULL);
         }
-        name = T.name;
-        if(T.getRootNode())
+        name = TreeExtended.name;
+        if(TreeExtended.getRootNode())
         {
-            setRootNode(copyAllNodes(T.getRootNode()));
+            setRootNode(copyAllNodes(TreeExtended.getRootNode()));
         }
         //NOTE what should I do with the times,lenghts and rates?
-        //times = T.times;
-        //lengths = T.lengths;
-        //rates = T.rates;
+        //times = TreeExtended.times;
+        //lengths = TreeExtended.lengths;
+        //rates = TreeExtended.rates;
     }
     return *this;
 }
@@ -129,24 +129,21 @@ Tree::setName(string s)
 }
 
 // Total number of nodes in tree
-//----------------------------------------------------------------------
-unsigned 
+const unsigned
 Tree::getNumberOfNodes() const
 {
     return noOfNodes;
 }
 
 // Total number of leaves in tree
-//----------------------------------------------------------------------
-unsigned 
+const unsigned
 Tree::getNumberOfLeaves() const
 {
     return noOfLeaves;
 }
 
 // Height. Empty tree has height 0, and the root-only tree has height 1.
-//----------------------------------------------------------------------
-unsigned
+const unsigned
 Tree::getHeight() const
 {
     return getHeight(rootNode);
@@ -154,8 +151,7 @@ Tree::getHeight() const
 
 // Check that all nodes has sane identity numbers
 // This is used when reading user-defined trees
-//----------------------------------------------------------------------
-bool 
+const bool
 Tree::IDnumbersAreSane(Node& n)
 {
     bool ret = n.getNumber() < getNumberOfNodes();
@@ -168,7 +164,6 @@ Tree::IDnumbersAreSane(Node& n)
 }
 
 // delete and remove all nodes from tree
-//----------------------------------------------------------------------
 void
 Tree::clear()
 {
@@ -177,7 +172,6 @@ Tree::clear()
 }
 
 // Access rootNode
-//----------------------------------------------------------------------
 Node* 
 Tree::getRootNode() const
 {
@@ -185,7 +179,6 @@ Tree::getRootNode() const
 } 
 
 // set rootNode
-//----------------------------------------------------------------------
 void
 Tree::setRootNode(Node *v)
 {
@@ -195,20 +188,6 @@ Tree::setRootNode(Node *v)
 }
 
 // Access Node from number
-//----------------------------------------------------------------------
-Node* 
-Tree::getNode(unsigned no)
-{
-    if (no >= all_nodes.size())
-    {
-        return NULL;
-    }
-    else
-    {
-        return all_nodes[no];
-    }
-}
-
 Node* 
 Tree::getNode(unsigned no) const
 {
@@ -343,60 +322,34 @@ Tree::mostRecentCommonAncestor(Node* a, Node* b) const
     return a;
 }
 
-// MRCA gets most recent common ancestor of two speciesNodes
-//----------------------------------------------------------------------
-const Node* 
-Tree::mostRecentCommonAncestor(const Node* a, const Node* b) const
-{
-    assert(a != NULL);
-    assert(b != NULL);
-
-    while (a != b)
-    {
-        if (b->dominates(*a))
-        {
-            a = a->getParent();
-        }
-        else
-        {
-            b = b->getParent();
-        }
-    }
-    return a;
-}
-
-
 // Check if times/rates/lengths are available
-//----------------------------------------------------------------------
-bool 
+const bool
 Tree::hasTimes() const
 {
     return times != 0;
 }
 
-bool 
+const bool
 Tree::hasRates() const
 {
     return rates != 0;
 }
 
-bool 
+const bool
 Tree::hasLengths() const
 {
     return lengths != 0;
 }
 
 // Gets the node time of node v
-//----------------------------------------------------------------------
-Real
+const double
 Tree::getTime(const Node& v) const
 {
     return (*times)[v];
 }
 
 // Gets the node time of node v
-//----------------------------------------------------------------------
-Real
+const double
 Tree::getEdgeTime(const Node& v) const
 {
     if(v.isRoot())
@@ -409,7 +362,7 @@ Tree::getEdgeTime(const Node& v) const
     }
 }
 
-Real
+const double
 Tree::rootToLeafTime() const
 {
     Node *v = getRootNode();
@@ -421,14 +374,14 @@ Tree::rootToLeafTime() const
 
 }
 
-Real
+const double
 Tree::getTopToLeafTime() const
 {
     return (getTime(*getRootNode()) + topTime);
 }
 
 // Sanity check of time
-bool 
+const bool
 Tree::checkTimeSanity(Node& root) const
 {
     Node& left = *root.getLeftChild();
@@ -445,30 +398,27 @@ Tree::checkTimeSanity(Node& root) const
 }
 
 // access and manipulate TopTime
-//----------------------------------------------------------------------
-const Real& 
+const double
 Tree::getTopTime() const
 {
     return topTime;
 }
 
 void 
-Tree::setTopTime(Real newTime)
+Tree::setTopTime(double newTime)
 {
     topTime = newTime;
 }
 
 // Gets the weight of node v
-//----------------------------------------------------------------------
-Real
+const double
 Tree::getLength(const Node& v) const
 {
     return (*lengths)[v];
 }
 
 // Gets the rate of node v
-//----------------------------------------------------------------------
-Real
+const double
 Tree::getRate(const Node& v) const
 {
     if(rates->size() == 1)
@@ -483,15 +433,14 @@ Tree::getRate(const Node& v) const
 
 // Sets the divergence time of node v
 void
-Tree::setTimeNoAssert(const Node& v, Real time) const
+Tree::setTimeNoAssert(const Node& v, double time) const
 {
     (*times)[v] = time;
 }
 
 // Sets the divergence time of node v
-//----------------------------------------------------------------------
 void
-Tree::setTime(const Node& v, Real time) const
+Tree::setTime(const Node& v, double time) const
 {
     (*times)[v] = time;
     assert(v.isLeaf() || (*times)[v] >= (*times)[v.getLeftChild()]);
@@ -500,9 +449,8 @@ Tree::setTime(const Node& v, Real time) const
 }
 
 // Sets the edge time of node v
-//----------------------------------------------------------------------
 void
-Tree::setEdgeTime(const Node& v, Real time) const
+Tree::setEdgeTime(const Node& v, double time) const
 {
     if(v.isRoot())
     {
@@ -517,9 +465,8 @@ Tree::setEdgeTime(const Node& v, Real time) const
 }
 
 // Sets the weight of node v
-//----------------------------------------------------------------------
 void
-Tree::setLength(const Node& v, Real weight) const
+Tree::setLength(const Node& v, double weight) const
 {
     if(weight < 2 * std::numeric_limits< double >::min())
     {
@@ -535,9 +482,8 @@ Tree::setLength(const Node& v, Real weight) const
 }
 
 // Sets the rate of node v
-//----------------------------------------------------------------------
 void
-Tree::setRate(const Node& v, Real rate) const
+Tree::setRate(const Node& v, double rate) const
 {
     if(rates->size() == 1)
     {
@@ -550,26 +496,26 @@ Tree::setRate(const Node& v, Real rate) const
 }
 
 // Handle to time, lengths and rates
-RealVector& 
+const RealVector&
 Tree::getTimes() const
 {
     return *times;
 }
 
-RealVector& 
+const RealVector&
 Tree::getRates() const
 {
     return *rates;
 }
 
-RealVector& 
+const RealVector&
 Tree::getLengths() const
 {
     return *lengths;
 }
 
 void
-Tree::setTimes(RealVector& v) const
+Tree::setTimes(RealVector& v)
 {
     if(times)
     {
@@ -580,7 +526,7 @@ Tree::setTimes(RealVector& v) const
 }
 
 void
-Tree::setRates(RealVector& v) const
+Tree::setRates(RealVector& v)
 {
     if(rates)
     {
@@ -591,7 +537,7 @@ Tree::setRates(RealVector& v) const
 }
 
 void
-Tree::setLengths(RealVector& v) const
+Tree::setLengths(RealVector& v)
 {
     if(lengths)
     {
@@ -601,7 +547,7 @@ Tree::setLengths(RealVector& v) const
     lengths = &v;
 }
 
-Real 
+double
 Tree::imbalance()
 {
     Node *r = getRootNode();
@@ -632,10 +578,10 @@ Tree::copyAllNodes(const Node *v)
     }
     return NULL;
 }
+
 // Recursively copy all nodes in a tree. And keep track of names etc while
 // you are at it! The new nodes get new IDs
 // Notice! Assumes that the new nodes will belong to the calling Tree!!
-//----------------------------------------------------------------------
 Node *
 Tree::copySubtree(const Node *v)
 {
@@ -669,7 +615,6 @@ Tree::copySubtree(const Node *v)
 }
 
 // delete and remove all nodes from tree
-//----------------------------------------------------------------------
 void
 Tree::clearTree()
 {
@@ -685,7 +630,7 @@ Tree::clearTree()
     all_nodes = std::vector<Node*>(DEF_NODE_VEC_SIZE, NULL);
 }
 
-Real
+double
 Tree::imbalance(Node *v)
 {
 #define MAX(A, B) ((A>B) ? A : B)
@@ -697,15 +642,15 @@ Tree::imbalance(Node *v)
     {
         Node *l = v->getLeftChild();
         Node *r = v->getRightChild();
-        Real my_imbalance = fabs(l->getNodeTime() + l->getTime() -
+        double my_imbalance = fabs(l->getNodeTime() + l->getTime() -
                                  r->getNodeTime()-r->getTime());
-        Real l_imbalance = imbalance(l);
-        Real r_imbalance = imbalance(r);
+        double l_imbalance = imbalance(l);
+        double r_imbalance = imbalance(r);
         return MAX(my_imbalance, MAX(l_imbalance, r_imbalance));
     }
 }
 
-unsigned 
+const unsigned
 Tree::getHeight(Node* v) const
 {
     if (v == NULL)

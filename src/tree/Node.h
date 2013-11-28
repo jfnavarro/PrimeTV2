@@ -28,25 +28,30 @@
 #include <map>
 
 #include "../draw/Color.h"
-#include "../reconcilation/SetOfNodesEx.hh"
+#include "../reconcilation/SetOfNodesEx.h"
 
 using namespace std;
 class Tree;
-
-enum  Type{Leaf=0, Speciation=1, Duplication=2, LateralTransfer=3, Undefined=4};
-typedef float Real;
 
 class Node
 {
 
 public:
 
+    enum Type{
+        Leaf = 0,
+        Speciation = 1,
+        Duplication = 2,
+        LateralTransfer = 3,
+        Undefined = 4
+    };
+
     Node(unsigned id);
     Node(unsigned id, const std::string& nodeName);
     virtual ~Node();
     Node(const Node &);
 
-    //Extra Methods aded by Jose Carlos Fernandez
+    //Extra Methods
     void setColor(Color c);
     void setSize(double s);
     void setX(double x);
@@ -57,67 +62,73 @@ public:
     void setVisited(unsigned inc);
     void incVisited();
     Color getColor();
-    double getSize();
-    double getX();
-    double getY();
-    double getX() const;
-    double getY() const;
+    const double getSize() const;
+    const double getX() const;
+    const double getY() const;
     Node *getHostParent();
     Node *getHostChild();
     Type getReconcilation();
     Node *getHostParent() const;
     Node *getHostChild() const;
     Type getReconcilation() const;
-    unsigned getVisited();
+    const unsigned getVisited() const;
     void setRightChild(Node *);
     void setLeftChild(Node *);
-    //Extra Methods aded by Jose Carlos Fernandez
+    //Extra Methods
 
     void rotate();
+
     Node* getLeftChild() const;
     Node* getRightChild() const;
     Node* getParent() const;
     Node* getSibling() const;
     Node* getDominatingChild(Node* y);
+
     const std::string& getName() const;
     Tree* getTree();
-    unsigned getNumber() const;
-    unsigned getPorder() const;
-    unsigned getNumberOfLeaves() const;
-    Real getBranchLength() const;
+
+    const unsigned getNumber() const;
+    const unsigned getPorder() const;
+    const unsigned getNumberOfLeaves() const;
+    const double getBranchLength() const;
     Node& operator=(const Node &);
-    unsigned getMaxPathToLeaf();
+
+    const unsigned getMaxPathToLeaf() const;
+
     void setName(const std::string& nodeName);
-    void setTree(Tree& T);
+    void setTree(Tree& TreeExtended);
     void setChildren(Node *left, Node *right);
     void setParent(Node *parent);
     void changeID(unsigned newID);
     void deleteSubtree();
-    SetOfNodesEx<Node> getLeaves();
-    bool isLeaf() const;
-    bool isRoot() const;
-    bool operator<=(const Node& b) const;
-    bool operator<(const Node& b) const;
-    bool operator<(const Node* b) const;
-    bool operator>(const Node& b) const;
-    bool dominates(const Node &b) const;
-    bool strictlyDominates(const Node &b) const;
 
-    Real getNodeTime() const;
-    Real getTime() const;
-    Real getLength() const;
-    bool changeNodeTime(const Real &t);
-    bool changeTime(const Real &et);
-    void setNodeTime(const Real &t);
-    void setTime(const Real &t);
-    void setLength(const Real &newLength);
+    SetOfNodesEx<Node> getLeaves();
+
+    const bool isLeaf() const;
+    const bool isRoot() const;
+    const bool operator<=(const Node& b) const;
+    const bool operator<(const Node& b) const;
+    const bool operator<(const Node* b) const;
+    const bool operator>(const Node& b) const;
+    const bool dominates(const Node &b) const;
+    const bool strictlyDominates(const Node &b) const;
+
+    const double getNodeTime() const;
+    const double getTime() const;
+    const double getLength() const;
+    const bool changeNodeTime(const double &t);
+    const bool changeTime(const double &et);
+
+    void setNodeTime(const double &t);
+    void setTime(const double &t);
+    void setLength(const double &newLength);
 
     friend std::ostream& operator<< (std::ostream& o, const Node &v);
     friend std::ostream& operator<< (std::ostream& o, const Node *v);
 
 private:
 
-    std::string stringify(std::string tag, Real val) const;
+    std::string stringify(std::string tag, double val) const;
     std::string stringify(std::string tag, std::string val) const;
     std::string stringify(std::string tag, Node *v) const;
 
@@ -130,14 +141,14 @@ protected:
     Node *rightChild;     // pointer to the right child Node
     long porder;          // Defining partial order of tree.
 
-    Real time;		      // the arc time from the parent to current node
-    Real nodeTime;        // the time from the leaves.
-    Real branchLength;	  // equals time * rate, we might want to remove this
+    double time;		      // the arc time from the parent to current node
+    double nodeTime;        // the time from the leaves.
+    double branchLength;	  // equals time * rate, we might want to remove this
 
     std::string name;     // the (leaf) name
     Tree* ownerTree;      // The tree to which I belong
 
-    /* extra features Jose Carlos Fernandez */
+    /* extra features */
     Color color;
     double size;
     double x;
@@ -146,7 +157,6 @@ protected:
     Node *hostChild;
     Type reconcilation;
     unsigned visited;
-
 };
 
 #endif

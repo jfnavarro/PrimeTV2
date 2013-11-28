@@ -22,7 +22,7 @@
 
 #include "Edge.h"
 
-#include "../tree/Node.hh"
+#include "../tree/Node.h"
 
 #include <iostream>
 #include <boost/concept_check.hpp>

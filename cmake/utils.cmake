@@ -15,25 +15,14 @@ MACRO(INITIALISE_PROJECT)
 
     IF(CMAKE_BUILD_TYPE MATCHES [Dd][Ee][Bb][Uu][Gg])
         MESSAGE("Building a debug version...")
-        set(DEBUG_MODE ON)
         # Default compiler settings
-        IF(WIN32)
-            SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /D_DEBUG /MDd /Zi /Ob0 /Od /RTC1")
-            SET(LINK_FLAGS_PROPERTIES "${LINK_FLAGS_PROPERTIES} /DEBUG")
-        ELSE()
-            SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0")
-        ENDIF()
+        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0 -fPIC")
         # Make sure that debugging is on for Qt
         ADD_DEFINITIONS(-DQT_DEBUG)
     ELSE()
         MESSAGE("Building a release version...")
-        set(DEBUG_MODE OFF)
         # Default compiler and linker settings
-        IF(WIN32)
-            SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /DNDEBUG /MD /O2 /Ob2")
-        ELSE()
-            SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2 -ffast-math")
-        ENDIF()
+        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2 -ffast-math -fPIC -funroll-loops")
         # Make sure that debugging is off for Qt
         ADD_DEFINITIONS(-DQT_NO_DEBUG_OUTPUT)
         ADD_DEFINITIONS(-DQT_NO_DEBUG)

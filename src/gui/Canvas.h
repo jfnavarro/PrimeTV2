@@ -34,7 +34,7 @@ public:
     Canvas(const QPixmap& pixmap, QGraphicsItem* parent = 0, QGraphicsScene* scene = 0);
     
     //save the canvas in a file
-    bool saveCanvas(const QString & fileName, const char * format = 0, int quality = -1);
+    bool saveCanvas(const QString & fileName, const char * format = 0, unsigned quality = -1);
     
     //save the canvas in a pdf
     bool saveCanvasPDF(const QString& fileName);
@@ -49,7 +49,7 @@ public:
     
     virtual void setPixmap(const QPixmap &pixmap);
 
-    void setSize(int _sizeW,int _sizeH);
+    void setSize(unsigned _sizeW,unsigned _sizeH);
 
 protected:
 
@@ -57,7 +57,6 @@ protected:
     
 public slots:
 
-    
     void rotateRightCentered();
     
     void rotateLeftCentered();

@@ -94,40 +94,44 @@ set(SRC_PARSER
 )
 
 set(INC_RECONCILATION
-    reconcilation/BeepVector.hh
+    reconcilation/BeepVector.h
     reconcilation/GammaMapEx.h
     reconcilation/LambdaMapEx.h
-    reconcilation/SetOfNodesEx.hh
-    reconcilation/StrStrMap.hh
+    reconcilation/SetOfNodesEx.h
+    reconcilation/StrStrMap.h
 )
 
 set(SRC_RECONCILATION
-    reconcilation/StrStrMap.cc
+    reconcilation/SetOfNodesEx.h
+    reconcilation/BeepVector.h
+    reconcilation/StrStrMap.cpp
+    reconcilation/LambdaMapEx.cpp
+    reconcilation/GammaMapEx.cpp
 )
 
 set(INC_TREE
-    tree/Node.hh
-    tree/Tree.hh
+    tree/Node.h
+    tree/Tree.h
     tree/Treeextended.h
-    tree/TreeIO.hh
-    tree/TreeIOTraits.hh
+    tree/TreeIO.h
+    tree/TreeIOTraits.h
 )
 
 set(SRC_TREE
-    tree/Node.cc
-    tree/Tree.cc
+    tree/Node.cpp
+    tree/Tree.cpp
     tree/Treeextended.cpp
-    tree/TreeIO.cc
-    tree/TreeIOTraits.cc
+    tree/TreeIO.cpp
+    tree/TreeIOTraits.cpp
 )
 
 set(INC_UTILS
-    utils/AnError.hh
+    utils/AnError.h
     utils/ConfigFile.h
 )
 
 set(SRC_UTILS
-    utils/AnError.cc
+    utils/AnError.cpp
     utils/ConfigFile.cpp
 )
 
@@ -311,7 +315,7 @@ if(APPLE)
   add_custom_command (TARGET ${PROJECT_NAME}
       COMMAND mkdir -p ${CMAKE_INSTALL_PREFIX}/Resources/translations
       #COMMAND install -m 644 ${CMAKE_SOURCE_DIR}/resources/icons/icon.png ${CMAKE_INSTALL_PREFIX}/Resources/
-      COMMAND install -m 644 ${CMAKE_SOURCE_DIR}/resources/images/header.png ${CMAKE_INSTALL_PREFIX}/Resources/ 
+      COMMAND install -m 644 ${CMAKE_SOURCE_DIR}/resources/images/header.png ${CMAKE_INSTALL_PREFIX}/Resources/
       COMMAND install -m 644 ${CMAKE_SOURCE_DIR}/cmake/mac/qt.conf ${CMAKE_INSTALL_PREFIX}/Resources/
       COMMAND ${MACDEPLOYQT} ${OS_X_PROJECT_BINARY_DIR}
       )

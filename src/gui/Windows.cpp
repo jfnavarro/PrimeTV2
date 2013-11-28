@@ -436,7 +436,7 @@ void MainWindow::loadParameters(Parameters *parameters)
     checkBoxHost->setChecked(parameters->do_not_draw_species_tree);
     checkBoxINodes->setChecked(parameters->ids_on_inner_nodes);
 
-    int set = atoi(parameters->colorConfig->getSet());
+    unsigned set = atoi(parameters->colorConfig->getSet());
     switch (set)
     {
     case(1):
@@ -804,18 +804,18 @@ void MainWindow::createActions()
     connect(actionLoad_Map_File, SIGNAL(triggered(bool)), this, SLOT(loadMap()));
     connect(actionShow_Parameters, SIGNAL(triggered(bool)), this, SLOT(showParameters(bool)));
     connect(actionPrint, SIGNAL(triggered(bool)), this, SLOT(print()));
-    connect(checkBoxHV, SIGNAL(stateChanged(int)), this, SLOT(update()));
-    connect(checkBoxGuest, SIGNAL(stateChanged(int)), this, SLOT(update()));
-    connect(checkBoxHeader, SIGNAL(stateChanged(int)), this, SLOT(update()));
-    connect(checkBoxHost, SIGNAL(stateChanged(int)), this, SLOT(update()));
-    connect(checkBoxINodes, SIGNAL(stateChanged(int)), this, SLOT(update()));
-    connect(checkBoxLGT, SIGNAL(stateChanged(int)), this, SLOT(update()));
-    connect(checkBoxLadderize, SIGNAL(stateChanged(int)), this, SLOT(update()));
-    connect(checkBoxLegend, SIGNAL(stateChanged(int)), this, SLOT(update()));
-    connect(checkBoxLogo, SIGNAL(stateChanged(int)), this, SLOT(update()));
-    connect(checkBoxMarkers, SIGNAL(stateChanged(int)), this, SLOT(update()));
-    connect(checkBoxReconcile, SIGNAL(stateChanged(int)), this, SLOT(activateReconcilation()));
-    connect(comboBoxTime, SIGNAL(currentIndexChanged(int)), this, SLOT(update()));
+    connect(checkBoxHV, SIGNAL(stateChanged(unsigned)), this, SLOT(update()));
+    connect(checkBoxGuest, SIGNAL(stateChanged(unsigned)), this, SLOT(update()));
+    connect(checkBoxHeader, SIGNAL(stateChanged(unsigned)), this, SLOT(update()));
+    connect(checkBoxHost, SIGNAL(stateChanged(unsigned)), this, SLOT(update()));
+    connect(checkBoxINodes, SIGNAL(stateChanged(unsigned)), this, SLOT(update()));
+    connect(checkBoxLGT, SIGNAL(stateChanged(unsigned)), this, SLOT(update()));
+    connect(checkBoxLadderize, SIGNAL(stateChanged(unsigned)), this, SLOT(update()));
+    connect(checkBoxLegend, SIGNAL(stateChanged(unsigned)), this, SLOT(update()));
+    connect(checkBoxLogo, SIGNAL(stateChanged(unsigned)), this, SLOT(update()));
+    connect(checkBoxMarkers, SIGNAL(stateChanged(unsigned)), this, SLOT(update()));
+    connect(checkBoxReconcile, SIGNAL(stateChanged(unsigned)), this, SLOT(activateReconcilation()));
+    connect(comboBoxTime, SIGNAL(currentIndexChanged(unsigned)), this, SLOT(update()));
     connect(doubleSpinBoxTextScale, SIGNAL(valueChanged(double)), this, SLOT(update()));
     connect(fontComboBoxGene, SIGNAL(currentFontChanged(QFont)), this, SLOT(update()));
     connect(fontComboBoxSpecies, SIGNAL(currentFontChanged(QFont)), this, SLOT(update()));
@@ -825,15 +825,15 @@ void MainWindow::createActions()
     connect(radioButtonColor2, SIGNAL(toggled(bool)), this, SLOT(update()));
     connect(radioButtonColor3, SIGNAL(toggled(bool)), this, SLOT(update()));
     connect(radioButtonColor4, SIGNAL(toggled(bool)), this, SLOT(update()));
-    connect(spinBoxDupliCost, SIGNAL(valueChanged(int)), this, SLOT(update()));
-    connect(spinBoxHorizontalSize, SIGNAL(valueChanged(int)), this, SLOT(update()));
-    connect(spinBoxMaxCost, SIGNAL(valueChanged(int)), this, SLOT(update()));
-    connect(spinBoxMinCost, SIGNAL(valueChanged(int)), this, SLOT(update()));
-    connect(spinBoxSpeCost, SIGNAL(valueChanged(int)), this, SLOT(update()));
-    connect(spinBoxVerticalSize, SIGNAL(valueChanged(int)), this, SLOT(update()));
-    connect(spinBoxSpeciesFontSize, SIGNAL(valueChanged(int)), this, SLOT(update()));
-    connect(spinBoxGeneFontSize, SIGNAL(valueChanged(int)), this, SLOT(update()));
-    connect(spinBoxAllFontSize, SIGNAL(valueChanged(int)), this, SLOT(update()));
+    connect(spinBoxDupliCost, SIGNAL(valueChanged(unsigned)), this, SLOT(update()));
+    connect(spinBoxHorizontalSize, SIGNAL(valueChanged(unsigned)), this, SLOT(update()));
+    connect(spinBoxMaxCost, SIGNAL(valueChanged(unsigned)), this, SLOT(update()));
+    connect(spinBoxMinCost, SIGNAL(valueChanged(unsigned)), this, SLOT(update()));
+    connect(spinBoxSpeCost, SIGNAL(valueChanged(unsigned)), this, SLOT(update()));
+    connect(spinBoxVerticalSize, SIGNAL(valueChanged(unsigned)), this, SLOT(update()));
+    connect(spinBoxSpeciesFontSize, SIGNAL(valueChanged(unsigned)), this, SLOT(update()));
+    connect(spinBoxGeneFontSize, SIGNAL(valueChanged(unsigned)), this, SLOT(update()));
+    connect(spinBoxAllFontSize, SIGNAL(valueChanged(unsigned)), this, SLOT(update()));
     connect(speciesColor, SIGNAL(clicked(bool)), this, SLOT(loadFontColor()));
     connect(geneColor, SIGNAL(clicked(bool)), this, SLOT(loadFontColor()));
     connect(allColor, SIGNAL(clicked(bool)), this, SLOT(loadFontColor()));

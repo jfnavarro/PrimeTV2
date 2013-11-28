@@ -49,7 +49,7 @@ namespace unit
 
         TestHandle addTest(QObject *test, const QString &name);
 
-        int exec();
+        unsigned exec();
 
     private:
         friend class TestHandle;

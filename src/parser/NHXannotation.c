@@ -40,7 +40,7 @@ annotate_node(struct NHXnode *n, struct NHXannotation *l)
   Note that only the MAX_ANNOTATION_ID_LENGTH - 1 first chars of tag
   are compared.
 */
-int
+unsigned
 annotation_isa(struct NHXannotation* l, const char *tag)
 {
     assert(l != NULL);
@@ -164,7 +164,7 @@ struct NHXannotation*
   Integer lists
 */
 struct int_list* 
-        new_int_list(int i, struct int_list *next)
+        new_int_list(unsigned i, struct int_list *next)
 {
     struct int_list *il = (struct int_list*) malloc(sizeof(struct int_list));
     il->next = next;

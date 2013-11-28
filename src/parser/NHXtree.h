@@ -24,7 +24,7 @@
 #define NHXTREE_H
 
 /*
-  An NHXtree keeps the pointer to the roo node of a tree
+  An NHXtree keeps the pointer to the root node of a tree
   and has also a pointer to the next tree in the list, since
   we are actually talking about a tree list here!
 */
@@ -43,13 +43,12 @@ struct NHXtree {
     struct NHXnode *root;
 };
 
-
 struct NHXtree *read_tree(const char *filename);
 struct NHXtree *read_tree_string(const char *str);
 struct NHXtree *read_tree_from_file_stream(FILE * f);
-void delete_trees(struct NHXtree *T);
+void delete_trees(struct NHXtree *TreeExtended);
 
-unsigned treeSize(const struct NHXtree *T);
+unsigned treeSize(const struct NHXtree *TreeExtended);
 
 struct NHXtree *new_tree(struct NHXnode *root, struct NHXtree *next_tree);
 #ifdef __cplusplus

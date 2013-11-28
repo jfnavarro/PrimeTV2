@@ -17,12 +17,11 @@
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
     
     Author : Jose Fernandez Navarro  -  jc.fernandez.navarro@gmail.com
-             Lars Arvestad, © the MCMC-club, SBC, all rights reserved
+             Lars Arvestad, the MCMC-club, SBC, all rights reserved
  */
 
-#include "TreeIOTraits.hh"
-
-#include "../utils/AnError.hh"
+#include "TreeIOTraits.h"
+#include "../utils/AnError.h"
 #include <sstream>
 
 using namespace std;
@@ -31,7 +30,7 @@ TreeIOTraits::TreeIOTraits()
 {
 	// We turn off everything by default. If this is changed,
 	// there will be bugs all over TreeIO!
-	for (int i=nw; i<last_item_dont_use; i++) 
+    for (unsigned i=nw; i<last_item_dont_use; i++)
 	{
 		traits[i] = false;
 	}
@@ -42,16 +41,16 @@ TreeIOTraits::~TreeIOTraits()
 
 TreeIOTraits::TreeIOTraits(const TreeIOTraits &tr)
 {
-	for (int i=nw; i<last_item_dont_use; i++) 
+    for (unsigned i=nw; i<last_item_dont_use; i++)
 	{
 		traits[i] = tr.traits[i];
 	}
 }
 
-//! This set of accessors are here to make the transition from the old
-//! set of bools to using this class easier and safer to do. There
-//! are probably prettier and less cluttered interfaces, but this will
-//! have to do for now.
+// This set of accessors are here to make the transition from the old
+// set of bools to using this class easier and safer to do. There
+// are probably prettier and less cluttered interfaces, but this will
+// have to do for now.
 bool 
 TreeIOTraits::hasNW() const 
 {
@@ -187,7 +186,7 @@ TreeIOTraits::setTT(bool b)
 void 
 TreeIOTraits::logicAnd(const TreeIOTraits &t)
 {
-	for (int i=nw; i<last_item_dont_use; i++) 
+    for (unsigned i=nw; i<last_item_dont_use; i++)
 	{
 		traits[i] = traits[i] && t.traits[i];
 	}

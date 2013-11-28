@@ -29,7 +29,7 @@
 #include <string>
 #include <sstream>
 
-#include "../utils/AnError.hh"
+#include "../utils/AnError.h"
 
 using namespace std;
 
@@ -45,17 +45,18 @@ public:
     SetOfNodesEx<T>& operator=(const SetOfNodesEx<T> &son);
 
     void insert(T* u);	// Add u to the set
-    void insertVector(std::vector<T*>& v);  //Add a vector to the set - NOTE! RISK THAT THIS FUNCTION WILL BECHANGED!
+    void insertVector(std::vector<T*>& v);  //Add a vector to the set
     void erase(T* u);	// Remove u from the set
-    bool member(T* u) const; // Is u a member of the set?
-    bool empty() const;		// Is the set empty or not?
-    unsigned size() const;	// Number of elements in set
+    const bool member(T* u) const; // Is u a member of the set?
+    const bool empty() const;		// Is the set empty or not?
+    const unsigned size() const;	// Number of elements in set
     T* operator[](unsigned i) const; // Random access
     bool operator==(const SetOfNodesEx<T> &s1) const;
     bool operator<(const SetOfNodesEx<T> &s1) const;
     std::ostream& operator<<(std::ostream& os);
     std::string strRep() const;
     std::string set4os() const;
+
 private:
     typename std::set<T*> theSet;
 };
@@ -80,7 +81,7 @@ template <class T>
 std::string SetOfNodesEx<T>::strRep() const
 {
     std::stringstream ss;
-    for(unsigned int i = 0; i < theSet.size(); i++)
+    for(unsigned i = 0; i < theSet.size(); i++)
     {
         const T *node = operator[](i);
         ss << node->getNumber() << " ";
@@ -89,8 +90,6 @@ std::string SetOfNodesEx<T>::strRep() const
 }
 
 // helper function for operator <<
-//----------------------------------------------------------------------
-
 template <class T> std::string 
 SetOfNodesEx<T>::set4os() const
 {
@@ -175,7 +174,7 @@ SetOfNodesEx<T>::erase(T *u)
 }
 
 template <class T>
-bool
+const bool
 SetOfNodesEx<T>::member(T *u) const
 {
     if (theSet.find(u) == theSet.end())
@@ -189,14 +188,14 @@ SetOfNodesEx<T>::member(T *u) const
 }
 
 template <class T>
-bool
+const bool
 SetOfNodesEx<T>::empty() const
 {
     return theSet.empty();
 }
 
 template <class T>
-unsigned
+const unsigned
 SetOfNodesEx<T>::size() const
 {
     return theSet.size();

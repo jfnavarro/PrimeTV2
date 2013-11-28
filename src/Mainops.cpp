@@ -21,12 +21,12 @@
 
 #include "Mainops.h"
 
-#include "tree/Node.hh"
+#include "tree/Node.h"
 #include "Parameters.h"
-#include "tree/TreeIO.hh"
-#include "tree/Node.hh"
-#include "tree/TreeIO.hh"
-#include "utils/AnError.hh"
+#include "tree/TreeIO.h"
+#include "tree/Node.h"
+#include "tree/TreeIO.h"
+#include "utils/AnError.h"
 #include "draw/DrawTreeCairo.h"
 #include "layout/Layoutrees.h"
 
@@ -39,7 +39,7 @@
 using namespace std;
 
 Mainops::Mainops()
-    :Guest(0),Host(0),gamma(0),lambdamap(0),dt(0),parameters(0),io(0)
+    :genesTree(0),speciesTree(0),gamma(0),lambdamap(0),dt(0),parameters(0),io(0)
 {
 
 }
@@ -52,21 +52,21 @@ void Mainops::start()
 
 void Mainops::cleanTrees()
 {
-    if(Guest)
+    if(genesTree)
     {
-        delete(Guest);
+        delete genesTree;
     }
-    Guest = 0;
+    genesTree = 0;
 
-    if(Host)
+    if(speciesTree)
     {
-        delete(Host);
+        delete speciesTree;
     }
-    Host = 0;
+    speciesTree = 0;
 
     if(io)
     {
-        delete(io);
+        delete io;
     }
     io = 0;
 
@@ -77,17 +77,17 @@ void Mainops::cleanTrees()
 
 Mainops::~Mainops()
 {
-    if(Guest)
+    if(genesTree)
     {
-        delete(Guest);
+        delete(genesTree);
     }
-    Guest = 0;
+    genesTree = 0;
 
-    if(Host)
+    if(speciesTree)
     {
-        delete(Host);
+        delete(speciesTree);
     }
-    Host = 0;
+    speciesTree = 0;
 
     if(gamma)
     {
@@ -117,15 +117,15 @@ Mainops::~Mainops()
     io = 0;
 }
 
-bool Mainops::lateralTransfer(const std::string &mapname, bool dp)
+const bool Mainops::lateralTransfer(const std::string &mapname, bool dp)
 {
     Phyltr late = Phyltr();
     late.g_input.duplication_cost = parameters->lateralduplicost;
     late.g_input.transfer_cost = parameters->lateraltrancost;
     late.g_input.max_cost = parameters->lateralmaxcost;
     late.g_input.min_cost = parameters->lateralmincost;
-    late.g_input.gene_tree = Guest;
-    late.g_input.species_tree = Host;
+    late.g_input.gene_tree = genesTree;
+    late.g_input.species_tree = speciesTree;
     if(dp)
     {
         late.g_input.print_only_minimal_loss_scenarios = false;
@@ -178,7 +178,7 @@ void Mainops::printLGT()
     }
 }
 
-bool Mainops::thereAreLGT(const std::vector<Scenario> &scenarios) const
+const bool Mainops::thereAreLGT(const std::vector<Scenario> &scenarios) const
 {
     BOOST_FOREACH(const Scenario &sc, scenarios)
     {
@@ -193,22 +193,22 @@ bool Mainops::thereAreLGT(const std::vector<Scenario> &scenarios) const
 void Mainops::OpenReconciled(const string &reconciled)
 {
     io->setSourceFile(reconciled);
-    Guest = new TreeExtended(io->readBeepTree<TreeExtended,Node>(&AC, &gs));
+    genesTree = new TreeExtended(io->readBeepTree(&AC, &gs));
 }
 
 void Mainops::OpenHost(const string &species)
-{    
+{
     io->setSourceFile(species);
-    Host = new TreeExtended(io->readHostTree<TreeExtended,Node>());
-    Node *root = Host->getRootNode();
+    speciesTree = new TreeExtended(io->readHostTree());
+    Node *root = speciesTree->getRootNode();
 
     if ((double)root->getTime() != (double)0.0)
     {
-        Real t = root->getNodeTime();
+        double t = root->getNodeTime();
         root->setTime(0.1 * t);
     }
 
-    if (Host->imbalance() / Host->rootToLeafTime() > 0.01)
+    if (speciesTree->imbalance() / speciesTree->rootToLeafTime() > 0.01)
     {
         parameters->scaleByTime = false;
         std::cerr << "The species tree is not ultrametric (it appears unbalanced),\n"
@@ -221,30 +221,30 @@ void Mainops::CalculateGamma()
 {
     if (parameters->do_not_draw_species_tree == false)
     {
-        gamma = new GammaMapEx<Node>(*Guest, *Host, gs, AC);
+        gamma = new GammaMapEx(*genesTree, *speciesTree, gs, AC);
         if (parameters->lattransfer)
         {
-            gamma = new GammaMapEx<Node>(gamma->update(*Guest,*Host,sigma,transferedges));
+            gamma = new GammaMapEx(gamma->update(*genesTree,*speciesTree,sigma,transferedges));
         }
         lambdamap = gamma->getLambda();
     }
     else
     {
-        lambdamap = new LambdaMapEx<Node>(*Guest, *Host, gs);
+        lambdamap = new LambdaMapEx(*genesTree, *speciesTree, gs);
         if (parameters->lattransfer)
         {
-            lambdamap->update(*Guest,*Host,sigma,transferedges);
+            lambdamap->update(*genesTree,*speciesTree,sigma,transferedges);
         }
-        gamma = new GammaMapEx<Node>(GammaMapEx<Node>::MostParsimonious(*Guest,*Host,*lambdamap));
+        gamma = new GammaMapEx(GammaMapEx::MostParsimonious(*genesTree,*speciesTree,*lambdamap));
     }
 }
 
 void Mainops::reconcileTrees(const string &gene, const string &species, const string &mapfile)
 {
     io->setSourceFile(gene);
-    Guest = new TreeExtended(io->readBeepTree<TreeExtended,Node>(&AC, &gs));
+    genesTree = new TreeExtended(io->readBeepTree(&AC, &gs));
     io->setSourceFile(species);
-    Host = new TreeExtended(io->readNewickTree<TreeExtended,Node>());
+    speciesTree = new TreeExtended(io->readNewickTree());
 
     if(mapfile != "")
     {
@@ -255,30 +255,30 @@ void Mainops::reconcileTrees(const string &gene, const string &species, const st
         throw AnError(": The mapfile is empty!\n");
     }
 
-    LambdaMapEx<Node> lambdamap_local = LambdaMapEx<Node>(*Guest, *Host, gs);
-    GammaMapEx<Node> gamma_local = GammaMapEx<Node>(GammaMapEx<Node>::MostParsimonious(*Guest, *Host, lambdamap_local));
-    string textTree = io->writeGuestTree<TreeExtended,Node>(*Guest,&gamma_local);
+    LambdaMapEx lambdamap_local = LambdaMapEx(*genesTree, *speciesTree, gs);
+    GammaMapEx gamma_local = GammaMapEx(GammaMapEx::MostParsimonious(*genesTree, *speciesTree, lambdamap_local));
+    string textTree = io->writeGuestTree(*genesTree,&gamma_local);
     io->setSourceString(textTree);
-    Guest = new TreeExtended(io->readBeepTree<TreeExtended,Node>(&AC, &gs));
+    genesTree = new TreeExtended(io->readBeepTree(&AC, &gs));
     OpenHost(species);
 }
 
 void Mainops::calculateCordinates()
 {
-    Host->reset();
-    Guest->reset();
+    speciesTree->reset();
+    genesTree->reset();
     //reduce crossing only if not LGT
     if(parameters->reduce && !(bool)(parameters->lattransfer))
     {
         std::cerr << "NOTE : the option -R is still experimental.." << std::endl;
         gamma->twistAndTurn();
     }
-    LayoutTrees spcord = LayoutTrees(Host,Guest,parameters,gamma,lambdamap);
+    LayoutTrees spcord = LayoutTrees(speciesTree,genesTree,parameters,gamma,lambdamap);
     spcord.start();
     parameters->leafwidth = spcord.getNodeHeight();
 }
 
-int Mainops::checkValidity()
+const bool Mainops::checkValidity()
 {
     if(parameters->lattransfer)
     {
@@ -293,7 +293,7 @@ int Mainops::checkValidity()
 void Mainops::DrawTree(cairo_t *cr)
 {
 
-    dt->start(parameters,Guest,Host,gamma,lambdamap,cr);
+    dt->start(parameters,genesTree,speciesTree,gamma,lambdamap,cr);
 
     dt->calculateTransformation();
     
@@ -347,7 +347,7 @@ void Mainops::DrawTree(cairo_t *cr)
     }
 }
 
-int Mainops::RenderImage()
+const bool Mainops::RenderImage()
 {
     bool ok = dt->RenderImage();
     dt->cleanUp();
@@ -364,7 +364,7 @@ void Mainops::setParameters(Parameters *p)
     parameters = p;
 }
 
-bool Mainops::getValidityLGT()
+const bool Mainops::getValidityLGT()
 {
     if(gamma->validLGT())
     {
@@ -468,7 +468,7 @@ void Mainops::loadPreComputedScenario(const std::string &filename,const std::str
                 stringstream lineStream(temp);
                 std::vector<std::string> transfer_nodes((istream_iterator<std::string>(lineStream)), istream_iterator<std::string>());
                 transferedges.clear();
-                transferedges.resize(Guest->getNumberOfNodes());
+                transferedges.resize(genesTree->getNumberOfNodes());
                 for(std::vector<std::string>::const_iterator it = transfer_nodes.begin(); it != transfer_nodes.end(); ++it)
                 {
                     std::vector<std::string> strs;
@@ -476,7 +476,7 @@ void Mainops::loadPreComputedScenario(const std::string &filename,const std::str
                     temp.erase(remove(temp.begin(),temp.end(),'('),temp.end());
                     temp.erase(remove(temp.begin(),temp.end(),')'),temp.end());
                     boost::split(strs, temp, boost::is_any_of(","));
-                    if(Guest->getNode(boost::lexical_cast<unsigned>(strs.at(0))) != NULL)
+                    if(genesTree->getNode(boost::lexical_cast<unsigned>(strs.at(0))) != NULL)
                     {
                         transferedges.set(boost::lexical_cast<unsigned>(strs.at(0))); //origin LGT
                     }
@@ -493,8 +493,8 @@ void Mainops::loadPreComputedScenario(const std::string &filename,const std::str
     scenario_file.close();
     parameters->lattransfer = true;
     Phyltr late = Phyltr();
-    late.g_input.gene_tree = Guest;
-    late.g_input.species_tree = Host;
+    late.g_input.gene_tree = genesTree;
+    late.g_input.species_tree = speciesTree;
 
     if(parameters->isreconciled)
     {

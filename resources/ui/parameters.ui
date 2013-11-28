@@ -700,7 +700,7 @@
  <connections>
   <connection>
    <sender>checkBoxHV</sender>
-   <signal>stateChanged(int)</signal>
+   <signal>stateChanged(unsigned)</signal>
    <receiver>Parameters</receiver>
    <slot>update()</slot>
    <hints>
@@ -716,7 +716,7 @@
   </connection>
   <connection>
    <sender>checkBoxGuest</sender>
-   <signal>stateChanged(int)</signal>
+   <signal>stateChanged(unsigned)</signal>
    <receiver>Parameters</receiver>
    <slot>update()</slot>
    <hints>
@@ -732,7 +732,7 @@
   </connection>
   <connection>
    <sender>checkBoxHeader</sender>
-   <signal>stateChanged(int)</signal>
+   <signal>stateChanged(unsigned)</signal>
    <receiver>Parameters</receiver>
    <slot>update()</slot>
    <hints>
@@ -748,7 +748,7 @@
   </connection>
   <connection>
    <sender>checkBoxHost</sender>
-   <signal>stateChanged(int)</signal>
+   <signal>stateChanged(unsigned)</signal>
    <receiver>Parameters</receiver>
    <slot>update()</slot>
    <hints>
@@ -764,7 +764,7 @@
   </connection>
   <connection>
    <sender>checkBoxINodes</sender>
-   <signal>stateChanged(int)</signal>
+   <signal>stateChanged(unsigned)</signal>
    <receiver>Parameters</receiver>
    <slot>update()</slot>
    <hints>
@@ -780,7 +780,7 @@
   </connection>
   <connection>
    <sender>checkBoxLadderize</sender>
-   <signal>stateChanged(int)</signal>
+   <signal>stateChanged(unsigned)</signal>
    <receiver>Parameters</receiver>
    <slot>update()</slot>
    <hints>
@@ -796,7 +796,7 @@
   </connection>
   <connection>
    <sender>checkBoxLegend</sender>
-   <signal>stateChanged(int)</signal>
+   <signal>stateChanged(unsigned)</signal>
    <receiver>Parameters</receiver>
    <slot>update()</slot>
    <hints>
@@ -812,7 +812,7 @@
   </connection>
   <connection>
    <sender>checkBoxLogo</sender>
-   <signal>stateChanged(int)</signal>
+   <signal>stateChanged(unsigned)</signal>
    <receiver>Parameters</receiver>
    <slot>update()</slot>
    <hints>
@@ -828,7 +828,7 @@
   </connection>
   <connection>
    <sender>checkBoxMarkers</sender>
-   <signal>stateChanged(int)</signal>
+   <signal>stateChanged(unsigned)</signal>
    <receiver>Parameters</receiver>
    <slot>update()</slot>
    <hints>
@@ -844,7 +844,7 @@
   </connection>
   <connection>
    <sender>comboBoxTime</sender>
-   <signal>currentIndexChanged(int)</signal>
+   <signal>currentIndexChanged(unsigned)</signal>
    <receiver>Parameters</receiver>
    <slot>update()</slot>
    <hints>
@@ -924,7 +924,7 @@
   </connection>
   <connection>
    <sender>spinBoxDupliCost</sender>
-   <signal>valueChanged(int)</signal>
+   <signal>valueChanged(unsigned)</signal>
    <receiver>Parameters</receiver>
    <slot>update()</slot>
    <hints>
@@ -940,7 +940,7 @@
   </connection>
   <connection>
    <sender>spinBoxHorizontalSize</sender>
-   <signal>valueChanged(int)</signal>
+   <signal>valueChanged(unsigned)</signal>
    <receiver>Parameters</receiver>
    <slot>update()</slot>
    <hints>
@@ -956,7 +956,7 @@
   </connection>
   <connection>
    <sender>spinBoxMaxCost</sender>
-   <signal>valueChanged(int)</signal>
+   <signal>valueChanged(unsigned)</signal>
    <receiver>Parameters</receiver>
    <slot>update()</slot>
    <hints>
@@ -972,7 +972,7 @@
   </connection>
   <connection>
    <sender>spinBoxMinCost</sender>
-   <signal>valueChanged(int)</signal>
+   <signal>valueChanged(unsigned)</signal>
    <receiver>Parameters</receiver>
    <slot>update()</slot>
    <hints>
@@ -988,7 +988,7 @@
   </connection>
   <connection>
    <sender>spinBoxSpeCost</sender>
-   <signal>valueChanged(int)</signal>
+   <signal>valueChanged(unsigned)</signal>
    <receiver>Parameters</receiver>
    <slot>update()</slot>
    <hints>
@@ -1004,7 +1004,7 @@
   </connection>
   <connection>
    <sender>spinBoxVerticalSize</sender>
-   <signal>valueChanged(int)</signal>
+   <signal>valueChanged(unsigned)</signal>
    <receiver>Parameters</receiver>
    <slot>update()</slot>
    <hints>

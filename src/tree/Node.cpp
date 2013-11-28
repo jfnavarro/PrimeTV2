@@ -27,10 +27,10 @@
 #include <cstdio>
 #include <sstream>
 
-#include "../utils/AnError.hh"
-#include "Node.hh"
-#include "Tree.hh"
-#include "../reconcilation/BeepVector.hh"
+#include "../utils/AnError.h"
+#include "Node.h"
+#include "Tree.h"
+#include "../reconcilation/BeepVector.h"
 
 using namespace std;
 
@@ -81,7 +81,6 @@ Node::Node(unsigned id, const string& nodeName)
 }
 
 // Copy relatives in tree are not copied!
-//----------------------------------------------------------------------
 Node::Node(const Node &v)
     : number(v.number),
       parent(NULL),          // relatives in tree are not copied!
@@ -113,7 +112,6 @@ Node::~Node()
 
 // Assignment: Also pointers are copied, which might not be the 
 // proper thing to do.
-//---------------------------------------------------------------------
 Node & 
 Node::operator=(const Node &v)
 {
@@ -144,7 +142,6 @@ Node::operator=(const Node &v)
 
 
 // Return the requested relative
-//----------------------------------------------------------------------
 Node* 
 Node::getLeftChild() const
 {
@@ -180,7 +177,6 @@ Node::getSibling() const
 
 // Retrieve the child of current node (x) that has y as a descendant. 
 // y may be a child of x, but could also be a grandchild.
-//---------------------------------------------------------------------
 Node*
 Node::getDominatingChild(Node* y)
 {
@@ -198,7 +194,6 @@ Node::getDominatingChild(Node* y)
 }
 
 // Rotate the node, i.e., switch left and right child.
-//---------------------------------------------------------------------
 void
 Node::rotate()
 {
@@ -210,7 +205,6 @@ Node::rotate()
 
 
 // get the (leaf) name
-//---------------------------------------------------------------------
 const string&
 Node::getName() const
 {
@@ -232,20 +226,19 @@ Node::getTree()
 }
 
 // Get the node's number (post-order)
-//---------------------------------------------------------------------
-unsigned
+const unsigned
 Node::getNumber() const
 {
     return number;
 }
 
-unsigned
+const unsigned
 Node::getPorder() const
 {
     return porder;
 }
 
-unsigned 
+const unsigned
 Node::getNumberOfLeaves() const
 {
     if (isLeaf())
@@ -260,13 +253,13 @@ Node::getNumberOfLeaves() const
     }
 }
 
-Real Node::getBranchLength() const
+const double Node::getBranchLength() const
 {
     return branchLength;
 }
 
-unsigned 
-Node::getMaxPathToLeaf()
+const unsigned
+Node::getMaxPathToLeaf() const
 {
     if(isLeaf())
     {
@@ -293,7 +286,7 @@ Node::getLeaves()
         //Find leaves recursively
         nodes = leftChild->getLeaves();
         SetOfNodesEx<Node> r = rightChild->getLeaves();
-        for(unsigned int i = 0; i < r.size(); i++)
+        for(unsigned i = 0; i < r.size(); i++)
         {
             nodes.insert(r[i]);
         }
@@ -303,7 +296,6 @@ Node::getLeaves()
 
 
 //Set the (leaf) name
-//---------------------------------------------------------------------
 void 
 Node::setName(const string& nodeName)
 {
@@ -311,18 +303,16 @@ Node::setName(const string& nodeName)
 }
 
 // Set the owner tree
-//----------------------------------------------------------------------
 void 
-Node::setTree(Tree& T)
+Node::setTree(Tree& TreeExtended)
 {
-    ownerTree = &T;
+    ownerTree = &TreeExtended;
 }
 
 // setChildren
 // Hook on subtrees to a node, and let the subtrees know
 // who the parent is. Also make sure that the partial order is OK by 
 // ensuring that porder is greater than for its children.
-//----------------------------------------------------------------------
 void
 Node::setChildren(Node *l, Node *r)
 {
@@ -349,7 +339,6 @@ Node::setChildren(Node *l, Node *r)
 
 
 // Sets the parent of the node
-//----------------------------------------------------------------------
 void
 Node::setParent(Node *v)
 {
@@ -358,7 +347,6 @@ Node::setParent(Node *v)
 
 // Change ID of this, used, e.g., in HybridTree, to ascertain condition 
 // ID < Tree.getNumberOfNodes(), when deleting hybrid or extinction nodes
-//----------------------------------------------------------------------
 void 
 Node::changeID(unsigned newID)
 {
@@ -368,7 +356,6 @@ Node::changeID(unsigned newID)
 
 
 // Delete all nodes lower in the tree. The current node is not deleted.
-//----------------------------------------------------------------------
 void
 Node::deleteSubtree()
 {
@@ -385,9 +372,7 @@ Node::deleteSubtree()
 
 
 // Checks if the current node is a leaf - A leaf lacks children
-//---------------------------------------------------------------------
-bool
-Node::isLeaf() const 
+const bool Node::isLeaf() const
 {
     if (getLeftChild() == NULL && getRightChild() == NULL)
     {
@@ -400,8 +385,7 @@ Node::isLeaf() const
 }
 
 // Checks if the current node is the root. Only the root has no parent
-//---------------------------------------------------------------------
-bool
+const bool
 Node::isRoot() const
 {
     if (getParent() == NULL)
@@ -414,7 +398,7 @@ Node::isRoot() const
     }
 }
 
-bool
+const bool
 Node::operator<=(const Node& b) const
 {
     for(const Node* c = this; c != &b; c = c->getParent())
@@ -427,7 +411,7 @@ Node::operator<=(const Node& b) const
     return true;
 }
 
-bool
+const bool
 Node::operator<(const Node& b) const
 {
     if(this == &b)
@@ -440,14 +424,14 @@ Node::operator<(const Node& b) const
     }
 }
 
-bool
+const bool
 Node::operator<(const Node* b) const
 {
     assert(b!= 0);
     return operator<(*b);
 }
 
-bool
+const bool
 Node::operator>(const Node& b) const
 {
     if(this == &b)
@@ -460,7 +444,7 @@ Node::operator>(const Node& b) const
     }
 }
 
-bool
+const bool
 Node::dominates(const Node& v) const
 {
     for(const Node* w = &v; w != this; w = w->getParent())
@@ -473,7 +457,7 @@ Node::dominates(const Node& v) const
     return true;
 }
 
-bool
+const bool
 Node::strictlyDominates(const Node& v) const
 {
     if(this == &v)
@@ -486,7 +470,7 @@ Node::strictlyDominates(const Node& v) const
     }
 }
 
-Real 
+const double
 Node::getTime() const
 {
     if(this->isRoot())
@@ -504,7 +488,7 @@ Node::getTime() const
 }
 
 void
-Node::setTime(const Real &t)
+Node::setTime(const double &t)
 {
 
     if(getParent())
@@ -518,10 +502,9 @@ Node::setTime(const Real &t)
 }
 
 // Set the branch length associated with the node
-// This does not affect time, nodeTime. 
-//---------------------------------------------------------------------
+// This does not affect time, nodeTime.
 void
-Node::setLength(const Real &newLength)
+Node::setLength(const double &newLength)
 {
     assert(getTree()->hasLengths()); // assert lengths is modeled
 
@@ -536,7 +519,7 @@ Node::setLength(const Real &newLength)
     }
 }
 
-Real 
+const double
 Node::getNodeTime() const
 {
     if(ownerTree->hasTimes())
@@ -549,12 +532,12 @@ Node::getNodeTime() const
     }
 }
 
-Real 
+const double
 Node::getLength() const
 {
     if(ownerTree->hasLengths())
     {
-        return ownerTree->getLengths()[this->getNumber()];//(*this);
+        return ownerTree->getLengths()[this->getNumber()];
     }
     else
     {
@@ -580,7 +563,7 @@ operator<< (std::ostream& o, const Node &v)
 
 
 std::string
-Node::stringify(string tag, Real val) const
+Node::stringify(string tag, double val) const
 {
     ostringstream oss;
     oss << "\t" << tag << "=" << val;
@@ -677,27 +660,17 @@ Color Node::getColor()
     return color;
 }
 
-double Node::getSize()
+const double Node::getSize() const
 {
     return size;
 }
 
-double Node::getX()
+const double Node::getX() const
 {
     return x;
 }
 
-double Node::getY()
-{
-    return y;
-}
-
-double Node::getX() const
-{
-    return x;
-}
-
-double Node::getY() const
+const double Node::getY() const
 {
     return y;
 }
@@ -712,7 +685,7 @@ Node* Node::getHostChild()
     return hostChild;
 }
 
-Type Node::getReconcilation()
+Node::Type Node::getReconcilation() const
 {
     return reconcilation;
 }
@@ -727,12 +700,12 @@ Node* Node::getHostChild() const
     return hostChild;
 }
 
-Type Node::getReconcilation() const
+Node::Type Node::getReconcilation()
 {
     return reconcilation;
 }
 
-unsigned Node::getVisited()
+const unsigned Node::getVisited() const
 {
     return visited;
 }

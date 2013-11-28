@@ -23,7 +23,7 @@ namespace unit
         }
 
         // go through list and append children to the back
-        for (int i=0; i<list.size(); ++i)
+        for (unsigned i=0; i<list.size(); ++i)
         {
             // append current layer
             list.append(list[i]->children());

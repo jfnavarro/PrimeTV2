@@ -30,7 +30,7 @@
 #include "lgt/Phyltr.h"
 #include "reconcilation/GammaMapEx.h"
 #include "reconcilation/LambdaMapEx.h"
-#include "reconcilation/SetOfNodesEx.hh"
+#include "reconcilation/SetOfNodesEx.h"
 #include "draw/DrawTreeCairo.h"
 
 #include <boost/dynamic_bitset.hpp>
@@ -58,7 +58,7 @@ public:
     /* calculate the Lateral transfer scenarios using parameters,
     * return true if there is a valid scenario. 
     */
-    bool lateralTransfer(const std::string &mapname, bool dp = false /*dynamic programming*/);
+    const bool lateralTransfer(const std::string &mapname, bool dp = false /*dynamic programming*/);
 
     /* load the reconciled gene tree and obtatins its information */
     void OpenReconciled(const string &gene);
@@ -73,7 +73,7 @@ public:
     void CalculateGamma();
 
     /* check wether the reconcilation of LGT scenario is valid */
-    int checkValidity();
+    const bool checkValidity();
 
     /* calculates the cordinates of the tree */
     void calculateCordinates();
@@ -82,7 +82,7 @@ public:
     void DrawTree(cairo_t *cr = 0);
 
     /* save the tree on a file, returns 1 if ok of 0 it if failed */
-    int RenderImage();
+    const bool RenderImage();
 
     /* return the parameters object */
     Parameters* getParameters();
@@ -106,17 +106,17 @@ public:
     void loadPreComputedScenario(const std::string &filename,const std::string &mapname); 
 
     /* check if there are scenarios with LGT in the set of scenarios given */
-    bool thereAreLGT(const std::vector<Scenario> &scenarios) const;
+    const bool thereAreLGT(const std::vector<Scenario> &scenarios) const;
 
     /* check whether there is a scenario valid on the vector of scenarios */
-    bool getValidityLGT();
+    const bool getValidityLGT();
 
 protected:
     
-    TreeExtended *Guest;
-    TreeExtended *Host;
-    GammaMapEx<Node> *gamma;
-    LambdaMapEx<Node> *lambdamap;
+    TreeExtended *genesTree;
+    TreeExtended *speciesTree;
+    GammaMapEx *gamma;
+    LambdaMapEx *lambdamap;
     DrawTreeCairo *dt; //drawing
     Parameters *parameters;
 

@@ -17,7 +17,7 @@
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
     
     Author : Jose Fernandez Navarro  -  jc.fernandez.navarro@gmail.com
-             Lars Arvestad, © the MCMC-club, SBC, all rights reserved
+             Lars Arvestad, the MCMC-club, SBC, all rights reserved
  */
 #ifndef STRSTRMAP_H
 #define STRSTRMAP_H
@@ -38,24 +38,24 @@ public:
 
     StrStrMap& operator=(const StrStrMap& sm);
 
-    //! Adding relations
-    //! u is a gene name x is a species name
+    // Adding relations
+    // u is a gene name x is a species name
     void insert(const std::string &u, const std::string &x);	// Map u to x.
     void change(const std::string &u, const std::string &x);	// Map u to x.
 
-    //! Retrieval. What does u map to?
-    //! The empty string is returned when not in map.
+    // Retrieval. What does u map to?
+    // The empty string is returned when not in map.
     virtual std::string find(const std::string &u) const ;
 
-    //! Random access to a "left" item, use that to retrieve "right" item.
+    // Random access to a "left" item, use that to retrieve "right" item.
     std::string getNthItem(unsigned idx) const;
 
-    //! reset map
+    // reset map
     void clearMap();
 
-    //! Diagnostics. The number of relations
-    unsigned size() const;
-    unsigned reverseSize() const;
+    // Diagnostics. The number of relations
+    const unsigned size() const;
+    const unsigned reverseSize() const;
 
     //! returns the mapping
     std::map<std::string, std::string> getMapping() const

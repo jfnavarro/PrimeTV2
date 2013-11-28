@@ -21,7 +21,7 @@
  */
 
 #include "Treeextended.h"
-#include "Node.hh"
+#include "Node.h"
 
 using namespace std;
 static const unsigned NONE = -1;
@@ -32,45 +32,45 @@ TreeExtended::TreeExtended():
 }
 
 //copy constructor  
-TreeExtended::TreeExtended(const TreeExtended &T)
-    : Tree(T),
-      lca_is_valid(T.lca_is_valid)
+TreeExtended::TreeExtended(const TreeExtended &TreeExtended)
+    : Tree(TreeExtended),
+      lca_is_valid(TreeExtended.lca_is_valid)
 {
 
 }
 
 //copy constructor from derived class
-TreeExtended::TreeExtended(const Tree& T)
-    : Tree(T),
+TreeExtended::TreeExtended(const Tree& TreeExtended)
+    : Tree(TreeExtended),
       lca_is_valid(false)
 {
 
 }
 
-TreeExtended::TreeExtended(TreeExtended* T)
-    : Tree(*T),
-      lca_is_valid(T->lca_is_valid)
+TreeExtended::TreeExtended(TreeExtended* TreeExtended)
+    : Tree(*TreeExtended),
+      lca_is_valid(TreeExtended->lca_is_valid)
 {
 
 }
 
-TreeExtended::TreeExtended(const TreeExtended* T)
-    : Tree(*T),
-      lca_is_valid(T->lca_is_valid)
+TreeExtended::TreeExtended(const TreeExtended* TreeExtended)
+    : Tree(*TreeExtended),
+      lca_is_valid(TreeExtended->lca_is_valid)
 {
 
 }
 
 
-TreeExtended::TreeExtended(Tree* T)
-    : Tree(*T),
+TreeExtended::TreeExtended(Tree* TreeExtended)
+    : Tree(*TreeExtended),
       lca_is_valid(false)
 {
 
 }
 
-TreeExtended::TreeExtended(const Tree* T)
-    : Tree(*T),
+TreeExtended::TreeExtended(const Tree* TreeExtended)
+    : Tree(*TreeExtended),
       lca_is_valid(false)
 {
 
@@ -81,32 +81,32 @@ TreeExtended::TreeExtended(const Tree* T)
 // Assignment
 //----------------------------------------------------------------------
 TreeExtended&
-TreeExtended::operator=(const TreeExtended& T)
+TreeExtended::operator=(const TreeExtended& TreeExtended)
 {
-    Tree::operator=(T);
-    lca_is_valid = T.lca_is_valid;
+    Tree::operator=(TreeExtended);
+    lca_is_valid = TreeExtended.lca_is_valid;
     return *this;
 }
 
 TreeExtended&
-TreeExtended::operator=(const Tree& T)
+TreeExtended::operator=(const Tree& TreeExtended)
 {
-    Tree::operator=(T);
+    Tree::operator=(TreeExtended);
     return *this;
 }
 
 TreeExtended&
-TreeExtended::operator=(const TreeExtended *T)
+TreeExtended::operator=(const TreeExtended *TreeExtended)
 {
-    Tree::operator=(*T);
-    lca_is_valid = T->lca_is_valid;
+    Tree::operator=(*TreeExtended);
+    lca_is_valid = TreeExtended->lca_is_valid;
     return *this;
 }
 
 TreeExtended&
-TreeExtended::operator=(const Tree* T)
+TreeExtended::operator=(const Tree* TreeExtended)
 {
-    Tree::operator=(*T);
+    Tree::operator=(*TreeExtended);
     return *this;
 }
 
@@ -319,7 +319,7 @@ TreeExtended::most_significant_bit(unsigned v)
     return c;
 }
 
-bool
+const bool
 TreeExtended::descendant(Node *v1, Node *v2) const
 {
     /* Is v1 descendant of v2? */
@@ -327,7 +327,7 @@ TreeExtended::descendant(Node *v1, Node *v2) const
 }
 
 
-double TreeExtended::findMaximumDistanceToLeaf(Node *n) const
+const double TreeExtended::findMaximumDistanceToLeaf(Node *n) const
 {
     if (n->isLeaf())
     {
@@ -351,7 +351,7 @@ double TreeExtended::findMaximumDistanceToLeaf(Node *n) const
     }
 }
 
-unsigned TreeExtended::getNumberOfChildren(Node *n) const
+const unsigned TreeExtended::getNumberOfChildren(Node *n) const
 {
     if(n == NULL)
     {
@@ -375,6 +375,7 @@ void TreeExtended::reset()
         n->setVisited(0);
         n->setX(0);
         n->setY(0);
-        n->setReconcilation(Undefined);
+        n->setReconcilation(Node::Undefined);
     }
 }
+
