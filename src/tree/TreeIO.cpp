@@ -722,7 +722,7 @@ Node* TreeIO::extendBeepTree(TreeExtended &S, const NHXnode *v,
             }
             else
             {
-                throw AnError("No species given for leaf!", name, 1);
+                //throw AnError("No species given for leaf!", name, 1);
             }
         }
 
