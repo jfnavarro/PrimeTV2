@@ -58,8 +58,12 @@ DrawTreeCairo::DrawTreeCairo()
 
 }
 
-void DrawTreeCairo::start(const Parameters *p, TreeExtended *g, TreeExtended *s,
-                const GammaMapEx *ga,const LambdaMapEx *la, cairo_t* cr_)
+void DrawTreeCairo::start(const Parameters *p,
+                          TreeExtended *g,
+                          TreeExtended *s,
+                          const GammaMapEx *ga,
+                          const LambdaMapEx *la,
+                          cairo_t* cr_)
 {
     parameters = p;
     gene = g;
@@ -68,56 +72,66 @@ void DrawTreeCairo::start(const Parameters *p, TreeExtended *g, TreeExtended *s,
     config = parameters->colorConfig;
     lambda = la;
 
-    //TODO this fails with the GUI
+    //clean up structures
     cleanUp();
 
-    //change the dimensions according to the orientation
-    if(parameters->horiz)
-    {
-        pageheight = parameters->width;
-        pagewidth = parameters->height;
-        pageheight += parameters->separation / 2;
-    }
-    else
-    {
-        pagewidth = parameters->width;
-        pageheight = parameters->height;
-        pagewidth += parameters->separation / 2;
-    }
+    //local variables to be used to draw
+    pagewidth = parameters->width;
+    pageheight = parameters->height;
 
-    //background surface size (add separation)
-    const double surface_width = pagewidth + parameters->separation;
-    const double surface_height = pageheight + parameters->separation;
+    const double surface_offset = 50;
+    //background surface size (add separation and some extra space)
+    const double surface_width = (parameters->horiz ? pageheight : pagewidth)
+            + (parameters->separation + surface_offset); //some offset to increase canvas
+    const double surface_height = (parameters->horiz ? pagewidth : pageheight)
+            + (parameters->separation + surface_offset); //some offset to increase canvas
+    const double background_surface_width = (parameters->horiz ? pageheight : pagewidth)
+            + (parameters->separation + surface_offset); //some offset to increase canvas
+    const double background_surface_height = (parameters->horiz ? pagewidth : pageheight)
+            + (parameters->separation + surface_offset); //some offset to increase canvas
 
-    char str[120]; //file format has to be completed
+    //adjust width to account for separation and root node extra space
+    pagewidth += parameters->separation;
+
+    char str[120]; //NOTE file format has to be completed
     //create the surface according to the format given
     if(parameters->format.compare("pdf") == 0)
     {
-        surface = cairo_pdf_surface_create (strcat(strcpy(str,parameters->outfile.c_str()),".pdf"),pagewidth, pageheight);
-        surfaceBackground = cairo_pdf_surface_create (strcat(strcpy(str,parameters->outfile.c_str()),".pdf"),surface_width,surface_height);
+        surface = cairo_pdf_surface_create (strcat(strcpy(str,parameters->outfile.c_str()),".pdf"),
+                                            surface_width, surface_height);
+        surfaceBackground = cairo_pdf_surface_create (strcat(strcpy(str,parameters->outfile.c_str()),".pdf"),
+                                                      background_surface_width, background_surface_height);
         
     }
     else if(parameters->format.compare("ps") == 0)
     {
-        surface = cairo_ps_surface_create (strcat(strcpy(str,parameters->outfile.c_str()),".ps"), pagewidth, pageheight);
-        surfaceBackground = cairo_ps_surface_create (strcat(strcpy(str,parameters->outfile.c_str()),".ps"),surface_width,surface_height);
+        surface = cairo_ps_surface_create (strcat(strcpy(str,parameters->outfile.c_str()),".ps"),
+                                           surface_width, surface_height);
+        surfaceBackground = cairo_ps_surface_create (strcat(strcpy(str,parameters->outfile.c_str()),".ps"),
+                                                     background_surface_width, background_surface_height);
         
     }
     else if(parameters->format.compare("svg") == 0)
     {
-        surface = cairo_svg_surface_create (strcat(strcpy(str,parameters->outfile.c_str()),".svg"),pagewidth, pageheight);
-        surfaceBackground = cairo_svg_surface_create (strcat(strcpy(str,parameters->outfile.c_str()),".svg"),surface_width,surface_height);
+        surface = cairo_svg_surface_create (strcat(strcpy(str,parameters->outfile.c_str()),".svg"),
+                                            surface_width, surface_height);
+        surfaceBackground = cairo_svg_surface_create (strcat(strcpy(str,parameters->outfile.c_str()),".svg"),
+                                                      background_surface_width, background_surface_height);
     }
     else if(parameters->format.compare("jpg") == 0 or parameters->format.compare("png") == 0)
     {
         image = true;
-        surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, pagewidth ,surface_height);
-        surfaceBackground = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,surface_width,surface_height);
+        surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, surface_width,
+                                              surface_height);
+        surfaceBackground = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
+                                                        background_surface_width, background_surface_height);
     }
     else
     {
-        surface = cairo_pdf_surface_create (strcat(strcpy(str,parameters->outfile.c_str()),".pdf"),pagewidth, pageheight);
-        surfaceBackground = cairo_pdf_surface_create (strcat(strcpy(str,parameters->outfile.c_str()),".pdf"),surface_width,surface_height);
+        surface = cairo_pdf_surface_create (strcat(strcpy(str,parameters->outfile.c_str()),".pdf"),
+                                            surface_width, surface_height);
+        surfaceBackground = cairo_pdf_surface_create (strcat(strcpy(str,parameters->outfile.c_str()),".pdf"),
+                                                      background_surface_width, background_surface_height);
     }
         
     //if the cairo object has been given as inputs
@@ -219,7 +233,7 @@ const bool DrawTreeCairo::RenderImage()
 
     //TODO calling the same for horizontal and vertical??
     //cairo_set_source_surface(cr,surface,parameters->separation,parameters->separation);
-    cairo_set_source_surface(cr,surface,0,0);
+    cairo_set_source_surface(cr,surface,5,5); //a little offset
 
     cairo_paint(cr);
     return 1;
@@ -230,13 +244,6 @@ void DrawTreeCairo::calculateTransformation()
 
     if(parameters->horiz)
     {
-        const double c = cos(pi/2);
-        const double s = sin(pi/2);
-        const double cx = (double)pagewidth / 2.0;
-        const double cy = (double)pageheight / 2.0;
-        //const double xratio = cx - (c*cx) + (s*cy);
-        //const double yratio = cy - (s*cx) - (c*cy);
-
         const double xscale = parameters->imagescale;
         const double yscale = parameters->imagescale;
         const double yoffset = (double)parameters->xoffset;
@@ -245,22 +252,15 @@ void DrawTreeCairo::calculateTransformation()
         const double origin_x = species->getRootNode()->getX();
         const double origin_y = species->getRootNode()->getY();
 
+        //we first translate to 0,0 then translate to height - y finally we rotate 90°
         cairo_matrix_t matrix_translation;
         cairo_matrix_init_translate(&matrix_translation, 0.0, -origin_y);
-
         cairo_matrix_t matrix_translation2;
-        cairo_matrix_init_translate(&matrix_translation2, pagewidth - origin_y, 0);
-
+        cairo_matrix_init_translate(&matrix_translation2, pageheight - origin_y, 0);
         cairo_matrix_t matrix_rotation;
         cairo_matrix_init_rotate(&matrix_rotation,pi/2);
-
         cairo_matrix_t matrix_scale;
-        cairo_matrix_init(&matrix_scale,xscale,0,0,yscale,xoffset,-yoffset);
-
-        /*
-        cairo_matrix_t matrix2;
-        cairo_matrix_init(&matrix,c,s,-s,c,cx-c*cx+s*cy,cy-s*cx-c*cy);*/
-
+        cairo_matrix_init(&matrix_scale, xscale, 0, 0, yscale, xoffset, -yoffset);
         cairo_matrix_t temp;
         cairo_matrix_t temp2;
         cairo_matrix_multiply(&temp, &matrix_translation, &matrix_rotation);

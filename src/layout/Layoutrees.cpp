@@ -31,8 +31,10 @@ static bool sort_double(const double u, const double v)
     return u > v;
 }
 
-LayoutTrees::LayoutTrees(TreeExtended *r,TreeExtended *g,
-                         Parameters *p,const GammaMapEx *gm,
+LayoutTrees::LayoutTrees(TreeExtended *r,
+                         TreeExtended *g,
+                         Parameters *p,
+                         const GammaMapEx *gm,
                          const LambdaMapEx *l)
     :species(r),gene(g),parameters(p),gamma(gm),lambda(l),
       bv(r->getNumberOfNodes()),Adress(g->getNumberOfNodes())
@@ -70,6 +72,7 @@ void LayoutTrees::start()
 
     // add xCanvasXtra(root node space) to the separation
     parameters->separation += xCanvasXtra;
+
     // starting y is on the middle of the canvas
     currentY = YCanvasSize - (yspace / 2.0);
     
@@ -98,7 +101,6 @@ void LayoutTrees::calculateSizes()
     
     // yspace is the space between each specie node, we compute it according to the width of the canvas
     // and the total number of leaves
-    //yspace = (double)(parameters->horiz ? parameters->width : parameters->height) / (double)numberLeaves;
     yspace = (double)(parameters->height) / (double)numberLeaves;
     
     // nodeheight is the space between species nodes where we can place gene nodes
@@ -111,39 +113,18 @@ void LayoutTrees::calculateSizes()
     while( NodeHeight < min_node_height )
     {
         double yrate = std::abs(min_node_height * numberLeaves);
-
-        //resize the canvas
-        //if (parameters->horiz)
-        //{
-            //parameters->width += yrate;
-            //parameters->height += (yrate * aspect_ratio);
-        //}
-        //else
-        //{
-            parameters->height += yrate;
-            parameters->width += (yrate * aspect_ratio);
-        //}
-
+        //increase canvas size (keeping aspect ratio)
+        parameters->height += yrate;
+        parameters->width += (yrate * aspect_ratio);
         //recompute yspace
-        //yspace = (double)(parameters->horiz ? parameters->width : parameters->height) / (double)numberLeaves;
         yspace = (double)(parameters->height) / (double)numberLeaves;
-
         //recompute NodeHeight
         NodeHeight = yspace / (double)maxnodesmapped;
     }
     
     //Y and X CanvasSize will be the real space dedicated to place the trees
-    //if(parameters->horiz)
-    //{
-        //YCanvasSize = parameters->width; // - parameters->separation
-        //XCanvasSize = parameters->height - xCanvasXtra - parameters->separation;
-    //}
-    //else
-    //{
-        YCanvasSize = parameters->height; //- parameters->separation
-        XCanvasSize = parameters->width - xCanvasXtra - parameters->separation;
-    //}
-
+    YCanvasSize = parameters->height - parameters->separation;
+    XCanvasSize = parameters->width - xCanvasXtra - parameters->separation;
 }
 
 void LayoutTrees::calculateIntervals()
@@ -214,7 +195,6 @@ const double LayoutTrees::getLeftMostCoordinate (Node* o) const
     }
 }
 
-
 /* yspace has been calculated according to the number of leaves and the height
  * so the cordinate y of each node will be increased by y on the leaves, the x
  * cordinate on the leaves is always the same, the y cordinates of intern
@@ -228,6 +208,8 @@ void LayoutTrees::CountSpeciesCoordinates(Node *n, unsigned depth)
     {
         n->setY(currentY);
         currentY -= yspace;
+        //x is equal to the size of the drawin canvas for x plus the root node
+        //drawing size but no the separation
         n->setX(XCanvasSize + xCanvasXtra);
     }
     else

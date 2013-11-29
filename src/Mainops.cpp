@@ -312,8 +312,8 @@ void Mainops::DrawTree(cairo_t *cr)
                 dt->DrawTimeLabels();
             }
         }
-        //dt->DrawSpeciesEdgesWithContour(); //NOTE this breaks the layout
-        dt->DrawSpeciesEdges();
+        dt->DrawSpeciesEdgesWithContour(); //NOTE this might break the layout
+        //dt->DrawSpeciesEdges();
         dt->DrawSpeciesNodes();
         dt->DrawSpeciesNodeLabels();
     }

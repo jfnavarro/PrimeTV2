@@ -128,16 +128,16 @@ public:
     // Vector can also accessed by unsgined corresponding to node's number
     Type& operator[](unsigned i)
     {
-        assert(i < pv.size());
-        //return pv.at(i);
-        return pv[i];
+        //assert(i < pv.size());
+        return pv.at(i);
+        //return pv[i];
     }
 
     Type operator[](unsigned i) const
     {
-        assert(i < pv.size());
-        //return pv.at(i);
-        return pv[i];
+        //assert(i < pv.size());
+        return pv.at(i);
+        //return pv[i];
     }
 
     // Iterator for vector.

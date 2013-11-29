@@ -42,18 +42,18 @@ public:
     
     //constructors
     TreeExtended();
-    TreeExtended(const TreeExtended &TreeExtended);
-    TreeExtended(const Tree& TreeExtended);
-    TreeExtended(TreeExtended *TreeExtended);
-    TreeExtended(const TreeExtended *TreeExtended);
-    TreeExtended(Tree *TreeExtended);
-    TreeExtended(const Tree *TreeExtended);
+    TreeExtended(const TreeExtended &tree);
+    TreeExtended(const Tree& tree);
+    TreeExtended(TreeExtended *tree);
+    TreeExtended(const TreeExtended *tree);
+    TreeExtended(Tree *tree);
+    TreeExtended(const Tree *tree);
     
     //overload of =
-    TreeExtended& operator=(const TreeExtended& TreeExtended);
-    TreeExtended& operator=(const Tree& TreeExtended);
-    TreeExtended& operator=(const TreeExtended *TreeExtended);
-    TreeExtended& operator=(const Tree *TreeExtended);
+    TreeExtended& operator=(const TreeExtended& tree);
+    TreeExtended& operator=(const Tree& tree);
+    TreeExtended& operator=(const TreeExtended *tree);
+    TreeExtended& operator=(const Tree *tree);
 
     /* returns the first node in a postorder configuration */
     Node* getPostOderBegin() const;

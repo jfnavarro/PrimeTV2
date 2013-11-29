@@ -50,7 +50,7 @@ TreeIO::~TreeIO()
 TreeIO
 TreeIO::fromFile(const std::string &f)
 {
-    if (f=="")
+    if (f == "")
     {
         return TreeIO();
     }
@@ -66,7 +66,6 @@ TreeIO::fromString(const std::string &s)
 {
     return TreeIO(readFromString, s);
 }
-
 
 // Change source using these utilities:
 void
@@ -188,7 +187,9 @@ TreeExtended TreeIO::readHostTree()
     traits.enforceHostTree();
     std::vector<SetOfNodesEx<Node> > *AC = 0;
     StrStrMap *gs = 0;
-    return readBeepTree(t, traits, AC, gs);
+    TreeExtended tree = readBeepTree(t, traits, AC, gs);
+    delete_trees(t);
+    return tree;
 }
 
 TreeExtended TreeIO::readGuestTree()
@@ -209,7 +210,9 @@ TreeExtended TreeIO::readNewickTree()
     traits.setNWisET(false);
     std::vector<SetOfNodesEx<Node> > *AC = 0;
     StrStrMap *gs = 0;
-    return readBeepTree(t, traits, AC,gs);
+    TreeExtended tree = readBeepTree(t, traits, AC, gs);
+    delete_trees(t);
+    return tree;
 }
 
 std::string TreeIO::writeBeepTree(const TreeExtended &G,const TreeIOTraits& traits,const GammaMapEx* gamma)
@@ -284,7 +287,9 @@ TreeExtended TreeIO::readBeepTree(const TreeIOTraits& tr, std::vector<SetOfNodes
         throw AnError("No tree found!");
     }
 
-    return readBeepTree(t, tr, AC, gs);
+    TreeExtended tree = readBeepTree(t, tr, AC, gs);
+    delete_trees(t);
+    return tree;
 }
 
 TreeExtended TreeIO::readGuestTree(std::vector<SetOfNodesEx<Node> >* AC, StrStrMap* gs)
@@ -301,7 +306,9 @@ TreeExtended TreeIO::readGuestTree(std::vector<SetOfNodesEx<Node> >* AC, StrStrM
         AC = 0;
     }
     traits.enforceGuestTree();
-    return readBeepTree(t, traits, AC, gs);
+    TreeExtended tree = readBeepTree(t, traits, AC, gs);
+    delete_trees(t);
+    return tree;
 }
 
 void TreeIO::checkTagsForTree(TreeIOTraits &traits)
@@ -338,7 +345,6 @@ void TreeIO::checkTagsForTree(TreeIOTraits &traits)
     delete_trees(t);
     t = 0;
 }
-
 
 // Find the right value for edge time
 double
@@ -404,7 +410,7 @@ TreeIO::decideNodeName(const NHXnode *v)
     }
     else			// Inner nodes might have a name. Go check
     {
-        struct NHXannotation *a = find_annotation(v, "S");
+        NHXannotation *a = find_annotation(v, "S");
         if (a)			// Great, we found it
         {
             name = a->arg.str;	// Pick string from union 'arg'
@@ -416,7 +422,7 @@ TreeIO::decideNodeName(const NHXnode *v)
 void
 TreeIO::handleBranchLengths(Node *node, const NHXnode *v, bool NWIsET)
 {
-    if(struct NHXannotation *a = find_annotation(v, "BL"))
+    if(NHXannotation *a = find_annotation(v, "BL"))
     {
         node->setLength(a->arg.t);
     }
@@ -426,8 +432,8 @@ TreeIO::handleBranchLengths(Node *node, const NHXnode *v, bool NWIsET)
                       "No branch length info found either in 'BL' and 'NW' is used for 'ET'",
                       234);
     }
-    else if(struct NHXannotation *a = find_annotation(v, "NW"))
-    {           // use info in 'NW'
+    else if(NHXannotation *a = find_annotation(v, "NW"))
+    {
         node->setLength(a->arg.t);
     }
     else if (v->parent)		// If not root...
@@ -562,21 +568,17 @@ TreeExtended TreeIO::readBeepTree(NHXtree *t, const TreeIOTraits& traits,
 
     if(NHXannotation *a = find_annotation(t->root, "NAME"))
     {
-        std::string str = a->arg.str;
-        tree.setName(str);
+        tree.setName(a->arg.str);
     }
 
     if(traits.hasNT())
     {
         if(NHXannotation *a = find_annotation(t->root, "TT"))
         {
-            double toptime = a->arg.t;
-            tree.setTopTime(toptime);
+            tree.setTopTime(a->arg.t);
         }
     }
 
-    //Loose temp structure and hand the root in a good place.
-    delete_trees(t);
     tree.setRootNode(r);
 
     if(tree.IDnumbersAreSane(*r) == false)
@@ -588,9 +590,11 @@ TreeExtended TreeIO::readBeepTree(NHXtree *t, const TreeIOTraits& traits,
 
 // The basic recursion function for reading node info from NHX structs
 
-Node* TreeIO::extendBeepTree(TreeExtended &S, const NHXnode *v,
+Node* TreeIO::extendBeepTree(TreeExtended &S,
+                             const NHXnode *v,
                              const TreeIOTraits& traits,
-                             std::vector<SetOfNodesEx<Node> > *AC, StrStrMap *gs,
+                             std::vector<SetOfNodesEx<Node> > *AC,
+                             StrStrMap *gs,
                              std::map<const Node*, Node*>* otherParent,
                              std::map<const Node*, unsigned>* extinct)
 {
@@ -686,25 +690,10 @@ Node* TreeIO::extendBeepTree(TreeExtended &S, const NHXnode *v,
                                   oss.str());
                 }
             }
-            // There is a problem when setting time for a hybrid parent
-            // when the other parent is no yet created -- AnError is thrown
-            // so we catch it here
-            try
-            {
-                S.setTime(*new_node, leftTime);
-            }
-            catch(AnError& e)
-            {
-                if(string(e.what()) != string("HybridTree::setTime():\n"
-                                              "op is NULL for hybridNode"))
-                {
-                    throw e;
-                }
-                assert(S.getTime(*new_node) == leftTime);
-            }
+            S.setTime(*new_node, leftTime);
             S.setTopTime(edge_time);
         }
-
+        //NOTE this is doing S.seTime again
         sanityCheckOnTimes(S, new_node, v, traits);
 
         // Check if any existing branchLength should be used
@@ -720,10 +709,7 @@ Node* TreeIO::extendBeepTree(TreeExtended &S, const NHXnode *v,
             {
                 gs->insert(name, string(speciesName(v)));
             }
-            else
-            {
-                //throw AnError("No species given for leaf!", name, 1);
-            }
+
         }
 
         // get antichain (gamma) info if requested
@@ -735,6 +721,7 @@ Node* TreeIO::extendBeepTree(TreeExtended &S, const NHXnode *v,
             }
             updateACInfo(v, new_node, *AC);
         }
+
         if(find_annotation(v, "EX"))
         {
             if(extinct)
@@ -769,21 +756,7 @@ void TreeIO::sanityCheckOnTimes(TreeExtended &S, Node *node, const NHXnode *v, c
         }
         if(NHXannotation *a = find_annotation(v, "NT"))
         {
-            // There is a problem when setting time for a hybrid parent
-            // when the other parent is no yet created -- AnError is thrown
-            // so we catch it here
-            try
-            {
-                S.setTime(*node, a->arg.t);
-            }
-            catch(AnError& e)
-            {
-                if(std::string(e.what()) != std::string("HybridTree::setTime():\n" "op is NULL for hybridNode"))
-                {
-                    throw e;
-                }
-                assert(S.getTime(*node) == a->arg.t);
-            }
+            S.setTime(*node, a->arg.t);
         }
         else
         {
@@ -1210,7 +1183,6 @@ std::string TreeIO::getAntiChainMarkup(Node &u, const GammaMapEx &gamma)
     }
     return ac;
 }
-
 
 void TreeIO::updateACInfo(const NHXnode *v, Node *new_node,
                           std::vector<SetOfNodesEx<Node> > &AC)

@@ -39,25 +39,27 @@ class Tree
 public:
 
     Tree();
-    Tree(const Tree &TreeExtended);
-    static Tree EmptyTree(const double& RootTime = 1.0, std::string leafname = "Leaf");
-
+    Tree(const Tree &tree);
+    static Tree EmptyTree(const double& RootTime = 1.0, const string &leafname = "Leaf");
     virtual ~Tree();
     virtual Tree& operator=(const Tree& TreeExtended);
+
     std::string getName() const;
-    void setName(std::string s);
+    void setName(const string &s);
     const unsigned getNumberOfNodes() const;
     const unsigned getNumberOfLeaves() const;
     const unsigned getHeight() const;
     const bool IDnumbersAreSane(Node& n);
+
     void clear();
+
     Node * getRootNode() const;
     void setRootNode(Node *r);
     Node* getNode(unsigned nodeNumber) const;
     Node* findLeaf(const std::string& name) const;
     Node* findNode(const std::string& name) const;
-    Node* addNode(Node *leftChild, Node *rightChild, unsigned id, std::string name = "");
-    Node* addNode(Node *leftChild,  Node *rightChild, std::string name = "");
+    Node* addNode(Node *leftChild, Node *rightChild, unsigned id, const string &name = "");
+    Node* addNode(Node *leftChild,  Node *rightChild, const string &name = "");
 
     /* annoying methods I want to get rid of */
     const bool hasTimes() const;
@@ -104,12 +106,10 @@ protected:
     std::vector<Node*> all_nodes;
     std::string name;
 
-    /* puag, mutable, really? */
     mutable RealVector* times;
     mutable RealVector* lengths;
     mutable RealVector* rates;
     mutable double topTime;
-
 };
 
 #endif

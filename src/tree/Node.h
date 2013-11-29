@@ -48,16 +48,16 @@ public:
 
     Node(unsigned id);
     Node(unsigned id, const std::string& nodeName);
-    virtual ~Node();
     Node(const Node &);
+    virtual ~Node();
 
     //Extra Methods
     void setColor(Color c);
     void setSize(double s);
     void setX(double x);
     void setY(double y);
-    void setHostParent( Node *hostparent);
-    void setHostChild( Node *hostchild);
+    void setHostParent(Node *hostparent);
+    void setHostChild(Node *hostchild);
     void setReconcilation(Type t);
     void setVisited(unsigned inc);
     void incVisited();

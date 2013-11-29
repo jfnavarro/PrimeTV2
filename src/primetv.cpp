@@ -494,7 +494,8 @@ main (int ac, char *av[])
             //we calculate the LGT scenarios is indicated
             if((bool)(parameters->lattransfer))
             {
-                mainops->lateralTransfer(mapfile,(parameters->lateralmincost == 1.0 && parameters->lateralmaxcost == 1.0));
+                mainops->lateralTransfer(mapfile,(parameters->lateralmincost == 1.0
+                                                  && parameters->lateralmaxcost == 1.0));
             }
             else if(load_precomputed_lgt_scenario)
             {

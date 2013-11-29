@@ -32,81 +32,78 @@ TreeExtended::TreeExtended():
 }
 
 //copy constructor  
-TreeExtended::TreeExtended(const TreeExtended &TreeExtended)
-    : Tree(TreeExtended),
-      lca_is_valid(TreeExtended.lca_is_valid)
+TreeExtended::TreeExtended(const TreeExtended &tree)
+    : Tree(tree),
+      lca_is_valid(tree.lca_is_valid)
 {
 
 }
 
 //copy constructor from derived class
-TreeExtended::TreeExtended(const Tree& TreeExtended)
-    : Tree(TreeExtended),
+TreeExtended::TreeExtended(const Tree& tree)
+    : Tree(tree),
       lca_is_valid(false)
 {
 
 }
 
-TreeExtended::TreeExtended(TreeExtended* TreeExtended)
-    : Tree(*TreeExtended),
-      lca_is_valid(TreeExtended->lca_is_valid)
+TreeExtended::TreeExtended(TreeExtended* tree)
+    : Tree(*tree),
+      lca_is_valid(tree->lca_is_valid)
 {
 
 }
 
-TreeExtended::TreeExtended(const TreeExtended* TreeExtended)
-    : Tree(*TreeExtended),
-      lca_is_valid(TreeExtended->lca_is_valid)
+TreeExtended::TreeExtended(const TreeExtended* tree)
+    : Tree(*tree),
+      lca_is_valid(tree->lca_is_valid)
 {
 
 }
 
 
-TreeExtended::TreeExtended(Tree* TreeExtended)
-    : Tree(*TreeExtended),
+TreeExtended::TreeExtended(Tree* tree)
+    : Tree(*tree),
       lca_is_valid(false)
 {
 
 }
 
-TreeExtended::TreeExtended(const Tree* TreeExtended)
-    : Tree(*TreeExtended),
+TreeExtended::TreeExtended(const Tree* tree)
+    : Tree(*tree),
       lca_is_valid(false)
 {
 
 }
-
-
 
 // Assignment
-//----------------------------------------------------------------------
 TreeExtended&
-TreeExtended::operator=(const TreeExtended& TreeExtended)
+TreeExtended::operator=(const TreeExtended& tree)
 {
-    Tree::operator=(TreeExtended);
-    lca_is_valid = TreeExtended.lca_is_valid;
+    Tree::operator=(tree);
+    lca_is_valid = tree.lca_is_valid;
     return *this;
 }
 
 TreeExtended&
-TreeExtended::operator=(const Tree& TreeExtended)
+TreeExtended::operator=(const Tree& tree)
 {
-    Tree::operator=(TreeExtended);
+    Tree::operator=(tree);
     return *this;
 }
 
 TreeExtended&
-TreeExtended::operator=(const TreeExtended *TreeExtended)
+TreeExtended::operator=(const TreeExtended *tree)
 {
-    Tree::operator=(*TreeExtended);
-    lca_is_valid = TreeExtended->lca_is_valid;
+    Tree::operator=(*tree);
+    lca_is_valid = tree->lca_is_valid;
     return *this;
 }
 
 TreeExtended&
-TreeExtended::operator=(const Tree* TreeExtended)
+TreeExtended::operator=(const Tree* tree)
 {
-    Tree::operator=(*TreeExtended);
+    Tree::operator=(*tree);
     return *this;
 }
 
@@ -117,7 +114,6 @@ Node* TreeExtended::preorder_begin() const
 
 Node* TreeExtended::preorder_next(Node *v) const
 {
-
     if (!v->isLeaf())
     {
         return v->getLeftChild();
@@ -153,7 +149,6 @@ Node* TreeExtended::getPostOderBegin() const
 
 Node* TreeExtended::postorder_next(Node *v) const
 {
-
     if (v == getRootNode())
     {
         return NULL;
@@ -280,7 +275,6 @@ void TreeExtended::build_lca() const
     lca_is_valid = true;
 }
 
-
 unsigned
 TreeExtended::most_significant_bit(unsigned v)
 {
@@ -364,7 +358,6 @@ const unsigned TreeExtended::getNumberOfChildren(Node *n) const
     }
 }
 
-
 void TreeExtended::reset()
 {
     for(unsigned i = 0; i < getNumberOfNodes(); i++)
@@ -378,4 +371,3 @@ void TreeExtended::reset()
         n->setReconcilation(Node::Undefined);
     }
 }
-

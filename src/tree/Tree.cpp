@@ -59,57 +59,56 @@ Tree::~Tree()
     //clearNodeAttributes();
 }
 
-Tree::Tree(const Tree &TreeExtended)
-    : noOfNodes(TreeExtended.noOfNodes),
-      noOfLeaves(TreeExtended.noOfLeaves),
+Tree::Tree(const Tree &tree)
+    : noOfNodes(tree.noOfNodes),
+      noOfLeaves(tree.noOfLeaves),
       rootNode(NULL),
       name2node(),                                       // Initialization
       all_nodes(max(noOfNodes,DEF_NODE_VEC_SIZE), NULL), // Allocate vector
-      name(TreeExtended.name),
+      name(tree.name),
       //NOTE what should I do with the times,lenghts and rates?
-      //times(TreeExtended.times),
-      //lengths(TreeExtended.lengths),
-      //rates(TreeExtended.rates),
-      topTime(TreeExtended.topTime)
+      //times(tree.times),
+      //lengths(tree.lengths),
+      //rates(tree.rates),
+      topTime(tree.topTime)
 {
-    if(TreeExtended.getRootNode())
+    if(tree.getRootNode())
     {
-        setRootNode(copyAllNodes(TreeExtended.getRootNode()));
+        setRootNode(copyAllNodes(tree.getRootNode()));
     }
 }
 
 Tree
-Tree::EmptyTree(const double& rootTime, string leafname)
+Tree::EmptyTree(const double& rootTime, const string &leafname)
 {
-    Tree TreeExtended;
-    string name = leafname;
-    TreeExtended.setRootNode(TreeExtended.addNode(0, 0, 0, name));
-    TreeExtended.topTime = rootTime;
-    TreeExtended.setName("Tree");
-    return TreeExtended;
+    Tree tree;
+    tree.setRootNode(tree.addNode(0, 0, 0, leafname));
+    tree.topTime = rootTime;
+    tree.setName("Tree");
+    return tree;
 }
 
 Tree&
-Tree::operator=(const Tree& TreeExtended)
+Tree::operator=(const Tree& tree)
 {
-    if(this != &TreeExtended)
+    if(this != &tree)
     {
         clear();
-        noOfNodes = TreeExtended.noOfNodes;
-        noOfLeaves = TreeExtended.noOfLeaves;
+        noOfNodes = tree.noOfNodes;
+        noOfLeaves = tree.noOfLeaves;
         if(noOfNodes > all_nodes.size())
         {
             all_nodes.resize(noOfNodes, NULL);
         }
-        name = TreeExtended.name;
-        if(TreeExtended.getRootNode())
+        name = tree.name;
+        if(tree.getRootNode())
         {
-            setRootNode(copyAllNodes(TreeExtended.getRootNode()));
+            setRootNode(copyAllNodes(tree.getRootNode()));
         }
         //NOTE what should I do with the times,lenghts and rates?
-        //times = TreeExtended.times;
-        //lengths = TreeExtended.lengths;
-        //rates = TreeExtended.rates;
+        //times = tree.times;
+        //lengths = tree.lengths;
+        //rates = tree.rates;
     }
     return *this;
 }
@@ -123,7 +122,7 @@ Tree::getName() const
 
 // Sets the name of the tree
 void
-Tree::setName(string s)
+Tree::setName(const string &s)
 {
     name = s;
 }
@@ -202,7 +201,6 @@ Tree::getNode(unsigned no) const
 }
 
 // Accessing nodes from a name
-//----------------------------------------------------------------------
 Node*
 Tree::findNode(const string& name) const
 {
@@ -216,8 +214,8 @@ Tree::findNode(const string& name) const
         return NULL;
     }
 }
+
 // Accessing leaves from a name
-//----------------------------------------------------------------------
 Node*
 Tree::findLeaf(const string& name) const
 {
@@ -234,12 +232,11 @@ Tree::findLeaf(const string& name) const
 }
 
 // The main tool for constructing the tree
-//-----------------------------------------------------------------
 Node *
 Tree::addNode(Node *leftChild, 
               Node *rightChild,
               unsigned node_id,
-              string name)
+              const string &name)
 {
     assert(leftChild==NULL || leftChild->getNumber()<all_nodes.size());
     assert(rightChild==NULL || rightChild->getNumber()<all_nodes.size());
@@ -291,17 +288,15 @@ Tree::clearNodeAttributes()
 
 //The main tool for constructing the tree, overloading for trees
 //without any branch times
-//----------------------------------------------------------------------
 Node *
 Tree::addNode(Node *leftChild, 
               Node *rightChild,
-              string name)
+              const string &name)
 {
     return addNode(leftChild, rightChild, getNumberOfNodes(), name);
 }
 
 // MRCA gets most recent common ancestor of two speciesNodes
-//----------------------------------------------------------------------
 Node* 
 Tree::mostRecentCommonAncestor(Node* a, Node* b) const
 {
