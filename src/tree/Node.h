@@ -96,7 +96,7 @@ public:
     const unsigned getMaxPathToLeaf() const;
 
     void setName(const std::string& nodeName);
-    void setTree(Tree& TreeExtended);
+    void setTree(Tree& tree);
     void setChildren(Node *left, Node *right);
     void setParent(Node *parent);
     void changeID(unsigned newID);

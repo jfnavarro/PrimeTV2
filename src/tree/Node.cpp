@@ -304,9 +304,9 @@ Node::setName(const string& nodeName)
 
 // Set the owner tree
 void 
-Node::setTree(Tree& TreeExtended)
+Node::setTree(Tree& tree)
 {
-    ownerTree = &TreeExtended;
+    ownerTree = &tree;
 }
 
 // setChildren

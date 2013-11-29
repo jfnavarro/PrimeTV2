@@ -42,7 +42,7 @@ public:
     Tree(const Tree &tree);
     static Tree EmptyTree(const double& RootTime = 1.0, const string &leafname = "Leaf");
     virtual ~Tree();
-    virtual Tree& operator=(const Tree& TreeExtended);
+    virtual Tree& operator=(const Tree& tree);
 
     std::string getName() const;
     void setName(const string &s);

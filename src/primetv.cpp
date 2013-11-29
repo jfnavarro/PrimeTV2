@@ -59,15 +59,15 @@ static Parameters *parameters = 0;
 static Mainops *mainops = 0;
 
 /* Helper function to sort vectors used in the parser of parameters */
-template<class TreeExtended>
-ostream& operator<<(ostream& os, const vector<TreeExtended>& v)
+template<class T>
+ostream& operator<<(ostream& os, const vector<T>& v)
 {
-    copy(v.begin(), v.end(), ostream_iterator<TreeExtended>(cout, " "));
+    copy(v.begin(), v.end(), ostream_iterator<T>(cout, " "));
     return os;
 }
 
 /* Helper function that checks if a filename exists in the system */
-unsigned file_exist(const char *filename)
+int file_exist(const char *filename)
 {
     struct stat buffer;
     return(stat(filename, &buffer) == 0);
@@ -186,7 +186,7 @@ main (int ac, char *av[])
                  "<string> ladderize right (r) or left (l)")
                 ("legend,L", po::bool_switch(&parameters->legend), "Activate the legend")
                 ("header,H", po::bool_switch(&parameters->header), "Activate the header")
-                ("text,TreeExtended", po::value<string>(&parameters->titleText),
+                ("text,T", po::value<string>(&parameters->titleText),
                  "<string> include the text on the top of the image.")
                 ("mark,x", po::value<std::vector<double> >(&parameters->uMarker)->multitoken(),
                  "<unsigned>....<unsigned> Highlight the nodes indicated.")
