@@ -125,7 +125,7 @@ public:
 protected:
     
     // Handle the various rules for how to set the time over an edge
-    double decideEdgeTime(const NHXnode *v, const TreeIOTraits& traits, bool isHY);
+    double decideEdgeTime(const NHXnode *v, const TreeIOTraits& traits, bool isHY) const;
 
     std::string decideNodeName(const NHXnode *v);
 

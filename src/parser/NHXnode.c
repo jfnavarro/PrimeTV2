@@ -29,9 +29,9 @@
 #include "NHXannotation.h"
 
 extern struct NHXnode *root_node;
-extern int lineno; /* Current line number in input file */
-extern int n_left_parens; /* Number of matched left parens '(' */
-extern int n_right_parens; /* Number of matched right parens ')' */
+extern unsigned int lineno; /* Current line number in input file */
+extern unsigned int n_left_parens; /* Number of matched left parens '(' */
+extern unsigned int n_right_parens; /* Number of matched right parens ')' */
 
 void inform_parser(const char *, const char*);
 
@@ -144,7 +144,7 @@ speciesName(const struct NHXnode *v)
     }
 }
 
-int
+unsigned
 subtreeSize(const struct NHXnode *n) /* Count the number of nodes in subtree rooted at n */
 {
     if (n == NULL)
@@ -167,7 +167,7 @@ NHX_debug_print(struct NHXnode *v)
     if (v)
     {
         struct NHXannotation *l = v->l;
-        if (l)
+        if (l != NULL)
         {
             if (annotation_isa(l, "ID"))
             {
@@ -189,7 +189,7 @@ struct NHXnode *
         new_node(char *name)
 {
     struct NHXnode *v = (struct NHXnode*) malloc (sizeof(struct NHXnode));
-    if (v)
+    if (v != NULL)
     {
         v->left = NULL;
         v->right = NULL;

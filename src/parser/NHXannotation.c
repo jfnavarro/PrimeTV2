@@ -61,7 +61,7 @@ delete_annotation_list(struct NHXannotation *l)
 }
 
 struct NHXannotation*
-        new_newick_weight(float t, struct NHXannotation *l)
+        new_newick_weight(double t, struct NHXannotation *l)
 {
     struct NHXannotation *a = (struct NHXannotation*) malloc(sizeof(struct NHXannotation));
     strncpy(a->anno_type, "NW", MAX_ANNOTATION_ID_LENGTH);
@@ -71,7 +71,7 @@ struct NHXannotation*
 }
 
 struct NHXannotation*
-        new_node_time(float t, struct NHXannotation *l)
+        new_node_time(double t, struct NHXannotation *l)
 {
     struct NHXannotation *a = (struct NHXannotation*) malloc(sizeof(struct NHXannotation));
     strncpy(a->anno_type, "NT", MAX_ANNOTATION_ID_LENGTH);
@@ -105,7 +105,7 @@ struct NHXannotation*
 }
 
 struct NHXannotation*
-        new_anti_chain(unsigned i, struct NHXannotation *l)
+        new_anti_chain(int i, struct NHXannotation *l)
 {
     struct NHXannotation *a = (struct NHXannotation*) malloc(sizeof(struct NHXannotation));
     strncpy(a->anno_type, "AC", MAX_ANNOTATION_ID_LENGTH);
@@ -125,7 +125,7 @@ struct NHXannotation*
 }
 
 struct NHXannotation*
-        new_node_id(unsigned id, struct NHXannotation *l)
+        new_node_id(int id, struct NHXannotation *l)
 {
     struct NHXannotation *a = (struct NHXannotation*) malloc(sizeof(struct NHXannotation));
     strncpy(a->anno_type, "ID", MAX_ANNOTATION_ID_LENGTH);
@@ -164,7 +164,7 @@ struct NHXannotation*
   Integer lists
 */
 struct int_list* 
-        new_int_list(unsigned i, struct int_list *next)
+        new_int_list(int i, struct int_list *next)
 {
     struct int_list *il = (struct int_list*) malloc(sizeof(struct int_list));
     il->next = next;

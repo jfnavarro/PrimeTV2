@@ -92,8 +92,8 @@ typedef union YYSTYPE
   struct NHXnode *v;		/* For returning tree nodes */
   struct NHXannotation *a;	/* For handling node annotations */
   float branch_time;
-  char *str;         /* Dealing with leaf names */
-  unsigned integer;
+  char *str;                /* Dealing with leaf names */
+  unsigned int integer;
   struct int_list *il;
 }
 /* Line 1529 of yacc.c.  */

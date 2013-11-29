@@ -29,7 +29,7 @@ extern "C" {
 
 struct NHXnode {
     struct NHXnode *parent, *left, *right;
-    char *name;			/* Name or other id of node. Mostly for leaves. */
+    char *name;                 /* Name or other id of node. Mostly for leaves. */
     struct NHXannotation *l;	/* Node annotations, e.g. duplication or not, anti-chains, et.c. */
 };
 
@@ -52,7 +52,7 @@ int isLeaf(const struct NHXnode *t);	/* Returns 1 if t is leaf, 0 otherwise */
 int isRoot(const struct NHXnode *t);	/* Returns 1 if t is a root (no parent), 0 otherwise */
 char *speciesName(const struct NHXnode *t);
 
-int subtreeSize(const struct NHXnode *n); /* Count the number of nodes in tree rooted at n */
+unsigned subtreeSize(const struct NHXnode *n); /* Count the number of nodes in tree rooted at n */
 
 /* Bad form, but a necessary temporary hack. /arve */
 void NHX_debug_print(struct NHXnode *l);

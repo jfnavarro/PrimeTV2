@@ -46,9 +46,9 @@ struct NHXtree {
 struct NHXtree *read_tree(const char *filename);
 struct NHXtree *read_tree_string(const char *str);
 struct NHXtree *read_tree_from_file_stream(FILE * f);
-void delete_trees(struct NHXtree *TreeExtended);
+void delete_trees(struct NHXtree *tree);
 
-unsigned treeSize(const struct NHXtree *TreeExtended);
+unsigned treeSize(const struct NHXtree *tree);
 
 struct NHXtree *new_tree(struct NHXnode *root, struct NHXtree *next_tree);
 #ifdef __cplusplus

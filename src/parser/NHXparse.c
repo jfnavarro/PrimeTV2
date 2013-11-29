@@ -208,8 +208,8 @@ typedef union YYSTYPE
   struct NHXnode *v;		/* For returning tree nodes */
   struct NHXannotation *a;	/* For handling node annotations */
   float branch_time;
-  char *str;         /* Dealing with leaf names */
-  unsigned integer;
+  char *str;                /* Dealing with leaf names */
+  unsigned int integer;
   struct int_list *il;
 }
 /* Line 193 of yacc.c.  */
@@ -2013,10 +2013,10 @@ read_tree(const char *filename) {
 
   if (filename == NULL) {
     yytree_in = stdin;
-    //set_globals("STDIN");	/* For better error messages */
+    set_globals("STDIN");	/* For better error messages */
   } else {
     f = fopen(filename, "r");
-    //set_globals(filename);	/* For better error messages */
+    set_globals(filename);	/* For better error messages */
     if (!f) {
       fprintf(stderr, "Could not open tree file '%s' for reading.\n", filename);
       return NULL;

@@ -212,8 +212,8 @@ TreeIOTraits::enforceHostTree()
 	}
 	else if(hasNW()) 
 	{
-		setNWisET(!hasET());
-		setET(true);
+        setNWisET(!hasET());
+        setET(true);
 	}
 	else if(hasET() == false)
 	{

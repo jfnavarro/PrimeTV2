@@ -202,7 +202,7 @@ void Mainops::OpenHost(const string &species)
     speciesTree = new TreeExtended(io->readHostTree());
     Node *root = speciesTree->getRootNode();
 
-    if ((double)root->getTime() != (double)0.0)
+    if ((double)root->getTime() == (double)0.0)
     {
         double t = root->getNodeTime();
         root->setTime(0.1 * t);

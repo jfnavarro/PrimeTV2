@@ -348,15 +348,18 @@ void TreeIO::checkTagsForTree(TreeIOTraits &traits)
 
 // Find the right value for edge time
 double
-TreeIO::decideEdgeTime(const NHXnode *v, const TreeIOTraits& traits, bool isHY)
+TreeIO::decideEdgeTime(const NHXnode *v, const TreeIOTraits& traits, bool isHY) const
 {
     double edge_time = 0.0;
+
+    //NHX_debug_print(const_cast<NHXnode*>(v));
 
     if(traits.hasET()) // Use edge time info from file
     {
         if(traits.hasNWisET())
         {
-            if(NHXannotation* a = find_annotation(v, "NW"))
+            NHXannotation* a = find_annotation(v, "NW");
+            if(a != NULL)
             {
                 edge_time = a->arg.t;
             }
@@ -369,28 +372,34 @@ TreeIO::decideEdgeTime(const NHXnode *v, const TreeIOTraits& traits, bool isHY)
                 throw AnError("Edge without edge time found in tree.", 1);
             }
         }
-        else if(NHXannotation *a = find_annotation(v, "ET"))
-        {
-            edge_time = a->arg.t;
-        }
-        else if (isRoot(v))
-        {
-            edge_time = 0.0;
-        }
         else
         {
-            throw AnError("Edge without edge time found in tree.", 1);
+            NHXannotation *a = find_annotation(v, "ET");
+            if(a != NULL)
+            {
+                edge_time = a->arg.t;
+            }
+            else if (isRoot(v))
+            {
+                edge_time = 0.0;
+            }
+            else
+            {
+                throw AnError("Edge without edge time found in tree.", 1);
+            }
+
         }
+
         // Check for sanity
         if(edge_time <= 0)
         {
+
             if(edge_time < 0)
             {
                 throw AnError("Tree contains an edge with negative time",1);
             }
-            else if(isHY == false && !isRoot(v))
+            else if(isHY == false && !(bool)isRoot(v))
             {
-                //TOFIX this is strange, this error is present only when using MAC
                 throw AnError("Tree contains an edge with zero time.", 1);
             }
         }
@@ -566,14 +575,16 @@ TreeExtended TreeIO::readBeepTree(NHXtree *t, const TreeIOTraits& traits,
         throw AnError("The input tree was empty!");
     }
 
-    if(NHXannotation *a = find_annotation(t->root, "NAME"))
+    NHXannotation *a = find_annotation(t->root, "NAME");
+    if(a != NULL)
     {
         tree.setName(a->arg.str);
     }
 
     if(traits.hasNT())
     {
-        if(NHXannotation *a = find_annotation(t->root, "TT"))
+        NHXannotation *a = find_annotation(t->root, "TT");
+        if(a != NULL)
         {
             tree.setTopTime(a->arg.t);
         }
@@ -607,7 +618,8 @@ Node* TreeIO::extendBeepTree(TreeExtended &S,
         // First find out if node already exists
         Node* new_node;
         NHXannotation* id = find_annotation(v, "ID");
-        if(id)
+        const bool hasID = (id != NULL);
+        if(hasID)
         {
             new_node = S.getNode(id->arg.i);
 
@@ -616,7 +628,7 @@ Node* TreeIO::extendBeepTree(TreeExtended &S,
             if(new_node)
             {
                 NHXannotation* h = find_annotation(v, "HY");
-                if(h)
+                if(h != NULL)
                 {
                     if(otherParent)
                     {
@@ -660,8 +672,9 @@ Node* TreeIO::extendBeepTree(TreeExtended &S,
         {
             rightTime = S.getTopTime() + S.getTime(*r);
         }
+
         // Now create the new node
-        if(id)
+        if(hasID)
         {
             new_node = S.addNode(l, r, id->arg.i, name);
         }
@@ -672,6 +685,7 @@ Node* TreeIO::extendBeepTree(TreeExtended &S,
         assert(new_node != NULL);
 
         double edge_time = decideEdgeTime(v, traits, otherParent);
+
         if(traits.hasET())
         {
             if(r && l)
@@ -819,7 +833,6 @@ TreeIO::recursivelyWriteBeepTree(Node &u,
 
     // Now add node in newick format and gamma/AC if requested
     // This is done differently ifor leaves and internal nodes
-    //-------------------------------------------------------------------
     if (u.isLeaf())  // leaves recursion stops and 'S' is set
     {
         if(id)
