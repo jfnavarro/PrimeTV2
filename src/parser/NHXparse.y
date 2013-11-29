@@ -112,7 +112,7 @@ tree_file : /* empty */ { err_msg("No input tree!"); }
 	  | tree_list   { input_trees = $1; }
 	  ;
 
-tree_list : tree           { $$ = new_tree($1, NULL); }
+tree_list : tree           { $$ = new_tree($1, 0); }
           | tree_list tree { $$ = new_tree($2, $1);   }
           ;
 
@@ -121,7 +121,7 @@ tree : subtree
 
 
 subtree_list : subtree
-             | subtree_list COMMA subtree { $$ = new_node(NULL); 
+             | subtree_list COMMA subtree { $$ = new_node(0); 
 					    $1->parent = $$;
 					    $3->parent = $$;
 					    $$->left = $1;
@@ -141,7 +141,7 @@ subtree : leaf
 				  annotate_node($2, append_annotations($5, $6));
 				  $$ = $2;
 		                }
-        | LEFT_PAREN error { $$ = NULL; err_msg("Could not parse subtree"); }
+        | LEFT_PAREN error { $$ = 0; err_msg("Could not parse subtree"); }
         ; 
 
 leaf    : STRING { $$ = new_node($1); n_leaves++;}
@@ -150,7 +150,7 @@ leaf    : STRING { $$ = new_node($1); n_leaves++;}
 
 
 
-label	: /* empty */                  { $$ = NULL; }
+label	: /* empty */                  { $$ = 0; }
 	| INTEGER                      { char str[10]; sprintf(str, "%d", $1); $$ = strdup(str);}
         | FLOAT                        { char str[10]; sprintf(str, "%f", $1); $$ = strdup(str);}
 	| STRING                       { $$ = $1;}
@@ -158,16 +158,16 @@ label	: /* empty */                  { $$ = NULL; }
 	;
 
 
-newick_weight : /* empty */ {$$ = NULL; }/*{ $$ = new_newick_weight(0.0, NULL); } /* Signal lack of time annotation! */
-            | COLON number { $$ = new_newick_weight($2, NULL); }
-	    | error { $$ = new_newick_weight(0.0, NULL); err_msg("Expected a branchlength");}
+newick_weight : /* empty */ {$$ = 0; }/*{ $$ = new_newick_weight(0.0, 0); } /* Signal lack of time annotation! */
+            | COLON number { $$ = new_newick_weight($2, 0); }
+	    | error { $$ = new_newick_weight(0.0, 0); err_msg("Expected a branchlength");}
 	    ;
 
 number : FLOAT   { $$ = $1;}
        | INTEGER { $$ = (float) $1; }
        ;
 
-possible_x_annotation : /* empty */ { $$ = NULL;}
+possible_x_annotation : /* empty */ { $$ = 0;}
 		      | ext_annotations
 		      ;
 
@@ -177,8 +177,8 @@ ext_annotations : ext_annotation
 
 ext_annotation : NHX_ANNOTATION_START possible_separator annotation_list ANNOTATION_END { $$ = $3; }
 	       | BEEP_ANNOTATION_START possible_separator annotation_list ANNOTATION_END { $$ = $3; }
-               | NHX_ANNOTATION_START error { err_msg("Syntax error in extended annotations"); $$ = NULL; }
-               | BEEP_ANNOTATION_START error { err_msg("Syntax error in extended annotations"); $$ = NULL; }
+               | NHX_ANNOTATION_START error { err_msg("Syntax error in extended annotations"); $$ = 0; }
+               | BEEP_ANNOTATION_START error { err_msg("Syntax error in extended annotations"); $$ = 0; }
 	       ;
 
 annotation_list	: annotation
@@ -190,7 +190,7 @@ possible_separator :
 		   ;
 
 annotation	: STRING 
-		  EQUAL { current_annotation = new_annotation($1, NULL);}
+		  EQUAL { current_annotation = new_annotation($1, 0);}
 		  value { $$ = current_annotation; }
 		| error { err_msg("Syntax error in extended annotations");}
 		;
@@ -202,7 +202,7 @@ value		: STRING	  { set_str_annotation($1);}
 		| error { err_msg("Wrong value type"); }
 		;
 
-int_list : INTEGER { $$ = new_int_list($1, NULL); }
+int_list : INTEGER { $$ = new_int_list($1, 0); }
 	 | int_list INTEGER { $$ = new_int_list($2, $1); }
 	 ;
 
@@ -262,7 +262,7 @@ set_float_annotation(float f) {
 
 
 
-char *arb_tags[] = {"S",         "AC",          "ID",     "NT",       "BL",       "ET",       "NW",      "EX",      "D",     "TT",   NULL};
+char *arb_tags[] = {"S",         "AC",          "ID",     "NT",       "BL",       "ET",       "NW",      "EX",      "D",     "TT",   0};
 type arb_types[] = {string_type, int_list_type, int_type, float_type, float_type, float_type, float_type,int_type,int_type,float_type};
 
 
@@ -270,7 +270,7 @@ type
 get_annotation_type() {
   int i;
   
-  for (i=0; arb_tags[i] != NULL; i++) {
+  for (i=0; arb_tags[i] != 0; i++) {
     if (strcmp(current_annotation->anno_type, arb_tags[i]) == 0) {
       	return arb_types[i];
     }
@@ -289,7 +289,7 @@ check_annotation_type(type actual_type) {
   int i;
 /*   char errbuf[1024];  */
   
-  for (i=0; arb_tags[i] != NULL; i++) {
+  for (i=0; arb_tags[i] != 0; i++) {
     if (strcmp(current_annotation->anno_type, arb_tags[i]) == 0) {
       if (arb_types[i] & actual_type) {
 	return;
@@ -325,14 +325,14 @@ set_globals(const char *filename) {
   read_tree
   
   Instruct the parser to read a tree from 'filename' or, if filename
-  is NULL, STDIN. Return the read tree on success, or NULL.
+  is 0, STDIN. Return the read tree on success, or 0.
 */
 struct NHXtree *
 read_tree(const char *filename) {
-  FILE *f = NULL;
+  FILE *f = 0;
   int ret_val;
 
-  if (filename == NULL) {
+  if (filename == 0) {
     yytree_in = stdin;
     set_globals("STDIN");	/* For better error messages */
   } else {
@@ -340,7 +340,7 @@ read_tree(const char *filename) {
     set_globals(filename);	/* For better error messages */
     if (!f) {
       fprintf(stderr, "Could not open tree file '%s' for reading.\n", filename);
-      return NULL;
+      return 0;
     } else {
       yytree_in = f;
     }
@@ -349,14 +349,14 @@ read_tree(const char *filename) {
   ret_val = yyparse();
 
   /* Cleanup */
-  if (f != NULL) {
+  if (f != 0) {
     //close(f);
     fclose(f);
     yytree_in = stdin;
   }
 
   if (ret_val == 1)
-    return NULL;
+    return 0;
   else
     return input_trees;
 }
@@ -376,7 +376,7 @@ read_tree_from_file_stream( FILE * f ) {
   yytree_in = f;
   ret_val = yyparse();
   if (ret_val == 1)
-    return NULL;
+    return 0;
   else
     return input_trees;
 }
@@ -393,9 +393,9 @@ struct NHXtree *
 read_tree_string(const char *str) {
   int ret_val;
 
-  if (str == NULL) {
-    fprintf(stderr, "Warning: Tried to read a tree from a NULL string.\n");
-    return NULL;
+  if (str == 0) {
+    fprintf(stderr, "Warning: Tried to read a tree from a 0 string.\n");
+    return 0;
   } 
     
   set_globals("<input string>");	/* For better error messages */
@@ -407,7 +407,7 @@ read_tree_string(const char *str) {
   close_string_buffer();
 
   if (ret_val == 1)
-    return NULL;
+    return 0;
   else
     return input_trees;
 }

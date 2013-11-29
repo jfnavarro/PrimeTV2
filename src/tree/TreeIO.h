@@ -105,7 +105,7 @@ public:
     TreeExtended readNewickTree();
 
     // Basic function for writing tree TreeExtended in newick format, with the tags
-    // indicated by traits included in PRIME markup. If gamma != NULL then AC
+    // indicated by traits included in PRIME markup. If gamma != 0 then AC
     // markup will also be included.
     // Precondition: (useET && useNT) == false
     std::string writeBeepTree(const TreeExtended &G, const TreeIOTraits& traits, const GammaMapEx *gamma);

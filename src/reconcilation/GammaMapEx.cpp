@@ -207,7 +207,7 @@ GammaMapEx::computeGammaBound(Node *v)
 void
 GammaMapEx::computeGammaBoundBelow(Node *v)
 {
-    assert(v != NULL);
+    assert(v != 0);
 
     if (v->isLeaf())
     {
@@ -244,7 +244,7 @@ GammaMapEx::computeGammaBoundBelow(Node *v)
 void
 GammaMapEx::addToSet(Node *x,  Node *v)
 {
-    assert(x != NULL);
+    assert(x != 0);
     gamma[x->getNumber()].insert(v);
     chainsOnNode[v->getNumber()].push_back(x);
 }
@@ -252,7 +252,7 @@ GammaMapEx::addToSet(Node *x,  Node *v)
 void
 GammaMapEx::addToSet(Node *x, Node &v)
 {
-    assert(x != NULL);
+    assert(x != 0);
     addToSet(x, &v);
 }
 
@@ -262,7 +262,7 @@ GammaMapEx::getHighestGammaPath(Node &u) const // Dominates all others on u
     const deque<Node*>& anti_chains = chainsOnNode[u.getNumber()];
     if (anti_chains.empty())
     {
-        return NULL;
+        return 0;
     }
     else
     {
@@ -276,7 +276,7 @@ GammaMapEx::getLowestGammaPath(Node &u) const // Dominated by others
     const deque<Node*> &anti_chains = chainsOnNode[u.getNumber()];
     if (anti_chains.empty())
     {
-        return NULL;
+        return 0;
     }
     else
     {
@@ -396,8 +396,8 @@ GammaMapEx::checkGammaMembership(Node *gn, Node *sn)
  void
 GammaMapEx::assignGammaBound(Node *v, Node *x)
 {
-    assert(x != NULL);
-    assert(v != NULL);
+    assert(x != 0);
+    assert(v != 0);
 
     Node *y = lambdaex[v]->getParent();
 
@@ -415,7 +415,7 @@ GammaMapEx::assignGammaBound(Node *v, Node *x)
   void
 GammaMapEx::removeFromSet(Node *x, Node *v)
 {
-    assert(x != NULL);
+    assert(x != 0);
     if(v == 0)
     {
         return;
@@ -485,7 +485,7 @@ GammaMapEx::validLGT() const
     }
     else
     {
-        for( Node *n = Gtree->getPostOderBegin(); n != NULL; n = Gtree->postorder_next(n))
+        for( Node *n = Gtree->getPostOderBegin(); n != 0; n = Gtree->postorder_next(n))
         {
             if(transfer_edges[n->getNumber()])
             {
@@ -740,7 +740,7 @@ dynamic_bitset<> GammaMapEx::getLGT()
 SetOfNodesEx<Node>
 GammaMapEx::getGamma(Node *x) const
 {
-    assert(x != NULL);
+    assert(x != 0);
     assert(x->getNumber() < gamma.size());
     return gamma[x->getNumber()];
 }

@@ -36,9 +36,9 @@ using namespace std;
 Tree::Tree() :
     noOfNodes(0),
     noOfLeaves(0),
-    rootNode(NULL),
+    rootNode(0),
     name2node(),
-    all_nodes(DEF_NODE_VEC_SIZE, NULL),
+    all_nodes(DEF_NODE_VEC_SIZE, 0),
     name("Tree"),
     times(0),
     lengths(0),
@@ -62,9 +62,9 @@ Tree::~Tree()
 Tree::Tree(const Tree &tree)
     : noOfNodes(tree.noOfNodes),
       noOfLeaves(tree.noOfLeaves),
-      rootNode(NULL),
+      rootNode(0),
       name2node(),                                       // Initialization
-      all_nodes(max(noOfNodes,DEF_NODE_VEC_SIZE), NULL), // Allocate vector
+      all_nodes(max(noOfNodes,DEF_NODE_VEC_SIZE), 0), // Allocate vector
       name(tree.name),
       //NOTE what should I do with the times,lenghts and rates?
       //times(tree.times),
@@ -98,7 +98,7 @@ Tree::operator=(const Tree& tree)
         noOfLeaves = tree.noOfLeaves;
         if(noOfNodes > all_nodes.size())
         {
-            all_nodes.resize(noOfNodes, NULL);
+            all_nodes.resize(noOfNodes, 0);
         }
         name = tree.name;
         if(tree.getRootNode())
@@ -181,7 +181,7 @@ Tree::getRootNode() const
 void
 Tree::setRootNode(Node *v)
 {
-    assert(v!=NULL);
+    assert(v!=0);
     assert(v->getNumber()<all_nodes.size());
     rootNode = v;
 }
@@ -192,7 +192,7 @@ Tree::getNode(unsigned no) const
 {
     if (no >= all_nodes.size())
     {
-        return NULL;
+        return 0;
     }
     else
     {
@@ -211,7 +211,7 @@ Tree::findNode(const string& name) const
     }
     else
     {
-        return NULL;
+        return 0;
     }
 }
 
@@ -238,10 +238,10 @@ Tree::addNode(Node *leftChild,
               unsigned node_id,
               const string &name)
 {
-    assert(leftChild==NULL || leftChild->getNumber()<all_nodes.size());
-    assert(rightChild==NULL || rightChild->getNumber()<all_nodes.size());
+    assert(leftChild==0 || leftChild->getNumber()<all_nodes.size());
+    assert(rightChild==0 || rightChild->getNumber()<all_nodes.size());
     noOfNodes++;
-    if (leftChild == NULL && rightChild == NULL)
+    if (leftChild == 0 && rightChild == 0)
     {
         noOfLeaves++;
     }
@@ -251,9 +251,9 @@ Tree::addNode(Node *leftChild,
     v->setChildren(leftChild, rightChild);
     while(all_nodes.size() <= node_id)
     {
-        all_nodes.resize(2 * all_nodes.size(), NULL);
+        all_nodes.resize(2 * all_nodes.size(), 0);
     }
-    if(all_nodes[node_id] != NULL)
+    if(all_nodes[node_id] != 0)
     {
         std::ostringstream id_str;
         id_str << node_id;
@@ -300,8 +300,8 @@ Tree::addNode(Node *leftChild,
 Node* 
 Tree::mostRecentCommonAncestor(Node* a, Node* b) const
 {
-    assert(a != NULL);
-    assert(b != NULL);
+    assert(a != 0);
+    assert(b != 0);
 
     while (a != b)
     {
@@ -546,14 +546,14 @@ double
 Tree::imbalance()
 {
     Node *r = getRootNode();
-    assert (r != NULL);
+    assert (r != 0);
     return imbalance(r);
 }
 
 Node *
 Tree::copyAllNodes(const Node *v)
 {
-    assert(v != NULL);
+    assert(v != 0);
     Node *u = new Node(*v);
     u->setTree(*this);
 
@@ -571,7 +571,7 @@ Tree::copyAllNodes(const Node *v)
         u->setChildren(l, r);	// Notice that setChildren changes (or corrects) porder here!
         return u;
     }
-    return NULL;
+    return 0;
 }
 
 // Recursively copy all nodes in a tree. And keep track of names etc while
@@ -580,7 +580,7 @@ Tree::copyAllNodes(const Node *v)
 Node *
 Tree::copySubtree(const Node *v)
 {
-    assert(v != NULL);
+    assert(v != 0);
     string name = v->getName();
     if(name != "")
     {
@@ -589,7 +589,7 @@ Tree::copySubtree(const Node *v)
             name = name + "a";
         }
     }
-    Node *u = addNode(NULL, NULL, name);
+    Node *u = addNode(0, 0, name);
     u->setTree(*this);
 
     assert(u->getNumber()<all_nodes.size());
@@ -613,16 +613,16 @@ Tree::copySubtree(const Node *v)
 void
 Tree::clearTree()
 {
-    if(rootNode != NULL)
+    if(rootNode != 0)
     {
         rootNode->deleteSubtree();
         delete rootNode;
-        rootNode = NULL;
+        rootNode = 0;
     }
     noOfNodes = noOfLeaves = 0;
     name2node.clear();
     all_nodes.clear();
-    all_nodes = std::vector<Node*>(DEF_NODE_VEC_SIZE, NULL);
+    all_nodes = std::vector<Node*>(DEF_NODE_VEC_SIZE, 0);
 }
 
 double
@@ -648,7 +648,7 @@ Tree::imbalance(Node *v)
 const unsigned
 Tree::getHeight(Node* v) const
 {
-    if (v == NULL)
+    if (v == 0)
         return 0;
     else
         return 1 + max(getHeight(v->getLeftChild()),

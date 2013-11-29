@@ -476,7 +476,7 @@ void Mainops::loadPreComputedScenario(const std::string &filename,const std::str
                     temp.erase(remove(temp.begin(),temp.end(),'('),temp.end());
                     temp.erase(remove(temp.begin(),temp.end(),')'),temp.end());
                     boost::split(strs, temp, boost::is_any_of(","));
-                    if(genesTree->getNode(boost::lexical_cast<unsigned>(strs.at(0))) != NULL)
+                    if(genesTree->getNode(boost::lexical_cast<unsigned>(strs.at(0))) != 0)
                     {
                         transferedges.set(boost::lexical_cast<unsigned>(strs.at(0))); //origin LGT
                     }

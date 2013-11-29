@@ -115,13 +115,13 @@ public:
 
     Type& operator[](const Node* i)
     {
-        assert(i != NULL);
+        assert(i != 0);
         return this->operator[](*i);
     }
 
     Type operator[](const Node* i) const
     {
-        assert(i != NULL);
+        assert(i != 0);
         return this->operator[](*i);
     }
 
@@ -210,7 +210,7 @@ protected:
 };
 
 typedef BeepVector<unsigned> UnsignedVector;//initializes elems to 0
-typedef BeepVector<Node*> NodeVector; //initializes elems to NULL
+typedef BeepVector<Node*> NodeVector; //initializes elems to 0
 
 class RealVector: public BeepVector<double>
 {

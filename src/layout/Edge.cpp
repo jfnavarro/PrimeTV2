@@ -29,10 +29,10 @@
 
 
 Edge::Edge()
-    :speOrigin(NULL),
-      speEnd(NULL),
-      geneOrigin(NULL),
-      geneEnd(NULL),
+    :speOrigin(0),
+      speEnd(0),
+      geneOrigin(0),
+      geneEnd(0),
       xOrigin(0),
       xEnd(0),
       yOrigin(0),

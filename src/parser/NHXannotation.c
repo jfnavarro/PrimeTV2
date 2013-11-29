@@ -30,7 +30,7 @@
 void
 annotate_node(struct NHXnode *n, struct NHXannotation *l)
 {
-    assert (n != NULL);
+    assert (n != 0);
     n->l = l;			/* Associate annotations with the node. */
 }
 
@@ -43,21 +43,23 @@ annotate_node(struct NHXnode *n, struct NHXannotation *l)
 unsigned
 annotation_isa(struct NHXannotation* l, const char *tag)
 {
-    assert(l != NULL);
-    assert(tag != NULL);
+    assert(l != 0);
+    assert(tag != 0);
     return strncmp(l->anno_type, tag, MAX_ANNOTATION_ID_LENGTH);
 }
 
 void
 delete_annotation_list(struct NHXannotation *l)
 {
-    if (l != NULL) {
+    if (l != 0) {
         if (annotation_isa(l, "S") == 0) {
             free(l->arg.str);
+            l->arg.str = 0;
         }
         delete_annotation_list(l->next);
         free(l);
     }
+    l = 0;
 }
 
 struct NHXannotation*
@@ -144,15 +146,15 @@ struct NHXannotation*
         append_annotations(struct NHXannotation* l1, struct NHXannotation* l2)
 {
     struct NHXannotation *a = l1;
-    if (a == NULL)
+    if (a == 0)
     {
         return l2;
     }
-    if (l2 == NULL)
+    if (l2 == 0)
     {
         return l1;
     }
-    while (a->next != NULL)
+    while (a->next != 0)
     {	/* Find last element */
         a = a->next;
     }
@@ -175,11 +177,12 @@ struct int_list*
 void 
 free_int_list(struct int_list *il) 
 {
-    if (il != NULL)
+    if (il != 0)
     {
         free_int_list(il->next);
         free(il);
     }
+    il = 0;
 }
 
 /*
@@ -188,17 +191,17 @@ free_int_list(struct int_list *il)
   Reverse the rest of the list.
   The first elements next points to the last elem in the reversed list.
   Point the that former second element to the first and set the
-  first elements next pointer to NULL.
+  first elements next pointer to 0.
 */
 struct int_list*
         int_list_reverse(struct int_list *il)
 {
     struct int_list *reversed;
-    if (il == NULL)
+    if (il == 0)
     {
-        return NULL;
+        return 0;
     }
-    else if (il->next == NULL)
+    else if (il->next == 0)
     {
         return il;
     }
@@ -206,7 +209,7 @@ struct int_list*
     {
         reversed = int_list_reverse(il->next);
         il->next->next = il;
-        il->next = NULL;
+        il->next = 0;
         return reversed;
     }
 }

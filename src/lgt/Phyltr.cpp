@@ -855,7 +855,7 @@ Candidate::compute_highest_mapping_(vector<vid_t> &highest) const
 
     // Next, take care of the rest of the vertices from the root and down.g
     for (Node *u = G.preorder_next(G.getRootNode());
-         u != NULL; u = G.preorder_next(u)) //check it iterates well
+         u != 0; u = G.preorder_next(u)) //check it iterates well
     {
         if (u == G.getRootNode())
         {
@@ -927,7 +927,7 @@ void compute_lambda(const TreeExtended &S,
     lambda.resize(G.getNumberOfNodes());
     
     for (Node *u = G.getPostOderBegin();
-         u != NULL;
+         u != 0;
          u = G.postorder_next(u))
     {
         /* Take care of gene tree leaves and continue. */
@@ -1047,7 +1047,7 @@ create_gene_species_map(const TreeExtended &species_tree,const TreeExtended &gen
                     "is missing in map file.";
             throw logic_error(message);
         }
-        if (species_tree.findNode(species_label) == NULL)
+        if (species_tree.findNode(species_label) == 0)
         {
             string message =
                     "species label '" + species_label + "' "
@@ -1083,7 +1083,7 @@ create_gene_species_map(const TreeExtended &species_tree,const TreeExtended &gen
                     "is missing in map file.";
             throw logic_error(message);
         }
-        if (species_tree.findNode(species_label) == NULL)
+        if (species_tree.findNode(species_label) == 0)
         {
             string message =
                     "species label '" + species_label + "' "
@@ -1123,19 +1123,19 @@ Phyltr::dp_algorithm()
 
     // The algorithm itself is described in a published paper.
     for (Node *u = G.getPostOderBegin();
-         u != NULL;
+         u != 0;
          u = G.postorder_next(u))
     {
         // First compute g_below[u][*].
         for (Node *x = S.getPostOderBegin();
-             x != NULL;
+             x != 0;
              x = S.postorder_next(x))
         {
             compute_below(u->getNumber(), x->getNumber());
         }
         // Compute g_outside[u][*]
         for (Node *x = S.preorder_begin();
-             x != NULL;
+             x != 0;
              x = S.preorder_next(x))
         {
             compute_outside(u->getNumber(), x->getNumber());
@@ -1256,9 +1256,9 @@ Phyltr::backtrack()
     multi_array<BacktrackElement, 2> &matrix = Phyltr::g_backtrack_matrix;
 
     // Backtrack the placements for each u and x.
-    for (Node *u = G.getPostOderBegin(); u != NULL; u = G.postorder_next(u))
+    for (Node *u = G.getPostOderBegin(); u != 0; u = G.postorder_next(u))
     {
-        for (Node *x = S.getPostOderBegin(); x != NULL; x = S.postorder_next(x))
+        for (Node *x = S.getPostOderBegin(); x != 0; x = S.postorder_next(x))
         {
             Phyltr::backtrack_below_placements(u->getNumber(), x->getNumber());
         }
@@ -1267,7 +1267,7 @@ Phyltr::backtrack()
     // Mark the sets of scenarios that we need to compute.
     matrix[G.getRootNode()->getNumber()][S.getRootNode()->getNumber()].scenarios_below_needed = true; //ROOT??
     
-    for (Node *u = G.preorder_begin(); u != NULL; u = G.preorder_next(u))
+    for (Node *u = G.preorder_begin(); u != 0; u = G.preorder_next(u))
     {
         for (vid_t x = 0; x < S.getNumberOfNodes(); ++x)
         {
@@ -1295,16 +1295,16 @@ Phyltr::backtrack()
     }
 
     // Compute the minimum number of transfer events for each u and x.
-    for (Node *u = G.getPostOderBegin(); u != NULL; u = G.postorder_next(u))
+    for (Node *u = G.getPostOderBegin(); u != 0; u = G.postorder_next(u))
     {
-        for (Node *x = S.getPostOderBegin(); x != NULL; x = S.postorder_next(x))
+        for (Node *x = S.getPostOderBegin(); x != 0; x = S.postorder_next(x))
         {
             Phyltr::backtrack_min_transfers(u->getNumber(), x->getNumber());
         }
     }
 
     // Backtrack the needed scenarios.
-    for (Node *u = G.getPostOderBegin(); u != NULL && u->getNumber() < G.getNumberOfNodes(); u = G.postorder_next(u))  // CHECK CHECK
+    for (Node *u = G.getPostOderBegin(); u != 0 && u->getNumber() < G.getNumberOfNodes(); u = G.postorder_next(u))  // CHECK CHECK
     {
         for (vid_t x = 0; x < S.getNumberOfNodes(); ++x)
         {

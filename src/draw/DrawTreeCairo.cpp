@@ -511,7 +511,7 @@ void DrawTreeCairo::DrawSpeciesEdgesWithContour()
     cairo_set_source_rgba(cr, cfill.red, cfill.green, cfill.blue, 1);
     cairo_fill(cr);
     
-    for ( Node *n = species->preorder_begin(); n != NULL; n = species->preorder_next(n) )
+    for ( Node *n = species->preorder_begin(); n != 0; n = species->preorder_next(n) )
     {
         double x = n->getX();
         double y = n->getY();
@@ -559,7 +559,7 @@ void DrawTreeCairo::DrawSpeciesEdges()
     cairo_stroke_preserve(cr);
     cairo_fill(cr);
     
-    for ( Node *n = species->preorder_begin(); n != NULL; n = species->preorder_next(n) )
+    for ( Node *n = species->preorder_begin(); n != 0; n = species->preorder_next(n) )
     {
         double x = n->getX();
         double y = n->getY();
@@ -646,7 +646,7 @@ void DrawTreeCairo::DrawSpeciesNodes()
     Color& cfill = config->species_node_color;
     Color& cline = config->species_node_contour_color;
     
-    for ( Node *n = species->preorder_begin(); n != NULL; n = species->preorder_next(n) )
+    for ( Node *n = species->preorder_begin(); n != 0; n = species->preorder_next(n) )
     {
         if(!n->isLeaf())
         {
@@ -745,7 +745,7 @@ void DrawTreeCairo::DrawGeneNodes()
     
     cairo_set_line_width(cr,2);
         
-    for ( Node *n = gene->preorder_begin(); n != NULL; n = gene->preorder_next(n) )
+    for ( Node *n = gene->preorder_begin(); n != 0; n = gene->preorder_next(n) )
     {
         double x = n->getX();
         double y = n->getY();
@@ -823,7 +823,7 @@ void DrawTreeCairo::DrawGeneLabels()
             parameters->geneFontColor.green, parameters->geneFontColor.blue, 1);
     cairo_set_font_size (cr, genefontsize);
     
-    for ( Node *n = gene->preorder_begin(); n != NULL; n = gene->preorder_next(n) )
+    for ( Node *n = gene->preorder_begin(); n != 0; n = gene->preorder_next(n) )
     {
         if(!gamma->isLateralTransfer(*n))
         {
@@ -1148,7 +1148,7 @@ Edge *DrawTreeCairo::getEdge(Node *sp, Node *gn)
             }
         }
     }
-    return NULL;
+    return 0;
 }
 
 const bool DrawTreeCairo::existLGTEdge(double x)
@@ -1220,7 +1220,7 @@ bool DrawTreeCairo::overlapSpeciesNode(double x,Node *origin, Node *destiny)
     double y1 = (origin->getY() + origin->getParent()->getY()) / 2;
     double y2 = (destiny->getY() + destiny->getParent()->getY()) / 2;
 
-    for(Node *n = species->getPostOderBegin(); n != NULL; n = species->postorder_next(n))
+    for(Node *n = species->getPostOderBegin(); n != 0; n = species->postorder_next(n))
     {
         
         if (n != destiny && !n->isLeaf())

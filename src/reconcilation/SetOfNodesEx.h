@@ -102,7 +102,7 @@ SetOfNodesEx<T>::set4os() const
         if(*i)
             os << (*i)->getNumber();
         else
-            os << "NULL";
+            os << "0";
         os << "\t";
     }
     os << "\n";

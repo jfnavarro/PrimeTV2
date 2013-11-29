@@ -50,7 +50,7 @@ delete_node(struct NHXnode *n)
 void
 delete_tree_nodes(struct NHXnode *n)
 {
-    if (n != NULL)
+    if (n != 0)
     {
         struct NHXnode *left = n->left;
         struct NHXnode *right = n->right;
@@ -62,19 +62,19 @@ delete_tree_nodes(struct NHXnode *n)
 
 /*
   Given a NHX node, see if it contains an annotation with the given tag.
-  Returns NULL, if not present, or if v is NULL.
+  Returns 0, if not present, or if v is 0.
 */
 struct NHXannotation* find_annotation(const struct NHXnode *v, const char *tag)
 {
     struct NHXannotation *a;
 
-    if (v == NULL)
+    if (v == 0)
     {
-        return NULL;
+        return 0;
     }
 
     a = v->l;
-    while (a != NULL)
+    while (a != 0)
     {
         if (annotation_isa(a, tag) == 0)
         {
@@ -82,7 +82,7 @@ struct NHXannotation* find_annotation(const struct NHXnode *v, const char *tag)
         }
         a = a->next;
     }
-    return NULL;
+    return 0;
 }
 
 int
@@ -90,7 +90,7 @@ isDuplication(const struct NHXnode *v)
 {
     struct NHXannotation *a = find_annotation(v, "D");
 
-    if (a == NULL)
+    if (a == 0)
     {
         return 0;
     }
@@ -103,8 +103,8 @@ isDuplication(const struct NHXnode *v)
 int
 isLeaf(const struct NHXnode *t)
 {
-    assert(t != NULL);
-    if (t->left == NULL && t->right == NULL)
+    assert(t != 0);
+    if (t->left == 0 && t->right == 0)
     {
         return 1;
     }
@@ -117,8 +117,8 @@ isLeaf(const struct NHXnode *t)
 int
 isRoot(const struct NHXnode *t)
 {
-    assert(t != NULL);
-    if (t->parent == NULL)
+    assert(t != 0);
+    if (t->parent == 0)
     {
         return 1;
     }
@@ -134,7 +134,7 @@ speciesName(const struct NHXnode *v)
 {
     struct NHXannotation *a = find_annotation(v, "S");
 
-    if (a == NULL)
+    if (a == 0)
     {
         return 0;
     }
@@ -147,7 +147,7 @@ speciesName(const struct NHXnode *v)
 unsigned
 subtreeSize(const struct NHXnode *n) /* Count the number of nodes in subtree rooted at n */
 {
-    if (n == NULL)
+    if (n == 0)
     {
         return 0;
     }
@@ -167,7 +167,7 @@ NHX_debug_print(struct NHXnode *v)
     if (v)
     {
         struct NHXannotation *l = v->l;
-        if (l != NULL)
+        if (l != 0)
         {
             if (annotation_isa(l, "ID"))
             {
@@ -189,13 +189,13 @@ struct NHXnode *
         new_node(char *name)
 {
     struct NHXnode *v = (struct NHXnode*) malloc (sizeof(struct NHXnode));
-    if (v != NULL)
+    if (v != 0)
     {
-        v->left = NULL;
-        v->right = NULL;
-        v->parent = NULL;
+        v->left = 0;
+        v->right = 0;
+        v->parent = 0;
         v->name = name;
-        v->l = NULL;
+        v->l = 0;
         return v;
     }
     else

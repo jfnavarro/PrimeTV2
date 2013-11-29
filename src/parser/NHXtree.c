@@ -29,19 +29,20 @@
 void
 delete_trees(struct NHXtree *tree)
 {
-    if (tree != NULL)
+    if (tree != 0)
     {
         delete_trees(tree->next);
         delete_tree_nodes(tree->root);
         free(tree);
     }
+    tree = 0;
 }
 
 struct NHXtree *
         new_tree(struct NHXnode *root, struct NHXtree *next_tree)
 {
     struct NHXtree *tree = (struct NHXtree *) malloc(sizeof(struct NHXtree));
-    if (tree != NULL)
+    if (tree != 0)
     {
         tree->root = root;
         tree->next = next_tree;
@@ -58,13 +59,13 @@ struct NHXtree *
 unsigned 
 treeSize(const struct NHXtree *tree)
 {
-    if (tree == NULL)
+    if (tree == 0)
     {
         return 0;
     }
 
     struct NHXnode *r = tree->root;
-    if (r == NULL)
+    if (r == 0)
     {
         return 0;
     }

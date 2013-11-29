@@ -121,7 +121,7 @@ Node* TreeExtended::preorder_next(Node *v) const
     /* special case when the tree consists of one vertex only. */
     if (v == getRootNode())
     {
-        return NULL;
+        return 0;
     }
     
     while (v != getRootNode() && v->getParent()->getRightChild() == v)
@@ -131,7 +131,7 @@ Node* TreeExtended::preorder_next(Node *v) const
     
     if (v == getRootNode())
     {
-        return NULL;
+        return 0;
     }
     
     return v->getParent()->getRightChild();
@@ -151,7 +151,7 @@ Node* TreeExtended::postorder_next(Node *v) const
 {
     if (v == getRootNode())
     {
-        return NULL;
+        return 0;
     }
 
     Node *p = v->getParent();
@@ -347,7 +347,7 @@ const double TreeExtended::findMaximumDistanceToLeaf(Node *n) const
 
 const unsigned TreeExtended::getNumberOfChildren(Node *n) const
 {
-    if(n == NULL)
+    if(n == 0)
     {
         return 0;
     }
@@ -363,8 +363,8 @@ void TreeExtended::reset()
     for(unsigned i = 0; i < getNumberOfNodes(); i++)
     {
         Node *n = getNode(i);
-        n->setHostChild(NULL);
-        n->setHostParent(NULL);
+        n->setHostChild(0);
+        n->setHostParent(0);
         n->setVisited(0);
         n->setX(0);
         n->setY(0);

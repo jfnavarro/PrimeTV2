@@ -225,7 +225,7 @@ std::string TreeIO::writeBeepTree(const TreeExtended &G,const TreeIOTraits& trai
     {
         name << "[&&PRIME NAME=" << G.getName();
 
-        if(G.getRootNode() == NULL)
+        if(G.getRootNode() == 0)
         {
             name << "] [empty tree!]";
             return name.str();
@@ -282,7 +282,7 @@ TreeExtended TreeIO::readBeepTree(const TreeIOTraits& tr, std::vector<SetOfNodes
                                   StrStrMap *gs)
 {
     NHXtree* t = readTree();
-    if (t == NULL)
+    if (t == 0)
     {
         throw AnError("No tree found!");
     }
@@ -326,7 +326,7 @@ void TreeIO::checkTagsForTree(TreeIOTraits &traits)
     NHXtree* t = readTree();
     if (t == 0)
     {
-        throw AnError("The input tree is NULL!",
+        throw AnError("The input tree is 0!",
                       "TreeIO::checkTagsForTree()",
                       1);
     }
@@ -359,7 +359,7 @@ TreeIO::decideEdgeTime(const NHXnode *v, const TreeIOTraits& traits, bool isHY) 
         if(traits.hasNWisET())
         {
             NHXannotation* a = find_annotation(v, "NW");
-            if(a != NULL)
+            if(a != 0)
             {
                 edge_time = a->arg.t;
             }
@@ -375,7 +375,7 @@ TreeIO::decideEdgeTime(const NHXnode *v, const TreeIOTraits& traits, bool isHY) 
         else
         {
             NHXannotation *a = find_annotation(v, "ET");
-            if(a != NULL)
+            if(a != 0)
             {
                 edge_time = a->arg.t;
             }
@@ -482,25 +482,25 @@ void
 TreeIO::checkTags(const NHXnode *v, TreeIOTraits& traits) const
 {
     // Determine if NW is given
-    if(find_annotation(v, "NW") == NULL && !isRoot(v))
+    if(find_annotation(v, "NW") == 0 && !isRoot(v))
     {
         traits.setNW(false);
     }
 
     // Determine if ET is given
-    if(find_annotation(v, "ET") == NULL && !isRoot(v))
+    if(find_annotation(v, "ET") == 0 && !isRoot(v))
     {
         traits.setET(false);
     }
 
     // Check if NT is given
-    if(find_annotation(v, "NT") == NULL && !isLeaf(v))
+    if(find_annotation(v, "NT") == 0 && !isLeaf(v))
     {
         traits.setNT(false);
     }
 
     // Check if BL is given
-    if(find_annotation(v, "BL") == NULL && !isRoot(v))
+    if(find_annotation(v, "BL") == 0 && !isRoot(v))
     {
         traits.setBL(false);
     }
@@ -533,7 +533,7 @@ TreeIO::readTree()
 {
     if (source == readFromStdin)
     {
-        return read_tree(NULL);
+        return read_tree(0);
     }
     else if (source == readFromFile)
     {
@@ -546,7 +546,7 @@ TreeIO::readTree()
     else
     {
         throw AnError("TreeIO not properly initialized!");
-        return NULL;
+        return 0;
     }
 }
 
@@ -570,13 +570,13 @@ TreeExtended TreeIO::readBeepTree(NHXtree *t, const TreeIOTraits& traits,
 
     // Convert it into our preferred C++ data structure
     Node *r = extendBeepTree(tree, t->root, traits, AC, gs, 0, 0);
-    if (r == NULL)
+    if (r == 0)
     {
         throw AnError("The input tree was empty!");
     }
 
     NHXannotation *a = find_annotation(t->root, "NAME");
-    if(a != NULL)
+    if(a != 0)
     {
         tree.setName(a->arg.str);
     }
@@ -584,7 +584,7 @@ TreeExtended TreeIO::readBeepTree(NHXtree *t, const TreeIOTraits& traits,
     if(traits.hasNT())
     {
         NHXannotation *a = find_annotation(t->root, "TT");
-        if(a != NULL)
+        if(a != 0)
         {
             tree.setTopTime(a->arg.t);
         }
@@ -618,7 +618,7 @@ Node* TreeIO::extendBeepTree(TreeExtended &S,
         // First find out if node already exists
         Node* new_node;
         NHXannotation* id = find_annotation(v, "ID");
-        const bool hasID = (id != NULL);
+        const bool hasID = (id != 0);
         if(hasID)
         {
             new_node = S.getNode(id->arg.i);
@@ -628,7 +628,7 @@ Node* TreeIO::extendBeepTree(TreeExtended &S,
             if(new_node)
             {
                 NHXannotation* h = find_annotation(v, "HY");
-                if(h != NULL)
+                if(h != 0)
                 {
                     if(otherParent)
                     {
@@ -682,7 +682,7 @@ Node* TreeIO::extendBeepTree(TreeExtended &S,
         {
             new_node =  S.addNode(l, r, name);
         }
-        assert(new_node != NULL);
+        assert(new_node != 0);
 
         double edge_time = decideEdgeTime(v, traits, otherParent);
 
@@ -1201,7 +1201,7 @@ void TreeIO::updateACInfo(const NHXnode *v, Node *new_node,
                           std::vector<SetOfNodesEx<Node> > &AC)
 {
     NHXannotation *a = find_annotation(v, "AC");
-    if (a != NULL)
+    if (a != 0)
     {
         int_list *il = a->arg.il;
         while (il)

@@ -248,7 +248,7 @@ void LayoutTrees::CountSpeciesCoordinates(Node *n, unsigned depth)
 const unsigned LayoutTrees::MostGenes() const
 {
     unsigned currentMax = 0;
-    for(Node *n = species->getPostOderBegin(); n != NULL; n = species->postorder_next(n))
+    for(Node *n = species->getPostOderBegin(); n != 0; n = species->postorder_next(n))
     {
         unsigned size = gamma->getSize(n);
         if( size > currentMax )
@@ -401,11 +401,11 @@ LayoutTrees::FindDuplications(Node* node)
         Node *top_l = gamma->getHighestGammaPath(*(node->getLeftChild()));
         Node *top_r = gamma->getHighestGammaPath(*(node->getRightChild()));
 
-        if (top_l == NULL)
+        if (top_l == 0)
         {
             top_l = top_dup_l;
         }
-        if (top_r == NULL)
+        if (top_r == 0)
         {
             top_r = top_dup_r;
         }

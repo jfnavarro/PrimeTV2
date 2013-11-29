@@ -102,7 +102,7 @@ void LambdaMapEx::update(const TreeExtended& G, const TreeExtended& S,
     clearValues();
 
     for (Node *u = G.getPostOderBegin();
-         u != NULL;
+         u != 0;
          u = G.postorder_next(u))
     {
         /* Take care of gene tree leaves and continue. */
@@ -216,7 +216,7 @@ LambdaMapEx::compLeafLambda(Node *g, const TreeExtended& S, const StrStrMap& gs)
              << "Please verify that gene and species names are correct\n"
              << "and complete!\n\n";
         e.action();
-        return NULL;
+        return 0;
     }
 }
 

@@ -36,9 +36,9 @@ using namespace std;
 
 Node::Node(unsigned id)
     : number(id),        // unique identifier
-      parent(NULL),      // neighbors in the tree
-      leftChild(NULL),
-      rightChild(NULL),
+      parent(0),      // neighbors in the tree
+      leftChild(0),
+      rightChild(0),
       porder(0),         // partial order of nodes on tree
       time(0.0),         // time of incoming edge
       nodeTime(0.0),     // time interval between node and leaves
@@ -49,8 +49,8 @@ Node::Node(unsigned id)
       size(0.0),
       x(0.0),
       y(0.0),
-      hostParent(NULL),
-      hostChild(NULL),
+      hostParent(0),
+      hostChild(0),
       reconcilation(Undefined),
       visited(0)
 {
@@ -59,9 +59,9 @@ Node::Node(unsigned id)
 
 Node::Node(unsigned id, const string& nodeName)
     : number(id),
-      parent(NULL),
-      leftChild(NULL),
-      rightChild(NULL),
+      parent(0),
+      leftChild(0),
+      rightChild(0),
       porder(0),
       time(0),
       nodeTime(0.0),
@@ -72,8 +72,8 @@ Node::Node(unsigned id, const string& nodeName)
       size(0.0),
       x(0.0),
       y(0.0),
-      hostParent(NULL),
-      hostChild(NULL),
+      hostParent(0),
+      hostChild(0),
       reconcilation(Undefined),
       visited(0)
 {
@@ -83,9 +83,9 @@ Node::Node(unsigned id, const string& nodeName)
 // Copy relatives in tree are not copied!
 Node::Node(const Node &v)
     : number(v.number),
-      parent(NULL),          // relatives in tree are not copied!
-      leftChild(NULL),
-      rightChild(NULL),
+      parent(0),          // relatives in tree are not copied!
+      leftChild(0),
+      rightChild(0),
       porder(v.porder),
       time(v.time),
       nodeTime(v.nodeTime),
@@ -180,7 +180,7 @@ Node::getSibling() const
 Node*
 Node::getDominatingChild(Node* y)
 {
-    assert(y != NULL);
+    assert(y != 0);
 
     if (this == y)
     {
@@ -221,7 +221,7 @@ Node::getTree()
     }
     else
     {
-        return NULL;
+        return 0;
     }
 }
 
@@ -363,10 +363,10 @@ Node::deleteSubtree()
     {
         leftChild -> deleteSubtree();
         delete leftChild;
-        leftChild = NULL;
+        leftChild = 0;
         rightChild -> deleteSubtree();
         delete rightChild;
-        rightChild = NULL;
+        rightChild = 0;
     }
 }
 
@@ -374,7 +374,7 @@ Node::deleteSubtree()
 // Checks if the current node is a leaf - A leaf lacks children
 const bool Node::isLeaf() const
 {
-    if (getLeftChild() == NULL && getRightChild() == NULL)
+    if (getLeftChild() == 0 && getRightChild() == 0)
     {
         return true;
     }
@@ -388,7 +388,7 @@ const bool Node::isLeaf() const
 const bool
 Node::isRoot() const
 {
-    if (getParent() == NULL)
+    if (getParent() == 0)
     {
         return true;
     }
@@ -515,7 +515,7 @@ Node::setLength(const double &newLength)
     else
     {
         throw AnError("Node::setLength:\n"
-                      "ownerTree->lengths is NULL",1);
+                      "ownerTree->lengths is 0",1);
     }
 }
 
@@ -591,7 +591,7 @@ Node::stringify(string tag, Node *v) const
 {
     ostringstream oss;
     oss << "\t" << tag;
-    if (v==NULL)
+    if (v==0)
     {
         oss << "=no";
     }
