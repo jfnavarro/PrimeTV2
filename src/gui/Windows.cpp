@@ -211,7 +211,8 @@ void MainWindow::generateTree()
 
             if ((bool)parameters->lattransfer)
             {
-                ops->lateralTransfer(mapfile.toStdString(),(parameters->lateralmincost == 1.0 && parameters->lateralmaxcost == 1.0));
+                ops->lateralTransfer(mapfile.toStdString(),(parameters->lateralmincost == 1.0
+                                                            && parameters->lateralmaxcost == 1.0));
             }
             
             ops->drawBest(); //draw tree into temp file
@@ -249,6 +250,7 @@ void MainWindow::generateTree()
 void MainWindow::paintTree()
 {
     std::string filename = parameters->outfile + "." + parameters->format;
+    std::cerr << "Writing tree to " << filename << std::endl;
     QFile file(QString::fromStdString(filename));
     if(file.exists())
     {
@@ -408,7 +410,7 @@ void MainWindow::newImage()
     }
     parameters = new Parameters();
     loadParameters(parameters);
-    parameters->format = "svg";
+    parameters->format = "png";
     ops->setParameters(parameters);
     actionLoad_Map_File->setEnabled(false);
     actionSave->setEnabled(false);
@@ -433,7 +435,7 @@ void MainWindow::loadParameters(Parameters *parameters)
     }
     checkBoxReconcile->setChecked(parameters->isreconciled);
     checkBoxGuest->setChecked(parameters->do_not_draw_guest_tree);
-    checkBoxHV->setChecked(parameters->horiz);
+    checkBoxHV->setChecked(!parameters->horiz);
     checkBoxLogo->setChecked(parameters->header);
     checkBoxLegend->setChecked(parameters->legend);
     checkBoxHeader->setChecked(parameters->title);

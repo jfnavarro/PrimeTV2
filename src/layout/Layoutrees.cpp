@@ -199,12 +199,11 @@ const double LayoutTrees::getLeftMostCoordinate (Node* o) const
     }
 }
 
-/* yspace has been calculated according to the number of leaves and the height
- * so the cordinate y of each node will be increased by y on the leaves, the x
- * cordinate on the leaves is always the same, the y cordinates of intern
- * nodes is calculated in the midpoint between the right most y and the
- * left most y, the x position is calcuted used the time mapped vectors
- */
+// yspace has been calculated according to the number of leaves and the height
+// so the cordinate y of each node will be increased by y on the leaves, the x
+// cordinate on the leaves is always the same, the y cordinates of intern
+// nodes is calculated in the midpoint between the right most y and the
+// left most y, the x position is calcuted used the time mapped vectors
 void LayoutTrees::CountSpeciesCoordinates(Node *n, unsigned depth)
 {
 
