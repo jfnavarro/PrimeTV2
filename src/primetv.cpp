@@ -58,7 +58,7 @@ static const std::string VERSION =  ((MAJOR + "." + MINOR) + ".") + PATCH;
 static Parameters *parameters = 0;
 static Mainops *mainops = 0;
 
-/* Helper function to sort vectors used in the parser of parameters */
+// Helper function to sort vectors used in the parser of parameters
 template<class T>
 ostream& operator<<(ostream& os, const vector<T>& v)
 {
@@ -66,7 +66,7 @@ ostream& operator<<(ostream& os, const vector<T>& v)
     return os;
 }
 
-/* Helper function that checks if a filename exists in the system */
+// Helper function that checks if a filename exists in the system
 int file_exist(const char *filename)
 {
     struct stat buffer;
@@ -91,13 +91,12 @@ int
 main (int ac, char *av[])
 {
 
-/* The boost progam options object is being used to capture all the parameters from console
- * it declares three types of parameters (generic, hidden and configuration)
- * it loads all of them and checks their basic validity, it also loads
- * a configuration file "~/.primetv2.cfg" to load all the information included in the file
- * once the parameters have been read and captured they all processed, valided and
- * assigned to the object container (Parameters)
- */
+// The boost progam options object is being used to capture all the parameters from console
+// it declares three types of parameters (generic, hidden and configuration)
+// it loads all of them and checks their basic validity, it also loads
+// a configuration file "~/.primetv2.cfg" to load all the information included in the file
+// once the parameters have been read and captured they all processed, valided and
+// assigned to the object container (Parameters)
 
     try
     {

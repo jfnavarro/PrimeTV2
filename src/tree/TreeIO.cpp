@@ -790,7 +790,7 @@ TreeIO::recursivelyWriteBeepTree(Node &u,
                                  std::map<const Node*,unsigned>* extinct,
                                  std::map<unsigned, unsigned>* id)
 {
-    assert((traits.hasID() && id) == false);
+    assert((traits.hasID() && id != 0) == false);
     string ret;
 
     // Determine what should be tagged in PRIME markup
@@ -835,7 +835,7 @@ TreeIO::recursivelyWriteBeepTree(Node &u,
     // This is done differently ifor leaves and internal nodes
     if (u.isLeaf())  // leaves recursion stops and 'S' is set
     {
-        if(id)
+        if(id != 0)
         {
             if(id->find(u.getNumber()) == id->end())
             {
@@ -892,7 +892,7 @@ TreeIO::recursivelyWriteBeepTree(Node &u,
             ret = "(" + right_str + ", " + left_str + ")";
         }
 
-        if(id)
+        if(id != 0)
         {
             if(id->find(u.getNumber()) == id->end())
             {
@@ -924,7 +924,7 @@ TreeIO::recursivelyWriteBeepTree(Node &u,
     {
         unsigned pn = u.getParent()->getNumber();
         unsigned opn = (*otherParent)[&u]->getNumber();
-        if(id)
+        if(id != 0)
         {
             if(id->find(pn) == id->end())
             {
@@ -934,10 +934,11 @@ TreeIO::recursivelyWriteBeepTree(Node &u,
             if(id->find(opn) == id->end())
             {
                 unsigned i = id->size();
-                (   *id)[opn] = i;
+                (*id)[opn] = i;
             }
+        
+            tagstr << " HY=(" << (*id)[pn] << " " << (*id)[opn] << ")";
         }
-        tagstr << " HY=(" << (*id)[pn] << " " << (*id)[opn] << ")";
     }
 
     if(extinct && extinct->find(&u) != extinct->end())

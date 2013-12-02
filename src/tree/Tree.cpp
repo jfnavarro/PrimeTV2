@@ -55,10 +55,10 @@ Tree::~Tree()
     {
         rootNode->deleteSubtree();
         delete rootNode;
-        rootNode = 0;
     }
+    rootNode = 0;
     //NOTE what should I do with the times,lenghts and rates?
-    //clearNodeAttributes();
+    clearNodeAttributes();
 }
 
 Tree::Tree(const Tree &tree)
@@ -69,9 +69,9 @@ Tree::Tree(const Tree &tree)
       all_nodes(max(noOfNodes,DEF_NODE_VEC_SIZE), 0), // Allocate vector
       name(tree.name),
       //NOTE what should I do with the times,lenghts and rates?
-      //times(tree.times),
-      //lengths(tree.lengths),
-      //rates(tree.rates),
+      times(tree.times),
+      lengths(tree.lengths),
+      rates(tree.rates),
       topTime(tree.topTime)
 {
     if(tree.getRootNode())
@@ -108,9 +108,9 @@ Tree::operator=(const Tree& tree)
             setRootNode(copyAllNodes(tree.getRootNode()));
         }
         //NOTE what should I do with the times,lenghts and rates?
-        //times = tree.times;
-        //lengths = tree.lengths;
-        //rates = tree.rates;
+        times = tree.times;
+        lengths = tree.lengths;
+        rates = tree.rates;
     }
     return *this;
 }
@@ -270,21 +270,22 @@ Tree::addNode(Node *leftChild,
 void
 Tree::clearNodeAttributes()
 {
-    if(times)
+    if (times != 0)
     {
         delete times;
-        times = 0;
     }
-    if(rates)  // rates is owned by EdgeRateModel
+    times = 0;
+    if (rates != 0)  // rates is owned by EdgeRateModel
     {
         delete rates;
-        rates = 0;
     }
-    if(lengths)
+    rates = 0;
+    if (lengths != 0)
     {
         delete lengths;
-        lengths = 0;
+        
     }
+    lengths = 0;
     topTime = 0;
 }
 

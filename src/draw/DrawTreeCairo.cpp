@@ -259,7 +259,7 @@ void DrawTreeCairo::calculateTransformation()
 
     if(parameters->horiz)
     {
-        const double origin_x = species->getRootNode()->getX();
+        //const double origin_x = species->getRootNode()->getX();
         const double origin_y = species->getRootNode()->getY();
 
         //we first translate to 0,0 then translate to height - y finally we rotate 90°
@@ -980,8 +980,9 @@ void DrawTreeCairo::newLGTPath(Node *n)
     double y1 = origin->getParent()->getY();
     double y2 = origin->getY();
 
-    Edge *e = getEdge(origin,GeneOrigin);
-    if(e)
+    Edge *e = 0;
+    e = getEdge(origin,GeneOrigin);
+    if(e != 0)
     {
         x1 = e->getXend();
         x2 = e->getXorigin();
@@ -1018,10 +1019,10 @@ void DrawTreeCairo::newLGTPath(Node *n)
         destinyx = originx;
                 
         cairo_move_to(cr,GeneDestiny->getX(),GeneDestiny->getY());
-        double xend;
-        double yend;
-        double xorigin;
-        double yorigin;
+        double xend = 0.0;
+        double yend = 0.0;
+        double xorigin = 0.0;
+        double yorigin = 0.0;
         
         for(Node *o = destiny; destiny != newdestiny; destiny = destiny->getParent())
         {

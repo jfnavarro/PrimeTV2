@@ -193,7 +193,7 @@ void MainWindow::generateTree()
         else
         {
             QTemporaryFile tempfile;
-            bool ok = tempfile.open();
+            tempfile.open();
             parameters->outfile = tempfile.fileName().toStdString();
             tempfile.remove();
             

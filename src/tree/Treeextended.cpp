@@ -24,7 +24,7 @@
 #include "Node.h"
 
 using namespace std;
-static const unsigned NONE = -1;
+static const int NONE = -1;
 
 TreeExtended::TreeExtended():
     Tree(),lca_is_valid(false)
@@ -47,35 +47,6 @@ TreeExtended::TreeExtended(const Tree& tree)
 
 }
 
-TreeExtended::TreeExtended(TreeExtended* tree)
-    : Tree(*tree),
-      lca_is_valid(tree->lca_is_valid)
-{
-
-}
-
-TreeExtended::TreeExtended(const TreeExtended* tree)
-    : Tree(*tree),
-      lca_is_valid(tree->lca_is_valid)
-{
-
-}
-
-
-TreeExtended::TreeExtended(Tree* tree)
-    : Tree(*tree),
-      lca_is_valid(false)
-{
-
-}
-
-TreeExtended::TreeExtended(const Tree* tree)
-    : Tree(*tree),
-      lca_is_valid(false)
-{
-
-}
-
 // Assignment
 TreeExtended&
 TreeExtended::operator=(const TreeExtended& tree)
@@ -89,21 +60,6 @@ TreeExtended&
 TreeExtended::operator=(const Tree& tree)
 {
     Tree::operator=(tree);
-    return *this;
-}
-
-TreeExtended&
-TreeExtended::operator=(const TreeExtended *tree)
-{
-    Tree::operator=(*tree);
-    lca_is_valid = tree->lca_is_valid;
-    return *this;
-}
-
-TreeExtended&
-TreeExtended::operator=(const Tree* tree)
-{
-    Tree::operator=(*tree);
     return *this;
 }
 
@@ -183,19 +139,19 @@ Node* TreeExtended::lca(Node *v1, Node *v2) const
     {
         build_lca();
     }
-    /* Get the representatives (i.e, indexes into L) of v1 and v2. */
+    // Get the representatives (i.e, indexes into L) of v1 and v2.
     unsigned r1 = Ref[v1->getNumber()];
     unsigned r2 = Ref[v2->getNumber()];
 
-    /* Make sure that r2 is the bigger one, so that the range
-        of indices is [r1, r2]. */
+    // Make sure that r2 is the bigger one, so that the range
+    //    of indices is [r1, r2].
     if (r1 > r2)
     {
         std::swap(r1, r2);
     }
     unsigned k = most_significant_bit(r2 - r1 + 1);
     unsigned idx1 = M[r1][k];
-    unsigned idx2 = M[r2-(1u<<k)+1][k]; /* 1u<<k == 2^k */
+    unsigned idx2 = M[r2-(1u<<k)+1][k]; // 1u<<k == 2^k
     if (L[idx2] < L[idx1])
     {
         idx1 = idx2;
@@ -205,10 +161,10 @@ Node* TreeExtended::lca(Node *v1, Node *v2) const
 
 void TreeExtended::build_lca() const
 {
-    /* First, we build the E and L arrays, i.e., the Euler tour and
-    the level array. */
+    // First, we build the E and L arrays, i.e., the Euler tour and
+    // the level array.
 
-    /* We define a recursive function to compute E and L. */
+    // We define a recursive function to compute E and L.
     struct Create_EL
     {
         void operator()(const Tree &tree,
@@ -237,7 +193,7 @@ void TreeExtended::build_lca() const
     Create_EL create_EL;
     create_EL(*this, getRootNode()->getNumber(), 0, E, L);
 
-    /* Create the R-vector. */
+    // Create the R-vector.
     Ref.clear();
     Ref.resize(this->getNumberOfNodes(), NONE);
     for (unsigned i = 0; i < E.size(); ++i)
@@ -247,7 +203,7 @@ void TreeExtended::build_lca() const
     }
 
 
-    /* Initialize and build the M-matrix. */
+    // Initialize and build the M-matrix.
     unsigned rows = L.size();
     unsigned cols = most_significant_bit(L.size()) + 1;
     M.resize(boost::extents[rows][cols]);
@@ -316,7 +272,7 @@ TreeExtended::most_significant_bit(unsigned v)
 const bool
 TreeExtended::descendant(Node *v1, Node *v2) const
 {
-    /* Is v1 descendant of v2? */
+    // Is v1 descendant of v2?
     return lca(v1, v2) == v2;
 }
 

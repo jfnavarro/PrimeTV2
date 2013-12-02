@@ -363,11 +363,12 @@ Node::deleteSubtree()
     {
         leftChild -> deleteSubtree();
         delete leftChild;
-        leftChild = 0;
         rightChild -> deleteSubtree();
         delete rightChild;
-        rightChild = 0;
+        
     }
+    leftChild = 0;
+    rightChild = 0;
 }
 
 

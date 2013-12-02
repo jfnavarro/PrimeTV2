@@ -17,7 +17,7 @@
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
     
     Author : Jose Fernandez Navarro  -  jc.fernandez.navarro@gmail.com
-             Lars Arvestad, © the MCMC-club, SBC, all rights reserved
+             Lars Arvestad, the MCMC-club, SBC, all rights reserved
  */
 
 // this class is an extension of the Tree class created by Lars Arsvestad,
@@ -44,16 +44,10 @@ public:
     TreeExtended();
     TreeExtended(const TreeExtended &tree);
     TreeExtended(const Tree& tree);
-    TreeExtended(TreeExtended *tree);
-    TreeExtended(const TreeExtended *tree);
-    TreeExtended(Tree *tree);
-    TreeExtended(const Tree *tree);
     
     //overload of =
     TreeExtended& operator=(const TreeExtended& tree);
     TreeExtended& operator=(const Tree& tree);
-    TreeExtended& operator=(const TreeExtended *tree);
-    TreeExtended& operator=(const Tree *tree);
 
     // returns the first node in a postorder configuration
     Node* getPostOderBegin() const;

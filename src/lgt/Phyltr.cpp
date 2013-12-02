@@ -157,8 +157,8 @@ Phyltr::read_sigma()
     Phyltr::g_input.sigma.resize(g_input.gene_tree->getNumberOfNodes());
     try
     {
-        create_gene_species_map(g_input.species_tree,
-                                g_input.gene_tree,
+        create_gene_species_map(*g_input.species_tree,
+                                *g_input.gene_tree,
                                 g_input.sigma_fname,
                                 g_input.sigma);
     }
@@ -175,8 +175,8 @@ bool Phyltr::read_sigma(map< string, string > str_sigma)
     Phyltr::g_input.sigma.resize(g_input.gene_tree->getNumberOfNodes());
     try
     {
-        create_gene_species_map(g_input.species_tree,
-                                g_input.gene_tree,
+        create_gene_species_map(*g_input.species_tree,
+                                *g_input.gene_tree,
                                 str_sigma,
                                 g_input.sigma);
     }
