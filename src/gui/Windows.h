@@ -30,6 +30,7 @@
 
 #include <QFileDialog>
 #include <QTemporaryFile>
+#include <QMainWindow>
 
 #include "ui_primetv.h"
 #include "ui_parameters.h"
@@ -42,6 +43,9 @@ class QActionGroup;
 class QLabel;
 class QMenu;
 class Parameters;
+class QWidget;
+class QGraphicsScene;
+class QString;
 
 class MainWindow : public QMainWindow, public Ui_MainWindow, public Ui_Parameters
 {
@@ -51,74 +55,71 @@ class MainWindow : public QMainWindow, public Ui_MainWindow, public Ui_Parameter
 public:
 
     // constructor we only need the parameters object and the parent if there is any
-    MainWindow(Parameters *p, Mainops *m, QWidget *parent = 0);
-    //copy constructor
-    MainWindow(const MainWindow& other);
+    explicit MainWindow(Parameters *p, Mainops *m, QMainWindow *parent = 0);
     //destructor
-    ~MainWindow();
+    virtual ~MainWindow();
     
 private slots:
-    /* slots are functions that are going to be assigned to signals and events */
     
-    /* launches an open file dialog to select and load the guest tree*/
+    // launches an open file dialog to select and load the guest tree
     void loadGuest();
     
-    /* launches an open file dialog to select and load the host tree*/
+    // launches an open file dialog to select and load the host tree
     void loadHost();
     
-    /* reconciles the trees, calculate gamma and lambda, the cordinates and draw the tree on the screen*/
+    // reconciles the trees, calculate gamma and lambda, the cordinates and draw the tree on the screen
     void generateTree();
     
-    /* exit the application */
+    // exit the application
     void exit();
     
-    /* save the canvas in a file */
+    // save the canvas in a file
     void save();
     
-    /* launches an open file dialog to select and load the map file if the reconcile option is activated */
+    // launches an open file dialog to select and load the map file if the reconcile option is activated
     void loadMap();
     
-    /* overloaded function called every time a parameter is modified to update the parameters */
+    // overloaded function called every time a parameter is modified to update the parameters
     void update();
     
-    /* reset the canvas and the parameters */
+    // reset the canvas and the parameters
     void newImage();
     
-    /* show or hide the parameters panel*/
+    // show or hide the parameters panel
     void showParameters(bool);
     
-    /* to activate the reconcilation mode, therefore the open map button will be enabled, because a map file is needed
-     * to reconcile*/
+    // to activate the reconcilation mode, therefore the open map button will be enabled, because a map file is needed
+    // to reconcile
     void activateReconcilation();
     
-    /* to print the canvas */
+    // to print the canvas
     void print();
     
-    /* a color selection dialog will show up and the color selected with will assigned the current font */
+    // a color selection dialog will show up and the color selected with will assigned the current font
     void loadFontColor();
     
-    /* launches and open dialog to load a configuration file where all the parameters will be stored */
+    // launches and open dialog to load a configuration file where all the parameters will be stored
     void loadConfigFile();
     
-    /* open a dialog to save the current configuration into a config file */
+    // open a dialog to save the current configuration into a config file
     void saveConfigFile();
 
 private:
     
-    /* creates an open file dialog and returns the file chosen*/
+    // creates an open file dialog and returns the file chosen
     QString openFile(QString header);
     
-    /* paint the current tree on the canvas */
+    // paint the current tree on the canvas
     void paintTree();
     
-    /* function that create all the actions and events asigned to the buttons*/
+    // function that create all the actions and events asigned to the buttons
     void createActions();
     
-    /* function that load the actual values of parameters in case the user has given parameters as input
-     * in the console */
+    // function that load the actual values of parameters in case the user has given parameters as input
+    // in the console
     void loadParameters(Parameters *parameters);
     
-    /* overloaded close Event function to handle the exit */
+    // overloaded close Event function to handle the exit
     void closeEvent(QCloseEvent *e);
     
     QWidget *params; //parameters panel

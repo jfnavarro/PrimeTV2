@@ -43,7 +43,7 @@
 
 //dashes pens used to pain with dashes
 static const double dashed1[] = {4.0, 1.0};
-static unsigned len1  = sizeof(dashed1) / sizeof(dashed1[0]);
+static int len1  = sizeof(dashed1) / sizeof(dashed1[0]);
 static const double dashed3[] = {0.0};
 static const double pi = 3.141516;
 
@@ -76,10 +76,13 @@ void DrawTreeCairo::start(const Parameters *p,
     cleanUp();
 
     //local variables to be used to draw
-    pagewidth = parameters->width;
-    pageheight = parameters->height;
+    pagewidth = parameters->adapted_width;
+    pageheight = parameters->adapted_height;
 
+    //const double original_width = parameters->width;
+    //const double original_height = parameters->height;
     const double surface_offset = 50;
+
     //background surface size (add separation and some extra space)
     const double surface_width = (parameters->horiz ? pageheight : pagewidth)
             + (parameters->separation + surface_offset); //some offset to increase canvas
@@ -135,7 +138,7 @@ void DrawTreeCairo::start(const Parameters *p,
     }
         
     //if the cairo object has been given as inputs
-    if(!cr_)   
+    if (!cr_)
     {
         cr = cairo_create (surface); 
     }
@@ -184,9 +187,6 @@ void DrawTreeCairo::cleanUp()
     LGT.clear();
 }
 
-//
-// Total destruction
-//
 DrawTreeCairo::~DrawTreeCairo()
 {
     cleanUp();
@@ -210,7 +210,7 @@ const bool DrawTreeCairo::RenderImage()
     {
         char str[80];
         
-        if( parameters->format.compare("png") == 0 )
+        if ( parameters->format.compare("png") == 0 )
         {
             cairo_status_t e = cairo_surface_write_to_png (surface, strcat(strcpy(str,parameters->outfile.c_str()),".png"));
             if (!e == CAIRO_STATUS_SUCCESS )
@@ -221,7 +221,7 @@ const bool DrawTreeCairo::RenderImage()
         }
         else if ( parameters->format.compare("jpg") == 0 )
         {
-            //TODO what to do here??
+            //TODO what to do here?, cairo stoped surporting writing on jpg surfaces
             
             //cairo_status_t e = cairo_surface_write_to_jpg (surface, strcat(strcpy(str,parameters->outfile.c_str()),".jpg"));
             //if (!e == CAIRO_STATUS_SUCCESS )
@@ -230,25 +230,35 @@ const bool DrawTreeCairo::RenderImage()
     }
 
     cr = cairo_create(surfaceBackground);
-
-    //TODO calling the same for horizontal and vertical??
-    //cairo_set_source_surface(cr,surface,parameters->separation,parameters->separation);
     cairo_set_source_surface(cr,surface,5,5); //a little offset
-
     cairo_paint(cr);
     return 1;
 }
 
 void DrawTreeCairo::calculateTransformation()
 {
+    double scale_width = 1.0;
+    double scale_height = 1.0;
+
+    /*if (parameters->width != parameters->adapted_width)
+    {
+        //we know adapted is always at least equal or bigger than width
+        scale_width = parameters->width / parameters->adapted_width;
+    }
+    if (parameters->height != parameters->adapted_height)
+    {
+        //we know adapted is always at least equal or bigger than width
+        scale_height = parameters->height / parameters->adapted_height;
+    }*/
+
+    //if canvas was increased to fit the tree we scale it down
+    const double xscale = parameters->imagescale * scale_width;
+    const double yscale = parameters->imagescale * scale_height;
+    const double yoffset = (double)parameters->xoffset;
+    const double xoffset = (double)parameters->yoffset;
 
     if(parameters->horiz)
     {
-        const double xscale = parameters->imagescale;
-        const double yscale = parameters->imagescale;
-        const double yoffset = (double)parameters->xoffset;
-        const double xoffset = (double)parameters->yoffset;
-
         const double origin_x = species->getRootNode()->getX();
         const double origin_y = species->getRootNode()->getY();
 
@@ -270,8 +280,7 @@ void DrawTreeCairo::calculateTransformation()
     }
     else
     {
-        cairo_matrix_init(&matrix,parameters->imagescale,0,0,parameters->imagescale,
-            parameters->xoffset,parameters->yoffset);
+        cairo_matrix_init(&matrix,xscale,0,0,yscale,xoffset,yoffset);
         cairo_transform(cr,&matrix);
     }
 }
@@ -317,16 +326,16 @@ void DrawTreeCairo::writeEventCosts()
     cerr << oss.str() << endl;
     cairo_text_extents (cr, oss.str().c_str(), &extents);
     cairo_move_to (cr, 0, extents.height*2);
-    cairo_show_text(cr,  oss.str().c_str());
+    cairo_show_text(cr, oss.str().c_str());
     cairo_restore(cr);
 }
 
 void DrawTreeCairo::createLegend()
 {
-    unsigned x = 0;
-    unsigned y = 0;
-    unsigned width = 160;
-    unsigned height = 90;
+    const unsigned x = 0;
+    const unsigned y = 0;
+    const unsigned width = 160;
+    const unsigned height = 90;
 
     cairo_save(cr);
     cairo_matrix_invert(&matrix);
@@ -410,7 +419,6 @@ void DrawTreeCairo::createLegend()
     cairo_show_text(cr,"Species Font Color");
     cairo_stroke(cr);
 
-
     cairo_set_source_rgba(cr,parameters->geneFontColor.red,
                 parameters->geneFontColor.green,parameters->geneFontColor.blue,1);
     cairo_move_to(cr,x+10,y+80);
@@ -434,15 +442,17 @@ DrawTreeCairo::GeneTreeMarkers()
     {
         cairo_set_source_rgba(cr,config->umColor.red,config->umColor.green,config->umColor.blue,0.80);
     }
+
     cairo_select_font_face (cr, parameters->gene_font.c_str(), CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_BOLD);
     cairo_set_font_size(cr,fontsize * parameters->markerscale);
     cairo_text_extents (cr, "i", &extents);
-    double offset = extents.width/2;
+
+    const double offset = extents.width / 2;
 
     for(vector<double>::const_iterator i = parameters->uMarker.begin(); 
         i != parameters->uMarker.end(); i++)
     {
-        if(*i < gene->getNumberOfNodes())
+        if (*i < gene->getNumberOfNodes())
         {
             Node *n = gene->getNode(*i);
             ostringstream os;
@@ -454,9 +464,7 @@ DrawTreeCairo::GeneTreeMarkers()
     }
 }
 
-//
-// Convert a number to a string. 
-//
+// Convert a number to a string.
 string
 DrawTreeCairo::double2charp(double x)
 {
@@ -468,7 +476,7 @@ DrawTreeCairo::double2charp(double x)
 void DrawTreeCairo::DrawTimeEdges()
 {
     cairo_set_line_width (cr, linewidth);
-    double midnode = leafWidth;
+    const double midnode = leafWidth;
     cairo_set_font_size (cr, fontsize);
     cairo_set_source_rgba (cr,parameters->allFontColor.red,parameters->allFontColor.green,parameters->allFontColor.blue, 1);
     cairo_move_to(cr, 0, pageheight);
@@ -480,12 +488,13 @@ void DrawTreeCairo::DrawTimeEdges()
     for(unsigned u = 0; u < species->getNumberOfNodes(); u++)
     {
         Node* n = species->getNode(u);
-        if(!n->isLeaf()) 
+        if (!n->isLeaf())
         {		    
             cairo_move_to(cr, n->getX(), pageheight);    
             cairo_line_to(cr, n->getX(), n->getY() + midnode);
         }
     }
+
     cairo_stroke(cr);
     cairo_set_dash(cr, dashed3, 0, 0);
 }
@@ -498,8 +507,10 @@ void DrawTreeCairo::DrawSpeciesEdgesWithContour()
     cairo_set_line_width(cr, s_contour_width);
     cairo_set_line_cap(cr, CAIRO_LINE_CAP_ROUND);
     cairo_set_line_join(cr, CAIRO_LINE_JOIN_ROUND);
-    double midnode = leafWidth;
+
+    const double midnode = leafWidth;
     Node *root = species->getRootNode();
+
     cairo_move_to(cr,0,root->getY()+midnode);
     cairo_rel_line_to(cr,root->getX(),0);
     cairo_rel_line_to(cr,0,-midnode*2);
@@ -513,12 +524,13 @@ void DrawTreeCairo::DrawSpeciesEdgesWithContour()
     
     for ( Node *n = species->preorder_begin(); n != 0; n = species->preorder_next(n) )
     {
-        double x = n->getX();
-        double y = n->getY();
+        const double x = n->getX();
+        const double y = n->getY();
 
-        if(!n->isLeaf())
+        if (!n->isLeaf())
         { 
-            double pmidx, pmidy;
+            double pmidx;
+            double pmidy;
             intersection(x, y - midnode,
                     n->getLeftChild()->getX(), n->getLeftChild()->getY()-midnode,		      
                     x, y + midnode,
@@ -549,8 +561,10 @@ void DrawTreeCairo::DrawSpeciesEdges()
 
     cairo_set_source_rgba(cr,config->species_edge_color.red,config->species_edge_color.green,config->species_edge_color.blue,1);
     cairo_set_line_width(cr, 1);
-    double midnode = leafWidth;
+
+    const double midnode = leafWidth;
     Node *root = species->getRootNode();
+
     cairo_move_to(cr,0,root->getY()+midnode);
     cairo_rel_line_to(cr,root->getX(),0);
     cairo_rel_line_to(cr,0,-midnode*2);
@@ -561,10 +575,11 @@ void DrawTreeCairo::DrawSpeciesEdges()
     
     for ( Node *n = species->preorder_begin(); n != 0; n = species->preorder_next(n) )
     {
-        double x = n->getX();
-        double y = n->getY();
+        const double x = n->getX();
+        const double y = n->getY();
+
         cairo_set_source_rgba(cr,config->species_edge_color.red,config->species_edge_color.green,config->species_edge_color.blue,1);
-        if(!n->isLeaf())
+        if (!n->isLeaf())
         {
             cairo_move_to(cr,x,y + midnode);
             cairo_rel_line_to(cr,n->getLeftChild()->getX()-x,n->getLeftChild()->getY()-y);
@@ -614,11 +629,11 @@ void DrawTreeCairo::DrawTimeLabels()
     {
         Node* n = species->getNode(u);
     
-        if(!n->isLeaf())
+        if (!n->isLeaf())
         {
-            string timelabel = double2charp(n->getNodeTime());
-            double xpos = n->getX();
-            double ypos = pageheight;
+            const string timelabel = double2charp(n->getNodeTime());
+            const double xpos = n->getX();
+            const double ypos = pageheight;
             cairo_move_to(cr,xpos+offset,ypos);
             cairo_save(cr);
             cairo_rotate(cr,-(pi/2));
@@ -648,7 +663,7 @@ void DrawTreeCairo::DrawSpeciesNodes()
     
     for ( Node *n = species->preorder_begin(); n != 0; n = species->preorder_next(n) )
     {
-        if(!n->isLeaf())
+        if (!n->isLeaf())
         {
             cairo_save(cr);
             cairo_translate (cr,n->getX(), n->getY());
@@ -686,9 +701,11 @@ void DrawTreeCairo::DrawSpeciesNodeLabels()
             }
             st << " " + n->getName();
         }
+
         const string ns = st.str();
-        double xpos = n->getX();
-        double ypos = n->getY();
+        const double xpos = n->getX();
+        const double ypos = n->getY();
+
         cairo_text_extents (cr, ns.c_str(), &extents);
         if(n->isLeaf())
         {
@@ -717,10 +734,10 @@ DrawTreeCairo::TimeLabelsOnEdges()
     for(unsigned u = 0; u < species->getNumberOfNodes(); u++)
     {
         Node* n = species->getNode(u);
-        string timelabel = double2charp(n->getTime());
+        const string timelabel = double2charp(n->getTime());
         double xpos = n->getX();
         double ypos = n->getY();
-        if(!n->isLeaf())
+        if (!n->isLeaf())
         {
             cairo_text_extents (cr, timelabel.c_str(), &extents);
             xpos = xpos - (extents.width + extents.x_advance);
@@ -747,31 +764,31 @@ void DrawTreeCairo::DrawGeneNodes()
         
     for ( Node *n = gene->preorder_begin(); n != 0; n = gene->preorder_next(n) )
     {
-        double x = n->getX();
-        double y = n->getY();
+        const double x = n->getX();
+        const double y = n->getY();
         
-    if(n->getReconcilation() == Node::Leaf || n->getReconcilation() == Node::Speciation) //speciation or leaf
-    {
-        cairo_set_source_rgba(cr, specCol.red, specCol.green, specCol.blue, 1);
-        cairo_arc(cr,x, y, leafWidth/10,0.0,2*pi);
-        cairo_fill(cr);
+        if(n->getReconcilation() == Node::Leaf || n->getReconcilation() == Node::Speciation) //speciation or leaf
+        {
+            cairo_set_source_rgba(cr, specCol.red, specCol.green, specCol.blue, 1);
+            cairo_arc(cr,x, y, leafWidth/10,0.0,2*pi);
+            cairo_fill(cr);
+        }
+        else if (n->getReconcilation() == Node::Duplication) //duplication
+        {
+            nDupl++;
+            cairo_set_source_rgba(cr, duplCol.red, duplCol.green, duplCol.blue, 1);
+            cairo_rectangle(cr,x-(leafWidth/5)/2,y-(leafWidth/5)/2,leafWidth/5,leafWidth/5);
+            cairo_fill(cr);
+
+        }
+        else if (n->getReconcilation() == Node::LateralTransfer) //duplication
+        {
+            nTrans++;
+            cairo_set_source_rgba(cr, duplCol.red, duplCol.green, duplCol.blue, 1);
+            cairo_rectangle(cr,x-(leafWidth/5)/2,y-(leafWidth/5)/2,leafWidth/5,leafWidth/5);
+            cairo_fill(cr);
+        }
     }
-    else if (n->getReconcilation() == Node::Duplication) //duplication
-    {
-        nDupl++;
-        cairo_set_source_rgba(cr, duplCol.red, duplCol.green, duplCol.blue, 1);
-        cairo_rectangle(cr,x-(leafWidth/5)/2,y-(leafWidth/5)/2,leafWidth/5,leafWidth/5);
-        cairo_fill(cr);
-            
-    }
-    else if (n->getReconcilation() == Node::LateralTransfer) //duplication
-    {
-        nTrans++;
-        cairo_set_source_rgba(cr, duplCol.red, duplCol.green, duplCol.blue, 1);
-        cairo_rectangle(cr,x-(leafWidth/5)/2,y-(leafWidth/5)/2,leafWidth/5,leafWidth/5);
-        cairo_fill(cr);        
-    }
-}
     
 cairo_stroke(cr);
 
@@ -786,7 +803,7 @@ void DrawTreeCairo::DrawGeneEdges()
     for (unsigned i = 0; i < gene->getNumberOfNodes(); i++)
     {
         Node *n = gene->getNode(i);
-        if(!n->isRoot())
+        if (!n->isRoot())
         {
             if(n->getReconcilation() == Node::LateralTransfer)
             {
@@ -825,7 +842,7 @@ void DrawTreeCairo::DrawGeneLabels()
     
     for ( Node *n = gene->preorder_begin(); n != 0; n = gene->preorder_next(n) )
     {
-        if(!gamma->isLateralTransfer(*n))
+        if (!gamma->isLateralTransfer(*n))
         {
             ostringstream os;
             if (parameters->ids_on_inner_nodes) 
@@ -876,7 +893,8 @@ void DrawTreeCairo::newDrawPath(Node *n)
 
     double xorigin = n->getX();
     double yorigin = n->getY();
-    double xend,yend = 0.0;
+    double xend = 0.0;
+    double yend = 0.0;
 
     cairo_move_to(cr,n->getX(),n->getY());
 
@@ -937,13 +955,12 @@ void DrawTreeCairo::DrawLGT()
 }	
 
 
-
-/* this function gets the destiny x and the origin x of the LT
-* then it gets the edge when the LT lays on the origin, if 
-* there is no edge the virtual edge will be between the species nodes
-* if the destiny is in a different time frame the origin and origin will
-* be placed according to the origin edge and the LGT will be drawn from
-* there to the destiny */
+// this function computes the destiny x and the origin x of the LGT
+// then it gets the edge where the LGT lays on the origin, if
+// there is no edge the virtual edge will be between the species nodes
+// if the destiny is in a different time frame than the origin, the origin will
+// be placed according to the origin edge and the LGT will be drawn from
+// there to the destiny
 void DrawTreeCairo::newLGTPath(Node *n)
 {
 
@@ -972,8 +989,8 @@ void DrawTreeCairo::newLGTPath(Node *n)
         y2 = e->getYorigin();
     }
     double slope = (y2 - y1) / (x2 - x1);      
-    double n1 = y1 - slope*x1;
-    double y = slope*originx + n1; 
+    double n1 = y1 - (slope * x1);
+    double y = (slope * originx) + n1;
 
     n->setX(originx);
     n->setY(y);
@@ -985,8 +1002,8 @@ void DrawTreeCairo::newLGTPath(Node *n)
         y2 = GeneDestiny->getY();
         y1 = destiny->getParent()->getY();
         slope = (y2 - y1) / (x2 - x1);      
-        n1 = y1 - slope*x1;
-        y = slope*destinyx + n1; 
+        n1 = y1 - (slope * x1);
+        y = (slope *destinyx) + n1;
 
         cairo_move_to(cr,n->getX(),n->getY());
         cairo_line_to(cr,destinyx,y);
@@ -1001,15 +1018,18 @@ void DrawTreeCairo::newLGTPath(Node *n)
         destinyx = originx;
                 
         cairo_move_to(cr,GeneDestiny->getX(),GeneDestiny->getY());
-        double xend,yend,xorigin,yorigin;
+        double xend;
+        double yend;
+        double xorigin;
+        double yorigin;
         
         for(Node *o = destiny; destiny != newdestiny; destiny = destiny->getParent())
         {
             double x = o->getParent()->getX();
-            //TODO what if we have more LGT going trough this species node??
-            unsigned size = gamma->getSize(o->getParent()) + 1;
             double y = o->getParent()->getY();
-        
+            //TODO what if we have more LGT going trough this species node??
+            const unsigned size = gamma->getSize(o->getParent()) + 1;
+
             if (size > 1)
             {
                 double delta = leafWidth / (size - 1);
@@ -1041,7 +1061,7 @@ void DrawTreeCairo::newLGTPath(Node *n)
 }
 
 
-//get the highest not LGT mapped node of n
+//get the highest non LGT mapped node of n
 Node* DrawTreeCairo::getHighestMappedLGT(Node *n)
 {
     Node *parent = n->getParent();
@@ -1057,7 +1077,7 @@ Node* DrawTreeCairo::getHighestMappedLGT(Node *n)
     return parent;
 }
 
-
+//get the lowest non LGT mapped node of n
 Node* DrawTreeCairo::getLowestMappedLGT(Node *n)
 {
     Node *left = n->getLeftChild();
@@ -1065,7 +1085,7 @@ Node* DrawTreeCairo::getLowestMappedLGT(Node *n)
     Node *child = n->getHostChild();
     Node *son;
 
-    if((*lambda)[right] == child)
+    if ((*lambda)[right] == child)
     {
         son = right;
     }
@@ -1075,7 +1095,7 @@ Node* DrawTreeCairo::getLowestMappedLGT(Node *n)
     }
     while(son->getReconcilation() == Node::LateralTransfer && !son->isLeaf())
     {
-        if((*lambda)[son->getRightChild()] == child)
+        if ((*lambda)[son->getRightChild()] == child)
         {
             son = son->getRightChild();
         }
@@ -1094,7 +1114,7 @@ Node* DrawTreeCairo::getLowestMappedNOLGT(Node *n)
     Node *child = n->getHostParent();
     Node *son;
 
-    if((*lambda)[right] == child)
+    if ((*lambda)[right] == child)
     {
         son = right;
     }
@@ -1104,7 +1124,7 @@ Node* DrawTreeCairo::getLowestMappedNOLGT(Node *n)
     }
     while(son->getReconcilation() == Node::LateralTransfer && !son->isLeaf())
     {
-        if((*lambda)[son->getRightChild()] == child)
+        if ((*lambda)[son->getRightChild()] == child)
         {
             son = son->getRightChild();
         }
@@ -1116,9 +1136,8 @@ Node* DrawTreeCairo::getLowestMappedNOLGT(Node *n)
     return son;
 }
 
-
 //detect if the gene node passed as argument is destiny of a LGT
-bool DrawTreeCairo::destinyLGT(Node *o)
+const bool DrawTreeCairo::destinyLGT(Node *o)
 {
 
     for (unsigned i = 0; i < parameters->transferedges.size(); i++)
@@ -1214,18 +1233,16 @@ pair<Node*,pair<double,double> > DrawTreeCairo::getOriginLGT(Node *n)
     return std::make_pair(origin,std::make_pair(originx,destinyx));
 }
 
-
-bool DrawTreeCairo::overlapSpeciesNode(double x,Node *origin, Node *destiny)
+const bool DrawTreeCairo::overlapSpeciesNode(double x,Node *origin, Node *destiny)
 {
-    double y1 = (origin->getY() + origin->getParent()->getY()) / 2;
-    double y2 = (destiny->getY() + destiny->getParent()->getY()) / 2;
+    const double y1 = (origin->getY() + origin->getParent()->getY()) / 2;
+    const double y2 = (destiny->getY() + destiny->getParent()->getY()) / 2;
 
     for(Node *n = species->getPostOderBegin(); n != 0; n = species->postorder_next(n))
     {
-        
         if (n != destiny && !n->isLeaf())
         {
-            if( (x >= (n->getX() - (leafWidth*0.3))) && (x <= (n->getX() + (leafWidth*0.3))) 
+            if ( (x >= (n->getX() - (leafWidth*0.3))) && (x <= (n->getX() + (leafWidth*0.3)))
                 && n->getY() >= y1 && n->getY() <= y2) 
             {
                 return true;
@@ -1264,7 +1281,7 @@ const bool DrawTreeCairo::checkCollision(double x00,double y00, double x01,
 }
 
 void DrawTreeCairo::addEdge(Node *spO,Node *spE,Node *gO,Node *gE,
-double xo,double yo,double xe,double ye,Edge::category m)
+                            double xo,double yo,double xe,double ye,Edge::category m)
 {
     Edge *e = new Edge();
     e->setSpeOrigin(*spO); 
@@ -1294,7 +1311,7 @@ const unsigned DrawTreeCairo::NumberLT(Node *n)
         Node* temp = getLowestMappedLGT(i.first);
         if(GeneOrigin == temp)
         {
-            counter++;
+            ++counter;
         }
     }
 

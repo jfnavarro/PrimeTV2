@@ -107,27 +107,27 @@ const Node *Edge::getGeneEnd() const
     return this->geneEnd;
 }
 
-double Edge::getXorigin()
+const double Edge::getXorigin() const
 {
     return this->xOrigin;
 }
 
-double Edge::getYorigin()
+const double Edge::getYorigin() const
 {
     return this->yOrigin;
 }
 
-double Edge::getXend()
+const double Edge::getXend() const
 {
     return this->xEnd;
 }
 
-double Edge::getYend()
+const double Edge::getYend() const
 {	
     return this->yEnd;
 }
 
-Edge::category Edge::getMode()
+const Edge::category Edge::getMode() const
 {
     return this->mode;
 }

@@ -97,7 +97,7 @@ void LayoutTrees::calculateSizes()
     const unsigned sizeRoot = gamma->getSize(species->getRootNode());
 
     //extra espace from the root to the margin to draw gene nodes mapped to the root
-    xCanvasXtra = parameters->root_sep * sizeRoot;
+    xCanvasXtra = parameters->root_sep * (double)sizeRoot;
     
     // yspace is the space between each specie node, we compute it according to the width of the canvas
     // and the total number of leaves
@@ -109,22 +109,26 @@ void LayoutTrees::calculateSizes()
     const double min_node_height = (double)parameters->min_node_height * (double)maxnodesmapped;
     const double aspect_ratio = std::abs((double)parameters->height / (double)parameters->width);
 
+    //if I will change the size I want to store the original size as well
+    parameters->adapted_height = parameters->height;
+    parameters->adapted_width = parameters->width;
+
     //check if the tree is too big to fit in the actual canvas size (min_node_height is 3 by default)
     while( NodeHeight < min_node_height )
     {
         double yrate = std::abs(min_node_height * numberLeaves);
         //increase canvas size (keeping aspect ratio)
-        parameters->height += yrate;
-        parameters->width += (yrate * aspect_ratio);
+        parameters->adapted_height += yrate;
+        parameters->adapted_width += (yrate * aspect_ratio);
         //recompute yspace
-        yspace = (double)(parameters->height) / (double)numberLeaves;
+        yspace = (double)(parameters->adapted_height) / (double)numberLeaves;
         //recompute NodeHeight
         NodeHeight = yspace / (double)maxnodesmapped;
     }
     
     //Y and X CanvasSize will be the real space dedicated to place the trees
-    YCanvasSize = parameters->height - parameters->separation;
-    XCanvasSize = parameters->width - xCanvasXtra - parameters->separation;
+    YCanvasSize = parameters->adapted_height - parameters->separation;
+    XCanvasSize = parameters->adapted_width - xCanvasXtra - parameters->separation;
 }
 
 void LayoutTrees::calculateIntervals()
@@ -251,7 +255,7 @@ const unsigned LayoutTrees::MostGenes() const
     for(Node *n = species->getPostOderBegin(); n != 0; n = species->postorder_next(n))
     {
         unsigned size = gamma->getSize(n);
-        if( size > currentMax )
+        if ( size > currentMax )
         {
             currentMax = size;
         }
@@ -285,7 +289,7 @@ void LayoutTrees::AssignLeafGene(Node *n)
     n->setY(y);
     n->setHostChild(spn);
     
-    if(!n->isRoot() && gamma->isLateralTransfer(*n->getParent())
+    if (!n->isRoot() && gamma->isLateralTransfer(*n->getParent())
             && ((*lambda)[n] == (*lambda)[n->getParent()]))
     {
         Node *destiny = (*lambda)[getHighestMappedLGT(n)];
@@ -334,7 +338,7 @@ void LayoutTrees::AssignGeneDuplication(Node *n)
     double proportion = 0;
     double delta = 0;
     double edge = 0;
-    if(!spb->isRoot())
+    if (!spb->isRoot())
     {
         Node *spbP = spb->getParent();
         edge = spb->getX() - spbP->getX();
@@ -385,7 +389,7 @@ LayoutTrees::FindDuplications(Node* node)
 {
     if(gamma->isSpeciation(*node) || gamma->isLateralTransfer(*node))
     {
-        if(!node->isLeaf())
+        if (!node->isLeaf())
         {
             FindDuplications(node->getLeftChild());
             FindDuplications(node->getRightChild());
@@ -425,7 +429,7 @@ LayoutTrees::MapDuplications(Node* de, unsigned line)
 
     else
     {
-        if(!gamma->isSpeciation(*de) && !gamma->isLateralTransfer(*de))
+        if (!gamma->isSpeciation(*de) && !gamma->isLateralTransfer(*de))
         {
             unsigned testlineage = Adress[de]->getNumber();
 

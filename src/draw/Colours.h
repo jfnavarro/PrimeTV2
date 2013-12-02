@@ -32,7 +32,12 @@ class Colours
 {
 
 public:
-    
+
+    Colours();
+    ~Colours();
+    void setColors(const char *set);
+    const char* getSet();
+
     Color default_foreground_color; // Draw the sequence names
     Color gene_edge_color;
     Color gene_lgt_color;	/* Not in use! */
@@ -46,11 +51,6 @@ public:
 
     Color markerColor; //marker color
     Color umColor;
-
-    Colours();
-    ~Colours();
-    void setColors(const char *set);
-    const char* getSet();
     
 private:
     const char *set;

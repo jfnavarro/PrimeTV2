@@ -99,7 +99,7 @@ SetOfNodesEx<T>::set4os() const
     for(typename std::set<T*>::const_iterator i = theSet.begin();
         i != theSet.end(); i++)
     {
-        if(*i)
+        if (*i)
             os << (*i)->getNumber();
         else
             os << "0";

@@ -68,7 +68,7 @@ LambdaMapEx::LambdaMapEx()
 LambdaMapEx&
 LambdaMapEx::operator=(const LambdaMapEx &l)
 {
-    if(&l != this)
+    if (&l != this)
     {
         NodeVector::operator=(l);
         description = l.description;

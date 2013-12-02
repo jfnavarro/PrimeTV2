@@ -16,7 +16,7 @@ namespace unit
 
     //TestHandle::TestHandle() : m_suite(0), m_name() { }
     TestHandle::TestHandle(TestSuite *suite, const QString &name)
-        : m_suite(suite), m_name(name)
+        : m_name(name), m_suite(suite)
     { }
 
     TestHandle TestHandle::dependsOn(const QString &name)

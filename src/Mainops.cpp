@@ -52,19 +52,19 @@ void Mainops::start()
 
 void Mainops::cleanTrees()
 {
-    if(genesTree)
+    if (genesTree)
     {
         delete genesTree;
     }
     genesTree = 0;
 
-    if(speciesTree)
+    if (speciesTree)
     {
         delete speciesTree;
     }
     speciesTree = 0;
 
-    if(io)
+    if (io)
     {
         delete io;
     }
@@ -77,21 +77,21 @@ void Mainops::cleanTrees()
 
 Mainops::~Mainops()
 {
-    if(genesTree)
+    if (genesTree)
     {
-        delete(genesTree);
+        delete genesTree;
     }
     genesTree = 0;
 
-    if(speciesTree)
+    if (speciesTree)
     {
-        delete(speciesTree);
+        delete speciesTree;
     }
     speciesTree = 0;
 
-    if(gamma)
+    if (gamma)
     {
-        delete(gamma);
+        delete gamma;
 
     }
     gamma = 0;
@@ -102,17 +102,17 @@ Mainops::~Mainops()
 
     //}
     //lambdamap = 0;
-
-    if(dt)
+ 
+    if (dt)
     {
-        delete(dt);
+        delete dt;
 
     }
     dt = 0;
 
-    if(io)
+    if (io)
     {
-        delete(io);
+        delete io;
     }
     io = 0;
 }
@@ -126,11 +126,13 @@ const bool Mainops::lateralTransfer(const std::string &mapname, bool dp)
     late.g_input.min_cost = parameters->lateralmincost;
     late.g_input.gene_tree = genesTree;
     late.g_input.species_tree = speciesTree;
+    
     if(dp)
     {
         late.g_input.print_only_minimal_loss_scenarios = false;
         late.g_input.print_only_minimal_transfer_scenarios = false;
     }
+    
     if(parameters->isreconciled)
     {
         late.g_input.sigma_fname = mapname;
@@ -246,7 +248,7 @@ void Mainops::reconcileTrees(const string &gene, const string &species, const st
     io->setSourceFile(species);
     speciesTree = new TreeExtended(io->readNewickTree());
 
-    if(mapfile != "")
+    if (mapfile != "")
     {
         gs = TreeIO::readGeneSpeciesInfo(mapfile);
     }
@@ -292,12 +294,11 @@ const bool Mainops::checkValidity()
 
 void Mainops::DrawTree(cairo_t *cr)
 {
-
     dt->start(parameters,genesTree,speciesTree,gamma,lambdamap,cr);
 
     dt->calculateTransformation();
     
-    if(parameters->do_not_draw_species_tree == false)
+    if (parameters->do_not_draw_species_tree == false)
     {
         //species tree
         if (!parameters->noTimeAnnotation)
@@ -312,13 +313,19 @@ void Mainops::DrawTree(cairo_t *cr)
                 dt->DrawTimeLabels();
             }
         }
-        dt->DrawSpeciesEdgesWithContour(); //NOTE this might break the layout
-        //dt->DrawSpeciesEdges();
+        if (parameters->lattransfer)
+        {
+            dt->DrawSpeciesEdges();
+        }
+        else
+        {
+            dt->DrawSpeciesEdgesWithContour(); //NOTE this might break the layout when using LGT
+        }
         dt->DrawSpeciesNodes();
         dt->DrawSpeciesNodeLabels();
     }
     // gene tree
-    if(!parameters->do_not_draw_guest_tree)
+    if (!parameters->do_not_draw_guest_tree)
     {
         dt->DrawGeneEdges();
         dt->DrawGeneNodes();
@@ -329,21 +336,21 @@ void Mainops::DrawTree(cairo_t *cr)
         }
     }
     
-    if(parameters->header)
-    {
-        dt->createHeader();
-    }
-    if(parameters->legend)
+    if (parameters->legend)
     {
         dt->createLegend();
     }
-    if(parameters->title)
+    if (parameters->title)
     {
         dt->createTitle();
     }
-    if(parameters->show_event_count)
+    if (parameters->show_event_count)
     {
         dt->writeEventCosts();
+    }
+    if(parameters->header)
+    {
+        dt->createHeader();
     }
 }
 
@@ -393,7 +400,7 @@ const bool Mainops::getValidityLGT()
 void Mainops::drawBest()
 {
     CalculateGamma(); //calculation of gamma and lambda
-    if(!checkValidity())
+    if (!checkValidity())
     {
         if(parameters->lattransfer)
         {
@@ -406,7 +413,7 @@ void Mainops::drawBest()
     }
     calculateCordinates(); //calculation of the drawing cordinates
     DrawTree();  //drawing the tree
-    if(!RenderImage())
+    if (!RenderImage())
     {
         throw AnError(": Error rendering the tree..\n");
     } // save the file
@@ -429,7 +436,7 @@ void Mainops::drawAllLGT()
         {
             calculateCordinates(); //calculation of the drawing cordinates
             DrawTree();  //drawing the tree
-            if(!RenderImage())
+            if (!RenderImage())
             {
                 throw AnError(": Error rendering the tree..\n");
             } // save the file

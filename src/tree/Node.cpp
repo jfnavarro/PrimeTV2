@@ -277,7 +277,7 @@ SetOfNodesEx<Node>
 Node::getLeaves()
 {
     SetOfNodesEx<Node> nodes;
-    if( isLeaf() )
+    if ( isLeaf() )
     {
         nodes.insert(this);
     }

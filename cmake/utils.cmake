@@ -16,13 +16,13 @@ MACRO(INITIALISE_PROJECT)
     IF(CMAKE_BUILD_TYPE MATCHES [Dd][Ee][Bb][Uu][Gg])
         MESSAGE("Building a debug version...")
         # Default compiler settings
-        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0 -fPIC")
+        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0 -fPIC -fexceptions")
         # Make sure that debugging is on for Qt
         ADD_DEFINITIONS(-DQT_DEBUG)
     ELSE()
         MESSAGE("Building a release version...")
         # Default compiler and linker settings
-        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2 -ffast-math -fPIC -funroll-loops")
+        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2 -ffast-math -fPIC -funroll-loops -fexceptions")
         # Make sure that debugging is off for Qt
         ADD_DEFINITIONS(-DQT_NO_DEBUG_OUTPUT)
         ADD_DEFINITIONS(-DQT_NO_DEBUG)
@@ -59,8 +59,11 @@ MACRO(INITIALISE_PROJECT)
     endif()
 
     if(APPLE)
-        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mmacosx-version-min=10.7 -stdlib=libc++")
-        SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -mmacosx-version-min=10.7 -stdlib=libc++")
+        set(CMAKE_XCODE_ATTRIBUTE_GCC_VERSION "com.apple.compilers.llvm.clang.1_0")
+        set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LANGUAGE_STANDARD "c++0x")
+        set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LIBRARY "libc++")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mmacosx-version-min=10.7 -stdlib=libc++")
+        set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -mmacosx-version-min=10.7 -stdlib=libc++")
     endif()
 
 ENDMACRO()
@@ -76,7 +79,7 @@ ENDMACRO()
 macro(check_for_cxx11_compiler _VAR)
     message(STATUS "Checking for C++11 compiler")
     set(${_VAR})
-    if((MSVC AND MSVC10) OR
+    if ((MSVC AND MSVC10) OR
        (CMAKE_COMPILER_IS_GNUCXX AND NOT ${CMAKE_CXX_COMPILER_VERSION} VERSION_LESS 4.6) OR
        (CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND NOT ${CMAKE_CXX_COMPILER_VERSION} VERSION_LESS 3.1))
         set(${_VAR} 1)

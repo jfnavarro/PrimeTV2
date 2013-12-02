@@ -148,7 +148,7 @@ inline bool ConfigFile::string_as_T<bool>( const string& s )
     string sup = s;
     for( string::iterator p = sup.begin(); p != sup.end(); ++p )
         *p = toupper(*p);  // make string all caps
-    if( sup==string("FALSE") || sup==string("F") ||
+    if ( sup==string("FALSE") || sup==string("F") ||
             sup==string("NO") || sup==string("N") ||
             sup==string("0") || sup==string("NONE") )
         b = false;
@@ -161,7 +161,7 @@ T ConfigFile::read( const string& key ) const
 {
     // Read the value corresponding to key
     mapci p = myContents.find(key);
-    if( p == myContents.end() ) throw key_not_found(key);
+    if ( p == myContents.end() ) throw key_not_found(key);
     return string_as_T<T>( p->second );
 }
 
@@ -172,7 +172,7 @@ T ConfigFile::read( const string& key, const T& value ) const
     // Return the value corresponding to key or given default value
     // if key is not found
     mapci p = myContents.find(key);
-    if( p == myContents.end() ) return value;
+    if ( p == myContents.end() ) return value;
     return string_as_T<T>( p->second );
 }
 
@@ -185,7 +185,7 @@ bool ConfigFile::readInto( T& var, const string& key ) const
     // Otherwise leave var untouched
     mapci p = myContents.find(key);
     bool found = ( p != myContents.end() );
-    if( found ) var = string_as_T<T>( p->second );
+    if ( found ) var = string_as_T<T>( p->second );
     return found;
 }
 
@@ -198,7 +198,7 @@ bool ConfigFile::readInto( T& var, const string& key, const T& value ) const
     // Otherwise set var to given default
     mapci p = myContents.find(key);
     bool found = ( p != myContents.end() );
-    if( found )
+    if ( found )
         var = string_as_T<T>( p->second );
     else
         var = value;

@@ -29,9 +29,9 @@
 #include "NHXannotation.h"
 
 extern struct NHXnode *root_node;
-extern unsigned int lineno; /* Current line number in input file */
-extern unsigned int n_left_parens; /* Number of matched left parens '(' */
-extern unsigned int n_right_parens; /* Number of matched right parens ')' */
+extern unsigned int lineno; // Current line number in input file
+extern unsigned int n_left_parens; // Number of matched left parens '('
+extern unsigned int n_right_parens; // Number of matched right parens ')'
 
 void inform_parser(const char *, const char*);
 
@@ -46,7 +46,6 @@ delete_node(struct NHXnode *n)
     free(n);
 }
 
-
 void
 delete_tree_nodes(struct NHXnode *n)
 {
@@ -60,10 +59,9 @@ delete_tree_nodes(struct NHXnode *n)
     }
 }
 
-/*
-  Given a NHX node, see if it contains an annotation with the given tag.
-  Returns 0, if not present, or if v is 0.
-*/
+
+//  Given a NHX node, see if it contains an annotation with the given tag.
+//  Returns 0, if not present, or if v is 0.
 struct NHXannotation* find_annotation(const struct NHXnode *v, const char *tag)
 {
     struct NHXannotation *a;
@@ -145,7 +143,7 @@ speciesName(const struct NHXnode *v)
 }
 
 unsigned
-subtreeSize(const struct NHXnode *n) /* Count the number of nodes in subtree rooted at n */
+subtreeSize(const struct NHXnode *n) // Count the number of nodes in subtree rooted at n
 {
     if (n == 0)
     {
@@ -158,8 +156,6 @@ subtreeSize(const struct NHXnode *n) /* Count the number of nodes in subtree roo
                 + subtreeSize(n->right);
     }
 }
-
-
 
 void
 NHX_debug_print(struct NHXnode *v)

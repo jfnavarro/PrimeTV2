@@ -65,7 +65,7 @@ set(SRC_GUI
 
 set(INC_LAYOUT
     layout/Edge.h
-    layout/Layouttrees.h
+    layout/Layoutrees.h
 )
 
 set(SRC_LAYOUT
@@ -141,7 +141,7 @@ set(INCLUDES
     ${INC_GUI}
     ${INC_LAYOUT}
     ${INC_LGT}
-    ${INC_PARSER}
+    #${INC_PARSER}
     ${INC_RECONCILATION}
     ${INC_TREE}
     ${INC_UTILS}
@@ -153,7 +153,7 @@ set(SOURCES
     ${SRC_GUI}
     ${SRC_LAYOUT}
     ${SRC_LGT}
-    ${SRC_PARSER}
+    #${SRC_PARSER}
     ${SRC_RECONCILATION}
     ${SRC_TREE}
     ${SRC_UTILS}
@@ -181,9 +181,9 @@ use_qt5lib(Qt5Gui)
 use_qt5lib(Qt5PrintSupport)
 
 #find boost    
-set(Boost_USE_STATIC_LIBS OFF)
+set(Boost_USE_STATIC_LIBS ON)
 set(Boost_USE_MULTITHREADED OFF)
-set(Boost_USE_STATIC_RUNTIME OFF)
+set(Boost_USE_STATIC_RUNTIME ON)
 find_package(Boost REQUIRED COMPONENTS system program_options)  
 include_directories(${Boost_INCLUDE_DIRS})
 #find bison flex and cairo
@@ -226,7 +226,7 @@ foreach(i ${PARSER_SOURCES})
  set_source_files_properties(${i} PROPERTIES LANGUAGE C)
 endforeach(i)
 
-add_library(primetvlib STATIC ${PARSER_SOURCES} ${SOURCES} ${QT_FORMS})
+add_library(primetvlib STATIC ${PARSER_SOURCES} ${SOURCES} ${INCLUDES} ${QT_FORMS})
 
 if(WIN32)
   add_executable(${PROJECT_NAME} WIN32 primetv.cpp ${QT_RESOURCES})
@@ -237,8 +237,11 @@ else()
 endif()
 
 qt5_use_modules(${PROJECT_NAME} Core Gui Widgets WebKitWidgets LinguistTools) 
-target_link_libraries(${PROJECT_NAME} primetvlib ${CAIRO_LIBRARIES} ${Boost_LIBRARIES}) 
+target_link_libraries(${PROJECT_NAME} primetvlib ${CAIRO_LIBRARIES} ${Boost_LIBRARIES})
 
+if(APPLE)
+  set_property(TARGET ${PROJECT_NAME} PROPERTY LINK_SEARCH_END_STATIC ON)
+endif(APPLE)
 
 ### UNIT TESTS ################################################################
 
@@ -331,9 +334,9 @@ if(APPLE)
       COMMENT "Create DMG image"
   )
 
-    install(FILES ${CMAKE_SOURCE_DIR}/cmake/linux/qt.conf DESTINATION bin)
-    install(TARGETS ${PROJECT_NAME} DESTINATION bin)
-    install(FILES ${PROJECT_SOURCE_DIR}/resources/images/header.png
+   install(FILES ${CMAKE_SOURCE_DIR}/cmake/linux/qt.conf DESTINATION bin)
+   install(TARGETS ${PROJECT_NAME} DESTINATION bin)
+   install(FILES ${PROJECT_SOURCE_DIR}/resources/images/header.png
             DESTINATION ${CMAKE_INSTALL_PREFIX}/share/primetv
             PERMISSIONS OWNER_READ GROUP_READ WORLD_READ)
 

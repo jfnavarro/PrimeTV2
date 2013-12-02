@@ -249,13 +249,13 @@ main (int ac, char *av[])
         {
             cout << visible << "\n" << "\n Default input <guest tree> [<host tree>] [<options>]\n Alternative input"
                     "(option -r) <gene tree> <species tree> <map file> [<options>] \n";
-            return EXIT_FAILURE;
+            return EXIT_SUCCESS;
         }
 
         if (vm.count("version"))
         {
             cout << "PrimeTV, version " << VERSION << std::endl;
-            return EXIT_FAILURE;
+            return EXIT_SUCCESS;
         }
 
         if(vm.count("color") == 1)
@@ -275,14 +275,14 @@ main (int ac, char *av[])
 
             BOOST_FOREACH(string s,vm["input-file"].as< vector<string> >())
             {
-                if(!file_exist(s.c_str()))
+                if (!file_exist(s.c_str()))
                 {
                     std::cerr << "The file name given : " << s.c_str() << " does not exist " << std::endl;
                     return EXIT_FAILURE;
                 }
             }
 
-            if(!(bool)(parameters->isreconciled) && (size == 1 || size == 2))
+            if (!(bool)(parameters->isreconciled) && (size == 1 || size == 2))
             {
                 reconciledtree = vm["input-file"].as< vector<string> >().at(0);
 
@@ -433,7 +433,7 @@ main (int ac, char *av[])
 
         if (vm.count("precomputed-lgt-scenario"))
         {
-            if((bool)(parameters->lattransfer))
+            if ((bool)(parameters->lattransfer))
             {
                 std::cerr << "The option -X(precomputed-lgt-scenario) cannot be used together with the option -l(lgt).." << std::endl;
                 return EXIT_FAILURE;
@@ -443,7 +443,7 @@ main (int ac, char *av[])
                 std::cerr << "The option -X(precomputed-lgt-scenario) cannot be used together with the option -b(show-scenarios).." << std::endl;
                 return EXIT_FAILURE;
             }
-            if((bool)(parameters->drawAll))
+            if ((bool)(parameters->drawAll))
             {
                 std::cerr << "The option -X(precomputed-lgt-scenario) cannot be used together with the option -Y(draw-all-lgt).." << std::endl;
                 return EXIT_FAILURE;
@@ -458,7 +458,7 @@ main (int ac, char *av[])
             return EXIT_FAILURE;
         }
 
-        if((bool)(parameters->drawAll) && !(bool)(parameters->lattransfer))
+        if ((bool)(parameters->drawAll) && !(bool)(parameters->lattransfer))
         {
             std::cerr << "The option -Y(draw-all-lgt) has to be used together with the option -l(lgt).." << std::endl;
             return EXIT_FAILURE;
@@ -470,7 +470,7 @@ main (int ac, char *av[])
         mainops->start();
         mainops->setParameters(parameters);
 
-        if((bool)(parameters->UI)) //We start the User Interface
+        if ((bool)(parameters->UI)) //We start the User Interface
         {
             QApplication app(ac, av);
             MainWindow *appWindow = new MainWindow(parameters,mainops);
@@ -481,7 +481,7 @@ main (int ac, char *av[])
         else // We start the script version
         {
             //if we don't need to reconcile the trees
-            if(!(bool)(parameters->isreconciled))
+            if (!(bool)(parameters->isreconciled))
             {
                 mainops->OpenReconciled(reconciledtree);
                 mainops->OpenHost(speciestree);
@@ -490,9 +490,8 @@ main (int ac, char *av[])
             {
                 mainops->reconcileTrees(genetree,speciestree,mapfile);
             }
-
-            //we calculate the LGT scenarios is indicated
-            if((bool)(parameters->lattransfer))
+            //we calculate the LGT scenarios if indicated
+            if ((bool)(parameters->lattransfer))
             {
                 mainops->lateralTransfer(mapfile,(parameters->lateralmincost == 1.0
                                                   && parameters->lateralmaxcost == 1.0));

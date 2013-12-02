@@ -41,9 +41,9 @@ Colours::~Colours()
 }
 
 //set the color combination
-void Colours::setColors(const char *set)
+void Colours::setColors(const char *_set)
 {
-    this->set = set;
+    set = _set;
 
     Color black = Color(0.0, 0.0, 0.0, "Black");
     Color lightgrey = Color(0.8, 0.8, 0.8, "Lightgrey");

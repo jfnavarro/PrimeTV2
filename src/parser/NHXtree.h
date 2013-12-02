@@ -29,7 +29,6 @@
   we are actually talking about a tree list here!
 */
 
-
 #include "NHXnode.h"
 
 #ifdef __cplusplus

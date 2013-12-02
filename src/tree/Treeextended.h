@@ -55,40 +55,40 @@ public:
     TreeExtended& operator=(const TreeExtended *tree);
     TreeExtended& operator=(const Tree *tree);
 
-    /* returns the first node in a postorder configuration */
+    // returns the first node in a postorder configuration
     Node* getPostOderBegin() const;
     
-    /* returns the first node in a preorder configuration */
+    // returns the first node in a preorder configuration
     Node* preorder_begin() const;
     
-    /* returns the next preorder node of the node given */
+    // returns the next preorder node of the node given
     Node* preorder_next(Node *v) const;
     
-    /* returns the next postorder node of the node given*/
+    // returns the next postorder node of the node given
     Node* postorder_next(Node *v) const;
     
-    /* returns the least common ancestor the two nodes given*/
+    // returns the least common ancestor the two nodes given
     Node* lca(Node *v1, Node *v2) const;
     
-    /* true is v1 is descendant of v2 */
+    // true is v1 is descendant of v2
     const bool descendant(Node *v1, Node *v2) const;
     
-    /* returns the maximum distance from leaf to node*/
+    // returns the maximum distance from leaf to node
     const double findMaximumDistanceToLeaf(Node *n) const;
     
-    /* returns the number of children of node n*/
+    // returns the number of children of node n
     const unsigned getNumberOfChildren(Node *n) const;
     
-    /* reset the tree information*/
+    // reset the tree information
     void reset();
     
 private:
 
     mutable bool lca_is_valid;
-    mutable std::vector<unsigned> E; /* Euler-path for lca-compuatation. */
-    mutable std::vector<unsigned> L; /* Level array corresponding to E. */
-    mutable std::vector<std::vector<unsigned>::size_type> Ref;/* Representative array for lca-computation */
-    mutable boost::multi_array<std::vector<unsigned>::size_type, 2> M; /* M-matrix for the RMQ-algorithm. */
+    mutable std::vector<unsigned> E; // Euler-path for lca-compuatation.
+    mutable std::vector<unsigned> L; // Level array corresponding to E.
+    mutable std::vector<std::vector<unsigned>::size_type> Ref; // Representative array for lca-computation
+    mutable boost::multi_array<std::vector<unsigned>::size_type, 2> M; // M-matrix for the RMQ-algorithm.
     struct Invalid_id : public std::exception {const char *what() const throw();};
     static unsigned most_significant_bit(unsigned v);
     void build_lca() const;

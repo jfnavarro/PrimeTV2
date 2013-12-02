@@ -31,6 +31,8 @@
 #include "Node.h"
 #include "TreeIO.h"
 
+#define MAX(A, B) ((A>B) ? A : B)
+
 using namespace std;
 
 Tree::Tree() :
@@ -628,7 +630,6 @@ Tree::clearTree()
 double
 Tree::imbalance(Node *v)
 {
-#define MAX(A, B) ((A>B) ? A : B)
     if (v->isLeaf())
     {
         return 0;

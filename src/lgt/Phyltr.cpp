@@ -37,7 +37,7 @@
 
 using namespace std;
 
-static const unsigned NONE = -1;
+static const int NONE = -1;
 ProgramInput Phyltr::g_input;
 vector<Scenario> Phyltr::scenarios;
 const cost_type COST_INF = numeric_limits<cost_type>::infinity();
@@ -192,7 +192,7 @@ bool Phyltr::read_sigma(map< string, string > str_sigma)
 
 Scenario Phyltr::getMaxCostScenario()
 {
-    if(!scenarios.empty())
+    if (!scenarios.empty())
     {
         sort(scenarios.begin(), scenarios.end());
         Scenario max = scenarios.at(0);
@@ -224,7 +224,7 @@ void Phyltr::printLambda(vector< vid_t > lambda)
 
 Scenario Phyltr::getMinCostScenario()
 {
-    if(!scenarios.empty())
+    if (!scenarios.empty())
     {
         sort(scenarios.begin(), scenarios.end());
         Scenario min = scenarios.at(0);

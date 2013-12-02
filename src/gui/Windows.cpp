@@ -42,10 +42,20 @@
 
 #define QUALITY 75  //0-100
 
-MainWindow::MainWindow(Parameters *p, Mainops *m, QWidget *parent)
-    :QMainWindow(parent),lastVisitedDir(),ops(m),parameters(p),guestTree(false),
-      hostTree(false),isPainted(false),mapfileStatus(false),config(0),
-      speciestree(""), genetree(""), reconciledtree(""),mapfile("")
+MainWindow::MainWindow(Parameters *p, Mainops *m, QMainWindow *parent)
+    :QMainWindow(parent),
+    lastVisitedDir(),
+    ops(m),
+    parameters(p),
+    reconciledtree(""),
+    speciestree(""),
+    genetree(""),
+    mapfile(""),
+    guestTree(false),
+    hostTree(false),
+    isPainted(false),
+    mapfileStatus(false),
+    config(0)
 {
 
     Ui_MainWindow::setupUi(this);
@@ -110,11 +120,6 @@ MainWindow::MainWindow(Parameters *p, Mainops *m, QWidget *parent)
     setAttribute(Qt::WA_MacNormalSize,false);
     setAttribute(Qt::WA_MacVariableSize,true);
     setAttribute(Qt::WA_OpaquePaintEvent,false);
-}
-
-MainWindow::MainWindow(const MainWindow& other)
-{
-
 }
 
 MainWindow::~MainWindow()
@@ -378,7 +383,7 @@ void MainWindow::update()
     }
     if (isPainted && hostTree && guestTree)
     {
-        if((bool)parameters->lattransfer)
+        if ((bool)parameters->lattransfer)
         {
             ops->lateralTransfer(mapfile.toStdString(),(parameters->lateralmincost == 1.0 && parameters->lateralmaxcost == 1.0));
         }

@@ -34,7 +34,10 @@ class Edge
 
 public:
 
-    enum category{Normal=0,LGT=1};
+    enum category{
+        Normal=0,
+        LGT=1
+    };
 
     Edge();
     Edge(const Edge& other);
@@ -46,11 +49,12 @@ public:
     const Node *getSpeEnd() const;
     const Node *getGeneOrigin() const;
     const Node *getGeneEnd() const;
-    double getXorigin();
-    double getYorigin();
-    double getXend();
-    double getYend();
-    category getMode();
+    const double getXorigin() const;
+    const double getYorigin() const;
+    const double getXend() const ;
+    const double getYend() const ;
+    const category getMode() const;
+
     void setSpeOrigin(const Node &);
     void setSpeEnd(const Node &);
     void setGeneOrigin(const Node &);

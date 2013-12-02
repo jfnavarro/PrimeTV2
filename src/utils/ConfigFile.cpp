@@ -31,7 +31,7 @@ ConfigFile::ConfigFile( string filename, string delimiter,
 
     std::ifstream in( filename.c_str() );
 
-    if( !in ) throw file_not_found( filename );
+    if ( !in ) throw file_not_found( filename );
 
     in >> (*this);
 }
@@ -100,7 +100,7 @@ std::istream& operator>>( std::istream& is, ConfigFile& cf )
     {
         // Read an entire line at a time
         string line;
-        if( nextline.length() > 0 )
+        if ( nextline.length() > 0 )
         {
             line = nextline;  // we read ahead; use it now
             nextline = "";
@@ -114,11 +114,11 @@ std::istream& operator>>( std::istream& is, ConfigFile& cf )
         line = line.substr( 0, line.find(comm) );
 
         // Check for end of file sentry
-        if( sentry != "" && line.find(sentry) != string::npos ) return is;
+        if ( sentry != "" && line.find(sentry) != string::npos ) return is;
 
         // Parse the line if it contains a delimiter
         pos delimPos = line.find( delim );
-        if( delimPos < string::npos )
+        if ( delimPos < string::npos )
         {
             // Extract the key
             string key = line.substr( 0, delimPos );
@@ -135,17 +135,17 @@ std::istream& operator>>( std::istream& is, ConfigFile& cf )
 
                 string nlcopy = nextline;
                 ConfigFile::trim(nlcopy);
-                if( nlcopy == "" ) continue;
+                if ( nlcopy == "" ) continue;
 
                 nextline = nextline.substr( 0, nextline.find(comm) );
-                if( nextline.find(delim) != string::npos )
+                if ( nextline.find(delim) != string::npos )
                     continue;
-                if( sentry != "" && nextline.find(sentry) != string::npos )
+                if ( sentry != "" && nextline.find(sentry) != string::npos )
                     continue;
 
                 nlcopy = nextline;
                 ConfigFile::trim(nlcopy);
-                if( nlcopy != "" ) line += "\n";
+                if ( nlcopy != "" ) line += "\n";
                 line += nextline;
                 terminate = false;
             }

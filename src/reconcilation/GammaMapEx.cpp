@@ -117,7 +117,7 @@ Node* GammaMapEx::checkGamma(Node *gn)
                 << "' is not mapped to a species node.";
             throw AnError(oss.str(), 1);
         }
-        if(!sn->isLeaf())
+        if (!sn->isLeaf())
         {
             ostringstream oss;
             oss << "Reconciliation error:\nGuest tree leaf '"
@@ -305,7 +305,7 @@ GammaMapEx::checkGammaForDuplication(Node *gn, Node *sn, Node *sl, Node *sr)
 
     if(sn != 0)
     {
-        if(*sn < *sl)
+        if (*sn < *sl)
         {
             ostringstream oss;
             oss << "Reconciliation error:\nThe host nodes that the "
@@ -479,7 +479,7 @@ GammaMapEx::valid(Node *x) const
 const bool
 GammaMapEx::validLGT() const
 {
-    if(!transfer_edges.any())
+    if (!transfer_edges.any())
     {
         return this->valid();
     }
@@ -615,7 +615,7 @@ GammaMapEx::isSpeciation(Node& u) const
 }
 
 string
-GammaMapEx::print(const bool& full) const
+GammaMapEx::print(bool full) const
 {
     if(gamma.empty())
     {

@@ -179,7 +179,7 @@ Node* TreeExtended::lca(Node *v1, Node *v2) const
     assert(v1->getNumber() >= 0 && v1->getNumber() < getNumberOfNodes());
     assert(v2->getNumber() >= 0 && v2->getNumber() < getNumberOfNodes());
 
-    if(!lca_is_valid)
+    if (!lca_is_valid)
     {
         build_lca();
     }

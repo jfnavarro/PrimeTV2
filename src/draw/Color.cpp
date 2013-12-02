@@ -35,5 +35,6 @@ Color::Color()
 
 }
 
-Color::Color(double red, double green, double blue, const char *name):red(red),green(green),blue(blue),name(name)
+Color::Color(double _red, double _green, double _blue, const char *_name):
+    red(_red),green(_green),blue(_blue),name(_name)
 {}

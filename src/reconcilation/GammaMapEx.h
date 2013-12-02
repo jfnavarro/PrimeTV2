@@ -50,15 +50,15 @@ public:
     //overload of operator =
     GammaMapEx& operator=(const GammaMapEx &gm);
     
-    /* Recursive function for reading a user-set gamma in tabular format
-    If chainsOnNode is changed to a set,*/
+    // Recursive function for reading a user-set gamma in tabular format
+    // If chainsOnNode is changed to a set,
     void readGamma(Node *sn, std::vector<SetOfNodesEx<Node> >& AC_info);
     
     //generates the most parimonious gamma object
     static GammaMapEx MostParsimonious(const TreeExtended &G,const TreeExtended &S,const LambdaMapEx &L);
     
-    /* these functions are going to compute and load the chainOnNode vector which is a map
-     * of species nodes mapped for each gene node*/
+    // these functions are going to compute and load the chainOnNode vector which is a map
+    // of species nodes mapped for each gene node
     void computeGammaBound(Node *g);
     void computeGammaBoundBelow(Node *g);
     void assignGammaBound(Node *u, Node *x);
@@ -76,18 +76,18 @@ public:
     LambdaMapEx getLambda() const;
     LambdaMapEx* getLambda();
     
-    /* print the gamma on a string file */
-    string print(const bool& full) const;
+    // print the gamma on a string file
+    string print(bool full) const;
     
-    /*Puts u in gamma(x), and registers x as having an anti-chain for x.
-    Would like to make x argument const below, but then I am not allowed
-    to put x in a dequeue!*/
+    // Puts u in gamma(x), and registers x as having an anti-chain for x.
+    // Would like to make x argument const below, but then I am not allowed
+    // to put x in a dequeue!
     void addToSet(Node *x, Node *u);
     void addToSet(Node *x, Node &u);
     
-    /*The following methods retrieves the max-element, according
-    to porder, of the gamma-path on u, i.e., \f$ \{x: u\in\gamma(x)\} \f$,
-     Null is returned if there is no anti-chain on u.*/
+    // The following methods retrieves the max-element, according
+    // to porder, of the gamma-path on u, i.e., \f$ \{x: u\in\gamma(x)\} \f$,
+    // Null is returned if there is no anti-chain on u.
     Node* getHighestGammaPath(Node &u) const;
     Node* getLowestGammaPath(Node &u) const;
     
@@ -113,16 +113,16 @@ public:
     void twistAndTurn();
     void twistAndTurn(Node *v, Node *x);
     
-    /* returns true if the node given is speciation */
+    // returns true if the node given is speciation
     const bool isSpeciation(Node &u) const;
     
-    /* return the gamma map */
+    // return the gamma map
     SetOfNodesEx<Node> getFullGamma(const Node& x) const;
     
-    /* true is that combination is in the gamma map */
+    // true is that combination is in the gamma map
     const bool isInGamma(Node *u, Node *x) const;
     
-    /* update the gamma to include Lateral Gene transfer */
+    // update the gamma to include Lateral Gene transfer
     GammaMapEx update(const TreeExtended &G, const TreeExtended &S,
                       const std::vector<unsigned> &sigma,
                       const dynamic_bitset<> &transfer_edges);
@@ -134,9 +134,9 @@ public:
     
 private:
 
-    /* returns the LGT vector*/
+    // returns the LGT vector
     dynamic_bitset<> getLGT();
-    /* set the LGT vector*/
+    // set the LGT vector
     void setLGT(dynamic_bitset<> lgt);
     
     const TreeExtended *Gtree;

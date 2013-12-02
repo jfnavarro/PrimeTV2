@@ -37,7 +37,7 @@ class Parameters
 {
 public:
 
-    Parameters();
+    explicit Parameters();
     ~Parameters();
     Parameters& operator=(const Parameters &ts);
 
@@ -85,6 +85,8 @@ public:
     float width;
     float height;
     float fontsize;
+    float adapted_width;
+    float adapted_height;
     double leafwidth;
     dynamic_bitset<> transferedges;
     dynamic_bitset<> duplications;
@@ -100,6 +102,7 @@ public:
     Color allFontColor;
     bool reduce;
     bool drawAll;
+
 };
 
 

@@ -66,6 +66,8 @@ Parameters::Parameters()
     uy_offset = 0.0;
     width = 1200;
     height = 1400;
+    adapted_width = 1200;
+    adapted_height = 1400;
     fontsize = 10.0;
     leafwidth = 25;
     equalTimes = true;
@@ -147,6 +149,8 @@ Parameters& Parameters::operator=(const Parameters& p)
         duplications = p.duplications;
         width = p.width;
         height = p.height;
+        adapted_width = p.adapted_width;
+        adapted_height = p.adapted_height;
         fontsize = p.fontsize;
         leafwidth = p.leafwidth;
         equalTimes = p.equalTimes;

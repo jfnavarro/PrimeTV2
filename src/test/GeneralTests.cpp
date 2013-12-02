@@ -159,7 +159,7 @@ bool GeneralTests::run()
 {
     bool retcode = true;
     QTemporaryFile tempfile;
-    if(!tempfile.open())
+    if (!tempfile.open())
     {
         return false;
     }
@@ -168,7 +168,7 @@ bool GeneralTests::run()
     try
     {
         mainops->cleanTrees();
-        if(!(bool)(parameters->isreconciled))
+        if (!(bool)(parameters->isreconciled))
         {
             mainops->OpenReconciled(test_reconciled.toLatin1().data());
             mainops->OpenHost(test_species.toLatin1().data());
@@ -179,7 +179,7 @@ bool GeneralTests::run()
         }
 
         //we calculate the LGT scenarios is indicated
-        if((bool)(parameters->lattransfer))
+        if ((bool)(parameters->lattransfer))
         {
             mainops->lateralTransfer(test_map.toLatin1().data(),(parameters->lateralmincost == 1.0 && parameters->lateralmaxcost == 1.0));
         }
@@ -202,7 +202,7 @@ bool GeneralTests::run()
             mainops->printLGT();
         }
 
-        //if(!exists_test(parameters->outfile + "." + parameters->format))
+        //if (!exists_test(parameters->outfile + "." + parameters->format))
         //{
             //retcode = false;
         //}

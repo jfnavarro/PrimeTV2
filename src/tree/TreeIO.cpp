@@ -690,7 +690,7 @@ Node* TreeIO::extendBeepTree(TreeExtended &S,
         {
             if(r && l)
             {
-                if((2 * abs(leftTime - rightTime) / (leftTime + rightTime)) >= 0.01)
+                if ((2 * abs(leftTime - rightTime) / (leftTime + rightTime)) >= 0.01)
                 {
                     ostringstream oss;
                     oss << "Tree time inconsistency at node  "

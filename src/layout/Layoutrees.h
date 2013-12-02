@@ -48,87 +48,87 @@ public:
     
     void start();
     
-    /* destructor*/
-    ~LayoutTrees();
+    virtual ~LayoutTrees();
     
     double getNodeHeight();
     
-    /* this functions takes a map of node->node and replaces their cordinates in
-     * the gene tree */
+    // this functions takes a map of node->node and replaces their cordinates in
+    // the gene tree
     void replaceNodes(const std::map<unsigned,unsigned> &replacements);
     
 private:
 
-    /* this function ladderize the tree to the right, it swapes the nodes */
+    // this function ladderize the tree to the right, it swapes the nodes
     const unsigned Ladderize_right() const;
     const unsigned Ladderize_right(Node *n) const;
     
-    /* the same to the left */
+    // the same to the left
     const unsigned Ladderize_left() const;
     const unsigned Ladderize_left(Node *n) const;
     
-    /* this function calculates the Species node cordinates using three different time approaches */
+    // this function calculates the Species node cordinates using three different time approaches
     void CountSpeciesCoordinates(Node *n, unsigned depth);
     
-    /* this function calculates the gene cordinates according to the species node cordinates calculated
-     * previously */
+    // this function calculates the gene cordinates according to the species node cordinates calculated
+    // previously
     void CountGeneCoordinates(Node *n);
     
-    /* this function assigns a leaf gene or species node its cordinates, the positions will depend of the number
-     * of nodes mapped to the species nodes where the node is being positioned on */
+    // this function assigns a leaf gene or species node its cordinates, the positions will depend of the number
+    // of nodes mapped to the species nodes where the node is being positioned on
     void AssignLeafGene(Node *n);
     
-    /* this function assigns a duplication gene its cordinates, depending on the number of duplication
-     * nodes that are being located in the species edge */
+    // this function assigns a duplication gene its cordinates, depending on the number of duplication
+    // nodes that are being located in the species edge
     void AssignGeneDuplication(Node *n);
     
-    /* this function assigns a LGT gene its information */
+    // this function assigns a LGT gene its information
     void AssignGeneLGT(Node *n);
     
-    /* this function returns the number of nodes of the species node that has the most nodes
-     * mapped */
+    // this function returns the number of nodes of the species node that has the most nodes
+    // mapped
     const unsigned MostGenes() const;
     
-    /* this function maps all the times of the tree to distribute them equally in groups to
-     * be used to calculte the x cordinates of the species nodes */
+    // this function maps all the times of the tree to distribute them equally in groups to
+    // be used to calculte the x cordinates of the species nodes
     const unsigned maptimes();
     
-    /* this function returns the left most y cordinate of the node given */
+    // this function returns the left most y cordinate of the node given
     const double getLeftMostCoordinate (Node* o) const;
     
-    /* the same but the right most cordiante */
+    // the same but the right most cordiante
     const double getRightMostCoordinate (Node* o) const;
     
-    /* this function maps all the duplications of the tree in the vector Adress */
+    // this function maps all the duplications of the tree in the vector Adress
     Node* FindDuplications(Node* node);
     
-    /* this function maps the number of duplication mapped to each species node*/
+    // this function maps the number of duplication mapped to each species node
     Node* MapDuplications(Node* de, unsigned line);
     
-    /* this function returns the level in the tree of the duplication node given */
+    // this function returns the level in the tree of the duplication node given
     const unsigned Duplevel(Node* nd, unsigned levellineage) const;
     
-    /* this function returns the right most cordiante node for a duplication
-     * node given as input */
+    // this function returns the right most cordiante node for a duplication
+    // node given as input
     const double RightMostCoordinate(Node* o, Node *end_of_slice, unsigned duplevel) const;
     
-    /* the same for the left*/
+    // this function returns the left most cordiante node for a duplication
+    // node given as input
     const double LeftMostCoordinate(Node* o, Node *end_of_slice, unsigned duplevel) const;
     
-    /* this function displaces the species node if it is colliding with another node*/
+    // this function displaces the species node if it is colliding with another node
     void CalcLegIntersection(Node *left, Node *right, Node *u);
     
-    /* this function calculates the time intervals and the drawing parameters */
+    // this function calculates the time intervals and the drawing parameters
     void calculateIntervals();
     
-    /* this function calculates the sizes of the nodes and increments the dimension
-     * of the picture is needed */
+    // this function calculates the sizes of the nodes and increments the dimension
+    // of the picture is needed
     void calculateSizes();
     
-    /* this function returns the highest mapped LGT node of the node given */
+    // this function returns the highest mapped LGT node of the node given
     Node* getHighestMappedLGT(Node *n);
     
-    /* this function returns the size of the biggest name label on both trees */
+    // this function returns the size of the biggest name label on both trees
     const double biggestLabel() const;
     
     //external attributes
@@ -142,14 +142,14 @@ private:
     
     double NodeHeight;
     double yspace;
-    double xspace;
+    //double xspace;
     double currentY;
     double YCanvasSize;
     double XCanvasSize;
     double xCanvasXtra;
     unsigned maxdeepleaf;
     unsigned maxdeepleaftimes;
-    unsigned leveltime;
+    //unsigned leveltime;
     std::vector<double> numXPositions; //equally distributed no time
     std::map<double,double> numXPositionsTimes; //distributed equally by time
     std::vector<double> maptime;
