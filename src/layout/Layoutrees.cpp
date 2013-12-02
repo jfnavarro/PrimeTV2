@@ -206,7 +206,6 @@ const double LayoutTrees::getLeftMostCoordinate (Node* o) const
 // left most y, the x position is calcuted used the time mapped vectors
 void LayoutTrees::CountSpeciesCoordinates(Node *n, unsigned depth)
 {
-
     if (n->isLeaf())
     {
         n->setY(currentY);
@@ -262,10 +261,9 @@ const unsigned LayoutTrees::MostGenes() const
     return currentMax;
 }
 
-/* each species node has a visited atribute, if the size (number os nodes mapped)
- * of a species node is > 1 then the nodeheight will be divided by the number
- * of nodes mapped and the current node located in the according position
- */
+// each species node has a visited atribute, if the size (number os nodes mapped)
+// of a species node is > 1 then the nodeheight will be divided by the number
+// of nodes mapped and the current node located in the according position
 void LayoutTrees::AssignLeafGene(Node *n)
 {
     Node *spn = gamma->getLowestGammaPath(*n);
@@ -349,11 +347,10 @@ void LayoutTrees::AssignGeneDuplication(Node *n)
         edge = spb->getX();
     }
     
-    /* we obtain the number of duplication and the duplications levels
-        * to figure out the x position of the node, we use the left most and right
-        * most cordinates of the duplication to figure out the y position
-        */
-    const double ndupli = bv[spb]+1;
+    // we obtain the number of duplication and the duplications levels
+    // to figure out the x position of the node, we use the left most and right
+    // most cordinates of the duplication to figure out the y position
+    const double ndupli = bv[spb] + 1;
     const unsigned duplilevel = Duplevel(n,spb->getNumber());
     delta = (edge/ndupli) * duplilevel;
     
@@ -623,10 +620,14 @@ Node* LayoutTrees::getHighestMappedLGT(Node *n)
     Node *parent = n->getParent();
 
     while(gamma->isLateralTransfer(*parent) && !parent->isRoot())
+    {
         parent = parent->getParent();
+    }
 
     while(!species->descendant((*lambda)[n],(*lambda)[parent]) && !parent->isRoot())
+    {
         parent = parent->getParent();
+    }
 
     return parent;
 }
