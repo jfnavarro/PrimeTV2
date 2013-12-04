@@ -212,6 +212,8 @@ void Mainops::calculateCordinates()
     // compute coordinates
     LayoutTrees spcord = LayoutTrees(speciesTree.get(), genesTree.get(),
                                      parameters, gamma.get(), lambdamap.get());
+    spcord.start();
+    parameters->leafwidth = spcord.getNodeHeight();
 
     // reduce crossing lines or try to
     if (parameters->reduce)
@@ -220,8 +222,6 @@ void Mainops::calculateCordinates()
         gamma->twistAndTurn(genesTree.get(),speciesTree.get());
     }
 
-    spcord.start();
-    parameters->leafwidth = spcord.getNodeHeight();
 }
 
 const bool Mainops::checkValidity()
