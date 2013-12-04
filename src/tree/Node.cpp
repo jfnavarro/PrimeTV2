@@ -202,10 +202,22 @@ Node::rotateCordinates()
 {
     double temp_x = leftChild->getX();
     double temp_y = leftChild->getY();
+    Node *temp_hostparent = leftChild->getHostParent();
+    Node *temp_hostchild = leftChild->getHostChild();
+    Type temp_reconcilatin = leftChild->getReconcilation();
+
     leftChild->setX(rightChild->getX());
     leftChild->setY(rightChild->getY());
+    leftChild->setHostParent(rightChild->getHostParent());
+    leftChild->setHostChild(rightChild->getHostChild());
+    leftChild->setReconcilation(rightChild->getReconcilation());
+
     rightChild->setX(temp_x);
     rightChild->setY(temp_y);
+    rightChild->setHostParent(temp_hostparent);
+    rightChild->setHostChild(temp_hostchild);
+    rightChild->setReconcilation(temp_reconcilatin);
+
 }
 
 // get the (leaf) name
@@ -324,7 +336,6 @@ Node::setChildren(Node *l, Node *r)
     {
         r->parent = this;
     }
-    return;
 }
 
 
