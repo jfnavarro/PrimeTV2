@@ -41,16 +41,16 @@ class TreeExtended : public Tree
 public:  
     
     //constructors
-    TreeExtended();
-    TreeExtended(const TreeExtended &tree);
-    TreeExtended(const Tree& tree);
+    explicit TreeExtended();
+    explicit TreeExtended(const TreeExtended &tree);
+    explicit TreeExtended(const Tree& tree);
     
     //overload of =
     TreeExtended& operator=(const TreeExtended& tree);
     TreeExtended& operator=(const Tree& tree);
 
     // returns the first node in a postorder configuration
-    Node* getPostOderBegin() const;
+    Node* postorder_begin() const;
     
     // returns the first node in a preorder configuration
     Node* preorder_begin() const;
@@ -76,6 +76,10 @@ public:
     // reset the tree information
     void reset();
     
+    // print preOrder and postOrder
+    void printPreOrder();
+    void printPostOrder();
+
 private:
 
     mutable bool lca_is_valid;

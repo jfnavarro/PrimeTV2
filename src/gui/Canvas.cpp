@@ -46,17 +46,16 @@ bool Canvas::saveCanvas(const QString& fileName, const char* format, unsigned qu
     return pixmap().save(fileName,format,quality);
 }
 
-/*This function creates the printer object to capture the filename
- * and then print the Cairo Canvas on the pdf page that will
- * have the same size
- */
+// This function creates the printer object to capture the filename
+// and then print the Cairo Canvas on the pdf page that will
+// have the same size
 bool Canvas::saveCanvasPDF(const QString& fileName)
 {
     return pixmap().save(fileName);
 }
 
-/*This function launches a printing dialog to select the printing device
- and then send the canvas to the printer to be printed out*/
+// This function launches a printing dialog to select the printing device
+// and then send the canvas to the printer to be printed out
 bool Canvas::print()
 {
     QPrinter printer;

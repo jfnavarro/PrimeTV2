@@ -38,28 +38,31 @@ class Tree
 {
 public:
 
-    Tree();
-    Tree(const Tree &tree);
-    static Tree EmptyTree(const double& RootTime = 1.0, const string &leafname = "Leaf");
+    explicit Tree();
+    explicit Tree(const Tree &tree);
+
+    //static Tree EmptyTree(const double& RootTime = 1.0, const string &leafname = "Leaf");
+
     virtual ~Tree();
     virtual Tree& operator=(const Tree& tree);
 
     std::string getName() const;
     void setName(const string &s);
+
     const unsigned getNumberOfNodes() const;
     const unsigned getNumberOfLeaves() const;
     const unsigned getHeight() const;
-    const bool IDnumbersAreSane(Node& n);
+    const bool IDnumbersAreSane(Node& n) const;
 
     void clear();
 
     Node * getRootNode() const;
-    void setRootNode(Node *r);
     Node* getNode(unsigned nodeNumber) const;
     Node* findLeaf(const std::string& name) const;
     Node* findNode(const std::string& name) const;
     Node* addNode(Node *leftChild, Node *rightChild, unsigned id, const string &name = "");
     Node* addNode(Node *leftChild,  Node *rightChild, const string &name = "");
+    void setRootNode(Node *r);
 
     /* annoying methods I want to get rid of */
     const bool hasTimes() const;
@@ -101,7 +104,7 @@ protected:
 
     unsigned noOfNodes;
     unsigned noOfLeaves;
-    Node * rootNode;
+    Node *rootNode;
     std::map<std::string, Node*> name2node;
     std::vector<Node*> all_nodes;
     std::string name;

@@ -124,15 +124,15 @@ MainWindow::MainWindow(Parameters *p, Mainops *m, QMainWindow *parent)
 
 MainWindow::~MainWindow()
 {
-    if(params)
+    if (params)
     {
-        delete(params);
+        delete params;
     }
     params = 0;
 
-    if(config)
+    if (config)
     {
-        delete(config);
+        delete config;
     }
     config = 0;
 }
@@ -197,7 +197,7 @@ void MainWindow::generateTree()
             parameters->outfile = tempfile.fileName().toStdString();
             tempfile.remove();
             
-            ops->cleanTrees();
+            ops->start();
             
             if (!checkBoxReconcile->checkState())
             {
@@ -250,7 +250,6 @@ void MainWindow::generateTree()
 void MainWindow::paintTree()
 {
     std::string filename = parameters->outfile + "." + parameters->format;
-    std::cerr << "Writing tree to " << filename << std::endl;
     QFile file(QString::fromStdString(filename));
     if(file.exists())
     {
@@ -313,7 +312,8 @@ void MainWindow::update()
         lineEditHeaderText->setText(tr(""));
     }
 
-    parameters->horiz = checkBoxHV->isChecked();
+    parameters->reduce = checkBoxReduce->isChecked();
+    parameters->horiz = !checkBoxHV->isChecked();
     parameters->markers = checkBoxMarkers->isChecked();
     parameters->header = checkBoxLogo->isChecked();
     parameters->do_not_draw_guest_tree = checkBoxGuest->isChecked();
@@ -385,12 +385,7 @@ void MainWindow::update()
     }
     if (isPainted && hostTree && guestTree)
     {
-        if ((bool)parameters->lattransfer)
-        {
-            ops->lateralTransfer(mapfile.toStdString(),(parameters->lateralmincost == 1.0 && parameters->lateralmaxcost == 1.0));
-        }
-        ops->drawBest(); //draw tree into temp file
-        paintTree();
+        generateTree();
     }
 }
 
@@ -400,18 +395,17 @@ void MainWindow::newImage()
     hostTree = false;
     isPainted = false;
     mapfileStatus = false;
+    speciestree = QString();
+    genetree = QString();
+    mapfile = QString();
     scene->clear();
     scene->update();
+    //TOFIX possible memory leak
     canvas = new Canvas(QPixmap());
     scene->addItem(canvas);
-    if(parameters)
-    {
-        delete parameters;
-    }
-    parameters = new Parameters();
+    parameters->reset();
     loadParameters(parameters);
     parameters->format = "png";
-    ops->setParameters(parameters);
     actionLoad_Map_File->setEnabled(false);
     actionSave->setEnabled(false);
     statusBar()->showMessage(tr("New tree"));
@@ -433,6 +427,7 @@ void MainWindow::loadParameters(Parameters *parameters)
     {
         checkBoxLadderize->setChecked(true);
     }
+
     checkBoxReconcile->setChecked(parameters->isreconciled);
     checkBoxGuest->setChecked(parameters->do_not_draw_guest_tree);
     checkBoxHV->setChecked(!parameters->horiz);
@@ -442,6 +437,7 @@ void MainWindow::loadParameters(Parameters *parameters)
     checkBoxLGT->setChecked(parameters->lattransfer);
     checkBoxHost->setChecked(parameters->do_not_draw_species_tree);
     checkBoxINodes->setChecked(parameters->ids_on_inner_nodes);
+    checkBoxReduce->setChecked(parameters->reduce);
 
     unsigned set = atoi(parameters->colorConfig->getSet());
     switch (set)
@@ -607,9 +603,12 @@ void MainWindow::activateReconcilation()
     parameters->isreconciled = checkBoxReconcile->isChecked();
     guestTree = false;
     hostTree = false;
-    mapfile = "";;
+    mapfile = QString();
+    speciestree = QString();
+    genetree = QString();
     scene->clear();
     scene->update();
+    //TOFIX possible memory leak
     canvas = new Canvas(QPixmap());
     scene->addItem(canvas);
     isPainted = false;
@@ -689,6 +688,7 @@ void MainWindow::loadConfigFile()
             parameters->lattransfer = config->read<bool>((string)"lgt",false);
             parameters->do_not_draw_species_tree = config->read<bool>((string)"nohost",false);
             parameters->ids_on_inner_nodes = config->read<bool>((string)"inodes",false);
+            parameters->reduce = config->read<bool>((string)"reduce",false);
             string color;
             color = config->read<string>((string)"color",(string)"1");
             parameters->colorConfig->setColors(color.c_str());
@@ -774,6 +774,7 @@ void MainWindow::saveConfigFile()
             out << "sizeH" << " = " << parameters->height << endl;
             out << "notime" << " = " << parameters->noTimeAnnotation << endl;
             out << "timeex" << " = " << parameters->timeAtEdges << endl;
+            out << "reduce" << " = " << parameters->reduce << endl;
             out << "speciesfontcolorB" << " = " << parameters->speciesFontColor.blue << endl;
             out << "speciesfontcolorG" << " = " << parameters->speciesFontColor.green << endl;
             out << "speciesfontcolorR " << " = " << parameters->speciesFontColor.red << endl;
@@ -814,6 +815,7 @@ void MainWindow::createActions()
     connect(actionLoad_Map_File, SIGNAL(triggered(bool)), this, SLOT(loadMap()));
     connect(actionShow_Parameters, SIGNAL(triggered(bool)), this, SLOT(showParameters(bool)));
     connect(actionPrint, SIGNAL(triggered(bool)), this, SLOT(print()));
+    connect(checkBoxReduce, SIGNAL(stateChanged(int)), this, SLOT(update()));
     connect(checkBoxHV, SIGNAL(stateChanged(int)), this, SLOT(update()));
     connect(checkBoxGuest, SIGNAL(stateChanged(int)), this, SLOT(update()));
     connect(checkBoxHeader, SIGNAL(stateChanged(int)), this, SLOT(update()));

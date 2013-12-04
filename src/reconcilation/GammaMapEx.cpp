@@ -182,14 +182,9 @@ GammaMapEx::MostParsimonious(const TreeExtended& G,const TreeExtended& S,const L
     return gamma_star;
 }
 
-LambdaMapEx GammaMapEx::getLambda() const
+const LambdaMapEx &GammaMapEx::getLambda()
 {
     return lambdaex;
-}
-
-LambdaMapEx *GammaMapEx::getLambda()
-{
-    return &lambdaex;
 }
 
 void
@@ -335,7 +330,7 @@ GammaMapEx::checkGammaForDuplication(Node *gn, Node *sn, Node *sl, Node *sr)
     }
 }
 
- Node*
+Node*
 GammaMapEx::checkGammaForSpeciation(Node *gn, Node *sn, Node *sl, Node *sr)   // gn is a speciation
 {
     Node* sm = Stree->lca(sl, sr); // "lambda"
@@ -371,7 +366,7 @@ GammaMapEx::checkGammaForSpeciation(Node *gn, Node *sn, Node *sl, Node *sr)   //
     return sn;
 }
 
- Node*
+Node*
 GammaMapEx::checkGammaMembership(Node *gn, Node *sn)
 {
     for (unsigned i = 1; i < chainsOnNode[gn->getNumber()].size(); i++)
@@ -412,7 +407,7 @@ GammaMapEx::assignGammaBound(Node *v, Node *x)
     }
 }
 
-  void
+void
 GammaMapEx::removeFromSet(Node *x, Node *v)
 {
     assert(x != 0);
@@ -431,13 +426,11 @@ GammaMapEx::removeFromSet(Node *x, Node *v)
     return;
 }
 
-
 const bool
 GammaMapEx::valid() const
 {
     return valid(Stree->getRootNode());
 }
-
 
 const bool
 GammaMapEx::valid(Node *x) const
@@ -475,17 +468,16 @@ GammaMapEx::valid(Node *x) const
     }
 }
 
-
 const bool
 GammaMapEx::validLGT() const
 {
     if (!transfer_edges.any())
     {
-        return this->valid();
+        return valid();
     }
     else
     {
-        for( Node *n = Gtree->getPostOderBegin(); n != 0; n = Gtree->postorder_next(n))
+        for( Node *n = Gtree->postorder_begin(); n != 0; n = Gtree->postorder_next(n))
         {
             if(transfer_edges[n->getNumber()])
             {
@@ -508,18 +500,15 @@ GammaMapEx::validLGT() const
                 return false;
             }
         }
-        return true && this->valid();
+        return true && valid();
     }
 }
-
-
 
 const unsigned
 GammaMapEx::sizeOfWidestSpeciesLeaf() const
 {
     return sizeOfWidestSpeciesLeaf(Stree->getRootNode(), 0);
 }
-
 
 const unsigned GammaMapEx::sizeOfWidestSpeciesLeaf(Node *x, unsigned current_max) const
 {
@@ -543,13 +532,17 @@ const unsigned GammaMapEx::sizeOfWidestSpeciesLeaf(Node *x, unsigned current_max
     }
 }
 
-
 void
 GammaMapEx::twistAndTurn()
 {
     twistAndTurn(Gtree->getRootNode(), Stree->getRootNode());
 }
 
+void
+GammaMapEx::twistAndTurn(TreeExtended *G, TreeExtended *S)
+{
+    twistAndTurn(G->getRootNode(), S->getRootNode());
+}
 
 void
 GammaMapEx::twistAndTurn(Node *v, Node *x)
@@ -575,6 +568,7 @@ GammaMapEx::twistAndTurn(Node *v, Node *x)
             if (vll == xr && vrl == xl)
             {
                 v->setChildren(vr, vl);
+                //v->rotateCordinates();
             }
         }
         else if (vll != lambdaex[v])
@@ -584,6 +578,7 @@ GammaMapEx::twistAndTurn(Node *v, Node *x)
             if (rep == xr)
             {
                 v->setChildren(vr, vl);
+                //v->rotateCordinates();
             }
         }
         else if (vrl != lambdaex[v])
@@ -593,6 +588,7 @@ GammaMapEx::twistAndTurn(Node *v, Node *x)
             if (rep == xl)
             {
                 v->setChildren(vr, vl);
+                //v->rotateCordinates();
             }
         }
         twistAndTurn(vl, vll);
@@ -650,7 +646,7 @@ GammaMapEx::print(bool full) const
         }
         else
         {
-            oss << i << "\n"; //"\tnot mapped\n";
+            oss << i << "\n"; //not mapped;
         }
     }
     return oss.str();
@@ -703,16 +699,18 @@ GammaMapEx::isInGamma(Node *u, Node *x) const
     return target_set.member(u);
 }
 
-GammaMapEx
+void
 GammaMapEx::update(const TreeExtended& G, const TreeExtended& S,
                    const std::vector< unsigned > &sigma,
                    const dynamic_bitset<> &transfer_edges)
 {
     lambdaex.update(G,S,sigma,transfer_edges);
-    GammaMapEx gamma_star(G, S, lambdaex);
-    gamma_star.setLGT(transfer_edges);
-    gamma_star.computeGammaBound(G.getRootNode());
-    return gamma_star;
+    gamma.clear();
+    gamma.resize(S.getNumberOfNodes());
+    chainsOnNode.clear();
+    chainsOnNode.resize(G.getNumberOfNodes());
+    setLGT(transfer_edges);
+    computeGammaBound(G.getRootNode());
 }
 
 
@@ -727,13 +725,12 @@ GammaMapEx::numberOfGammaPaths(Node &u) const
 
 void GammaMapEx::setLGT(dynamic_bitset< long unsigned > lgt)
 {
-    this->transfer_edges = lgt;
+    transfer_edges = lgt;
 }
-
 
 dynamic_bitset<> GammaMapEx::getLGT()
 {
-    return this->transfer_edges;
+    return transfer_edges;
 }
 
 

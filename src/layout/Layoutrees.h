@@ -41,7 +41,7 @@ class LayoutTrees
 
 public:
 
-    /*constructor : gene tree, species tree and parameters are going to be modified */
+    // constructor : gene tree, species tree and parameters are going to be modified
     LayoutTrees(TreeExtended *r,TreeExtended *g,
                 Parameters *p,const GammaMapEx *gm,
                 const LambdaMapEx *l);

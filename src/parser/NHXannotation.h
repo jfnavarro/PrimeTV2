@@ -29,7 +29,7 @@ extern "C" {
 #include "NHXnode.h" 
 
 //   This is how long tag strings (such as 'AC' or 'D') in
-//   NHX trees are allowed to be, *including* '\0'!
+//   NHX trees are allowed to be, *including* '\0'
 #define MAX_ANNOTATION_ID_LENGTH 5
 
 struct NHXannotation {
@@ -50,8 +50,8 @@ struct int_list {
     struct int_list *next;
 };
 
-void annotate_node(struct NHXnode *n, struct NHXannotation *l); /* Put the necessary node time info from l into n, and*/
-void delete_annotation_list(struct NHXannotation *l); /* Free up all memory */
+void annotate_node(struct NHXnode *n, struct NHXannotation *l); // Put the necessary node time info from l into n,
+void delete_annotation_list(struct NHXannotation *l); // Free up all memory
 
 // Check annotation type. Essentially doing a strcmp with 'tag'.
 int annotation_isa(struct NHXannotation* l, const char *tag);

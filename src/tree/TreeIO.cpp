@@ -175,7 +175,7 @@ TreeIO::readGeneSpeciesInfoVector(const std::string &filename)
     return gene2speciesVec;
 }
 
-TreeExtended TreeIO::readHostTree()
+TreeExtended* TreeIO::readHostTree()
 {
     TreeIOTraits traits;
     checkTagsForTree(traits);
@@ -187,19 +187,20 @@ TreeExtended TreeIO::readHostTree()
     traits.enforceHostTree();
     std::vector<SetOfNodesEx<Node> > *AC = 0;
     StrStrMap *gs = 0;
-    TreeExtended tree = readBeepTree(t, traits, AC, gs);
+    TreeExtended *tree = readBeepTree(t, traits, AC, gs);
     delete_trees(t);
+    t = 0;
     return tree;
 }
 
-TreeExtended TreeIO::readGuestTree()
+TreeExtended* TreeIO::readGuestTree()
 {
     std::vector<SetOfNodesEx<Node> > *AC = 0;
     StrStrMap *gs = 0;
     return readGuestTree(AC, gs);
 }
 
-TreeExtended TreeIO::readNewickTree()
+TreeExtended* TreeIO::readNewickTree()
 {
     TreeIOTraits traits;
     checkTagsForTree(traits);
@@ -210,8 +211,9 @@ TreeExtended TreeIO::readNewickTree()
     traits.setNWisET(false);
     std::vector<SetOfNodesEx<Node> > *AC = 0;
     StrStrMap *gs = 0;
-    TreeExtended tree = readBeepTree(t, traits, AC, gs);
+    TreeExtended *tree = readBeepTree(t, traits, AC, gs);
     delete_trees(t);
+    t = 0;
     return tree;
 }
 
@@ -259,7 +261,7 @@ std::string TreeIO::writeBeepTree(const TreeExtended& G, const GammaMapEx *gamma
     return writeBeepTree(G, traits, gamma);
 }
 
-TreeExtended TreeIO::readBeepTree(std::vector<SetOfNodesEx<Node> > *AC, StrStrMap *gs)
+TreeExtended* TreeIO::readBeepTree(std::vector<SetOfNodesEx<Node> > *AC, StrStrMap *gs)
 {
     TreeIOTraits traits;
     checkTagsForTree(traits);
@@ -278,7 +280,7 @@ std::string TreeIO::writeGuestTree(const TreeExtended& G, const GammaMapEx* gamm
     return writeBeepTree(G, traits, gamma);
 }
 
-TreeExtended TreeIO::readBeepTree(const TreeIOTraits& tr, std::vector<SetOfNodesEx<Node> > *AC,
+TreeExtended* TreeIO::readBeepTree(const TreeIOTraits& tr, std::vector<SetOfNodesEx<Node> > *AC,
                                   StrStrMap *gs)
 {
     NHXtree* t = readTree();
@@ -287,12 +289,13 @@ TreeExtended TreeIO::readBeepTree(const TreeIOTraits& tr, std::vector<SetOfNodes
         throw AnError("No tree found!");
     }
 
-    TreeExtended tree = readBeepTree(t, tr, AC, gs);
+    TreeExtended *tree = readBeepTree(t, tr, AC, gs);
     delete_trees(t);
+    t = 0;
     return tree;
 }
 
-TreeExtended TreeIO::readGuestTree(std::vector<SetOfNodesEx<Node> >* AC, StrStrMap* gs)
+TreeExtended* TreeIO::readGuestTree(std::vector<SetOfNodesEx<Node> >* AC, StrStrMap* gs)
 {
     TreeIOTraits traits;
     checkTagsForTree(traits);
@@ -306,8 +309,9 @@ TreeExtended TreeIO::readGuestTree(std::vector<SetOfNodesEx<Node> >* AC, StrStrM
         AC = 0;
     }
     traits.enforceGuestTree();
-    TreeExtended tree = readBeepTree(t, traits, AC, gs);
+    TreeExtended *tree = readBeepTree(t, traits, AC, gs);
     delete_trees(t);
+    t = 0;
     return tree;
 }
 
@@ -477,7 +481,6 @@ bool TreeIO::recursivelyCheckTags(const NHXnode* v, TreeIOTraits& traits)
 // Precondition: All bool argument has proper values. Assume a specific
 // bool argument, 'A' has incoming value 'a', and the value for the 
 // current node is 'b', then on return, A = a && b.
-//----------------------------------------------------------------------
 void
 TreeIO::checkTags(const NHXnode *v, TreeIOTraits& traits) const
 {
@@ -527,7 +530,6 @@ TreeIO::checkTags(const NHXnode *v, TreeIOTraits& traits) const
 
 
 // Generic reading function, interfacing NHX* code
-//----------------------------------------------------------------------
 NHXtree*
 TreeIO::readTree()
 {
@@ -551,25 +553,28 @@ TreeIO::readTree()
 }
 
 // The basic function for reading NHX trees
-TreeExtended TreeIO::readBeepTree(NHXtree *t, const TreeIOTraits& traits,
+TreeExtended* TreeIO::readBeepTree(NHXtree *t, const TreeIOTraits& traits,
                                   std::vector<SetOfNodesEx<Node> > *AC, StrStrMap *gs)
 {
-    assert(t != 0);
-    TreeExtended tree;
+    TreeExtended *tree = new TreeExtended();
+    assert(tree);
+    assert(t);
 
     // Create BeepVectors to hold required 'tag' info
     if(traits.hasET() || traits.hasNT() ||
             (traits.hasNW() && traits.hasNWisET()))
     {
-        tree.setTimes(*new RealVector(treeSize(t)));
+        RealVector *timevector = new RealVector(treeSize(t));
+        tree->setTimes(*timevector);
     }
     if(traits.hasBL()|| (traits.hasNW() && traits.hasNWisET() == false))
     {
-        tree.setLengths(*new RealVector(treeSize(t)));
+        RealVector *lengthvector = new RealVector(treeSize(t));
+        tree->setLengths(*lengthvector);
     }
 
     // Convert it into our preferred C++ data structure
-    Node *r = extendBeepTree(tree, t->root, traits, AC, gs, 0, 0);
+    Node *r = extendBeepTree(*tree, t->root, traits, AC, gs, 0, 0);
     if (r == 0)
     {
         throw AnError("The input tree was empty!");
@@ -578,7 +583,7 @@ TreeExtended TreeIO::readBeepTree(NHXtree *t, const TreeIOTraits& traits,
     NHXannotation *a = find_annotation(t->root, "NAME");
     if(a != 0)
     {
-        tree.setName(a->arg.str);
+        tree->setName(a->arg.str);
     }
 
     if(traits.hasNT())
@@ -586,16 +591,17 @@ TreeExtended TreeIO::readBeepTree(NHXtree *t, const TreeIOTraits& traits,
         NHXannotation *a = find_annotation(t->root, "TT");
         if(a != 0)
         {
-            tree.setTopTime(a->arg.t);
+            tree->setTopTime(a->arg.t);
         }
     }
 
-    tree.setRootNode(r);
+    tree->setRootNode(r);
 
-    if(tree.IDnumbersAreSane(*r) == false)
+    if(tree->IDnumbersAreSane(*r) == false)
     {
         throw AnError("There are higher ID-numbers than there are nodes in tree", "TreeIO::readBeepTree");
     }
+
     return tree;
 }
 

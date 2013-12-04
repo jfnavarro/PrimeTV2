@@ -25,70 +25,7 @@
 
 Parameters::Parameters()
 {
-    species_font = "Times";
-    gene_font = "Times";
-    all_font = "Times";
-    ids_on_inner_nodes = false;
-    do_not_draw_species_tree = false;
-    do_not_draw_guest_tree = false;
-    fontscale = 1.0;
-    imagescale = 1.0;
-    xoffset = 0.0;
-    yoffset = 0.0;
-    ufontsize = 1.0;
-    markerscale = 1.0;
-    isMarkerColor = false;
-    header = false;
-    legend = false;
-    title = false;
-    lattransfer = false;
-    lateralmincost = 1.0;
-    lateralmaxcost = 10.0;
-    lateralduplicost = 1.0;
-    lateraltrancost = 1.0;
-    show_event_count = false;
-    UI = false;
-    scaleByTime = true;
-    timeAtEdges = false;
-    noTimeAnnotation = false;
-    markers = false;
-    horiz = true;
-    format = "pdf";
-    colorConfig = new Colours();
-    colorConfig->setColors("1");
-    outfile = "image";
-    ladd = 'n';
-    isreconciled = false;
-    um_fontsize = 1.0;
-    species_font_size = 10.0;
-    gene_font_size = 10.0;
-    ux_offset = 0.0;
-    uy_offset = 0.0;
-    width = 1200;
-    height = 1400;
-    adapted_width = 1200;
-    adapted_height = 1400;
-    fontsize = 10.0;
-    leafwidth = 25;
-    equalTimes = true;
-    linewidth = 1.0;
-    s_contour_width = 5.0;
-    separation = 150.0;
-    root_sep = 50.0;
-    min_node_height = 3;
-    maxLeafNameSize = 0.0;
-    speciesFontColor.blue = 0.0;
-    speciesFontColor.green = 0.0;
-    speciesFontColor.red = 0.0;
-    geneFontColor.blue = 0.0;
-    geneFontColor.green = 0.0;
-    geneFontColor.red = 0.0;
-    allFontColor.blue = 0.0;
-    allFontColor.green = 0.0;
-    allFontColor.red = 0.0;
-    reduce = false;
-    drawAll = false;
-    all_font_size = 1.0;
+    reset();
 }
 
 Parameters::~Parameters()
@@ -173,4 +110,70 @@ Parameters& Parameters::operator=(const Parameters& p)
 }
 
 
-
+void Parameters::reset()
+{
+    species_font = "Times";
+    gene_font = "Times";
+    all_font = "Times";
+    ids_on_inner_nodes = false;
+    do_not_draw_species_tree = false;
+    do_not_draw_guest_tree = false;
+    fontscale = 1.0;
+    imagescale = 1.0;
+    xoffset = 0.0;
+    yoffset = 0.0;
+    ufontsize = 1.0;
+    markerscale = 1.0;
+    isMarkerColor = false;
+    header = false;
+    legend = false;
+    title = false;
+    lattransfer = false;
+    lateralmincost = 1.0;
+    lateralmaxcost = 10.0;
+    lateralduplicost = 1.0;
+    lateraltrancost = 1.0;
+    show_event_count = false;
+    UI = false;
+    scaleByTime = true;
+    timeAtEdges = false;
+    noTimeAnnotation = false;
+    markers = false;
+    horiz = true;
+    format = "pdf";
+    colorConfig = new Colours();
+    colorConfig->setColors("1");
+    outfile = "image";
+    ladd = 'n';
+    isreconciled = false;
+    um_fontsize = 1.0;
+    species_font_size = 10.0;
+    gene_font_size = 10.0;
+    ux_offset = 0.0;
+    uy_offset = 0.0;
+    width = 1200;
+    height = 1400;
+    adapted_width = 1200;
+    adapted_height = 1400;
+    fontsize = 10.0;
+    leafwidth = 25;
+    equalTimes = true;
+    linewidth = 1.0;
+    s_contour_width = 5.0;
+    separation = 150.0;
+    root_sep = 50.0;
+    min_node_height = 3;
+    maxLeafNameSize = 0.0;
+    speciesFontColor.blue = 0.0;
+    speciesFontColor.green = 0.0;
+    speciesFontColor.red = 0.0;
+    geneFontColor.blue = 0.0;
+    geneFontColor.green = 0.0;
+    geneFontColor.red = 0.0;
+    allFontColor.blue = 0.0;
+    allFontColor.green = 0.0;
+    allFontColor.red = 0.0;
+    reduce = false;
+    drawAll = false;
+    all_font_size = 1.0;
+}

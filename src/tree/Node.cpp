@@ -39,7 +39,6 @@ Node::Node(unsigned id)
       parent(0),      // neighbors in the tree
       leftChild(0),
       rightChild(0),
-      porder(0),         // partial order of nodes on tree
       time(0.0),         // time of incoming edge
       nodeTime(0.0),     // time interval between node and leaves
       branchLength(0.0), // branchLength
@@ -62,7 +61,6 @@ Node::Node(unsigned id, const string& nodeName)
       parent(0),
       leftChild(0),
       rightChild(0),
-      porder(0),
       time(0),
       nodeTime(0.0),
       branchLength(0.0),
@@ -86,7 +84,6 @@ Node::Node(const Node &v)
       parent(0),          // relatives in tree are not copied!
       leftChild(0),
       rightChild(0),
-      porder(v.porder),
       time(v.time),
       nodeTime(v.nodeTime),
       branchLength(v.branchLength),
@@ -104,15 +101,14 @@ Node::Node(const Node &v)
 
 }
 
-
 Node::~Node()
 {
 
 }
 
-// Assignment: Also pointers are copied, which might not be the 
+// Assignment: Also pointers are copied, which might not be the
 // proper thing to do.
-Node & 
+Node &
 Node::operator=(const Node &v)
 {
     if (this != &v)
@@ -121,7 +117,6 @@ Node::operator=(const Node &v)
         parent = v.parent;
         leftChild = v.leftChild;
         rightChild = v.rightChild;
-        porder = v.porder;
         time = v.time;
         nodeTime = v.nodeTime;
         branchLength = v.branchLength;
@@ -129,8 +124,8 @@ Node::operator=(const Node &v)
         ownerTree = v.ownerTree;
         color = v.color;
         size = v.size;
-        x = v.size;
-        y = v.size;
+        x = v.x;
+        y = v.y;
         hostParent = v.hostParent;
         hostChild = v.hostChild;
         reconcilation = v.reconcilation;
@@ -138,8 +133,6 @@ Node::operator=(const Node &v)
     }
     return *this;
 }
-
-
 
 // Return the requested relative
 Node* 
@@ -203,6 +196,17 @@ Node::rotate()
     rightChild = tmp;
 }
 
+// rotate cordinates from left two right or viceversa
+void
+Node::rotateCordinates()
+{
+    double temp_x = leftChild->getX();
+    double temp_y = leftChild->getY();
+    leftChild->setX(rightChild->getX());
+    leftChild->setY(rightChild->getY());
+    rightChild->setX(temp_x);
+    rightChild->setY(temp_y);
+}
 
 // get the (leaf) name
 const string&
@@ -230,12 +234,6 @@ const unsigned
 Node::getNumber() const
 {
     return number;
-}
-
-const unsigned
-Node::getPorder() const
-{
-    return porder;
 }
 
 const unsigned
@@ -294,7 +292,6 @@ Node::getLeaves()
     return nodes;
 }
 
-
 //Set the (leaf) name
 void 
 Node::setName(const string& nodeName)
@@ -316,23 +313,16 @@ Node::setTree(Tree& tree)
 void
 Node::setChildren(Node *l, Node *r)
 {
-    this->leftChild = l;
-    this->rightChild = r;
+    leftChild = l;
+    rightChild = r;
+
     if (l)
     {
         l->parent = this;
-        if (l->porder >= porder)
-        {
-            porder = l->porder + 1;
-        }
     }
     if (r)
     {
         r->parent = this;
-        if (r->porder >= porder)
-        {
-            porder = r->porder + 1;
-        }
     }
     return;
 }
@@ -613,47 +603,47 @@ operator<< (std::ostream& o, const Node *v)
 
 void Node::setColor(Color c)
 {
-    this->color = c;
+    color = c;
 }
 
-void Node::setSize(double s)
+void Node::setSize(double _size)
 {
-    this->size = s;
+    size = _size;
 }
 
-void Node::setX(double x)
+void Node::setX(double _x)
 {
-    this->x = x;
+    x = _x;
 }
 
-void Node::setY(double y)
+void Node::setY(double _y)
 {
-    this->y = y;
+    y = _y;
 }
 
-void Node::setHostChild(Node* hostchild)
+void Node::setHostChild(Node* _hostchild)
 {
-    this->hostChild = hostchild;
+   hostChild = _hostchild;
 }
 
-void Node::setHostParent(Node* hostparent)
+void Node::setHostParent(Node* _hostparent)
 {
-    this->hostParent = hostparent;
+    hostParent = _hostparent;
 }
 
 void Node::setReconcilation(Type t)
 {
-    this->reconcilation = t;
+    reconcilation = t;
 }
 
 void Node::setVisited(unsigned inc)
 {
-    this->visited = inc;
+    visited = inc;
 }
 
 void Node::incVisited()
 {
-    this->visited++;
+    visited++;
 }
 
 Color Node::getColor()

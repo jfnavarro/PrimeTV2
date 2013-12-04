@@ -58,13 +58,13 @@ class LambdaMapEx : public NodeVector
 public:
 
     //constructors
-    LambdaMapEx(unsigned Nnodes);
-    LambdaMapEx(const TreeExtended &G,const TreeExtended &S, const StrStrMap &gs);
-    LambdaMapEx(const LambdaMapEx& l);
-    LambdaMapEx();
-    
+    explicit LambdaMapEx(unsigned Nnodes);
+    explicit LambdaMapEx(const LambdaMapEx& l);
+    explicit LambdaMapEx();
+    explicit LambdaMapEx(const TreeExtended &G,const TreeExtended &S, const StrStrMap &gs);
+
     //destructor
-    ~LambdaMapEx();
+    virtual ~LambdaMapEx();
     
     //overload of operator =
     LambdaMapEx& operator=(const LambdaMapEx& l);

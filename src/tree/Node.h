@@ -46,9 +46,11 @@ public:
         Undefined = 4
     };
 
-    Node(unsigned id);
-    Node(unsigned id, const std::string& nodeName);
-    Node(const Node &);
+    explicit Node(unsigned id);
+    explicit Node(unsigned id, const std::string& nodeName);
+    explicit Node(const Node &);
+    Node& operator=(const Node &);
+
     virtual ~Node();
 
     //Extra Methods
@@ -77,6 +79,7 @@ public:
     //Extra Methods
 
     void rotate();
+    void rotateCordinates();
 
     Node* getLeftChild() const;
     Node* getRightChild() const;
@@ -88,10 +91,8 @@ public:
     Tree* getTree();
 
     const unsigned getNumber() const;
-    const unsigned getPorder() const;
     const unsigned getNumberOfLeaves() const;
     const double getBranchLength() const;
-    Node& operator=(const Node &);
 
     const unsigned getMaxPathToLeaf() const;
 
@@ -139,7 +140,6 @@ protected:
     Node *parent;         // pointer to the parent Node
     Node *leftChild;      // pointer to the left child Node
     Node *rightChild;     // pointer to the right child Node
-    long porder;          // Defining partial order of tree.
 
     double time;		      // the arc time from the parent to current node
     double nodeTime;        // the time from the leaves.

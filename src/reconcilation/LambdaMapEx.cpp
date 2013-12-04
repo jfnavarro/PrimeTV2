@@ -27,7 +27,7 @@
 #include "LambdaMapEx.h"
 
 LambdaMapEx::LambdaMapEx(unsigned Nnodes)
-    :NodeVector(Nnodes),
+    : NodeVector(Nnodes),
       description()
 {
 }
@@ -58,12 +58,11 @@ LambdaMapEx::LambdaMapEx(const LambdaMapEx& l)
 }
 
 LambdaMapEx::LambdaMapEx()
-    :NodeVector(0),
+    : NodeVector(0),
       description()
 {
 
 }
-
 
 LambdaMapEx&
 LambdaMapEx::operator=(const LambdaMapEx &l)
@@ -101,16 +100,17 @@ void LambdaMapEx::update(const TreeExtended& G, const TreeExtended& S,
 
     clearValues();
 
-    for (Node *u = G.getPostOderBegin();
+    for (Node *u = G.postorder_begin();
          u != 0;
          u = G.postorder_next(u))
     {
-        /* Take care of gene tree leaves and continue. */
+        // Take care of gene tree leaves and continue.
         if (u->isLeaf())
         {
             pv[u->getNumber()] = S.getNode(sigma[u->getNumber()]);
             continue;
         }
+
         Node *v = u->getLeftChild();
         Node *w = u->getRightChild();
 

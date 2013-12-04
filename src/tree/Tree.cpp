@@ -57,7 +57,6 @@ Tree::~Tree()
         delete rootNode;
     }
     rootNode = 0;
-    //NOTE what should I do with the times,lenghts and rates?
     clearNodeAttributes();
 }
 
@@ -68,7 +67,6 @@ Tree::Tree(const Tree &tree)
       name2node(),                                       // Initialization
       all_nodes(max(noOfNodes,DEF_NODE_VEC_SIZE), 0), // Allocate vector
       name(tree.name),
-      //NOTE what should I do with the times,lenghts and rates?
       times(tree.times),
       lengths(tree.lengths),
       rates(tree.rates),
@@ -80,7 +78,7 @@ Tree::Tree(const Tree &tree)
     }
 }
 
-Tree
+/*Tree
 Tree::EmptyTree(const double& rootTime, const string &leafname)
 {
     Tree tree;
@@ -88,7 +86,7 @@ Tree::EmptyTree(const double& rootTime, const string &leafname)
     tree.topTime = rootTime;
     tree.setName("Tree");
     return tree;
-}
+}*/
 
 Tree&
 Tree::operator=(const Tree& tree)
@@ -107,7 +105,6 @@ Tree::operator=(const Tree& tree)
         {
             setRootNode(copyAllNodes(tree.getRootNode()));
         }
-        //NOTE what should I do with the times,lenghts and rates?
         times = tree.times;
         lengths = tree.lengths;
         rates = tree.rates;
@@ -153,7 +150,7 @@ Tree::getHeight() const
 // Check that all nodes has sane identity numbers
 // This is used when reading user-defined trees
 const bool
-Tree::IDnumbersAreSane(Node& n)
+Tree::IDnumbersAreSane(Node& n) const
 {
     bool ret = n.getNumber() < getNumberOfNodes();
     if(n.isLeaf() == false)

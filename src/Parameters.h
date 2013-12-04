@@ -40,6 +40,7 @@ public:
     explicit Parameters();
     ~Parameters();
     Parameters& operator=(const Parameters &ts);
+    void reset();
 
     string species_font;
     string gene_font;

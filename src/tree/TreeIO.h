@@ -63,8 +63,8 @@ class TreeIO
 
 public:
 
-    TreeIO();
-    TreeIO(enum TreeSource src, const std::string &s);
+    explicit TreeIO();
+    explicit TreeIO(enum TreeSource src, const std::string &s);
     virtual ~TreeIO();
 
     // static functions to read trees
@@ -84,31 +84,32 @@ public:
 
     // Convenience front to readBeepTree(...)
     // Reads times from NT, ET or NW and nothing more
-    TreeExtended readHostTree();
+    TreeExtended *readHostTree();
     
     // Convenience front to readBeepTree(...)
     // Reads edge lengths from BL or NW and what else there is
     // Reads antichains info and gene species maps
-    TreeExtended readGuestTree(std::vector<SetOfNodesEx<Node> >* AC, StrStrMap* gs);
+    TreeExtended *readGuestTree(std::vector<SetOfNodesEx<Node> >* AC, StrStrMap* gs);
     
     // Convenience front to readGuestTree(...)
     // Reads edge lengths from BL or NW and what else there is
     // Doese not read antichains info and gene species maps
-    TreeExtended readGuestTree();
-    TreeExtended readBeepTree(std::vector<SetOfNodesEx<Node> > *AC, StrStrMap *gs);
-    TreeExtended readBeepTree(const TreeIOTraits& tr,
+    TreeExtended *readGuestTree();
+    TreeExtended *readBeepTree(std::vector<SetOfNodesEx<Node> > *AC, StrStrMap *gs);
+    TreeExtended *readBeepTree(const TreeIOTraits& tr,
                               std::vector<SetOfNodesEx<Node> > *AC,
                               StrStrMap *gs);
 
     // Convenience front to readBeepTree(...)
     // Reads a plain newick tree with branch lengths from NW only
-    TreeExtended readNewickTree();
+    TreeExtended* readNewickTree();
 
     // Basic function for writing tree TreeExtended in newick format, with the tags
     // indicated by traits included in PRIME markup. If gamma != 0 then AC
     // markup will also be included.
     // Precondition: (useET && useNT) == false
-    std::string writeBeepTree(const TreeExtended &G, const TreeIOTraits& traits, const GammaMapEx *gamma);
+    std::string writeBeepTree(const TreeExtended &G, const TreeIOTraits& traits,
+                              const GammaMapEx *gamma);
 
     // convenience front function for writeBeepTree(...)
     // writes tree S with all attributes
@@ -145,7 +146,7 @@ protected:
     // Helper function that reads NHXtrees:
     NHXtree* readTree();
 
-    TreeExtended readBeepTree(NHXtree *t, const TreeIOTraits& traits,
+    TreeExtended* readBeepTree(NHXtree *t, const TreeIOTraits& traits,
                    std::vector<SetOfNodesEx<Node> > *AC, StrStrMap *gs);
 
     Node* extendBeepTree(TreeExtended &S, const NHXnode *v,

@@ -250,7 +250,7 @@ void LayoutTrees::CountSpeciesCoordinates(Node *n, unsigned depth)
 const unsigned LayoutTrees::MostGenes() const
 {
     unsigned currentMax = 0;
-    for(Node *n = species->getPostOderBegin(); n != 0; n = species->postorder_next(n))
+    for(Node *n = species->postorder_begin(); n != 0; n = species->postorder_next(n))
     {
         unsigned size = gamma->getSize(n);
         if ( size > currentMax )
@@ -275,7 +275,7 @@ void LayoutTrees::AssignLeafGene(Node *n)
     {
         const unsigned yoffset = spn->getVisited();
         const unsigned delta = NodeHeight / (size - 1);
-        y = (spn->getY() - NodeHeight/2) + (delta * yoffset);
+        y = (spn->getY() - (NodeHeight / 2) ) + (delta * yoffset);
     }
     else
     {

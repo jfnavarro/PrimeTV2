@@ -41,12 +41,15 @@ class GammaMapEx
 public:
     
     //constructors for different scenarios
-    GammaMapEx(const TreeExtended &G,const TreeExtended &S, const StrStrMap &gs,
+    explicit GammaMapEx(const TreeExtended &G,const TreeExtended &S, const StrStrMap &gs,
                std::vector<SetOfNodesEx<Node> > &AC_info);
-    GammaMapEx(const TreeExtended &G,const TreeExtended &S, const StrStrMap &gs);
-    GammaMapEx(const TreeExtended &G,const TreeExtended &S, const LambdaMapEx &L);
+    explicit GammaMapEx(const TreeExtended &G,const TreeExtended &S, const StrStrMap &gs);
+    explicit GammaMapEx(const TreeExtended &G,const TreeExtended &S, const LambdaMapEx &L);
+
     GammaMapEx(const GammaMapEx& original);
     
+    virtual ~GammaMapEx() {};
+
     //overload of operator =
     GammaMapEx& operator=(const GammaMapEx &gm);
     
@@ -73,9 +76,8 @@ public:
     const bool isLateralTransfer(Node &u) const;
     
     // returns the lambdamap
-    LambdaMapEx getLambda() const;
-    LambdaMapEx* getLambda();
-    
+    const LambdaMapEx& getLambda();
+
     // print the gamma on a string file
     string print(bool full) const;
     
@@ -109,10 +111,11 @@ public:
     const unsigned sizeOfWidestSpeciesLeaf() const;
     const unsigned sizeOfWidestSpeciesLeaf(Node *x, unsigned cur_max) const;
     
-    // alternate left and right in the tree
+    // alternate left and right (cordinates) for each node in the tree (if needed)
     void twistAndTurn();
     void twistAndTurn(Node *v, Node *x);
-    
+    void twistAndTurn(TreeExtended *G, TreeExtended *S);
+
     // returns true if the node given is speciation
     const bool isSpeciation(Node &u) const;
     
@@ -123,7 +126,7 @@ public:
     const bool isInGamma(Node *u, Node *x) const;
     
     // update the gamma to include Lateral Gene transfer
-    GammaMapEx update(const TreeExtended &G, const TreeExtended &S,
+    void update(const TreeExtended &G, const TreeExtended &S,
                       const std::vector<unsigned> &sigma,
                       const dynamic_bitset<> &transfer_edges);
     

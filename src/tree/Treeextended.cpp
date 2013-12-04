@@ -74,7 +74,7 @@ Node* TreeExtended::preorder_next(Node *v) const
     {
         return v->getLeftChild();
     }
-    /* special case when the tree consists of one vertex only. */
+    // special case when the tree consists of one vertex only.
     if (v == getRootNode())
     {
         return 0;
@@ -93,7 +93,7 @@ Node* TreeExtended::preorder_next(Node *v) const
     return v->getParent()->getRightChild();
 }
 
-Node* TreeExtended::getPostOderBegin() const
+Node* TreeExtended::postorder_begin() const
 {    
     Node *v = getRootNode();
     while (!v->isLeaf())
@@ -325,5 +325,21 @@ void TreeExtended::reset()
         n->setX(0);
         n->setY(0);
         n->setReconcilation(Node::Undefined);
+    }
+}
+
+void TreeExtended::printPostOrder()
+{
+    for ( Node *n = postorder_begin(); n != 0; n = postorder_next(n) )
+    {
+        std::cout << n << std::endl;
+    }
+}
+
+void TreeExtended::printPreOrder()
+{
+    for ( Node *n = preorder_begin(); n != 0; n = preorder_next(n) )
+    {
+        std::cout << n << std::endl;
     }
 }

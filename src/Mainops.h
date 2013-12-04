@@ -52,8 +52,6 @@ public:
     virtual ~Mainops();
     //instantiates objects
     void start();
-    //destroy and create trees
-    void cleanTrees();
 
     // calculate the Lateral transfer scenarios using parameters,
     // return true if there is a valid scenario.
@@ -111,19 +109,19 @@ public:
 
 protected:
     
-    TreeExtended *genesTree;
-    TreeExtended *speciesTree;
-    GammaMapEx *gamma;
-    LambdaMapEx *lambdamap;
-    DrawTreeCairo *dt; //drawing
+    std::shared_ptr<TreeExtended> genesTree;
+    std::shared_ptr<TreeExtended> speciesTree;
+    std::shared_ptr<GammaMapEx> gamma;
+    std::shared_ptr<LambdaMapEx> lambdamap;
+    std::unique_ptr<DrawTreeCairo> dt; //drawing
     Parameters *parameters;
 
     std::vector<Scenario> scenarios;
     dynamic_bitset<> transferedges;
     std::vector<unsigned> sigma;
-    std::vector<unsigned> lambda;
+    //std::vector<unsigned> lambda; //not user at the moment
 
-    TreeIO *io;
+    std::unique_ptr<TreeIO> io;
     std::vector<SetOfNodesEx<Node> > AC;
     StrStrMap gs;
 };  

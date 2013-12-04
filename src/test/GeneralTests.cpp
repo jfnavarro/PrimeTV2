@@ -167,7 +167,7 @@ bool GeneralTests::run()
     tempfile.remove();
     try
     {
-        mainops->cleanTrees();
+        mainops->start();
         if (!(bool)(parameters->isreconciled))
         {
             mainops->OpenReconciled(test_reconciled.toLatin1().data());

@@ -55,8 +55,10 @@ static const std::string PATCH = boost::lexical_cast<std::string>(VERSION_REVISI
 static const std::string VERSION =  ((MAJOR + "." + MINOR) + ".") + PATCH;
 
 //member objects //TODO make them singleton
-static Parameters *parameters = 0;
-static Mainops *mainops = 0;
+//static Parameters *parameters = 0;
+//static Mainops *mainops = 0;
+Parameters *parameters = 0;
+Mainops *mainops = 0;
 
 // Helper function to sort vectors used in the parser of parameters
 template<class T>
@@ -75,12 +77,13 @@ int file_exist(const char *filename)
 
 void cleanUp()
 {
-    if(parameters)
+    if (parameters)
     {
         delete parameters;
     }
     parameters = 0;
-    if(mainops)
+
+    if (mainops)
     {
         delete mainops;
     }
@@ -134,7 +137,9 @@ main (int ac, char *av[])
                 ("help,h", "Produce help message")
                 ("gui", po::bool_switch(&parameters->UI), "Initiates a Graphical User Interface")
                 ("reconciled,r", po::bool_switch(&parameters->isreconciled)->default_value(false),
-                 "Indicates that the Guest tree is not reconciled. By default, it is assumed that the Guest Tree is already reconciled in PRIME format. This option requires a third input file which maps guest tree leaves to host tree leaves")
+                 "Indicates that the Guest tree is not reconciled. By default,"
+                 "it is assumed that the Guest Tree is already reconciled in PRIME format."
+                 "This option requires a third input file which maps guest tree leaves to host tree leaves")
                 ("config,C", po::value<string>(&config_file)->default_value(default_config_file),
                  "Name of a file of a configuration.");
 
@@ -144,7 +149,8 @@ main (int ac, char *av[])
         po::options_description config("Configuration");
         config.add_options()
                 ("color,c",po::value<string>(&colorconfig)->default_value("1"),
-                 "Set colors according to <spec> which can be 'blue', 'kth', 'su', 'grey', 'mono', or 'yellow'. You can also use integers 1, 2,... for shortcut.")
+                 "Set colors according to <spec> which can be 'blue', 'kth', 'su', 'grey', 'mono', or 'yellow'."
+                 "You can also use integers 1, 2,... for shortcut.")
                 ("notimescale,t", "Don't scale host edges by time")
                 ("timeex,e", po::bool_switch(&parameters->timeAtEdges),
                  "Annotate host edges by their time extent")
@@ -162,11 +168,14 @@ main (int ac, char *av[])
                 ("size,p", po::value<std::vector<float> >()->multitoken(),
                  "Image size in pixels <width> <height>")
                 ("guest-font,j", po::value<string>(&parameters->gene_font)->default_value("Times"),
-                 "<string> use this font for guest tree labels (def. Times) possible options = \"serif\", \"sans-serif\", \"Purisa\", \"Sans\", \"monospace\" ..etc")
+                 "<string> use this font for guest tree labels (def. Times) possible options = \"serif\","
+                 "\"sans-serif\", \"Purisa\", \"Sans\", \"monospace\" ..etc")
                 ("host-font,q", po::value<string>(&parameters->species_font)->default_value("Times"),
-                 "<string> use this font for host node labels (def. Times) possible options = \"serif\", \"sans-serif\", \"Purisa\", \"Sans\", \"monospace\" ..etc")
+                 "<string> use this font for host node labels (def. Times) possible options = \"serif\","
+                 "\"sans-serif\", \"Purisa\", \"Sans\", \"monospace\" ..etc")
                 ("all-font,A", po::value<string>(&parameters->all_font)->default_value("Times"),
-                 "<string> use this font for the rest of text labels (def. Times) possible options = \"serif\", \"sans-serif\", \"Purisa\", \"Sans\", \"monospace\" ..etc")
+                 "<string> use this font for the rest of text labels (def. Times) possible options = \"serif\","
+                 "\"sans-serif\", \"Purisa\", \"Sans\", \"monospace\" ..etc")
                 ("fontscale,s", po::value<float>(&parameters->fontscale)->default_value(1.0),
                  "<float> scale fonts by this number")
                 ("genefontsize,G", po::value<float>(&parameters->gene_font_size)->default_value(10.0),
@@ -193,7 +202,8 @@ main (int ac, char *av[])
                 ("lgt,l", po::bool_switch(&parameters->lattransfer),
                  "Allow lateral transfer (LGT) when reconciling.")
                 ("event-costs,P", po::value<std::vector<float> >()->multitoken(),
-                 "<float>: [<min>] [<max>] [<dupli. cost>] [<trans. cost>] Parameters that give (1) minimum reconciliation cost, (2) maximum reconciliation, (3) duplication cost, and (4) LGT cost.")
+                 "<float>: [<min>] [<max>] [<dupli. cost>] [<trans. cost>] Parameters that give (1) minimum reconciliation cost,"
+                 "(2) maximum reconciliation, (3) duplication cost, and (4) LGT cost.")
                 ("show-event-count", po::bool_switch(&parameters->show_event_count),
                  "Show the number of duplications and transfers used in the computed reconciliation.")
                 ("vertical,V", po::bool_switch(&parameters->horiz)->default_value(false),
@@ -205,14 +215,14 @@ main (int ac, char *av[])
                 ("draw-all-lgt,Y", po::bool_switch(&parameters->drawAll)->default_value(false),
                  "Draw a file for each pre-computed LGT scenario.")
                 ("precomputed-lgt-scenario,X", po::value<string>(&precomputed_scenario_file),
-                 "<string> name of the file containing the scenario as: \nTransfer edges Numbers: (9,2,0.12)\n Where 9 is origin, 2 destiny and 0.12 time.");
+                 "<string> name of the file containing the scenario as: \nTransfer edges Numbers: (9,2,0.12)\n"
+                 "Where 9 is origin, 2 destiny and 0.12 time.");
 
 
         // Hidden options, will be allowed both on command line and
         // in config file, but will not be shown to the user.
         po::options_description hidden("Hidden options");
-        hidden.add_options()
-                ("input-file", po::value< vector<string> >(), "input files: ");
+        hidden.add_options()("input-file", po::value< vector<string> >(), "input files: ");
 
         po::options_description cmdline_options;
         cmdline_options.add(generic).add(config).add(hidden);
@@ -264,7 +274,7 @@ main (int ac, char *av[])
 
         if (vm.count("input-file"))
         {
-            unsigned size = vm["input-file"].as< vector<string> >().size();
+            int size = vm["input-file"].as< vector<string> >().size();
 
             if(size <= 1)
             {
@@ -308,7 +318,7 @@ main (int ac, char *av[])
             }
 
             //TODO
-            //function check trees, check they exist and they are okay
+            //function check trees, check they exist and they are well formed and proper format
         }
 
         if (vm.count("notimescale"))
@@ -399,14 +409,14 @@ main (int ac, char *av[])
                 parameters->width = vm["size"].as< vector<float> >().at(0);
                 parameters->height = vm["size"].as< vector<float> >().at(1);
 
-                if (parameters->width < 400 || parameters->width > 2000)
+                if (parameters->width < 400 || parameters->width > 6000)
                 {
-                    parameters->width = 800;
+                    parameters->width = 1200;
                 }
 
-                if(parameters->height < 400 || parameters->height > 2000)
+                if(parameters->height < 400 || parameters->height > 6000)
                 {
-                    parameters->height = 1000;
+                    parameters->height = 1400;
                 }
             }
         }
@@ -423,7 +433,7 @@ main (int ac, char *av[])
                 {
                     parameters->xoffset = 0.0;
                 }
-                if(abs(parameters->yoffset) > parameters->height/2)
+                if(abs(parameters->yoffset) > parameters->height / 2)
                 {
                     parameters->yoffset = 0.0;
                 }
@@ -434,17 +444,20 @@ main (int ac, char *av[])
         {
             if ((bool)(parameters->lattransfer))
             {
-                std::cerr << "The option -X(precomputed-lgt-scenario) cannot be used together with the option -l(lgt).." << std::endl;
+                std::cerr << "The option -X(precomputed-lgt-scenario) cannot be used together"
+                             "with the option -l(lgt).." << std::endl;
                 return EXIT_FAILURE;
             }
             if(show_lgt_scenarios)
             {
-                std::cerr << "The option -X(precomputed-lgt-scenario) cannot be used together with the option -b(show-scenarios).." << std::endl;
+                std::cerr << "The option -X(precomputed-lgt-scenario) cannot be used together"
+                             "with the option -b(show-scenarios).." << std::endl;
                 return EXIT_FAILURE;
             }
             if ((bool)(parameters->drawAll))
             {
-                std::cerr << "The option -X(precomputed-lgt-scenario) cannot be used together with the option -Y(draw-all-lgt).." << std::endl;
+                std::cerr << "The option -X(precomputed-lgt-scenario) cannot be used together"
+                             "with the option -Y(draw-all-lgt).." << std::endl;
                 return EXIT_FAILURE;
             }
             load_precomputed_lgt_scenario = true;
@@ -453,13 +466,15 @@ main (int ac, char *av[])
 
         if(show_lgt_scenarios && !(bool)(parameters->lattransfer))
         {
-            std::cerr << "The option -b(show-scenarios) has to be used together with the option -l(lgt).." << std::endl;
+            std::cerr << "The option -b(show-scenarios) has to be used together with"
+                         "the option -l(lgt).." << std::endl;
             return EXIT_FAILURE;
         }
 
         if ((bool)(parameters->drawAll) && !(bool)(parameters->lattransfer))
         {
-            std::cerr << "The option -Y(draw-all-lgt) has to be used together with the option -l(lgt).." << std::endl;
+            std::cerr << "The option -Y(draw-all-lgt) has to be used together with"
+                         "the option -l(lgt).." << std::endl;
             return EXIT_FAILURE;
         }
 

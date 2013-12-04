@@ -164,20 +164,19 @@ void DrawTreeCairo::start(const Parameters *p,
 
 void DrawTreeCairo::cleanUp()
 {
-    if(cr)
+    if (cr)
     {
         cairo_destroy(cr);
     }
     cr = 0;
 
-    if(surface)
+    if (surface)
     {
         cairo_surface_destroy(surface);
-
     }
     surface = 0;
 
-    if(surfaceBackground)
+    if (surfaceBackground)
     {
         cairo_surface_destroy(surfaceBackground);
     }
@@ -185,6 +184,18 @@ void DrawTreeCairo::cleanUp()
 
     FreeClear(geneEdges);
     LGT.clear();
+
+    pagewidth = 0;
+    pageheight = 0;
+    fontsize = 0;
+    genefontsize = 0;
+    speciesfontsize = 0;
+    linewidth = 0;
+    s_contour_width = 0;
+    leafWidth = 0;
+    nDupl = 0;
+    nTrans = 0;
+    image = false;
 }
 
 DrawTreeCairo::~DrawTreeCairo()
@@ -790,7 +801,7 @@ void DrawTreeCairo::DrawGeneNodes()
         }
     }
     
-cairo_stroke(cr);
+    cairo_stroke(cr);
 
 }
 
@@ -901,7 +912,7 @@ void DrawTreeCairo::newDrawPath(Node *n)
     Node *o;
     //we start to draw from the lowest node and from leaves to root
     //we store every edge we draw
-    for (o = origin; o != destiny; o = o->getParent() )
+    for (o = origin; o != destiny && !o->isRoot(); o = o->getParent() )
     {
 
         if(nparent->getReconcilation() == Node::Speciation && o->getParent() == destiny)
@@ -1024,7 +1035,7 @@ void DrawTreeCairo::newLGTPath(Node *n)
         double xorigin = 0.0;
         double yorigin = 0.0;
         
-        for(Node *o = destiny; destiny != newdestiny; destiny = destiny->getParent())
+        for(Node *o = destiny; destiny != newdestiny && !destiny->isRoot(); destiny = destiny->getParent())
         {
             double x = o->getParent()->getX();
             double y = o->getParent()->getY();
@@ -1239,7 +1250,7 @@ const bool DrawTreeCairo::overlapSpeciesNode(double x,Node *origin, Node *destin
     const double y1 = (origin->getY() + origin->getParent()->getY()) / 2;
     const double y2 = (destiny->getY() + destiny->getParent()->getY()) / 2;
 
-    for(Node *n = species->getPostOderBegin(); n != 0; n = species->postorder_next(n))
+    for(Node *n = species->postorder_begin(); n != 0; n = species->postorder_next(n))
     {
         if (n != destiny && !n->isLeaf())
         {
