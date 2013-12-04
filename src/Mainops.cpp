@@ -209,19 +209,17 @@ void Mainops::calculateCordinates()
 {
     speciesTree->reset();
     genesTree->reset();
-    // compute coordinates
-    LayoutTrees spcord = LayoutTrees(speciesTree.get(), genesTree.get(),
-                                     parameters, gamma.get(), lambdamap.get());
-    spcord.start();
-    parameters->leafwidth = spcord.getNodeHeight();
-
     // reduce crossing lines or try to
     if (parameters->reduce)
     {
         std::cout << "NOTE : the option -R is still experimental.." << std::endl;
         gamma->twistAndTurn(genesTree.get(),speciesTree.get());
     }
-
+    // compute coordinates
+    LayoutTrees spcord = LayoutTrees(speciesTree.get(), genesTree.get(),
+                                     parameters, gamma.get(), lambdamap.get());
+    spcord.start();
+    parameters->leafwidth = spcord.getNodeHeight();
 }
 
 const bool Mainops::checkValidity()

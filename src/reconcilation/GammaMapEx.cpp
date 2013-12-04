@@ -567,8 +567,8 @@ GammaMapEx::twistAndTurn(Node *v, Node *x)
         {
             if (vll == xr && vrl == xl)
             {
-                //v->setChildren(vr, vl);
-                v->rotateCordinates();
+                v->setChildren(vr, vl);
+                //v->rotateCordinates();
             }
         }
         else if (vll != lambdaex[v])
@@ -577,8 +577,8 @@ GammaMapEx::twistAndTurn(Node *v, Node *x)
 
             if (rep == xr)
             {
-                //v->setChildren(vr, vl);
-                v->rotateCordinates();
+                v->setChildren(vr, vl);
+                //v->rotateCordinates();
             }
         }
         else if (vrl != lambdaex[v])
@@ -587,8 +587,8 @@ GammaMapEx::twistAndTurn(Node *v, Node *x)
 
             if (rep == xl)
             {
-                //v->setChildren(vr, vl);
-                v->rotateCordinates();
+                v->setChildren(vr, vl);
+                //v->rotateCordinates();
             }
         }
         twistAndTurn(vl, vll);
