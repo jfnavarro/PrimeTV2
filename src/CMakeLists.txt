@@ -231,7 +231,7 @@ add_library(primetvlib STATIC ${PARSER_SOURCES} ${SOURCES} ${INCLUDES} ${QT_FORM
 if(WIN32)
   add_executable(${PROJECT_NAME} WIN32 primetv.cpp ${QT_RESOURCES})
 elseif(APPLE)
-  add_executable(${PROJECT_NAME} primetv.cpp ${QT_RESOURCES}) #MACOSX_BUNDLE
+  add_executable(${PROJECT_NAME} primetv.cpp ${QT_RESOURCES}) 
 else()
   add_executable(${PROJECT_NAME} primetv.cpp ${QT_RESOURCES})
 endif()
@@ -278,7 +278,7 @@ if(UNIX AND NOT APPLE)
         set(CPACK_SYSTEM_NAME "${CPACK_SYSTEM_NAME}64")
     endif()
 
-    install(FILES ${CMAKE_SOURCE_DIR}/cmake/linux/qt.conf DESTINATION bin)
+    #install(FILES ${CMAKE_SOURCE_DIR}/cmake/linux/qt.conf DESTINATION bin)
     install(TARGETS ${PROJECT_NAME} DESTINATION bin)
     install(FILES ${PROJECT_SOURCE_DIR}/resources/images/header.png 
             DESTINATION ${CMAKE_INSTALL_PREFIX}/share/primetv 
@@ -288,51 +288,8 @@ endif()
 
 if(APPLE)
 
-  #set project name of binary dir for OSX
-  set(OS_X_PROJECT_BINARY_DIR "${CMAKE_BINARY_DIR}/${PROJECT_NAME}.app")
-  set(CMAKE_INSTALL_PREFIX ${OS_X_PROJECT_BINARY_DIR}/Contents)
-  set(DMG_DIR ${CMAKE_BINARY_DIR}/${PROJECT_NAME})
-  #configure and install Info.plist file
-  set(InfoPlistFile ${CMAKE_BINARY_DIR}/Info.plist)
-  execute_process(COMMAND date "+%Y"
-                  OUTPUT_VARIABLE YEAR
-                  OUTPUT_STRIP_TRAILING_WHITESPACE)
-  configure_file(${CMAKE_SOURCE_DIR}/cmake/mac/Info.plist.in ${InfoPlistFile})
-  set_target_properties(${PROJECT_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${InfoPlistFile})
-
-  # MACOSX sets
-  #set(MACOSX_BUNDLE_ICON_FILE "${CMAKE_SOURCE_DIR}/assets/images/stVi.icns")
-  #set(MACOSX_BUNDLE_INFO_STRING "PrimeTV2 : Phylogenetic trees viewer")
-  #set(MACOSX_BUNDLE_GUI_IDENTIFIER "name.elemc.${PROJECT_NAME}")
-  #set(MACOSX_BUNDLE_LONG_VERSION_STRING "${PROJECT_VERSION}")
-  #set(MACOSX_BUNDLE_SHORT_VERSION_STRING "${PROJECT_VERSION}")
-  #set(MACOSX_BUNDLE_VERSION "${PROJECT_VERSION}")
-  #set(MACOSX_BUNDLE_BUNDLE_NAME "${PROJECT_NAME}")
-
   set(CMAKE_OSX_ARCHITECTURES "ppc;i386")
   set(CMAKE_CXX_FLAGS "--sysroot ${CMAKE_OSX_SYSROOT} ${CMAKE_CXX_FLAGS}")
-
-  #find macdeoployqt
-  #find_program(MACDEPLOYQT NAMES macdeployqt macdeployqt-mac PATHS ${QT_BINARY_DIR} NO_DEFAULT_PATH)
-
-  #add_custom_command (TARGET ${PROJECT_NAME}
-  #    COMMAND mkdir -p ${CMAKE_INSTALL_PREFIX}/Resources/translations
-      #COMMAND install -m 644 ${CMAKE_SOURCE_DIR}/resources/icons/icon.png ${CMAKE_INSTALL_PREFIX}/Resources/
-  #    COMMAND install -m 644 ${CMAKE_SOURCE_DIR}/resources/images/header.png ${CMAKE_INSTALL_PREFIX}/Resources/
-  #    COMMAND install -m 644 ${CMAKE_SOURCE_DIR}/cmake/mac/qt.conf ${CMAKE_INSTALL_PREFIX}/Resources/
-  #    COMMAND ${MACDEPLOYQT} ${OS_X_PROJECT_BINARY_DIR}
-  #    )
-  
-  #add_custom_target(dmg
-  #    COMMAND mkdir -p ${DMG_DIR}
-  #    COMMAND cp -R ${BUNDLE_DIR} ${DMG_DIR}/
-  #    COMMAND ln -sf /Applications ${DMG_DIR}
-  #    COMMAND cp ${CMAKE_SOURCE_DIR}/resources/images/header.png .
-      #COMMAND cp ${CMAKE_SOURCE_DIR}/resources/icons/icon.png  .VolumeIcon.icns
-  #    COMMAND hdiutil create ${CMAKE_BINARY_DIR}/${PROJECT_NAME}-${PROJECT_VERSION}.dmg -srcfolder ${DMG_DIR}
-  #    DEPENDS ${PROJECT_NAME}
-  #    COMMENT "Create DMG image"
-  #)
 
    #install(FILES ${CMAKE_SOURCE_DIR}/cmake/linux/qt.conf DESTINATION bin)
    install(TARGETS ${PROJECT_NAME} DESTINATION bin)

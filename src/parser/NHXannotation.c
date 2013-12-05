@@ -31,13 +31,14 @@ void
 annotate_node(struct NHXnode *n, struct NHXannotation *l)
 {
     assert (n != 0);
-    n->l = l;			// Associate annotations with the node.
+    n->l = l;			/* Associate annotations with the node. */
 }
 
-//  Check what annotation we have. Does it match our string?
-//  Returns 0 on identity, non-zero on difference.
-//  Note that only the MAX_ANNOTATION_ID_LENGTH - 1 first chars of tag
-//  are compared.
+/*  Check what annotation we have. Does it match our string?
+    Returns 0 on identity, non-zero on difference.
+    Note that only the MAX_ANNOTATION_ID_LENGTH - 1 first chars of tag
+    are compared.
+*/
 int
 annotation_isa(struct NHXannotation* l, const char *tag)
 {
@@ -61,7 +62,7 @@ delete_annotation_list(struct NHXannotation *l)
 }
 
 struct NHXannotation*
-        new_newick_weight(double t, struct NHXannotation *l)
+        new_newick_weight(float t, struct NHXannotation *l)
 {
     struct NHXannotation *a = (struct NHXannotation*) malloc(sizeof(struct NHXannotation));
     strncpy(a->anno_type, "NW", MAX_ANNOTATION_ID_LENGTH);
@@ -71,7 +72,7 @@ struct NHXannotation*
 }
 
 struct NHXannotation*
-        new_node_time(double t, struct NHXannotation *l)
+        new_node_time(float t, struct NHXannotation *l)
 {
     struct NHXannotation *a = (struct NHXannotation*) malloc(sizeof(struct NHXannotation));
     strncpy(a->anno_type, "NT", MAX_ANNOTATION_ID_LENGTH);
@@ -80,7 +81,7 @@ struct NHXannotation*
     return a;
 }
 
-// New modern style annotation-creaters
+/* New modern style annotation-creaters */
 struct NHXannotation*
         new_annotation(char *tag, struct NHXannotation *l)
 {
@@ -90,7 +91,7 @@ struct NHXannotation*
     return a;
 }
 
-// Old style annotation-creaters
+/* Old style annotation-creaters */
 struct NHXannotation*
         new_duplication(struct NHXannotation *l)
 {
@@ -130,10 +131,11 @@ struct NHXannotation*
     return a;
 }
 
-// I messed up in my data modelling, so sometimes I return a list
-// of annotations, when the parser sort-of expects a single item.
-// Therefore, I cannot simply change a next-pointer, but have to trace
-// down to the end of the list. It helps if l1 is short however!
+/* I messed up in my data modelling, so sometimes I return a list
+   of annotations, when the parser sort-of expects a single item.
+   Therefore, I cannot simply change a next-pointer, but have to trace
+   down to the end of the list. It helps if l1 is short however!
+*/
 struct NHXannotation*
         append_annotations(struct NHXannotation* l1, struct NHXannotation* l2)
 {
@@ -148,13 +150,13 @@ struct NHXannotation*
     }
     while (a->next != 0)
     {
-        a = a->next; // Find last element
+        a = a->next; /* Find last element */
     }
     a->next = l2;
     return l1;
 }
 
-// Integer lists
+/* Integer lists */
 struct int_list* 
         new_int_list(int i, struct int_list *next)
 {
@@ -175,13 +177,13 @@ free_int_list(struct int_list *il)
     il = 0;
 }
 
-
-//  Reverse algorithm:
-//  Grab first element.
-//  Reverse the rest of the list.
-//  The first elements next points to the last elem in the reversed list.
-//  Point the that former second element to the first and set the
-//  first elements next pointer to 0.
+/*  Reverse algorithm:
+    Grab first element.
+    Reverse the rest of the list.
+    The first elements next points to the last elem in the reversed list.
+    Point the that former second element to the first and set the
+    first elements next pointer to 0.
+*/
 struct int_list*
         int_list_reverse(struct int_list *il)
 {

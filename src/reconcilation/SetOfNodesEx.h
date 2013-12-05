@@ -44,13 +44,13 @@ public:
 
     SetOfNodesEx<T>& operator=(const SetOfNodesEx<T> &son);
 
-    void insert(T* u);	// Add u to the set
-    void insertVector(std::vector<T*>& v);  //Add a vector to the set
-    void erase(T* u);	// Remove u from the set
-    const bool member(T* u) const; // Is u a member of the set?
-    const bool empty() const;		// Is the set empty or not?
-    const unsigned size() const;	// Number of elements in set
-    T* operator[](unsigned i) const; // Random access
+    void insert(T* u);	                                     // Add u to the set
+    void insertVector(std::vector<T*>& v);                  //Add a vector to the set
+    void erase(T* u);	                                    // Remove u from the set
+    const bool member(T* u) const;                           // Is u a member of the set?
+    const bool empty() const;		                         // Is the set empty or not?
+    const unsigned size() const;	                        // Number of elements in set
+    T* operator[](unsigned i) const;                        // Random access
     bool operator==(const SetOfNodesEx<T> &s1) const;
     bool operator<(const SetOfNodesEx<T> &s1) const;
     std::ostream& operator<<(std::ostream& os);
@@ -113,13 +113,13 @@ template <class T> bool
 SetOfNodesEx<T>::operator==(const SetOfNodesEx<T> &s1) const
 {
     return (this->theSet == s1.theSet);
-};
+}
 
 template <class T> bool 
 SetOfNodesEx<T>::operator<(const SetOfNodesEx<T> &s1) const
 {
     return (this->theSet < s1.theSet);
-};
+}
 
 template <class T>
 SetOfNodesEx<T>::SetOfNodesEx()

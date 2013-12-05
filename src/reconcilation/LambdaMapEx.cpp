@@ -143,7 +143,7 @@ std::ostream&
 operator<<(std::ostream &o, const LambdaMapEx& l)
 {
     return o << l.print();
-};
+}
 
 std::string
 LambdaMapEx::print() const

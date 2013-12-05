@@ -46,6 +46,7 @@ void set_str_annotation(char *str);
 void set_int_annotation(int i);
 void set_float_annotation(float f);
 void set_int_list_annotation(struct int_list *il);
+
 typedef enum {
   string_type=1, 
   int_type=2, 
@@ -53,6 +54,7 @@ typedef enum {
   number_type=6,	/* == int_type | float_type */
   int_list_type=8
 } type;
+
 type get_annotation_type();
 void check_annotation_type(type actual_type);
 
@@ -61,7 +63,6 @@ void yyerror(char *s);
 int yylex(void);
 
 %}
-
 
 %union {
   struct NHXtree *t;		/* For returning full trees */
@@ -155,7 +156,7 @@ leaf    : STRING { $$ = new_node($1); n_leaves++;}
 
 label	: /* empty */                  { $$ = 0; }
 	| INTEGER                      { char str[10]; sprintf(str, "%d", $1); $$ = strdup(str);}
-        | FLOAT                        { char str[10]; sprintf(str, "%f", $1); $$ = strdup(str);}
+    | FLOAT                        { char str[10]; sprintf(str, "%f", $1); $$ = strdup(str);}
 	| STRING                       { $$ = $1;}
 	| APOSTROPHE STRING APOSTROPHE { $$ = $2;}
 	;
@@ -237,12 +238,12 @@ err_msg(char *s) {
   The following functions update the annotation with the actual values, 
   but also performs some type checking with the known tags.
 */
-
 void
 set_str_annotation(char *str) {
   check_annotation_type(string_type);
   current_annotation->arg.str = str;
 }
+
 void
 set_int_annotation(int i) {
   type t = get_annotation_type();
@@ -257,22 +258,19 @@ set_int_list_annotation(struct int_list *il) {
   check_annotation_type(int_list_type);
   current_annotation->arg.il = il;
 }
+
 void
 set_float_annotation(float f) {
   check_annotation_type(float_type);
   current_annotation->arg.t = f;
 }
 
-
-
 char *arb_tags[] = {"S",         "AC",          "ID",     "NT",       "BL",       "ET",       "NW",      "EX",      "D",     "TT",   0};
 type arb_types[] = {string_type, int_list_type, int_type, float_type, float_type, float_type, float_type,int_type,int_type,float_type};
-
 
 type
 get_annotation_type() {
   int i;
-  
   for (i=0; arb_tags[i] != 0; i++) {
     if (strcmp(current_annotation->anno_type, arb_tags[i]) == 0) {
       	return arb_types[i];
@@ -280,7 +278,7 @@ get_annotation_type() {
   } 
   
   fprintf(stderr, "%s:%d: Error, tag without known type: %s\n", 
-	  current_filename, lineno, current_annotation->anno_type);
+  current_filename, lineno, current_annotation->anno_type);
   exit(18);
 }
 
@@ -290,23 +288,20 @@ get_annotation_type() {
 void 
 check_annotation_type(type actual_type) {
   int i;
-/*   char errbuf[1024];  */
-  
   for (i=0; arb_tags[i] != 0; i++) {
     if (strcmp(current_annotation->anno_type, arb_tags[i]) == 0) {
       if (arb_types[i] & actual_type) {
-	return;
+        return;
       } else {
-	fprintf(stderr, "%s:%d:  Error, wrong type for tag %s!\n", 
+        fprintf(stderr, "%s:%d:  Error, wrong type for tag %s!\n", 
 		current_filename,
 		lineno,
 		current_annotation->anno_type);
-	exit(17);
+        exit(17);
       }
     }
   }
 }
-
 
 void
 set_globals(const char *filename) {
@@ -353,7 +348,7 @@ read_tree(const char *filename) {
 
   /* Cleanup */
   if (f != 0) {
-    //close(f);
+    /*close(f);*/
     fclose(f);
     yytree_in = stdin;
   }
@@ -363,7 +358,6 @@ read_tree(const char *filename) {
   else
     return input_trees;
 }
-
 
 
 /*
@@ -383,7 +377,6 @@ read_tree_from_file_stream( FILE * f ) {
   else
     return input_trees;
 }
-
 
 
 /*

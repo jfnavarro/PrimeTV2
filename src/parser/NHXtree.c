@@ -59,12 +59,12 @@ struct NHXtree *
 unsigned 
 treeSize(const struct NHXtree *tree)
 {
+    struct NHXnode *r = 0;
     if (tree == 0)
     {
         return 0;
     }
-
-    struct NHXnode *r = tree->root;
+    r = tree->root;
     if (r == 0)
     {
         return 0;

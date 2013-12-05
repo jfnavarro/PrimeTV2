@@ -28,31 +28,33 @@ extern "C" {
 #endif
 
 struct NHXnode {
-    struct NHXnode *parent, *left, *right;
-    char *name;                 // Name or other id of node. Mostly for leaves.
-    struct NHXannotation *l;	// Node annotations, e.g. duplication or not, anti-chains, et.c.
+    struct NHXnode *parent;
+    struct NHXnode *left;
+    struct NHXnode *right;
+    char *name;                     /* Name or other id of node. Mostly for leaves. */
+    struct NHXannotation *l;	    /* Node annotations, e.g. duplication or not, anti-chains, et.c. */
 };
 
-// struct NHXnode *read_tree(const char *filename);
+/* struct NHXnode *read_tree(const char *filename); */
 void delete_node(struct NHXnode *n);
 void delete_tree_nodes(struct NHXnode *n);
 
-// Find the annotation of a certain type
+/* Find the annotation of a certain type */
 struct NHXannotation* find_annotation(const struct NHXnode *v, const char *tag);
 
-// isDuplication returns non-zero if the provided node is annotated
-// as a duplication.
-int isDuplication(const struct NHXnode *t); // Returns 1 if is _annotated_ as duplication, 0 o.w.
-int isLeaf(const struct NHXnode *t);        // Returns 1 if t is leaf, 0 otherwise
-int isRoot(const struct NHXnode *t);        // Returns 1 if t is a root (no parent), 0 otherwise
+/* isDuplication returns non-zero if the provided node is annotated
+   as a duplication. */
+int isDuplication(const struct NHXnode *t); /* Returns 1 if is _annotated_ as duplication, 0 o.w. */
+int isLeaf(const struct NHXnode *t);        /* Returns 1 if t is leaf, 0 otherwise */
+int isRoot(const struct NHXnode *t);        /* Returns 1 if t is a root (no parent), 0 otherwise */
 char *speciesName(const struct NHXnode *t);
 
-unsigned subtreeSize(const struct NHXnode *n); // Count the number of nodes in tree rooted at n
+unsigned subtreeSize(const struct NHXnode *n); /* Count the number of nodes in tree rooted at n */
 
-// Bad form, but a necessary temporary hack. /arve
+/* Bad form, but a necessary temporary hack. */
 void NHX_debug_print(struct NHXnode *l);
 
-//Functions used by Yacc/Bison. Don't touch, don't use!
+/* Functions used by Yacc/Bison. Don't touch, don't use! */
 struct NHXnode *new_node(char *name);
 
 #ifdef __cplusplus

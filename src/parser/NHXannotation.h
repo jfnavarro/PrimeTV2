@@ -28,36 +28,37 @@ extern "C" {
 
 #include "NHXnode.h" 
 
-//   This is how long tag strings (such as 'AC' or 'D') in
-//   NHX trees are allowed to be, *including* '\0'
+/*   This is how long tag strings (such as 'AC' or 'D') in
+    NHX trees are allowed to be, *including* '\0' */
+
 #define MAX_ANNOTATION_ID_LENGTH 5
 
 struct NHXannotation {
     char anno_type[MAX_ANNOTATION_ID_LENGTH];
     union {
-        double t;               // For node times
-        int i;                  // Anti-chain (i.e., number of species node)
-        char *str;              // For species name, et.c.
-        struct int_list *il;	// List of integers
+        float t;               /* For node times */
+        int i;                  /* Anti-chain (i.e., number of species node) */
+        char *str;              /* For species name, et.c. */
+        struct int_list *il;	/* List of integers */
     } arg;
 
     struct NHXannotation *next;
 };
 
-// Structure for integer lists
+/* Structure for integer lists */
 struct int_list {
     int i;
     struct int_list *next;
 };
 
-void annotate_node(struct NHXnode *n, struct NHXannotation *l); // Put the necessary node time info from l into n,
-void delete_annotation_list(struct NHXannotation *l); // Free up all memory
+void annotate_node(struct NHXnode *n, struct NHXannotation *l); /* Put the necessary node time info from l into n, */
+void delete_annotation_list(struct NHXannotation *l); /* Free up all memory */
 
-// Check annotation type. Essentially doing a strcmp with 'tag'.
+/* Check annotation type. Essentially doing a strcmp with 'tag'. */
 int annotation_isa(struct NHXannotation* l, const char *tag);
 
-// Prepend a new annotation to the annotation list l:
-struct NHXannotation *new_newick_weight(double t, struct NHXannotation *l);
+/* Prepend a new annotation to the annotation list l: */
+struct NHXannotation *new_newick_weight(float t, struct NHXannotation *l);
 struct NHXannotation *new_annotation(char *tag, struct NHXannotation *l);
 struct NHXannotation *new_duplication(struct NHXannotation *l);
 struct NHXannotation *new_anti_chain(int i, struct NHXannotation *l);
@@ -65,7 +66,7 @@ struct NHXannotation *new_species_name(char *str, struct NHXannotation *l);
 struct NHXannotation *new_node_id(int id, struct NHXannotation *l);
 struct NHXannotation *append_annotations(struct NHXannotation* l1, struct NHXannotation *l2);
 
-// Handle integer lists.
+/* Handle integer lists. */
 struct int_list* new_int_list(int i, struct int_list *next);
 void free_int_list(struct int_list *il);
 struct int_list* int_list_reverse(struct int_list *il);
