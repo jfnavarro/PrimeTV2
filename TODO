@@ -1,8 +1,3 @@
-Get rid/improve/redo GammaEx and LambdaEx, they could just be a container with a map and some interface functions
-
-Separate Node class in two classes with inheritance.
-
-Replace SetOfNodes, BeepVector and StrStrMap for std or boost containers
 
 Add genome to nodes (branchlenght)
 
@@ -12,23 +7,21 @@ Make the building procedure compatible with Windows
 
 Time of nodes a variable in the node.
 
-Separate ownertrees methods in node.
-
 Add more feactures to nodes, i.e. a feature that can be changed by clicking on it, also the position.
 
 Posibility to drag and drop nodes
 
-improve the way the LGT cordinates are being calculated by including a time event to the LGT edge
+Improve the way the LGT cordinates are being calculated by including a time event to the LGT edge
 
-Get rid/redo the Newick/PRIME tree parser, the current one uses C code and bison and flex.
+Get rid/redo the Newick/PRIME tree parser, the current one uses C code and bison and flex which is problematic
+and not portable.
 
 Update GUI parameters to recently added parameters for terminal version (find a way to link them)
 
-Improve GUI (refactor)
+Improve GUI 
 
 Known bugs :
 
-* In the terminal version when scaling to more than 1.0 the tree gets out of the canvas
 * Some option in terminal version are un-stable
 * -R option to remove crossing edges has not been tested carefully
 * Sometimes in OSX the tree parsing fail with the message : "host tree lacks time in one of its edges"
