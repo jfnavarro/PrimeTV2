@@ -31,38 +31,6 @@ TreeExtended::TreeExtended():
 {
 }
 
-//copy constructor  
-TreeExtended::TreeExtended(const TreeExtended &tree)
-    : Tree(tree),
-      lca_is_valid(tree.lca_is_valid)
-{
-
-}
-
-//copy constructor from derived class
-TreeExtended::TreeExtended(const Tree& tree)
-    : Tree(tree),
-      lca_is_valid(false)
-{
-
-}
-
-// Assignment
-TreeExtended&
-TreeExtended::operator=(const TreeExtended& tree)
-{
-    Tree::operator=(tree);
-    lca_is_valid = tree.lca_is_valid;
-    return *this;
-}
-
-TreeExtended&
-TreeExtended::operator=(const Tree& tree)
-{
-    Tree::operator=(tree);
-    return *this;
-}
-
 Node* TreeExtended::preorder_begin() const 
 {
     return getRootNode();

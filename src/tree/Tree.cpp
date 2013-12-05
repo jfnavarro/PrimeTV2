@@ -60,12 +60,12 @@ Tree::~Tree()
     clearNodeAttributes();
 }
 
-Tree::Tree(const Tree &tree)
+/*Tree::Tree(const Tree &tree)
     : noOfNodes(tree.noOfNodes),
       noOfLeaves(tree.noOfLeaves),
       rootNode(0),
-      name2node(),                                       // Initialization
-      all_nodes(max(noOfNodes,DEF_NODE_VEC_SIZE), 0), // Allocate vector
+      name2node(),
+      all_nodes(max(noOfNodes,DEF_NODE_VEC_SIZE), 0),
       name(tree.name),
       times(tree.times),
       lengths(tree.lengths),
@@ -77,16 +77,6 @@ Tree::Tree(const Tree &tree)
         setRootNode(copyAllNodes(tree.getRootNode()));
     }
 }
-
-/*Tree
-Tree::EmptyTree(const double& rootTime, const string &leafname)
-{
-    Tree tree;
-    tree.setRootNode(tree.addNode(0, 0, 0, leafname));
-    tree.topTime = rootTime;
-    tree.setName("Tree");
-    return tree;
-}*/
 
 Tree&
 Tree::operator=(const Tree& tree)
@@ -110,7 +100,7 @@ Tree::operator=(const Tree& tree)
         rates = tree.rates;
     }
     return *this;
-}
+}*/
 
 
 string
@@ -542,15 +532,14 @@ Tree::setLengths(RealVector& v)
     lengths = &v;
 }
 
-double
-Tree::imbalance()
+const double Tree::imbalance() const
 {
     Node *r = getRootNode();
     assert (r != 0);
     return imbalance(r);
 }
 
-Node *
+/*Node *
 Tree::copyAllNodes(const Node *v)
 {
     assert(v != 0);
@@ -607,7 +596,7 @@ Tree::copySubtree(const Node *v)
         u->setChildren(l, r);	// Notice that setChildren changes (or corrects) porder here!
         return u;
     }
-}
+}*/
 
 // delete and remove all nodes from tree
 void
@@ -625,8 +614,8 @@ Tree::clearTree()
     all_nodes = std::vector<Node*>(DEF_NODE_VEC_SIZE, 0);
 }
 
-double
-Tree::imbalance(Node *v)
+const double
+Tree::imbalance(Node *v) const
 {
     if (v->isLeaf())
     {
@@ -636,10 +625,10 @@ Tree::imbalance(Node *v)
     {
         Node *l = v->getLeftChild();
         Node *r = v->getRightChild();
-        double my_imbalance = fabs(l->getNodeTime() + l->getTime() -
-                                 r->getNodeTime()-r->getTime());
-        double l_imbalance = imbalance(l);
-        double r_imbalance = imbalance(r);
+        const double my_imbalance = fabs(l->getNodeTime() + l->getTime() -
+                                 r->getNodeTime() - r->getTime());
+        const double l_imbalance = imbalance(l);
+        const double r_imbalance = imbalance(r);
         return MAX(my_imbalance, MAX(l_imbalance, r_imbalance));
     }
 }

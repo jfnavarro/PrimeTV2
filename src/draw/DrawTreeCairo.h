@@ -139,7 +139,7 @@ public:
 private:
 
     // this function converts double to string
-    string double2charp(double x);
+    string double2charp(const double &x);
     
     // this function is a helper function to draw the gene edges
     // it draws all the edges that are not Laterl Transfer
@@ -147,42 +147,42 @@ private:
     
     // this functions returns the node that is highest up mapped to the node given and it
     // is also lateral transfer
-    Node* getHighestMappedLGT(Node *n);
+    Node* getHighestMappedLGT(Node *n) const;
     
     // this functions returns the node that is lowest down mapped to the node given and it
     // is also lateral transfer
-    Node* getLowestMappedLGT(Node *n);
+    Node* getLowestMappedLGT(Node *n) const;
     
     // this functions returns the lowest noded mapped to the node given as input
     //  but not being lateral transfer
-    Node* getLowestMappedNOLGT(Node *n);
+    Node* getLowestMappedNOLGT(Node *n) const;
     
     // this function checks wheter the node give is a destination of a lateral
     // transfer or not
-    const bool destinyLGT(Node *n);
+    const bool destinyLGT(Node *n) const;
     
     // this function is a helper function to draw the lateral
     // transfer paths
     void newLGTPath(Node *n);
     
     // this function gets the edge that includes the nodes given as inputs
-    Edge *getEdge(Node *sp,Node *gn);
+    Edge *getEdge(Node *sp,Node *gn) const;
     
     // this function checks wheter there exist or not an edge
     // with the origin x
-    const bool existLGTEdge(double x);
+    const bool existLGTEdge(const double& x) const;
     
     // this function returns a pair of x cordinates, the origin x
     // and destiny x of the Lateral Transfer
     pair<Node*,pair<double,double> > getOriginLGT(Node *n);
     
     // this function checks if the nodes given as inputs overlap at x
-    const bool overlapSpeciesNode(double x,Node *origin, Node *destiny);
+    const bool overlapSpeciesNode(double x,Node *origin, Node *destiny) const;
     
     // this function check if there is a collision between the two spaces given as inputs
     const bool checkCollision(double x00,double y00, double x01,
                               double y01, double x10, double y10,
-                              double x11,double y11);
+                              double x11,double y11) const;
     
     // this function add a new edge to the vector of edges
     void addEdge(Node *spO,Node *spE,Node *gO,Node *gE,

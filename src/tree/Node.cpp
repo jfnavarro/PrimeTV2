@@ -35,14 +35,14 @@
 using namespace std;
 
 Node::Node(unsigned id)
-    : number(id),        // unique identifier
-      parent(0),      // neighbors in the tree
+    : number(id),
+      parent(0),
       leftChild(0),
       rightChild(0),
-      time(0.0),         // time of incoming edge
-      nodeTime(0.0),     // time interval between node and leaves
-      branchLength(0.0), // branchLength
-      name(),         // user-specified name (usually only for leaves)
+      time(0.0),
+      nodeTime(0.0),
+      branchLength(0.0),
+      name(),
       ownerTree(0),
       color(),
       size(0.0),
@@ -78,60 +78,9 @@ Node::Node(unsigned id, const string& nodeName)
 
 }
 
-// Copy relatives in tree are not copied!
-Node::Node(const Node &v)
-    : number(v.number),
-      parent(0),          // relatives in tree are not copied!
-      leftChild(0),
-      rightChild(0),
-      time(v.time),
-      nodeTime(v.nodeTime),
-      branchLength(v.branchLength),
-      name(v.name),
-      ownerTree(v.ownerTree),
-      color(v.color),
-      size(v.size),          // relatives in tree are not copied!
-      x(v.x),
-      y(v.y),
-      hostParent(v.hostParent),
-      hostChild(v.hostChild),
-      reconcilation(v.reconcilation),
-      visited(0)
-{
-
-}
-
 Node::~Node()
 {
-
-}
-
-// Assignment: Also pointers are copied, which might not be the
-// proper thing to do.
-Node &
-Node::operator=(const Node &v)
-{
-    if (this != &v)
-    {
-        number = v.number;
-        parent = v.parent;
-        leftChild = v.leftChild;
-        rightChild = v.rightChild;
-        time = v.time;
-        nodeTime = v.nodeTime;
-        branchLength = v.branchLength;
-        name = v.name;
-        ownerTree = v.ownerTree;
-        color = v.color;
-        size = v.size;
-        x = v.x;
-        y = v.y;
-        hostParent = v.hostParent;
-        hostChild = v.hostChild;
-        reconcilation = v.reconcilation;
-        visited = v.visited;
-    }
-    return *this;
+    //NOTE tree will delete all the nodes
 }
 
 // Return the requested relative
@@ -202,22 +151,10 @@ Node::rotateCordinates()
 {
     double temp_x = leftChild->getX();
     double temp_y = leftChild->getY();
-    Node *temp_hostparent = leftChild->getHostParent();
-    Node *temp_hostchild = leftChild->getHostChild();
-    Type temp_reconcilatin = leftChild->getReconcilation();
-
     leftChild->setX(rightChild->getX());
     leftChild->setY(rightChild->getY());
-    leftChild->setHostParent(rightChild->getHostParent());
-    leftChild->setHostChild(rightChild->getHostChild());
-    leftChild->setReconcilation(rightChild->getReconcilation());
-
     rightChild->setX(temp_x);
     rightChild->setY(temp_y);
-    rightChild->setHostParent(temp_hostparent);
-    rightChild->setHostChild(temp_hostchild);
-    rightChild->setReconcilation(temp_reconcilatin);
-
 }
 
 // get the (leaf) name
@@ -325,6 +262,7 @@ Node::setTree(Tree& tree)
 void
 Node::setChildren(Node *l, Node *r)
 {
+    //NOTE possible memory leak
     leftChild = l;
     rightChild = r;
 
@@ -343,6 +281,7 @@ Node::setChildren(Node *l, Node *r)
 void
 Node::setParent(Node *v)
 {
+    //NOTE possible memory leak
     parent = v;
 }
 
@@ -634,11 +573,13 @@ void Node::setY(double _y)
 
 void Node::setHostChild(Node* _hostchild)
 {
+    //NOTE possible memory leak
    hostChild = _hostchild;
 }
 
 void Node::setHostParent(Node* _hostparent)
 {
+    //NOTE possible memory leak
     hostParent = _hostparent;
 }
 

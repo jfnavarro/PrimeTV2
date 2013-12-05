@@ -39,12 +39,7 @@ class Tree
 public:
 
     explicit Tree();
-    explicit Tree(const Tree &tree);
-
-    //static Tree EmptyTree(const double& RootTime = 1.0, const string &leafname = "Leaf");
-
     virtual ~Tree();
-    virtual Tree& operator=(const Tree& tree);
 
     std::string getName() const;
     void setName(const string &s);
@@ -54,12 +49,11 @@ public:
     const unsigned getHeight() const;
     const bool IDnumbersAreSane(Node& n) const;
 
-    void clear();
-
     Node * getRootNode() const;
     Node* getNode(unsigned nodeNumber) const;
     Node* findLeaf(const std::string& name) const;
     Node* findNode(const std::string& name) const;
+
     Node* addNode(Node *leftChild, Node *rightChild, unsigned id, const string &name = "");
     Node* addNode(Node *leftChild,  Node *rightChild, const string &name = "");
     void setRootNode(Node *r);
@@ -91,14 +85,14 @@ public:
     /* annoying methods I want to get rid of */
 
     Node* mostRecentCommonAncestor(Node* a, Node* b) const;
-    double imbalance();
 
-    Node* copyAllNodes(const Node* v);
-    Node* copySubtree(const Node *v);
+    const double imbalance() const;
+    const double imbalance(Node *v) const;
+    const unsigned getHeight(Node* v) const;
+
+    void clear();
     void clearTree();
     void clearNodeAttributes();
-    double imbalance(Node *v);
-    const unsigned getHeight(Node* v) const;
 
 protected:
 

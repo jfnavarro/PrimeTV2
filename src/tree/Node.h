@@ -48,9 +48,6 @@ public:
 
     explicit Node(unsigned id);
     explicit Node(unsigned id, const std::string& nodeName);
-    explicit Node(const Node &);
-    Node& operator=(const Node &);
-
     virtual ~Node();
 
     //Extra Methods
@@ -97,10 +94,11 @@ public:
     const unsigned getMaxPathToLeaf() const;
 
     void setName(const std::string& nodeName);
-    void setTree(Tree& tree);
+    void setTree(Tree &tree);
     void setChildren(Node *left, Node *right);
     void setParent(Node *parent);
     void changeID(unsigned newID);
+
     void deleteSubtree();
 
     SetOfNodesEx<Node> getLeaves();

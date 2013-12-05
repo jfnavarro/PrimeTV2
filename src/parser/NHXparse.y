@@ -11,7 +11,8 @@
    Defined this to get more detailed error messages from parser. Only
    for debugging really. To messy for a user. 
 */
-/* #define YYERROR_VERBOSE */ 
+
+/* #define YYERROR_VERBOSE */
 
 /* Here comes some C declarations */
 
@@ -57,6 +58,8 @@ void check_annotation_type(type actual_type);
 
 void err_msg(char *s);
 void yyerror(char *s);
+int yylex(void);
+
 %}
 
 
@@ -113,7 +116,7 @@ tree_file : /* empty */ { err_msg("No input tree!"); }
 	  ;
 
 tree_list : tree           { $$ = new_tree($1, 0); }
-          | tree_list tree { $$ = new_tree($2, $1);   }
+          | tree_list tree { $$ = new_tree($2, $1); }
           ;
 
 tree : subtree

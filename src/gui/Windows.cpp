@@ -313,7 +313,7 @@ void MainWindow::update()
     }
 
     parameters->reduce = checkBoxReduce->isChecked();
-    parameters->horiz = !checkBoxHV->isChecked();
+    parameters->horiz = !(bool)(checkBoxHV->isChecked());
     parameters->markers = checkBoxMarkers->isChecked();
     parameters->header = checkBoxLogo->isChecked();
     parameters->do_not_draw_guest_tree = checkBoxGuest->isChecked();
@@ -430,7 +430,7 @@ void MainWindow::loadParameters(Parameters *parameters)
 
     checkBoxReconcile->setChecked(parameters->isreconciled);
     checkBoxGuest->setChecked(parameters->do_not_draw_guest_tree);
-    checkBoxHV->setChecked(!parameters->horiz);
+    checkBoxHV->setChecked(!(bool)(parameters->horiz));
     checkBoxLogo->setChecked(parameters->header);
     checkBoxLegend->setChecked(parameters->legend);
     checkBoxHeader->setChecked(parameters->title);
@@ -711,7 +711,7 @@ void MainWindow::loadConfigFile()
             parameters->allFontColor.green =  config->read<double>((string)"allfontcolorG",0.0);
             parameters->allFontColor.red = config->read<double>((string)"allfontcolorR",0.0);
 
-            parameters->format = "jpg";
+            parameters->format = "png";
             
             statusBar()->showMessage(tr("Configuration Loaded"));
             loadParameters(parameters);
@@ -746,7 +746,7 @@ void MainWindow::saveConfigFile()
             std::fstream out;
             out.open(filename.toStdString().c_str(),ios::out);
 
-            //            out << "reconcile" << " = " << parameters->isreconciled << endl;
+            out << "reconcile" << " = " << parameters->isreconciled << endl;
             out << "genefont" << " = " << parameters->gene_font << endl;
             out << "speciefont" << " = " << parameters->species_font << endl;
             out << "allfont" << " = " << parameters->all_font << endl;

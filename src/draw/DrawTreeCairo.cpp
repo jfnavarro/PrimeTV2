@@ -477,7 +477,7 @@ DrawTreeCairo::GeneTreeMarkers()
 
 // Convert a number to a string.
 string
-DrawTreeCairo::double2charp(double x)
+DrawTreeCairo::double2charp(const double &x)
 {
     ostringstream et;
     et << x;
@@ -1074,7 +1074,7 @@ void DrawTreeCairo::newLGTPath(Node *n)
 
 
 //get the highest non LGT mapped node of n
-Node* DrawTreeCairo::getHighestMappedLGT(Node *n)
+Node* DrawTreeCairo::getHighestMappedLGT(Node *n) const
 {
     Node *parent = n->getParent();
 
@@ -1090,7 +1090,7 @@ Node* DrawTreeCairo::getHighestMappedLGT(Node *n)
 }
 
 //get the lowest non LGT mapped node of n
-Node* DrawTreeCairo::getLowestMappedLGT(Node *n)
+Node* DrawTreeCairo::getLowestMappedLGT(Node *n) const
 {
     Node *left = n->getLeftChild();
     Node *right = n->getRightChild();
@@ -1119,7 +1119,7 @@ Node* DrawTreeCairo::getLowestMappedLGT(Node *n)
     return son;
 }
 
-Node* DrawTreeCairo::getLowestMappedNOLGT(Node *n)
+Node* DrawTreeCairo::getLowestMappedNOLGT(Node *n) const
 {
     Node *left = n->getLeftChild();
     Node *right = n->getRightChild();
@@ -1149,7 +1149,7 @@ Node* DrawTreeCairo::getLowestMappedNOLGT(Node *n)
 }
 
 //detect if the gene node passed as argument is destiny of a LGT
-const bool DrawTreeCairo::destinyLGT(Node *o)
+const bool DrawTreeCairo::destinyLGT(Node *o) const
 {
 
     for (unsigned i = 0; i < parameters->transferedges.size(); i++)
@@ -1163,7 +1163,7 @@ const bool DrawTreeCairo::destinyLGT(Node *o)
 
 }
 
-Edge *DrawTreeCairo::getEdge(Node *sp, Node *gn)
+Edge *DrawTreeCairo::getEdge(Node *sp, Node *gn) const
 {
     BOOST_FOREACH(Edge *e,geneEdges)
     {
@@ -1182,7 +1182,7 @@ Edge *DrawTreeCairo::getEdge(Node *sp, Node *gn)
     return 0;
 }
 
-const bool DrawTreeCairo::existLGTEdge(double x)
+const bool DrawTreeCairo::existLGTEdge(const double &x) const
 {
     BOOST_FOREACH(Edge *e,geneEdges)
     {
@@ -1245,7 +1245,7 @@ pair<Node*,pair<double,double> > DrawTreeCairo::getOriginLGT(Node *n)
     return std::make_pair(origin,std::make_pair(originx,destinyx));
 }
 
-const bool DrawTreeCairo::overlapSpeciesNode(double x,Node *origin, Node *destiny)
+const bool DrawTreeCairo::overlapSpeciesNode(double x,Node *origin, Node *destiny) const
 {
     const double y1 = (origin->getY() + origin->getParent()->getY()) / 2;
     const double y2 = (destiny->getY() + destiny->getParent()->getY()) / 2;
@@ -1267,16 +1267,16 @@ const bool DrawTreeCairo::overlapSpeciesNode(double x,Node *origin, Node *destin
 
 const bool DrawTreeCairo::checkCollision(double x00,double y00, double x01,
                                          double y01, double x10, double y10,
-                                         double x11,double y11)
+                                         double x11,double y11) const
 
 {
-    double m0 = (y01-y00) / (x01-x00);
-    double m1 = (y11-y10) / (x11-x10);
+    const double m0 = (y01-y00) / (x01-x00);
+    const double m1 = (y11-y10) / (x11-x10);
 
-    double q0 = y00 - m0 * x00;
-    double q1 = y10 - m1 * x10;
+    const double q0 = y00 - m0 * x00;
+    const double q1 = y10 - m1 * x10;
 
-    double collision = (q1-q0) / (m1-m0);
+    const double collision = (q1-q0) / (m1-m0);
 
     if ( m0 == m1 && q0 == q1 )
     {
