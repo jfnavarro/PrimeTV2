@@ -471,8 +471,8 @@ LayoutTrees::LeftMostCoordinate(Node* o, Node *end_of_slice, unsigned duplevel) 
         if(gamma->getLowestGammaPath(*o) != end_of_slice)
         {
             double size = gamma->getSize(end_of_slice);
-            double delta = NodeHeight / size - 1;
-            double y = (end_of_slice->getY() - NodeHeight/2) + ((duplevel) * delta);
+            double delta = NodeHeight / (size - 1);
+            double y = (end_of_slice->getY() - (NodeHeight /2) ) + (duplevel * delta);
             return y;
         }
         else
@@ -489,8 +489,8 @@ LayoutTrees::LeftMostCoordinate(Node* o, Node *end_of_slice, unsigned duplevel) 
         else
         {
             double size = gamma->getSize(end_of_slice);
-            double delta = NodeHeight / size - 1;
-            double y = (end_of_slice->getY() - NodeHeight/2) + ((duplevel) * delta);
+            double delta = NodeHeight / (size - 1);
+            double y = (end_of_slice->getY() - (NodeHeight / 2)) + (duplevel * delta);
             return y;
         }
     }
@@ -506,7 +506,7 @@ LayoutTrees::RightMostCoordinate (Node* o, Node *end_of_slice, unsigned duplevel
         {
             double size = gamma->getSize(end_of_slice);
             double delta = NodeHeight / size - 1;
-            double y = (end_of_slice->getY()- NodeHeight/2) + ((duplevel) * delta);
+            double y = (end_of_slice->getY() - (NodeHeight / 2)) + (duplevel * delta);
             return y;
         }
         else
@@ -524,7 +524,7 @@ LayoutTrees::RightMostCoordinate (Node* o, Node *end_of_slice, unsigned duplevel
         {
             double size = gamma->getSize(end_of_slice);
             double delta = NodeHeight / size - 1;
-            double y = (end_of_slice->getY()- NodeHeight/2) + ((duplevel) * delta);
+            double y = (end_of_slice->getY() - (NodeHeight / 2)) + (duplevel * delta);
             return y; ;
         }
     }

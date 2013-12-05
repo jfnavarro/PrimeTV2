@@ -16,20 +16,22 @@ MACRO(INITIALISE_PROJECT)
     IF(CMAKE_BUILD_TYPE MATCHES [Dd][Ee][Bb][Uu][Gg])
         MESSAGE("Building a debug version...")
         # Default compiler settings
-        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0 -fPIC -fexceptions")
+        SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -O0 -fPIC -fexceptions -pedantic-errors")
+        SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -g -O0 -fPIC -fexceptions -pedantic-errors")
         # Make sure that debugging is on for Qt
         ADD_DEFINITIONS(-DQT_DEBUG)
     ELSE()
         MESSAGE("Building a release version...")
         # Default compiler and linker settings
         SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2 -ffast-math -fPIC -funroll-loops -fexceptions")
+        SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O2 -ffast-math -fPIC -funroll-loops -fexceptions")
         # Make sure that debugging is off for Qt
         ADD_DEFINITIONS(-DQT_NO_DEBUG_OUTPUT)
         ADD_DEFINITIONS(-DQT_NO_DEBUG)
     ENDIF()
 
     SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D_DEBUG -DDEBUG")
-    SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D_DEBUG -DDEBUG")
+    SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -D_DEBUG -DDEBUG")
 
     # Reduce the number of warnings
     # Remove "warning: multi-character character constant"
@@ -66,6 +68,8 @@ MACRO(INITIALISE_PROJECT)
         set(CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LIBRARY "libc++")
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mmacosx-version-min=10.7 -stdlib=libc++")
         set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -mmacosx-version-min=10.7 -stdlib=libc++")
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mmacosx-version-min=10.7 -stdlib=libc++")
+        set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -mmacosx-version-min=10.7 -stdlib=libc++")
     endif()
 
 ENDMACRO()

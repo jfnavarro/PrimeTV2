@@ -78,9 +78,6 @@ void DrawTreeCairo::start(const Parameters *p,
     //local variables to be used to draw
     pagewidth = parameters->adapted_width;
     pageheight = parameters->adapted_height;
-
-    //const double original_width = parameters->width;
-    //const double original_height = parameters->height;
     const double surface_offset = 50;
 
     //background surface size (add separation and some extra space)
@@ -250,18 +247,6 @@ void DrawTreeCairo::calculateTransformation()
 {
     double scale_width = 1.0;
     double scale_height = 1.0;
-
-    /*if (parameters->width != parameters->adapted_width)
-    {
-        //we know adapted is always at least equal or bigger than width
-        scale_width = parameters->width / parameters->adapted_width;
-    }
-    if (parameters->height != parameters->adapted_height)
-    {
-        //we know adapted is always at least equal or bigger than width
-        scale_height = parameters->height / parameters->adapted_height;
-    }*/
-
     //if canvas was increased to fit the tree we scale it down
     const double xscale = parameters->imagescale * scale_width;
     const double yscale = parameters->imagescale * scale_height;
@@ -279,7 +264,7 @@ void DrawTreeCairo::calculateTransformation()
         cairo_matrix_t matrix_translation2;
         cairo_matrix_init_translate(&matrix_translation2, pageheight - origin_y, 0);
         cairo_matrix_t matrix_rotation;
-        cairo_matrix_init_rotate(&matrix_rotation,pi/2);
+        cairo_matrix_init_rotate(&matrix_rotation, pi / 2);
         cairo_matrix_t matrix_scale;
         cairo_matrix_init(&matrix_scale, xscale, 0, 0, yscale, xoffset, -yoffset);
         cairo_matrix_t temp;
@@ -309,7 +294,7 @@ void DrawTreeCairo::createTitle()
 
     const char *str = parameters->titleText.c_str();
     cairo_text_extents (cr, str, &extents);
-    cairo_move_to (cr, std::max(0.0,(pagewidth/2) - extents.width/2), extents.height*2);
+    cairo_move_to (cr, std::max(0.0, (pagewidth / 2) - (extents.width / 2) ), extents.height * 2);
     cairo_show_text(cr, str);
     cairo_restore(cr);
 }
@@ -336,17 +321,22 @@ void DrawTreeCairo::writeEventCosts()
     }
     cerr << oss.str() << endl;
     cairo_text_extents (cr, oss.str().c_str(), &extents);
-    cairo_move_to (cr, 0, extents.height*2);
+    cairo_move_to (cr, 0, extents.height * 2);
     cairo_show_text(cr, oss.str().c_str());
     cairo_restore(cr);
 }
 
 void DrawTreeCairo::createLegend()
 {
-    const unsigned x = 0;
-    const unsigned y = 0;
-    const unsigned width = 160;
-    const unsigned height = 90;
+    const double x = 0;
+    const double y = 0;
+    const double width = 160;
+    const double height = 90;
+
+    const unsigned line_width = 10;
+    const double x1 = 10;
+    const double x2 = 20;
+    const double x3 = 30;
 
     cairo_save(cr);
     cairo_matrix_invert(&matrix);
@@ -363,81 +353,81 @@ void DrawTreeCairo::createLegend()
     cairo_rel_line_to (cr, -width, 0);
     cairo_close_path (cr);
     cairo_stroke(cr);
-    cairo_move_to(cr,width/2-x,y+10);
+    cairo_move_to(cr, (width / 2) - x, y + 10);
     cairo_show_text(cr,"Legend");
 
     cairo_set_source_rgba(cr,config->gene_edge_color.red,
                 config->gene_edge_color.green,config->gene_edge_color.blue,1);
-    cairo_move_to(cr,x+10,y+20);
-    cairo_set_line_width(cr, 10);
-    cairo_line_to(cr,x+15,y+20);
+    cairo_move_to(cr, x + x1, y + 20);
+    cairo_set_line_width(cr, line_width);
+    cairo_line_to(cr, x + x2, y + 20);
     cairo_stroke(cr);
     cairo_set_source_rgba(cr,parameters->allFontColor.red,parameters->allFontColor.green,parameters->allFontColor.blue,1);
     cairo_set_line_width(cr, 1);
-    cairo_move_to(cr,x+30,y+25);
+    cairo_move_to(cr, x + x3, y + 25);
     cairo_show_text(cr,"Gene Tree Color");
 
     cairo_set_source_rgba(cr,config->species_edge_color.red,
                 config->species_edge_color.green,config->species_edge_color.blue,1);
-    cairo_move_to(cr,x+10,y+30);
-    cairo_set_line_width(cr, 10);
-    cairo_line_to(cr,x+15,y+30);
+    cairo_move_to(cr,x + x1, y + 30);
+    cairo_set_line_width(cr, line_width);
+    cairo_line_to(cr, x + x2, y + 30);
     cairo_stroke(cr);
     cairo_set_source_rgba(cr,parameters->allFontColor.red,parameters->allFontColor.green,parameters->allFontColor.blue,1);
     cairo_set_line_width(cr, 1);
-    cairo_move_to(cr,x+30,y+35);
+    cairo_move_to(cr, x + x3, y + 35);
     cairo_show_text(cr,"Species Edge Color");
 
     cairo_set_source_rgba(cr,config->species_node_color.red,
                 config->species_node_color.green,config->species_node_color.blue,1);
-    cairo_move_to(cr,x+10,y+40);
-    cairo_set_line_width(cr, 10);
-    cairo_line_to(cr,x+15,y+40);
+    cairo_move_to(cr, x + x1, y +40);
+    cairo_set_line_width(cr, line_width);
+    cairo_line_to(cr, x + x2, y + 40);
     cairo_stroke(cr);
     cairo_set_source_rgba(cr,parameters->allFontColor.red,parameters->allFontColor.green,parameters->allFontColor.blue,1);
     cairo_set_line_width(cr, 1);
-    cairo_move_to(cr,x+30,y+45);
+    cairo_move_to(cr, x + x3, y + 45);
     cairo_show_text(cr,"Node Contour Color");
 
     cairo_set_source_rgba(cr,config->umColor.red,config->umColor.green,config->umColor.blue,0.60);
-    cairo_move_to(cr,x+10,y+50);
-    cairo_set_line_width(cr, 10);
-    cairo_line_to(cr,x+15,y+50);
+    cairo_move_to(cr, x + x1, y + 50);
+    cairo_set_line_width(cr, line_width);
+    cairo_line_to(cr, x + x2, y + 50);
     cairo_stroke(cr);
     cairo_set_source_rgba(cr,parameters->allFontColor.red,parameters->allFontColor.green,parameters->allFontColor.blue,1);
     cairo_set_line_width(cr, 1);
-    cairo_move_to(cr,x+30,y+55);
+    cairo_move_to(cr, x + x3, y + 55);
     cairo_show_text(cr,"Marker Color");
 
-    cairo_move_to(cr,x+10,y+60);
-    cairo_set_line_width(cr, 10);
-    cairo_line_to(cr,x+15,y+60);
+    cairo_move_to(cr, x + x1, y + 60);
+    cairo_set_line_width(cr, line_width);
+    cairo_line_to(cr, x + x2, y+60);
     cairo_stroke(cr);
     cairo_set_source_rgba(cr,parameters->allFontColor.red,parameters->allFontColor.green,parameters->allFontColor.blue,1);
     cairo_set_line_width(cr, 1);
-    cairo_move_to(cr,x+30,y+65);
+    cairo_move_to(cr,  x + x3, y + 65);
     cairo_show_text(cr,"Time and Axes Color");
 
     cairo_set_source_rgba(cr,parameters->speciesFontColor.red,
                 parameters->speciesFontColor.green,parameters->speciesFontColor.blue,1);
-    cairo_move_to(cr,x+10,y+70);
-    cairo_set_line_width(cr, 10);
-    cairo_line_to(cr,x+15,y+70);
+    cairo_move_to(cr, x + x1, y + 70);
+    cairo_set_line_width(cr, line_width);
+    cairo_line_to(cr, x + x2, y + 70);
     cairo_stroke(cr);
     cairo_set_line_width(cr, 1);
-    cairo_move_to(cr,x+30,y+75);
+    cairo_move_to(cr, x + x3, y + 75);
     cairo_set_source_rgba(cr,parameters->allFontColor.red,parameters->allFontColor.green,parameters->allFontColor.blue,1);
     cairo_show_text(cr,"Species Font Color");
     cairo_stroke(cr);
 
     cairo_set_source_rgba(cr,parameters->geneFontColor.red,
                 parameters->geneFontColor.green,parameters->geneFontColor.blue,1);
-    cairo_move_to(cr,x+10,y+80);
-    cairo_set_line_width(cr, 10);
-    cairo_line_to(cr,x+15,y+80);
+    cairo_move_to(cr, x + x1, y + 80);
+    cairo_set_line_width(cr, line_width);
+    cairo_line_to(cr, x + x2, y + 80);
     cairo_stroke(cr);
     cairo_set_line_width(cr, 1);
-    cairo_move_to(cr,x+30,y+85);
+    cairo_move_to(cr, x + x3, y + 85);
     cairo_set_source_rgba(cr,parameters->allFontColor.red,parameters->allFontColor.green,parameters->allFontColor.blue,1);
     cairo_show_text(cr,"Gene Font Color");
     cairo_restore(cr);
@@ -522,10 +512,10 @@ void DrawTreeCairo::DrawSpeciesEdgesWithContour()
     const double midnode = leafWidth;
     Node *root = species->getRootNode();
 
-    cairo_move_to(cr,0,root->getY()+midnode);
-    cairo_rel_line_to(cr,root->getX(),0);
-    cairo_rel_line_to(cr,0,-midnode*2);
-    cairo_rel_line_to(cr,- root->getX(),0);
+    cairo_move_to(cr, 0, root->getY()+midnode);
+    cairo_rel_line_to(cr, root->getX(), 0);
+    cairo_rel_line_to(cr,0, -(midnode * 2) );
+    cairo_rel_line_to(cr, -(root->getX()), 0);
     cairo_close_path(cr);
 
     cairo_set_source_rgba(cr, cline.red, cline.green, cline.blue, 1);
@@ -548,17 +538,14 @@ void DrawTreeCairo::DrawSpeciesEdgesWithContour()
                     n->getRightChild()->getX(), n->getRightChild()->getY()+midnode,
                     pmidx, pmidy);
 
-            cairo_move_to(cr,x,y + midnode); 
+            cairo_move_to(cr, x, y + midnode);
             cairo_rel_line_to(cr,n->getLeftChild()->getX()-x,n->getLeftChild()->getY()-y);
-            cairo_rel_line_to(cr,0,-midnode*2);
-
-            cairo_line_to(cr,pmidx, pmidy);
-            
+            cairo_rel_line_to(cr, 0, -(midnode * 2) );
+            cairo_line_to(cr, pmidx, pmidy);
             cairo_line_to(cr,n->getRightChild()->getX(),n->getRightChild()->getY()+midnode);
-            cairo_rel_line_to(cr,0,-midnode*2);
-            cairo_line_to(cr,x,y - midnode);
+            cairo_rel_line_to(cr, 0, - (midnode * 2) );
+            cairo_line_to(cr, x, y - midnode);
             cairo_close_path(cr);
-
             cairo_set_source_rgba(cr, cline.red, cline.green, cline.blue, 1);
             cairo_stroke_preserve(cr);
             cairo_set_source_rgba(cr, cfill.red, cfill.green, cfill.blue, 1);
@@ -576,10 +563,10 @@ void DrawTreeCairo::DrawSpeciesEdges()
     const double midnode = leafWidth;
     Node *root = species->getRootNode();
 
-    cairo_move_to(cr,0,root->getY()+midnode);
+    cairo_move_to(cr, 0, (root->getY() + midnode) );
     cairo_rel_line_to(cr,root->getX(),0);
-    cairo_rel_line_to(cr,0,-midnode*2);
-    cairo_rel_line_to(cr,- root->getX(),0);
+    cairo_rel_line_to(cr, 0, -(midnode * 2) );
+    cairo_rel_line_to(cr, -(root->getX()) , 0);
     cairo_close_path(cr);
     cairo_stroke_preserve(cr);
     cairo_fill(cr);
@@ -679,11 +666,9 @@ void DrawTreeCairo::DrawSpeciesNodes()
             cairo_save(cr);
             cairo_translate (cr,n->getX(), n->getY());
             cairo_scale(cr, 0.3, 1);
-            cairo_arc (cr, 0., 0.,leafWidth, 0., 2 * pi);
-
+            cairo_arc (cr, 0.0, 0.0,leafWidth, 0.0, 2 * pi);
             cairo_set_source_rgba(cr, cfill.red, cfill.green, cfill.blue, 1);
             cairo_fill_preserve(cr);
-
             cairo_set_line_width(cr, s_contour_width);
             cairo_set_source_rgba(cr, cline.red, cline.green, cline.blue, 1);
             cairo_stroke(cr);
@@ -720,17 +705,19 @@ void DrawTreeCairo::DrawSpeciesNodeLabels()
         cairo_text_extents (cr, ns.c_str(), &extents);
         if(n->isLeaf())
         {
-            cairo_move_to(cr,xpos + extents.height/2 ,ypos + leafWidth);
+            cairo_move_to(cr, xpos + (extents.height / 2) , ypos + leafWidth);
         }
         else
         {
-            cairo_move_to(cr,xpos - 0.25 * extents.width, ypos + leafWidth);
+            cairo_move_to(cr, xpos - (0.25 * extents.width) , ypos + leafWidth);
         }
+
         cairo_save(cr);
         if(parameters->horiz)
         {
             cairo_rotate(cr,-(pi/4));
         }
+
         cairo_show_text(cr,ns.c_str());
         cairo_restore(cr);
     }
@@ -781,14 +768,15 @@ void DrawTreeCairo::DrawGeneNodes()
         if(n->getReconcilation() == Node::Leaf || n->getReconcilation() == Node::Speciation) //speciation or leaf
         {
             cairo_set_source_rgba(cr, specCol.red, specCol.green, specCol.blue, 1);
-            cairo_arc(cr,x, y, leafWidth/10,0.0,2*pi);
+            cairo_arc(cr,x, y, (leafWidth / 10), 0.0, 2*pi);
             cairo_fill(cr);
         }
         else if (n->getReconcilation() == Node::Duplication) //duplication
         {
             nDupl++;
             cairo_set_source_rgba(cr, duplCol.red, duplCol.green, duplCol.blue, 1);
-            cairo_rectangle(cr,x-(leafWidth/5)/2,y-(leafWidth/5)/2,leafWidth/5,leafWidth/5);
+            cairo_rectangle(cr,x - ( (leafWidth / 5) / 2 ),y - ( (leafWidth / 5) / 2),
+                            leafWidth / 5, leafWidth / 5);
             cairo_fill(cr);
 
         }
@@ -796,7 +784,8 @@ void DrawTreeCairo::DrawGeneNodes()
         {
             nTrans++;
             cairo_set_source_rgba(cr, duplCol.red, duplCol.green, duplCol.blue, 1);
-            cairo_rectangle(cr,x-(leafWidth/5)/2,y-(leafWidth/5)/2,leafWidth/5,leafWidth/5);
+            cairo_rectangle(cr,x - ( (leafWidth / 5) / 2 ),y - ( (leafWidth / 5) / 2),
+                            leafWidth / 5, leafWidth / 5);
             cairo_fill(cr);
         }
     }
@@ -809,7 +798,7 @@ void DrawTreeCairo::DrawGeneEdges()
 {
     Color& regular = config->gene_edge_color;
     cairo_set_source_rgba(cr, regular.red, regular.green, regular.blue,1);
-    cairo_set_line_width(cr,linewidth/2);
+    cairo_set_line_width(cr, linewidth / 2);
     
     for (unsigned i = 0; i < gene->getNumberOfNodes(); i++)
     {
@@ -866,7 +855,7 @@ void DrawTreeCairo::DrawGeneLabels()
             }
             cairo_text_extents(cr, os.str().c_str(), &extents);
             double xpos = n->getX() + extents.height;
-            double ypos = n->getY() + extents.height/2;
+            double ypos = n->getY() + (extents.height / 2);
             cairo_move_to(cr,xpos,ypos);
             cairo_save(cr);
             if(parameters->horiz)
@@ -932,7 +921,7 @@ void DrawTreeCairo::newDrawPath(Node *n)
             if(size > 1)
             {
                 double delta = leafWidth / (size - 1);
-                y = (o->getParent()->getY() - leafWidth/2) + ((o->getParent()->getVisited()) * delta);
+                y = (o->getParent()->getY() - (leafWidth / 2) ) + ((o->getParent()->getVisited()) * delta);
             }
             o->getParent()->incVisited();
             cairo_line_to(cr,x,y);
@@ -1015,7 +1004,7 @@ void DrawTreeCairo::newLGTPath(Node *n)
         y1 = destiny->getParent()->getY();
         slope = (y2 - y1) / (x2 - x1);      
         n1 = y1 - (slope * x1);
-        y = (slope *destinyx) + n1;
+        y = (slope * destinyx) + n1;
 
         cairo_move_to(cr,n->getX(),n->getY());
         cairo_line_to(cr,destinyx,y);
@@ -1045,7 +1034,7 @@ void DrawTreeCairo::newLGTPath(Node *n)
             if (size > 1)
             {
                 double delta = leafWidth / (size - 1);
-                y = (o->getParent()->getY() - leafWidth/2) + ((o->getParent()->getVisited()) * delta);
+                y = ( o->getParent()->getY() - (leafWidth / 2) ) + ( o->getParent()->getVisited() * delta);
             }
             
             o->getParent()->incVisited();
@@ -1062,8 +1051,8 @@ void DrawTreeCairo::newLGTPath(Node *n)
         x2 = newdestiny->getX();
         x1 = newdestiny->getParent()->getX();
         slope = (y2 - y1) / (x2 - x1);      
-        n1 = y1 - slope*x1;
-        y = slope*destinyx + n1; 
+        n1 = y1 - (slope * x1);
+        y = (slope * destinyx) + n1;
         
         cairo_line_to(cr,destinyx,y);
         addEdge(origin,destiny,GeneOrigin,GeneDestiny,xend,yend,destinyx,y,Edge::LGT);
@@ -1210,16 +1199,16 @@ pair<Node*,pair<double,double> > DrawTreeCairo::getOriginLGT(Node *n)
     double destinyx;
     double originx = (GeneDestiny->getX() + destiny->getParent()->getX()) / 2;
 
-    while((originx > (origin->getX() - leafWidth/4) && originx > (destiny->getParent()->getX() + leafWidth/4)) 
+    while((originx > ( origin->getX() - (leafWidth / 4) ) && originx > ( destiny->getParent()->getX() + ( leafWidth / 4) ))
         || (existLGTEdge(originx) || overlapSpeciesNode(originx,origin,destiny)))
     {
-        originx -= parameters->linewidth * 5;
+        originx -= (parameters->linewidth * 5);
     }
 
-    while((originx < (originbound->getX() + leafWidth/4) && originx < (GeneDestiny->getX() - leafWidth/4)) 
+    while((originx < ( originbound->getX() + (leafWidth / 4) ) && originx < ( GeneDestiny->getX() - (leafWidth / 4) ))
         || (existLGTEdge(originx) || overlapSpeciesNode(originx,origin,destiny)))
     {
-        originx += parameters->linewidth * 5;
+        originx += (parameters->linewidth * 5);
     }
 
     if (originx < originbound->getX() || originx > origin->getX() )
@@ -1273,8 +1262,8 @@ const bool DrawTreeCairo::checkCollision(double x00,double y00, double x01,
     const double m0 = (y01-y00) / (x01-x00);
     const double m1 = (y11-y10) / (x11-x10);
 
-    const double q0 = y00 - m0 * x00;
-    const double q1 = y10 - m1 * x10;
+    const double q0 = y00 - (m0 * x00);
+    const double q1 = y10 - (m1 * x10);
 
     const double collision = (q1-q0) / (m1-m0);
 
