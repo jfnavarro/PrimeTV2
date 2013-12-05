@@ -55,8 +55,6 @@ static const std::string PATCH = boost::lexical_cast<std::string>(VERSION_REVISI
 static const std::string VERSION =  ((MAJOR + "." + MINOR) + ".") + PATCH;
 
 //member objects //TODO make them singleton
-//static Parameters *parameters = 0;
-//static Mainops *mainops = 0;
 Parameters *parameters = 0;
 Mainops *mainops = 0;
 
