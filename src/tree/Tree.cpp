@@ -60,49 +60,6 @@ Tree::~Tree()
     clearNodeAttributes();
 }
 
-/*Tree::Tree(const Tree &tree)
-    : noOfNodes(tree.noOfNodes),
-      noOfLeaves(tree.noOfLeaves),
-      rootNode(0),
-      name2node(),
-      all_nodes(max(noOfNodes,DEF_NODE_VEC_SIZE), 0),
-      name(tree.name),
-      times(tree.times),
-      lengths(tree.lengths),
-      rates(tree.rates),
-      topTime(tree.topTime)
-{
-    if(tree.getRootNode())
-    {
-        setRootNode(copyAllNodes(tree.getRootNode()));
-    }
-}
-
-Tree&
-Tree::operator=(const Tree& tree)
-{
-    if(this != &tree)
-    {
-        clear();
-        noOfNodes = tree.noOfNodes;
-        noOfLeaves = tree.noOfLeaves;
-        if(noOfNodes > all_nodes.size())
-        {
-            all_nodes.resize(noOfNodes, 0);
-        }
-        name = tree.name;
-        if(tree.getRootNode())
-        {
-            setRootNode(copyAllNodes(tree.getRootNode()));
-        }
-        times = tree.times;
-        lengths = tree.lengths;
-        rates = tree.rates;
-    }
-    return *this;
-}*/
-
-
 string
 Tree::getName() const
 {
@@ -351,10 +308,7 @@ const double
 Tree::rootToLeafTime() const
 {
     Node *v = getRootNode();
-    if (!v)   //assert?
-    {
-        throw AnError("rootToLeafTime: No root node! Not good...", 1);
-    }
+    assert(v);
     return v->getNodeTime();
 
 }
@@ -538,65 +492,6 @@ const double Tree::imbalance() const
     assert (r != 0);
     return imbalance(r);
 }
-
-/*Node *
-Tree::copyAllNodes(const Node *v)
-{
-    assert(v != 0);
-    Node *u = new Node(*v);
-    u->setTree(*this);
-
-    assert(u->getNumber()<all_nodes.size());
-    all_nodes[u->getNumber()] = u;
-    if (v->isLeaf())
-    {
-        name2node[u->getName()] = u;
-        return u;
-    }
-    else
-    {
-        Node *l = copyAllNodes(v->getLeftChild());
-        Node *r = copyAllNodes(v->getRightChild());
-        u->setChildren(l, r);	// Notice that setChildren changes (or corrects) porder here!
-        return u;
-    }
-    return 0;
-}
-
-// Recursively copy all nodes in a tree. And keep track of names etc while
-// you are at it! The new nodes get new IDs
-// Notice! Assumes that the new nodes will belong to the calling Tree!!
-Node *
-Tree::copySubtree(const Node *v)
-{
-    assert(v != 0);
-    string name = v->getName();
-    if(name != "")
-    {
-        while(name2node.find(name) != name2node.end())
-        {
-            name = name + "a";
-        }
-    }
-    Node *u = addNode(0, 0, name);
-    u->setTree(*this);
-
-    assert(u->getNumber()<all_nodes.size());
-    all_nodes[u->getNumber()] = u;
-
-    if (v->isLeaf())
-    {
-        name2node[u->getName()] = u;
-        return u;
-    }
-    else
-    {
-        Node *l = copySubtree(v->getLeftChild());
-        Node *r = copySubtree(v->getRightChild());
-        u->setChildren(l, r);	// Notice that setChildren changes (or corrects) porder here!
-        return u;
-    }
-}*/
 
 // delete and remove all nodes from tree
 void
