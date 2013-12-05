@@ -1,6 +1,6 @@
 PRIMETV2 : a visualization tool for Phylogenetic Reconciled Trees
 
-Version 0.1.0 (Alpha)
+Version 0.2.0 
 
 The utility of this program is to draw reconciled trees and it is explained in :
 
@@ -19,6 +19,6 @@ on the same location the program is being executed.
 To launch the User Interface the option --gui must be added.
 
 The UI also allows to save and load configuration, save the tree in a file (different formats), print the tree
-show/hide the parameters panel, modify the parameters in "in vivo", and load the trees to generate the drawing (generate tree 
+show/hide the parameters panel, modify the parameters and recompute the tree in real time, and load the trees to generate the drawing (generate tree 
 button).
 
