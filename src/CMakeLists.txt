@@ -141,7 +141,6 @@ set(INCLUDES
     ${INC_GUI}
     ${INC_LAYOUT}
     ${INC_LGT}
-    #${INC_PARSER}
     ${INC_RECONCILATION}
     ${INC_TREE}
     ${INC_UTILS}
@@ -153,7 +152,6 @@ set(SOURCES
     ${SRC_GUI}
     ${SRC_LAYOUT}
     ${SRC_LGT}
-    #${SRC_PARSER}
     ${SRC_RECONCILATION}
     ${SRC_TREE}
     ${SRC_UTILS}

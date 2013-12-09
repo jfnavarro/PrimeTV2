@@ -82,7 +82,7 @@ MainWindow::MainWindow(Parameters *p, Mainops *m, QMainWindow *parent)
     statusBar()->showMessage(message);
 
     QRect screen = QApplication::desktop()->screenGeometry();
-    resize((unsigned)((screen.width())/2),(unsigned)((screen.height())/2));
+    resize( static_cast<int>(screen.width() / 2), static_cast<int>(screen.height() / 2) );
 
     scene = new QGraphicsScene();
     view->setScene(scene);
@@ -209,7 +209,7 @@ void MainWindow::generateTree()
                 ops->reconcileTrees(genetree.toStdString(),speciestree.toStdString(),mapfile.toStdString());
             }
 
-            if ((bool)parameters->lattransfer)
+            if (parameters->lattransfer)
             {
                 ops->lateralTransfer(mapfile.toStdString(),(parameters->lateralmincost == 1.0
                                                             && parameters->lateralmaxcost == 1.0));
@@ -294,10 +294,10 @@ void MainWindow::closeEvent(QCloseEvent *e)
 void MainWindow::update()
 {
     parameters->lattransfer = checkBoxLGT->isChecked();
-    parameters->lateralmincost = (float)spinBoxMinCost->value();
-    parameters->lateralmaxcost = (float)spinBoxMaxCost->value();
-    parameters->lateralduplicost = (float)spinBoxDupliCost->value();
-    parameters->lateraltrancost = (float)spinBoxSpeCost->value();
+    parameters->lateralmincost = static_cast<float>(spinBoxMinCost->value());
+    parameters->lateralmaxcost = static_cast<float>(spinBoxMaxCost->value());
+    parameters->lateralduplicost = static_cast<float>(spinBoxDupliCost->value());
+    parameters->lateraltrancost = static_cast<float>(spinBoxSpeCost->value());
     
     parameters->title = checkBoxHeader->isChecked();
     lineEditHeaderText->setEnabled(checkBoxHeader->isChecked());
@@ -314,7 +314,7 @@ void MainWindow::update()
     }
 
     parameters->reduce = checkBoxReduce->isChecked();
-    parameters->horiz = !(bool)(checkBoxHV->isChecked());
+    parameters->horiz = !checkBoxHV->isChecked();
     parameters->markers = checkBoxMarkers->isChecked();
     parameters->header = checkBoxLogo->isChecked();
     parameters->do_not_draw_guest_tree = checkBoxGuest->isChecked();
@@ -431,7 +431,7 @@ void MainWindow::loadParameters(Parameters *parameters)
 
     checkBoxReconcile->setChecked(parameters->isreconciled);
     checkBoxGuest->setChecked(parameters->do_not_draw_guest_tree);
-    checkBoxHV->setChecked(!(bool)(parameters->horiz));
+    checkBoxHV->setChecked(!parameters->horiz);
     checkBoxLogo->setChecked(parameters->header);
     checkBoxLegend->setChecked(parameters->legend);
     checkBoxHeader->setChecked(parameters->title);
@@ -671,46 +671,46 @@ void MainWindow::loadConfigFile()
             
             Parameters *parameters = new Parameters();
             
-            parameters->gene_font = config->read<string>((string)"genefont",(string)"Times");
-            parameters->species_font = config->read<string>((string)"speciefont",(string)"Times");
-            parameters->all_font = config->read<string>((string)"allfont",(string)"Times");
-            parameters->fontsize = config->read<float>((string)"fontsize",(float)10.0);
-            parameters->gene_font_size = config->read<float>((string)"genefontsize",(float)10.0);
-            parameters->species_font_size = config->read<float>((string)"speciesfontsize",(float)10.0);
-            parameters->fontscale = config->read<float>((string)"fontscale",(float)1);
-            parameters->markers = config->read<bool>((string)"mark",false);
-            parameters->ladd = config->read<char>((string)"ladderize",'n');
-            parameters->isreconciled = config->read<bool>((string)"reconcile",false);
-            parameters->do_not_draw_guest_tree = config->read<bool>((string)"noguest",false);
-            parameters->horiz = config->read<bool>((string)"vertical",true);
-            parameters->header = config->read<bool>((string)"header",false);
-            parameters->legend = config->read<bool>((string)"legend",false);
-            parameters->title = config->read<bool>((string)"text",false);
-            parameters->lattransfer = config->read<bool>((string)"lgt",false);
-            parameters->do_not_draw_species_tree = config->read<bool>((string)"nohost",false);
-            parameters->ids_on_inner_nodes = config->read<bool>((string)"inodes",false);
-            parameters->reduce = config->read<bool>((string)"reduce",false);
+            parameters->gene_font = config->read<string>(string("genefont"),string("Times"));
+            parameters->species_font = config->read<string>(string("speciefont"),string("Times"));
+            parameters->all_font = config->read<string>(string("allfont"),string("Times"));
+            parameters->fontsize = config->read<float>(string("fontsize"),float(10.0));
+            parameters->gene_font_size = config->read<float>(string("genefontsize"),float(10.0));
+            parameters->species_font_size = config->read<float>(string("speciesfontsize"),float(10.0));
+            parameters->fontscale = config->read<float>(string("fontscale"),float(1.0));
+            parameters->markers = config->read<bool>(string("mark"),false);
+            parameters->ladd = config->read<char>(string("ladderize"),'n');
+            parameters->isreconciled = config->read<bool>(string("reconcile"),false);
+            parameters->do_not_draw_guest_tree = config->read<bool>(string("noguest"),false);
+            parameters->horiz = config->read<bool>(string("vertical"),true);
+            parameters->header = config->read<bool>(string("header"),false);
+            parameters->legend = config->read<bool>(string("legend"),false);
+            parameters->title = config->read<bool>(string("text"),false);
+            parameters->lattransfer = config->read<bool>(string("lgt"),false);
+            parameters->do_not_draw_species_tree = config->read<bool>(string("nohost"),false);
+            parameters->ids_on_inner_nodes = config->read<bool>(string("inodes"),false);
+            parameters->reduce = config->read<bool>(string("reduce"),false);
             string color;
-            color = config->read<string>((string)"color",(string)"1");
+            color = config->read<string>(string("color"),string("1"));
             parameters->colorConfig->setColors(color.c_str());
-            parameters->titleText = config->read<string>((string)"titleText");
-            parameters->height = config->read<float>((string)"sizeW",(float)1200);
-            parameters->width = config->read<float>((string)"sizeH",(float)1400);
-            parameters->lateralmaxcost = config->read<float>((string)"lateralMax",(float)1);
-            parameters->lateralduplicost = config->read<float>((string)"lateralDupli",(float)1);
-            parameters->lateraltrancost = config->read<float>((string)"lateralLGT",(float)2);
-            parameters->lateralmincost = config->read<float>((string)"lateralMin",(float)1);
-            parameters->noTimeAnnotation = config->read<bool>((string)"notime",false);
-            parameters->timeAtEdges = config->read<bool>((string)"timeex",false);
-            parameters->speciesFontColor.blue = config->read<double>((string)"speciesfontcolorB",0.0);
-            parameters->speciesFontColor.green = config->read<double>((string)"speciesfontcolorG",0.0);
-            parameters->speciesFontColor.red = config->read<double>((string)"speciesfontcolorR",0.0);
-            parameters->geneFontColor.blue = config->read<double>((string)"genefontcolorB",0.0);
-            parameters->geneFontColor.green =  config->read<double>((string)"genefontcolorG",0.0);
-            parameters->geneFontColor.red = config->read<double>((string)"genefontcolorR",0.0);
-            parameters->allFontColor.blue = config->read<double>((string)"allfontcolorB",0.0);
-            parameters->allFontColor.green =  config->read<double>((string)"allfontcolorG",0.0);
-            parameters->allFontColor.red = config->read<double>((string)"allfontcolorR",0.0);
+            parameters->titleText = config->read<string>(string("titleText"));
+            parameters->height = config->read<float>(string("sizeW"),float(1200));
+            parameters->width = config->read<float>(string("sizeH"),float(1400));
+            parameters->lateralmaxcost = config->read<float>(string("lateralMax"),float(1.0));
+            parameters->lateralduplicost = config->read<float>(string("lateralDupli"),float(1.0));
+            parameters->lateraltrancost = config->read<float>(string("lateralLGT"),float(2.0));
+            parameters->lateralmincost = config->read<float>(string("lateralMin"),float(1.0));
+            parameters->noTimeAnnotation = config->read<bool>(string("notime"),false);
+            parameters->timeAtEdges = config->read<bool>(string("timeex"),false);
+            parameters->speciesFontColor.blue = config->read<double>(string("speciesfontcolorB"),0.0);
+            parameters->speciesFontColor.green = config->read<double>(string("speciesfontcolorG"),0.0);
+            parameters->speciesFontColor.red = config->read<double>(string("speciesfontcolorR"),0.0);
+            parameters->geneFontColor.blue = config->read<double>(string("genefontcolorB"),0.0);
+            parameters->geneFontColor.green =  config->read<double>(string("genefontcolorG"),0.0);
+            parameters->geneFontColor.red = config->read<double>(string("genefontcolorR"),0.0);
+            parameters->allFontColor.blue = config->read<double>(string("allfontcolorB"),0.0);
+            parameters->allFontColor.green =  config->read<double>(string("allfontcolorG"),0.0);
+            parameters->allFontColor.red = config->read<double>(string("allfontcolorR"),0.0);
 
             parameters->format = "png";
             

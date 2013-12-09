@@ -250,8 +250,8 @@ void DrawTreeCairo::calculateTransformation()
     //if canvas was increased to fit the tree we scale it down
     const double xscale = parameters->imagescale * scale_width;
     const double yscale = parameters->imagescale * scale_height;
-    const double yoffset = (double)parameters->xoffset;
-    const double xoffset = (double)parameters->yoffset;
+    const double yoffset = parameters->xoffset;
+    const double xoffset = parameters->yoffset;
 
     if(parameters->horiz)
     {

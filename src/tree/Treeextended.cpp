@@ -100,8 +100,8 @@ TreeExtended::Invalid_id::what() const throw()
 
 Node* TreeExtended::lca(Node *v1, Node *v2) const
 {
-    assert(v1->getNumber() >= 0 && v1->getNumber() < getNumberOfNodes());
-    assert(v2->getNumber() >= 0 && v2->getNumber() < getNumberOfNodes());
+    assert(static_cast<int>(v1->getNumber()) != -1 && v1->getNumber() < getNumberOfNodes());
+    assert(static_cast<int>(v2->getNumber()) != -1 && v2->getNumber() < getNumberOfNodes());
 
     if (!lca_is_valid)
     {
