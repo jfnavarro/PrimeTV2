@@ -61,16 +61,16 @@ public:
     void setVisited(unsigned inc);
     void incVisited();
     Color getColor();
-    const double getSize() const;
-    const double getX() const;
-    const double getY() const;
+    double getSize() const;
+    double getX() const;
+    double getY() const;
     Node *getHostParent();
     Node *getHostChild();
     Type getReconcilation();
     Node *getHostParent() const;
     Node *getHostChild() const;
     Type getReconcilation() const;
-    const unsigned getVisited() const;
+    unsigned getVisited() const;
     void setRightChild(Node *);
     void setLeftChild(Node *);
     //Extra Methods
@@ -87,11 +87,11 @@ public:
     const std::string& getName() const;
     Tree* getTree();
 
-    const unsigned getNumber() const;
-    const unsigned getNumberOfLeaves() const;
-    const double getBranchLength() const;
+    unsigned getNumber() const;
+    unsigned getNumberOfLeaves() const;
+    double getBranchLength() const;
 
-    const unsigned getMaxPathToLeaf() const;
+    unsigned getMaxPathToLeaf() const;
 
     void setName(const std::string& nodeName);
     void setTree(Tree &tree);
@@ -103,20 +103,20 @@ public:
 
     SetOfNodesEx<Node> getLeaves();
 
-    const bool isLeaf() const;
-    const bool isRoot() const;
-    const bool operator<=(const Node& b) const;
-    const bool operator<(const Node& b) const;
-    const bool operator<(const Node* b) const;
-    const bool operator>(const Node& b) const;
-    const bool dominates(const Node &b) const;
-    const bool strictlyDominates(const Node &b) const;
+    bool isLeaf() const;
+    bool isRoot() const;
+    bool operator<=(const Node& b) const;
+    bool operator<(const Node& b) const;
+    bool operator<(const Node* b) const;
+    bool operator>(const Node& b) const;
+    bool dominates(const Node &b) const;
+    bool strictlyDominates(const Node &b) const;
 
-    const double getNodeTime() const;
-    const double getTime() const;
-    const double getLength() const;
-    const bool changeNodeTime(const double &t);
-    const bool changeTime(const double &et);
+    double getNodeTime() const;
+    double getTime() const;
+    double getLength() const;
+    bool changeNodeTime(const double &t);
+    bool changeTime(const double &et);
 
     void setNodeTime(const double &t);
     void setTime(const double &t);

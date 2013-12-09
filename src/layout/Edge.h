@@ -49,11 +49,11 @@ public:
     const Node *getSpeEnd() const;
     const Node *getGeneOrigin() const;
     const Node *getGeneEnd() const;
-    const double getXorigin() const;
-    const double getYorigin() const;
-    const double getXend() const ;
-    const double getYend() const ;
-    const category getMode() const;
+    double getXorigin() const;
+    double getYorigin() const;
+    double getXend() const ;
+    double getYend() const ;
+    category getMode() const;
 
     void setSpeOrigin(const Node &);
     void setSpeEnd(const Node &);

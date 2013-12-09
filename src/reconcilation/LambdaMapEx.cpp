@@ -26,6 +26,8 @@
 
 #include "LambdaMapEx.h"
 
+#include "options_cmake.h"
+
 LambdaMapEx::LambdaMapEx(unsigned Nnodes)
     : NodeVector(Nnodes),
       description()
@@ -129,9 +131,10 @@ void LambdaMapEx::update(const TreeExtended& G, const TreeExtended& S,
     }
 }
 
-void LambdaMapEx::update(const TreeExtended &G, const TreeExtended& S,
+void LambdaMapEx::update(const TreeExtended &G, const TreeExtended &S,
                          const std::vector<unsigned> &lambda)
 {
+    UNUSED(G);
     for (unsigned i = 0; i < lambda.size(); i++)
     {
         pv[i] = S.getNode(lambda[i]);
@@ -220,7 +223,7 @@ LambdaMapEx::compLeafLambda(Node *g, const TreeExtended& S, const StrStrMap& gs)
     }
 }
 
-const bool LambdaMapEx::valid() const
+bool LambdaMapEx::valid() const
 {
     for (unsigned i = 0; i < pv.size(); i++)
     {

@@ -157,7 +157,7 @@ void LayoutTrees::calculateIntervals()
 
 }
 
-const unsigned LayoutTrees::maptimes()
+unsigned LayoutTrees::maptimes()
 {
     for (unsigned i = 0; i < species->getNumberOfNodes(); ++i)
     {
@@ -173,7 +173,7 @@ const unsigned LayoutTrees::maptimes()
     return maptime.size();
 }
 
-const double LayoutTrees::getRightMostCoordinate (Node* o) const
+double LayoutTrees::getRightMostCoordinate (Node* o) const
 {
     if (o->isLeaf())
     {
@@ -186,7 +186,7 @@ const double LayoutTrees::getRightMostCoordinate (Node* o) const
     }
 }
 
-const double LayoutTrees::getLeftMostCoordinate (Node* o) const
+double LayoutTrees::getLeftMostCoordinate (Node* o) const
 {
     if(o->isLeaf())
     {
@@ -247,7 +247,7 @@ void LayoutTrees::CountSpeciesCoordinates(Node *n, unsigned depth)
     
 }
 
-const unsigned LayoutTrees::MostGenes() const
+unsigned LayoutTrees::MostGenes() const
 {
     unsigned currentMax = 0;
     for(Node *n = species->postorder_begin(); n != 0; n = species->postorder_next(n))
@@ -449,7 +449,7 @@ LayoutTrees::MapDuplications(Node* de, unsigned line)
     }
 }
 
-const unsigned LayoutTrees::Duplevel(Node* nd, unsigned levellineage) const
+unsigned LayoutTrees::Duplevel(Node* nd, unsigned levellineage) const
 {      
     if(gamma->isSpeciation(*nd) || Adress[nd]->getNumber() != unsigned(levellineage))
     {
@@ -463,7 +463,7 @@ const unsigned LayoutTrees::Duplevel(Node* nd, unsigned levellineage) const
     }
 }
 
-const double
+double
 LayoutTrees::LeftMostCoordinate(Node* o, Node *end_of_slice, unsigned duplevel) const
 {
     if (gamma->isSpeciation(*o))
@@ -497,7 +497,7 @@ LayoutTrees::LeftMostCoordinate(Node* o, Node *end_of_slice, unsigned duplevel) 
 }
 
 
-const double
+double
 LayoutTrees::RightMostCoordinate (Node* o, Node *end_of_slice, unsigned duplevel) const
 {
     if (gamma->isSpeciation(*o))
@@ -535,13 +535,13 @@ double LayoutTrees::getNodeHeight()
     return NodeHeight;
 }
 
-const unsigned
+unsigned
 LayoutTrees::Ladderize_left() const
 {
     return Ladderize_left(species->getRootNode());
 }
 
-const unsigned
+unsigned
 LayoutTrees::Ladderize_left(Node* n) const
 {
     if(n->isLeaf())
@@ -560,13 +560,13 @@ LayoutTrees::Ladderize_left(Node* n) const
     }
 }
 
-const unsigned
+unsigned
 LayoutTrees::Ladderize_right() const
 {
     return Ladderize_right(species->getRootNode());
 }
 
-const unsigned
+unsigned
 LayoutTrees::Ladderize_right(Node* n) const
 {
     if(n->isLeaf())
@@ -632,7 +632,7 @@ Node* LayoutTrees::getHighestMappedLGT(Node *n)
     return parent;
 }
 
-const double LayoutTrees::biggestLabel() const
+double LayoutTrees::biggestLabel() const
 {
     double size = 0.0;
     

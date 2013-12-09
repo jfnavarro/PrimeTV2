@@ -32,6 +32,8 @@ Canvas::Canvas( const QPixmap& pixmap,
                 QGraphicsItem* parent, QGraphicsScene* scene ) :
     QObject(), QGraphicsPixmapItem ( pixmap,parent )
 {
+    Q_UNUSED(scene);
+
     setTransformationMode(Qt::SmoothTransformation);
     setFlags(QGraphicsItem::ItemIsMovable);
 }
@@ -84,6 +86,8 @@ QRectF Canvas::boundingRect() const
 
 void Canvas::paint ( QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget )
 {
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
     painter->drawPixmap ( boundingRect().toRect(), pixmap() );
     //QGraphicsPixmapItem::paint(painter, option, widget);
 }

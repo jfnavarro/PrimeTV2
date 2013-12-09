@@ -73,7 +73,7 @@ public:
     Node* checkGammaMembership(Node *gn, Node *sn);
     
     // check if the node given as a parameter is a LGT or not
-    const bool isLateralTransfer(Node &u) const;
+    bool isLateralTransfer(Node &u) const;
     
     // returns the lambdamap
     const LambdaMapEx& getLambda();
@@ -94,22 +94,22 @@ public:
     Node* getLowestGammaPath(Node &u) const;
     
     //Get the size of gamma(x), i.e., the number of GeneNodes mapped to x.
-    const unsigned getSize(Node &x) const;
-    const unsigned getSize(Node *x) const;
+    unsigned getSize(Node &x) const;
+    unsigned getSize(Node *x) const;
     
     //remove node from the set
     void removeFromSet(Node *x, Node *v);
     
     // check validity of the gamma
-    const bool valid() const;
-    const bool valid(Node *x) const;
+    bool valid() const;
+    bool valid(Node *x) const;
     
     //check validity of the gamma for a scenario loaded
-    const bool validLGT() const;
+    bool validLGT() const;
     
     // to obtaing the widest species leaf
-    const unsigned sizeOfWidestSpeciesLeaf() const;
-    const unsigned sizeOfWidestSpeciesLeaf(Node *x, unsigned cur_max) const;
+    unsigned sizeOfWidestSpeciesLeaf() const;
+    unsigned sizeOfWidestSpeciesLeaf(Node *x, unsigned cur_max) const;
     
     // alternate left and right (cordinates) for each node in the tree (if needed)
     void twistAndTurn();
@@ -117,13 +117,13 @@ public:
     void twistAndTurn(TreeExtended *G, TreeExtended *S);
 
     // returns true if the node given is speciation
-    const bool isSpeciation(Node &u) const;
+    bool isSpeciation(Node &u) const;
     
     // return the gamma map
     SetOfNodesEx<Node> getFullGamma(const Node& x) const;
     
     // true is that combination is in the gamma map
-    const bool isInGamma(Node *u, Node *x) const;
+    bool isInGamma(Node *u, Node *x) const;
     
     // update the gamma to include Lateral Gene transfer
     void update(const TreeExtended &G, const TreeExtended &S,
@@ -131,7 +131,7 @@ public:
                       const dynamic_bitset<> &transfer_edges);
     
     //Count the gamma-paths on a gene
-    const unsigned numberOfGammaPaths(Node &u) const;
+    unsigned numberOfGammaPaths(Node &u) const;
     
     SetOfNodesEx<Node> getGamma(Node *x) const;
     

@@ -211,7 +211,7 @@ void DrawTreeCairo::createHeader()
     cairo_restore(cr);
 }
 
-const bool DrawTreeCairo::RenderImage()
+bool DrawTreeCairo::RenderImage()
 {
     
     if(image)
@@ -1138,7 +1138,7 @@ Node* DrawTreeCairo::getLowestMappedNOLGT(Node *n) const
 }
 
 //detect if the gene node passed as argument is destiny of a LGT
-const bool DrawTreeCairo::destinyLGT(Node *o) const
+bool DrawTreeCairo::destinyLGT(Node *o) const
 {
 
     for (unsigned i = 0; i < parameters->transferedges.size(); i++)
@@ -1171,7 +1171,7 @@ Edge *DrawTreeCairo::getEdge(Node *sp, Node *gn) const
     return 0;
 }
 
-const bool DrawTreeCairo::existLGTEdge(const double &x) const
+bool DrawTreeCairo::existLGTEdge(const double &x) const
 {
     BOOST_FOREACH(Edge *e,geneEdges)
     {
@@ -1234,7 +1234,7 @@ pair<Node*,pair<double,double> > DrawTreeCairo::getOriginLGT(Node *n)
     return std::make_pair(origin,std::make_pair(originx,destinyx));
 }
 
-const bool DrawTreeCairo::overlapSpeciesNode(double x,Node *origin, Node *destiny) const
+bool DrawTreeCairo::overlapSpeciesNode(double x,Node *origin, Node *destiny) const
 {
     const double y1 = (origin->getY() + origin->getParent()->getY()) / 2;
     const double y2 = (destiny->getY() + destiny->getParent()->getY()) / 2;
@@ -1254,7 +1254,7 @@ const bool DrawTreeCairo::overlapSpeciesNode(double x,Node *origin, Node *destin
     return false;
 }
 
-const bool DrawTreeCairo::checkCollision(double x00,double y00, double x01,
+bool DrawTreeCairo::checkCollision(double x00,double y00, double x01,
                                          double y01, double x10, double y10,
                                          double x11,double y11) const
 
@@ -1299,7 +1299,7 @@ void DrawTreeCairo::addEdge(Node *spO,Node *spE,Node *gO,Node *gE,
 
 
 //count the number of times this LGT is origin of LT
-const unsigned DrawTreeCairo::NumberLT(Node *n)
+unsigned DrawTreeCairo::NumberLT(Node *n)
 {	
     unsigned counter = 0;
     Node *GeneOrigin = getLowestMappedLGT(n);

@@ -74,21 +74,21 @@ Tree::setName(const string &s)
 }
 
 // Total number of nodes in tree
-const unsigned
+unsigned
 Tree::getNumberOfNodes() const
 {
     return noOfNodes;
 }
 
 // Total number of leaves in tree
-const unsigned
+unsigned
 Tree::getNumberOfLeaves() const
 {
     return noOfLeaves;
 }
 
 // Height. Empty tree has height 0, and the root-only tree has height 1.
-const unsigned
+unsigned
 Tree::getHeight() const
 {
     return getHeight(rootNode);
@@ -96,7 +96,7 @@ Tree::getHeight() const
 
 // Check that all nodes has sane identity numbers
 // This is used when reading user-defined trees
-const bool
+bool
 Tree::IDnumbersAreSane(Node& n) const
 {
     bool ret = n.getNumber() < getNumberOfNodes();
@@ -265,33 +265,33 @@ Tree::mostRecentCommonAncestor(Node* a, Node* b) const
 }
 
 // Check if times/rates/lengths are available
-const bool
+bool
 Tree::hasTimes() const
 {
     return times != 0;
 }
 
-const bool
+bool
 Tree::hasRates() const
 {
     return rates != 0;
 }
 
-const bool
+bool
 Tree::hasLengths() const
 {
     return lengths != 0;
 }
 
 // Gets the node time of node v
-const double
+double
 Tree::getTime(const Node& v) const
 {
     return (*times)[v];
 }
 
 // Gets the node time of node v
-const double
+double
 Tree::getEdgeTime(const Node& v) const
 {
     if(v.isRoot())
@@ -304,7 +304,7 @@ Tree::getEdgeTime(const Node& v) const
     }
 }
 
-const double
+double
 Tree::rootToLeafTime() const
 {
     Node *v = getRootNode();
@@ -313,14 +313,14 @@ Tree::rootToLeafTime() const
 
 }
 
-const double
+double
 Tree::getTopToLeafTime() const
 {
     return (getTime(*getRootNode()) + topTime);
 }
 
 // Sanity check of time
-const bool
+bool
 Tree::checkTimeSanity(Node& root) const
 {
     Node& left = *root.getLeftChild();
@@ -337,7 +337,7 @@ Tree::checkTimeSanity(Node& root) const
 }
 
 // access and manipulate TopTime
-const double
+double
 Tree::getTopTime() const
 {
     return topTime;
@@ -350,14 +350,14 @@ Tree::setTopTime(double newTime)
 }
 
 // Gets the weight of node v
-const double
+double
 Tree::getLength(const Node& v) const
 {
     return (*lengths)[v];
 }
 
 // Gets the rate of node v
-const double
+double
 Tree::getRate(const Node& v) const
 {
     if(rates->size() == 1)
@@ -486,7 +486,7 @@ Tree::setLengths(RealVector& v)
     lengths = &v;
 }
 
-const double Tree::imbalance() const
+double Tree::imbalance() const
 {
     Node *r = getRootNode();
     assert (r != 0);
@@ -509,7 +509,7 @@ Tree::clearTree()
     all_nodes = std::vector<Node*>(DEF_NODE_VEC_SIZE, 0);
 }
 
-const double
+double
 Tree::imbalance(Node *v) const
 {
     if (v->isLeaf())
@@ -528,7 +528,7 @@ Tree::imbalance(Node *v) const
     }
 }
 
-const unsigned
+unsigned
 Tree::getHeight(Node* v) const
 {
     if (v == 0)

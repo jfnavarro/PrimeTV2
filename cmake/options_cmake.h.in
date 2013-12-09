@@ -7,6 +7,16 @@
 #define VERSION_REVISION @PROJECT_VERSION_PATCH@
 #define VERSION_BUILD @PROJECT_VERSION_MAJOR@
 
+#ifndef UNUSED
+#define UNUSED(expr) do { (void)(expr); } while (0)
+#endif
+
+static const double EPSILON = double(1.0e-5);
+static bool fuzzyEqual(double a, double b)
+{
+    return fabs(a - b) < EPSILON;
+}
+
 // This is flag for unit tests
 #cmakedefine01 BUILD_UNIT_TESTS
 

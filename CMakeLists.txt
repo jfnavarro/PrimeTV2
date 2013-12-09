@@ -3,8 +3,7 @@
 ###############################################################################
 project(primetv)
 cmake_minimum_required(VERSION 2.8.9)
-enable_language(C)
-enable_language(CXX)
+enable_language(CXX C)
 
 set(APPLICATION_NAME "PrimeTV : Phylogenetic trees viewer")
 

@@ -1,6 +1,6 @@
 MACRO(INITIALISE_PROJECT)
 
-#    SET(CMAKE_VERBOSE_MAKEFILE ON)
+    #SET(CMAKE_VERBOSE_MAKEFILE ON)
     SET(CMAKE_INCLUDE_CURRENT_DIR ON)
 
     # Required packages
@@ -16,22 +16,27 @@ MACRO(INITIALISE_PROJECT)
     IF(CMAKE_BUILD_TYPE MATCHES [Dd][Ee][Bb][Uu][Gg])
         MESSAGE("Building a debug version...")
         # Default compiler settings
-        SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -O0 -fPIC -fexceptions -pedantic-errors")
-        SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -g -O0 -fPIC -fexceptions -pedantic-errors")
+        IF(WIN32)
+            SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /D_DEBUG /MDd /Zi /Ob0 /Od /RTC1")
+            SET(LINK_FLAGS_PROPERTIES "${LINK_FLAGS_PROPERTIES} /DEBUG")
+        ELSE()
+            SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -O0")
+        ENDIF()
+        SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D_DEBUG -DDEBUG")
         # Make sure that debugging is on for Qt
         ADD_DEFINITIONS(-DQT_DEBUG)
     ELSE()
         MESSAGE("Building a release version...")
         # Default compiler and linker settings
-        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2 -ffast-math -fPIC -funroll-loops -fexceptions")
-        SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O2 -ffast-math -fPIC -funroll-loops -fexceptions")
+        IF(WIN32)
+            SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /DNDEBUG /MD /O2 /Ob2")
+        ELSE()
+            SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2 -ffast-math")
+        ENDIF()
         # Make sure that debugging is off for Qt
         ADD_DEFINITIONS(-DQT_NO_DEBUG_OUTPUT)
         ADD_DEFINITIONS(-DQT_NO_DEBUG)
     ENDIF()
-
-    SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D_DEBUG -DDEBUG")
-    SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -D_DEBUG -DDEBUG")
 
     # Reduce the number of warnings
     # Remove "warning: multi-character character constant"
@@ -43,14 +48,15 @@ MACRO(INITIALISE_PROJECT)
         IF(TREAT_WARNINGS_AS_ERRORS)
             SET(WARNING_ERROR "-Werror")
         ENDIF(TREAT_WARNINGS_AS_ERRORS)
-        SET(DISABLED_WARNINGS "-Wno-multichar -Wno-unused-variable -Wno-unused-function -Wno-return-type -Wno-switch")
-        SET(DISABLED_WARNINGS_DEBUG "-Wno-unused-variable -Wno-unused-function")
+        SET(DISABLED_WARNINGS "-Wno-float-equal -Wno-shadow -Wno-unreachable-code -Wno-switch-enum -Wno-unused-function")
+        SET(DISABLED_WARNINGS_DEBUG "-Wno-float-equal -Wno-shadow -Wno-unreachable-code -Wno-switch-enum -Wno-unused-function")
+        SET(EXTRA_WARNINGS "-Wold-style-cast -Woverloaded-virtual -Wall -Wpedantic -Wunused-variable -Wextra -Weffc++ -Wformat-nonliteral -Wformat -Wreturn-type -Wempty-body -Wdeprecated -Wdisabled-optimization -Winline -Wredundant-decls -Wpacked -Wuninitialized -Wcast-align -Wcast-qual -Wswitch-default -Wswitch -Wint-to-void-pointer-cast -Wnon-virtual-dtor -Wsign-compare -pedantic-errors -fuse-cxa-atexit -ffor-scope")
     ENDIF()
 
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${DISABLED_WARNINGS} ${WARNING_ERROR}")
-    SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} ${DISABLED_WARNINGS_DEBUG} ${WARNING_ERROR}")
-    SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${DISABLED_WARNINGS} ${WARNING_ERROR}")
-    SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} ${DISABLED_WARNINGS_DEBUG} ${WARNING_ERROR}")
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${EXTRA_WARNINGS} ${DISABLED_WARNINGS} ${WARNING_ERROR}")
+    SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} ${EXTRA_WARNINGS} ${DISABLED_WARNINGS_DEBUG} ${WARNING_ERROR}")
+    SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${EXTRA_WARNINGS} ${DISABLED_WARNINGS} ${WARNING_ERROR}")
+    SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} ${EXTRA_WARNINGS} ${DISABLED_WARNINGS_DEBUG} ${WARNING_ERROR}")
 
     #enable c++11
     check_for_cxx11_compiler(CXX11_COMPILER)

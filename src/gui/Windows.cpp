@@ -286,6 +286,7 @@ void MainWindow::exit()
 
 void MainWindow::closeEvent(QCloseEvent *e)
 {
+    Q_UNUSED(e);
     params->close();
     QCoreApplication::exit();
 }

@@ -24,7 +24,7 @@
 #include "Node.h"
 
 using namespace std;
-static const int NONE = -1;
+static const unsigned NONE = -1;
 
 TreeExtended::TreeExtended():
     Tree(),lca_is_valid(false)
@@ -167,7 +167,9 @@ void TreeExtended::build_lca() const
     for (unsigned i = 0; i < E.size(); ++i)
     {
         if (Ref[E[i]] == NONE)
+        {
             Ref[E[i]] = i;
+        }
     }
 
 
@@ -237,7 +239,7 @@ TreeExtended::most_significant_bit(unsigned v)
     return c;
 }
 
-const bool
+bool
 TreeExtended::descendant(Node *v1, Node *v2) const
 {
     // Is v1 descendant of v2?
@@ -245,7 +247,7 @@ TreeExtended::descendant(Node *v1, Node *v2) const
 }
 
 
-const double TreeExtended::findMaximumDistanceToLeaf(Node *n) const
+double TreeExtended::findMaximumDistanceToLeaf(Node *n) const
 {
     if (n->isLeaf())
     {
@@ -269,7 +271,7 @@ const double TreeExtended::findMaximumDistanceToLeaf(Node *n) const
     }
 }
 
-const unsigned TreeExtended::getNumberOfChildren(Node *n) const
+unsigned TreeExtended::getNumberOfChildren(Node *n) const
 {
     if(n == 0)
     {

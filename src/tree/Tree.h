@@ -44,10 +44,10 @@ public:
     std::string getName() const;
     void setName(const string &s);
 
-    const unsigned getNumberOfNodes() const;
-    const unsigned getNumberOfLeaves() const;
-    const unsigned getHeight() const;
-    const bool IDnumbersAreSane(Node& n) const;
+    unsigned getNumberOfNodes() const;
+    unsigned getNumberOfLeaves() const;
+    unsigned getHeight() const;
+    bool IDnumbersAreSane(Node& n) const;
 
     Node * getRootNode() const;
     Node* getNode(unsigned nodeNumber) const;
@@ -59,13 +59,13 @@ public:
     void setRootNode(Node *r);
 
     /* annoying methods I want to get rid of */
-    const bool hasTimes() const;
-    const bool hasRates() const;
-    const bool hasLengths() const;
-    const double getTime(const Node& v) const;
-    const double getEdgeTime(const Node& v) const;
-    const double getLength(const Node& v) const;
-    const double getRate(const Node& v) const;
+    bool hasTimes() const;
+    bool hasRates() const;
+    bool hasLengths() const;
+    double getTime(const Node& v) const;
+    double getEdgeTime(const Node& v) const;
+    double getLength(const Node& v) const;
+    double getRate(const Node& v) const;
     void setTimeNoAssert(const Node& v, double time) const;
     void setTime(const Node& v, double time) const;
     void setEdgeTime(const Node& v, double time) const;
@@ -77,18 +77,18 @@ public:
     void setTimes(RealVector& v);
     void setRates(RealVector& v);
     void setLengths(RealVector& v);
-    const bool checkTimeSanity(Node& root) const;
-    const double getTopTime() const;
+    bool checkTimeSanity(Node& root) const;
+    double getTopTime() const;
     void setTopTime(double newTime);
-    const double rootToLeafTime() const;
-    const double getTopToLeafTime() const;
+    double rootToLeafTime() const;
+    double getTopToLeafTime() const;
     /* annoying methods I want to get rid of */
 
     Node* mostRecentCommonAncestor(Node* a, Node* b) const;
 
-    const double imbalance() const;
-    const double imbalance(Node *v) const;
-    const unsigned getHeight(Node* v) const;
+    double imbalance() const;
+    double imbalance(Node *v) const;
+    unsigned getHeight(Node* v) const;
 
     void clear();
     void clearTree();

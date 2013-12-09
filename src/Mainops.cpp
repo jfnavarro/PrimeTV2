@@ -56,7 +56,7 @@ Mainops::~Mainops()
     //members are smart pointers
 }
 
-const bool Mainops::lateralTransfer(const std::string &mapname, bool dp)
+bool Mainops::lateralTransfer(const std::string &mapname, bool dp)
 {
     Phyltr late = Phyltr();
     late.g_input.duplication_cost = parameters->lateralduplicost;
@@ -119,7 +119,7 @@ void Mainops::printLGT()
     }
 }
 
-const bool Mainops::thereAreLGT(const std::vector<Scenario> &scenarios) const
+bool Mainops::thereAreLGT(const std::vector<Scenario> &scenarios) const
 {
     BOOST_FOREACH(const Scenario &sc, scenarios)
     {
@@ -143,7 +143,7 @@ void Mainops::OpenHost(const string &species)
     speciesTree.reset(io->readHostTree());
     Node *root = speciesTree->getRootNode();
 
-    if ((double)root->getTime() == (double)0.0)
+    if (root->getTime() == 0.0)
     {
         double t = root->getNodeTime();
         root->setTime(0.1 * t);
@@ -222,7 +222,7 @@ void Mainops::calculateCordinates()
     parameters->leafwidth = spcord.getNodeHeight();
 }
 
-const bool Mainops::checkValidity()
+bool Mainops::checkValidity()
 {
     if(parameters->lattransfer)
     {
@@ -297,7 +297,7 @@ void Mainops::DrawTree(cairo_t *cr)
     }
 }
 
-const bool Mainops::RenderImage()
+bool Mainops::RenderImage()
 {
     return dt->RenderImage();
 }
@@ -312,7 +312,7 @@ void Mainops::setParameters(Parameters *p)
     parameters = p;
 }
 
-const bool Mainops::getValidityLGT()
+bool Mainops::getValidityLGT()
 {
     if(gamma->validLGT())
     {

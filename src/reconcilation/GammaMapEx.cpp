@@ -24,6 +24,8 @@
 
 #include "GammaMapEx.h"
 
+#include "options_cmake.h"
+
 GammaMapEx::GammaMapEx(const TreeExtended &G,const TreeExtended &S, const StrStrMap& gs,
                           std::vector<SetOfNodesEx<Node> > &AC_info)
     : Gtree(&G),
@@ -159,7 +161,7 @@ Node* GammaMapEx::checkGamma(Node *gn)
 
 // To determine whether a node is lateral transfer or not, we just need to
 // look a the set of lateral transfer nodes
-const bool GammaMapEx::isLateralTransfer(Node& u) const
+bool GammaMapEx::isLateralTransfer(Node& u) const
 {
     if(u.isLeaf())
     {
@@ -279,12 +281,12 @@ GammaMapEx::getLowestGammaPath(Node &u) const // Dominated by others
     }
 }
 
-const unsigned GammaMapEx::getSize(Node& x) const   //version with reference
+unsigned GammaMapEx::getSize(Node& x) const   //version with reference
 {
     return gamma[x.getNumber()].size();
 }
 
-const unsigned GammaMapEx::getSize(Node* x) const   //version with pointer
+unsigned GammaMapEx::getSize(Node* x) const   //version with pointer
 {
     return gamma[x->getNumber()].size();
 }
@@ -292,6 +294,8 @@ const unsigned GammaMapEx::getSize(Node* x) const   //version with pointer
 Node *
 GammaMapEx::checkGammaForDuplication(Node *gn, Node *sn, Node *sl, Node *sr)
 {
+    UNUSED(sr);
+
     while(sn == sl)
     {
         removeFromSet(sn, gn);
@@ -426,13 +430,13 @@ GammaMapEx::removeFromSet(Node *x, Node *v)
     return;
 }
 
-const bool
+bool
 GammaMapEx::valid() const
 {
     return valid(Stree->getRootNode());
 }
 
-const bool
+bool
 GammaMapEx::valid(Node *x) const
 {
     if (x->isLeaf())
@@ -468,7 +472,7 @@ GammaMapEx::valid(Node *x) const
     }
 }
 
-const bool
+bool
 GammaMapEx::validLGT() const
 {
     if (!transfer_edges.any())
@@ -504,13 +508,13 @@ GammaMapEx::validLGT() const
     }
 }
 
-const unsigned
+unsigned
 GammaMapEx::sizeOfWidestSpeciesLeaf() const
 {
     return sizeOfWidestSpeciesLeaf(Stree->getRootNode(), 0);
 }
 
-const unsigned GammaMapEx::sizeOfWidestSpeciesLeaf(Node *x, unsigned current_max) const
+unsigned GammaMapEx::sizeOfWidestSpeciesLeaf(Node *x, unsigned current_max) const
 {
     if (x->isLeaf())
     {
@@ -596,8 +600,7 @@ GammaMapEx::twistAndTurn(Node *v, Node *x)
     }
 }
 
-
-const bool
+bool
 GammaMapEx::isSpeciation(Node& u) const
 {
     if (lambdaex[u] == getLowestGammaPath(u))
@@ -692,7 +695,7 @@ GammaMapEx::getFullGamma(const Node& x) const
     return full;
 }
 
-const bool
+bool
 GammaMapEx::isInGamma(Node *u, Node *x) const
 {
     const SetOfNodesEx<Node> &target_set = gamma[x->getNumber()];
@@ -713,15 +716,13 @@ GammaMapEx::update(const TreeExtended& G, const TreeExtended& S,
     computeGammaBound(G.getRootNode());
 }
 
-
-const unsigned
+unsigned
 GammaMapEx::numberOfGammaPaths(Node &u) const
 {
     assert(chainsOnNode.size() > u.getNumber());
     const deque<Node*> &anti_chains = chainsOnNode[u.getNumber()];
     return anti_chains.size();
 }
-
 
 void GammaMapEx::setLGT(dynamic_bitset< long unsigned > lgt)
 {

@@ -37,7 +37,7 @@
 
 using namespace std;
 
-static const int NONE = -1;
+static const unsigned NONE = -1;
 ProgramInput Phyltr::g_input;
 vector<Scenario> Phyltr::scenarios;
 const cost_type COST_INF = numeric_limits<cost_type>::infinity();

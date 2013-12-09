@@ -54,8 +54,8 @@ public:
     void clearMap();
 
     // Diagnostics. The number of relations
-    const unsigned size() const;
-    const unsigned reverseSize() const;
+    unsigned size() const;
+    unsigned reverseSize() const;
 
     //! returns the mapping
     std::map<std::string, std::string> getMapping() const

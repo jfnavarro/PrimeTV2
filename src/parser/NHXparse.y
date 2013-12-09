@@ -58,8 +58,8 @@ typedef enum {
 type get_annotation_type();
 void check_annotation_type(type actual_type);
 
-void err_msg(char *s);
-void yyerror(char *s);
+void err_msg(const char *s);
+void yyerror(const char *s);
 int yylex(void);
 
 %}
@@ -213,7 +213,7 @@ int_list : INTEGER { $$ = new_int_list($1, 0); }
 %%
 
 void
-yyerror (char *s) {
+yyerror (const char *s) {
   fprintf (stderr, "%s:line %d: %s\n", current_filename, lineno, s);
   if (n_right_parens > n_left_parens) {
      fprintf(stderr, "\tUnbalanced parenthesis!\n");
@@ -227,7 +227,7 @@ yyerror (char *s) {
 }
 
 void
-err_msg(char *s) {
+err_msg(const char *s) {
   if (err_flag) {	     
      fprintf(stderr, "%s\n", s);
      err_flag = 0;
@@ -265,7 +265,7 @@ set_float_annotation(float f) {
   current_annotation->arg.t = f;
 }
 
-char *arb_tags[] = {"S",         "AC",          "ID",     "NT",       "BL",       "ET",       "NW",      "EX",      "D",     "TT",   0};
+const char *arb_tags[] = {"S",         "AC",          "ID",     "NT",       "BL",       "ET",       "NW",      "EX",      "D",     "TT",   0};
 type arb_types[] = {string_type, int_list_type, int_type, float_type, float_type, float_type, float_type,int_type,int_type,float_type};
 
 type

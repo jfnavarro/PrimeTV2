@@ -288,8 +288,8 @@ endif()
 
 if(APPLE)
 
-  set(CMAKE_OSX_ARCHITECTURES "ppc;i386")
-  set(CMAKE_CXX_FLAGS "--sysroot ${CMAKE_OSX_SYSROOT} ${CMAKE_CXX_FLAGS}")
+   set(CMAKE_OSX_ARCHITECTURES "ppc;i386")
+   set(CMAKE_CXX_FLAGS "--sysroot ${CMAKE_OSX_SYSROOT} ${CMAKE_CXX_FLAGS}")
 
    #install(FILES ${CMAKE_SOURCE_DIR}/cmake/linux/qt.conf DESTINATION bin)
    install(TARGETS ${PROJECT_NAME} DESTINATION bin)

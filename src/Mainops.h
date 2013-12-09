@@ -55,7 +55,7 @@ public:
 
     // calculate the Lateral transfer scenarios using parameters,
     // return true if there is a valid scenario.
-    const bool lateralTransfer(const std::string &mapname, bool dp = false /*dynamic programming*/);
+    bool lateralTransfer(const std::string &mapname, bool dp = false /*dynamic programming*/);
 
     // load the reconciled gene tree and obtatins its information
     void OpenReconciled(const string &gene);
@@ -70,7 +70,7 @@ public:
     void CalculateGamma();
 
     // check wether the reconcilation of LGT scenario is valid
-    const bool checkValidity();
+    bool checkValidity();
 
     // calculates the cordinates of the trees
     void calculateCordinates();
@@ -79,7 +79,7 @@ public:
     void DrawTree(cairo_t *cr = 0);
 
     // save the tree on a file, returns 1 if ok of 0 it if failed
-    const bool RenderImage();
+    bool RenderImage();
 
     // return the parameters object
     Parameters* getParameters();
@@ -102,10 +102,10 @@ public:
     void loadPreComputedScenario(const std::string &filename,const std::string &mapname); 
 
     // check if there are scenarios with LGT in the set of scenarios given
-    const bool thereAreLGT(const std::vector<Scenario> &scenarios) const;
+    bool thereAreLGT(const std::vector<Scenario> &scenarios) const;
 
     // check whether there is a scenario valid on the vector of scenarios
-    const bool getValidityLGT();
+    bool getValidityLGT();
 
 protected:
     

@@ -20,10 +20,8 @@
              Lars Arvestad, © the MCMC-club, SBC, all rights reserved
  */
 
-#include "NHXnode.h"
 #include "NHXtree.h"
 
-#include <stdio.h>
 #include <stdlib.h>
 
 void

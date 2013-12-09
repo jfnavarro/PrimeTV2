@@ -1,7 +1,3 @@
-/* 
-  The NHX extensions are from Zmasek-Eddy: http://www.genetics.wustl.edu/eddy/forester/NHX.html.
-*/
-
 /*
 * IMPORTANT NOTE!
 *
@@ -10,9 +6,8 @@
 */ 
 
 %{
+    
 #include "NHXparse.h"
-
-
 #include <string.h>
 
 unsigned int lineno = 0;
@@ -33,9 +28,8 @@ YY_BUFFER_STATE prev_buf;
 /* Handle tree comments sensible */
 %x comment
 %x annotation
-/* 
-   Some shortcuts
-*/
+
+/* Some shortcuts */
 
 TAG     [a-zA-Z]+
 STR     [a-zA-Z0-9\|\-\_/+*#!%&?\.]+
@@ -60,7 +54,7 @@ INTEGER [+-]?[0-9]+
 [ \t] /* Do nothing */
 
 
-<annotation>\] { BEGIN(INITIAL); return ANNOTATION_END; }
+<annotation>\]        { BEGIN(INITIAL); return ANNOTATION_END; }
 <annotation>=         { return EQUAL; }
 <annotation>\(        { return LEFT_PAREN; }
 <annotation>\)        { return RIGHT_PAREN; }
@@ -69,7 +63,7 @@ INTEGER [+-]?[0-9]+
 <annotation>{FLOAT}   { yytree_lval.branch_time = atof(yytext); return FLOAT; }
 <annotation>'[^']*'   { yytree_lval.str = strdup(yytext+1); *(strstr(yytree_lval.str, "'")) = '\0'; return STRING; }
 <annotation>{STR}     { yytree_lval.str = strdup(yytext);  ; return STRING; }
-<annotation>.	/* Ignore spaces and such */
+<annotation>.         /* Ignore spaces and such */
 
 <comment>\] { BEGIN(INITIAL); }
 <comment>.  /* eat comment */
@@ -78,7 +72,6 @@ INTEGER [+-]?[0-9]+
 %%
 /*
   Support for reading free strings rather than files.
-
   Important: These calls do not nest!
 */
 void

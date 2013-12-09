@@ -59,13 +59,13 @@ public:
     Node* lca(Node *v1, Node *v2) const;
     
     // true is v1 is descendant of v2
-    const bool descendant(Node *v1, Node *v2) const;
+    bool descendant(Node *v1, Node *v2) const;
     
     // returns the maximum distance from leaf to node
-    const double findMaximumDistanceToLeaf(Node *n) const;
+    double findMaximumDistanceToLeaf(Node *n) const;
     
     // returns the number of children of node n
-    const unsigned getNumberOfChildren(Node *n) const;
+    unsigned getNumberOfChildren(Node *n) const;
     
     // reset the tree information
     void reset();

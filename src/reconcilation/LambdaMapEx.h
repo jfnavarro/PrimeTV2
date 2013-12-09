@@ -73,11 +73,13 @@ public:
     void update(const TreeExtended &G,const TreeExtended &S, StrStrMap* gs = 0);
     
     //update lambda with the Lateral Transfers
-    void update(const TreeExtended &G, const TreeExtended &S, const std::vector<unsigned> &sigma,
+    void update(const TreeExtended &G, const TreeExtended &S,
+                const std::vector<unsigned> &sigma,
                 const dynamic_bitset<> &transfer_edges);
     
     //update lambda for a normal reconcilation for a lambda given
-    void update(const TreeExtended &G, const TreeExtended& S,const std::vector<unsigned> &lambda);
+    void update(const TreeExtended &G, const TreeExtended &S,
+                const std::vector<unsigned> &lambda);
 
     //overload << for printing
     std::ostream& operator<<(const LambdaMapEx &l);
@@ -86,7 +88,7 @@ public:
     std::string print() const;
     
     //check whether is valid of not
-    const bool valid() const;
+    bool valid() const;
 
 private:
 

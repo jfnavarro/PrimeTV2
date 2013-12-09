@@ -179,13 +179,13 @@ Node::getTree()
 }
 
 // Get the node's number (post-order)
-const unsigned
+unsigned
 Node::getNumber() const
 {
     return number;
 }
 
-const unsigned
+unsigned
 Node::getNumberOfLeaves() const
 {
     if (isLeaf())
@@ -200,12 +200,12 @@ Node::getNumberOfLeaves() const
     }
 }
 
-const double Node::getBranchLength() const
+double Node::getBranchLength() const
 {
     return branchLength;
 }
 
-const unsigned
+unsigned
 Node::getMaxPathToLeaf() const
 {
     if(isLeaf())
@@ -313,7 +313,7 @@ Node::deleteSubtree()
 
 
 // Checks if the current node is a leaf - A leaf lacks children
-const bool Node::isLeaf() const
+bool Node::isLeaf() const
 {
     if (getLeftChild() == 0 && getRightChild() == 0)
     {
@@ -326,7 +326,7 @@ const bool Node::isLeaf() const
 }
 
 // Checks if the current node is the root. Only the root has no parent
-const bool
+bool
 Node::isRoot() const
 {
     if (getParent() == 0)
@@ -339,7 +339,7 @@ Node::isRoot() const
     }
 }
 
-const bool
+bool
 Node::operator<=(const Node& b) const
 {
     for(const Node* c = this; c != &b; c = c->getParent())
@@ -352,7 +352,7 @@ Node::operator<=(const Node& b) const
     return true;
 }
 
-const bool
+bool
 Node::operator<(const Node& b) const
 {
     if(this == &b)
@@ -365,14 +365,14 @@ Node::operator<(const Node& b) const
     }
 }
 
-const bool
+bool
 Node::operator<(const Node* b) const
 {
     assert(b!= 0);
     return operator<(*b);
 }
 
-const bool
+bool
 Node::operator>(const Node& b) const
 {
     if(this == &b)
@@ -385,7 +385,7 @@ Node::operator>(const Node& b) const
     }
 }
 
-const bool
+bool
 Node::dominates(const Node& v) const
 {
     for(const Node* w = &v; w != this; w = w->getParent())
@@ -398,7 +398,7 @@ Node::dominates(const Node& v) const
     return true;
 }
 
-const bool
+bool
 Node::strictlyDominates(const Node& v) const
 {
     if(this == &v)
@@ -411,7 +411,7 @@ Node::strictlyDominates(const Node& v) const
     }
 }
 
-const double
+double
 Node::getTime() const
 {
     if(this->isRoot())
@@ -460,7 +460,7 @@ Node::setLength(const double &newLength)
     }
 }
 
-const double
+double
 Node::getNodeTime() const
 {
     if(ownerTree->hasTimes())
@@ -473,7 +473,7 @@ Node::getNodeTime() const
     }
 }
 
-const double
+double
 Node::getLength() const
 {
     if(ownerTree->hasLengths())
@@ -603,17 +603,17 @@ Color Node::getColor()
     return color;
 }
 
-const double Node::getSize() const
+double Node::getSize() const
 {
     return size;
 }
 
-const double Node::getX() const
+double Node::getX() const
 {
     return x;
 }
 
-const double Node::getY() const
+double Node::getY() const
 {
     return y;
 }
@@ -648,7 +648,7 @@ Node::Type Node::getReconcilation()
     return reconcilation;
 }
 
-const unsigned Node::getVisited() const
+unsigned Node::getVisited() const
 {
     return visited;
 }

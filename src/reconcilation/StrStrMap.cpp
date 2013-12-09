@@ -17,7 +17,7 @@
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
     
     Author : Jose Fernandez Navarro  -  jc.fernandez.navarro@gmail.com
-             Lars Arvestad, © the MCMC-club, SBC, all rights reserved
+             Lars Arvestad, the MCMC-club, SBC, all rights reserved
  */
 
 #include  "StrStrMap.h"
@@ -116,13 +116,13 @@ StrStrMap::clearMap()
 }
 
 // Diagnostics. Find how many relations are stored
-const unsigned
+unsigned
 StrStrMap::size() const
 {
     return avbildning.size();
 }
 
-const unsigned
+unsigned
 StrStrMap::reverseSize() const
 {
     set<string> reverse;

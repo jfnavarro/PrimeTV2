@@ -81,7 +81,7 @@ public:
     
     // this function create a file and render the cairo surface into
     // that file
-    const bool RenderImage();
+    bool RenderImage();
     
     // this function make the affine matrix tranformation over the surface
     // according to the parameters given
@@ -159,7 +159,7 @@ private:
     
     // this function checks wheter the node give is a destination of a lateral
     // transfer or not
-    const bool destinyLGT(Node *n) const;
+    bool destinyLGT(Node *n) const;
     
     // this function is a helper function to draw the lateral
     // transfer paths
@@ -170,17 +170,17 @@ private:
     
     // this function checks wheter there exist or not an edge
     // with the origin x
-    const bool existLGTEdge(const double& x) const;
+    bool existLGTEdge(const double& x) const;
     
     // this function returns a pair of x cordinates, the origin x
     // and destiny x of the Lateral Transfer
     pair<Node*,pair<double,double> > getOriginLGT(Node *n);
     
     // this function checks if the nodes given as inputs overlap at x
-    const bool overlapSpeciesNode(double x,Node *origin, Node *destiny) const;
+    bool overlapSpeciesNode(double x,Node *origin, Node *destiny) const;
     
     // this function check if there is a collision between the two spaces given as inputs
-    const bool checkCollision(double x00,double y00, double x01,
+    bool checkCollision(double x00,double y00, double x01,
                               double y01, double x10, double y10,
                               double x11,double y11) const;
     
@@ -189,7 +189,7 @@ private:
                  double xo,double yo,double xe,double ye,Edge::category m);
     
     // this function returns the number of LT for a given child son
-    const unsigned NumberLT(Node *son);
+    unsigned NumberLT(Node *son);
 
     // Computer the intersection of two lines, given four points.
     void intersection(double x1, double y1,

@@ -47,9 +47,9 @@ public:
     void insert(T* u);	                                     // Add u to the set
     void insertVector(std::vector<T*>& v);                  //Add a vector to the set
     void erase(T* u);	                                    // Remove u from the set
-    const bool member(T* u) const;                           // Is u a member of the set?
-    const bool empty() const;		                         // Is the set empty or not?
-    const unsigned size() const;	                        // Number of elements in set
+    bool member(T* u) const;                           // Is u a member of the set?
+    bool empty() const;		                         // Is the set empty or not?
+    unsigned size() const;	                        // Number of elements in set
     T* operator[](unsigned i) const;                        // Random access
     bool operator==(const SetOfNodesEx<T> &s1) const;
     bool operator<(const SetOfNodesEx<T> &s1) const;
@@ -174,7 +174,7 @@ SetOfNodesEx<T>::erase(T *u)
 }
 
 template <class T>
-const bool
+bool
 SetOfNodesEx<T>::member(T *u) const
 {
     if (theSet.find(u) == theSet.end())
@@ -188,14 +188,14 @@ SetOfNodesEx<T>::member(T *u) const
 }
 
 template <class T>
-const bool
+bool
 SetOfNodesEx<T>::empty() const
 {
     return theSet.empty();
 }
 
 template <class T>
-const unsigned
+unsigned
 SetOfNodesEx<T>::size() const
 {
     return theSet.size();
