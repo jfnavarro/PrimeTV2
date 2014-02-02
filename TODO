@@ -1,22 +1,22 @@
 
-Add genome to nodes (branchlenght)
+Add genome to nodes (branch length)
 
-List of scenarios to chose from in the User Interfance
+List of scenarios to chose from in the User Interface
 
 Make the building procedure compatible with Windows
 
 Time of nodes a variable in the node.
 
-Add more feactures to nodes, i.e. a feature that can be changed by clicking on it, also the position.
+Add more features to nodes, i.e. a feature that can be changed by clicking on it, also the position.
 
-Posibility to drag and drop nodes
+Possibility to drag and drop nodes in the User Interface or to re-arrange them manually.
 
-Improve the way the LGT cordinates are being calculated by including a time event to the LGT edge
+Improve the way the LGT coordinates are being calculated by including a time event to the LGT edge.
 
-Get rid/redo the Newick/PRIME tree parser, the current one uses C code and bison and flex which is problematic
+Replace the tree parser, it uses C code and bison and flex which is problematic
 and not portable.
 
-Update GUI parameters to recently added parameters for terminal version (find a way to link them)
+Update GUI parameters to recently added parameters for terminal version (find a way to link them).
 
 Improve GUI 
 

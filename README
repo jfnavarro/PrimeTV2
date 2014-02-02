@@ -6,19 +6,16 @@ The utility of this program is to draw reconciled trees and it is explained in :
 
 http://www.biomedcentral.com/1471-2105/8/148
 
-The program can be run using an User Interface(experimental) or the console/script version.
+The program can be run using an User Interface(experimental) or the terminal version.
 
-Either way the input will be a species tree and a gene tree. If the gene tree is reconciled already
-a map file will not be needed whereas if the tree is not reconciled the option "Reconcile" will have to 
-be activated and a map file(gene to species nodes) will have to be given, the program will reconcile it by itself.
+Either way, the input needs to be a species tree and a gene tree. If the gene tree is reconciled already a map file will not be needed whereas if the tree is not reconciled the option "Reconcile" will have to be activated and a map file(gene to species nodes) will have to be given, the program will reconcile it by itself.
 
 The list of parameters and their functions can be seen running the script or including --help, /? ect..
 A list of parameters will be automatically loaded if they are included in a file config.cfg placed
 on the same location the program is being executed.
 
-To launch the User Interface the option --gui must be added.
+To launch the User Interface the option --gui must be given.
 
-The UI also allows to save and load configuration, save the tree in a file (different formats), print the tree
-show/hide the parameters panel, modify the parameters and recompute the tree in real time, and load the trees to generate the drawing (generate tree 
+The UI also allows to save and load configuration files, save the tree in a file (different formats), print the tree, show/hide the parameters panel, modify the parameters and recompute the tree in real time, and load the trees to generate the drawing (generate tree 
 button).
 

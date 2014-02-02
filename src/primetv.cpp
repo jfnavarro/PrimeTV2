@@ -102,14 +102,14 @@ main (int ac, char *av[])
     try
     {
         parameters = new Parameters();
-        std::string config_file = "";
-        std::string default_config_file = "";
-        std::string reconciledtree = "";
-        std::string speciestree = "";
-        std::string genetree = "";
-        std::string mapfile = "";
-        std::string precomputed_scenario_file = "";
-        std::string colorconfig = "";
+        std::string config_file;
+        std::string default_config_file;
+        std::string reconciledtree;
+        std::string speciestree;
+        std::string genetree;
+        std::string mapfile;
+        std::string precomputed_scenario_file;
+        std::string colorconfig;
         bool show_lgt_scenarios = false;
         bool load_precomputed_lgt_scenario = false;
         // Create path to default config file

@@ -3,36 +3,13 @@ MACRO(INITIALISE_PROJECT)
     #SET(CMAKE_VERBOSE_MAKEFILE ON)
     SET(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-    # Required packages
-    find_package(Qt5Widgets REQUIRED)
-    # Keep track of some information about Qt
-    SET(QT_BINARY_DIR ${_qt5Widgets_install_prefix}/bin)
-    SET(QT_LIBRARY_DIR ${_qt5Widgets_install_prefix}/lib)
-    SET(QT_PLUGINS_DIR ${_qt5Widgets_install_prefix}/plugins)
-    SET(QT_VERSION_MAJOR ${Qt5Widgets_VERSION_MAJOR})
-    SET(QT_VERSION_MINOR ${Qt5Widgets_VERSION_MINOR})
-    SET(QT_VERSION_PATCH ${Qt5Widgets_VERSION_PATCH})
-
     IF(CMAKE_BUILD_TYPE MATCHES [Dd][Ee][Bb][Uu][Gg])
         MESSAGE("Building a debug version...")
-        # Default compiler settings
-        IF(WIN32)
-            SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /D_DEBUG /MDd /Zi /Ob0 /Od /RTC1")
-            SET(LINK_FLAGS_PROPERTIES "${LINK_FLAGS_PROPERTIES} /DEBUG")
-        ELSE()
-            SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -O0")
-        ENDIF()
         SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D_DEBUG -DDEBUG")
         # Make sure that debugging is on for Qt
         ADD_DEFINITIONS(-DQT_DEBUG)
     ELSE()
         MESSAGE("Building a release version...")
-        # Default compiler and linker settings
-        IF(WIN32)
-            SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /DNDEBUG /MD /O2 /Ob2")
-        ELSE()
-            SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2 -ffast-math")
-        ENDIF()
         # Make sure that debugging is off for Qt
         ADD_DEFINITIONS(-DQT_NO_DEBUG_OUTPUT)
         ADD_DEFINITIONS(-DQT_NO_DEBUG)

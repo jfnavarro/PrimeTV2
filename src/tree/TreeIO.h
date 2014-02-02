@@ -70,6 +70,7 @@ public:
     // static functions to read trees
     static TreeIO fromFile(const std::string &filename);
     static TreeIO fromString(const std::string &treeString);
+
     //static functions to read map files
     static StrStrMap readGeneSpeciesInfo(const std::string& filename);
     static std::vector<StrStrMap> readGeneSpeciesInfoVector(const std::string& filename);

@@ -44,15 +44,15 @@ Edge::Edge()
 
 Edge::Edge(const Edge& other)
 {
-    this->speOrigin = other.speOrigin;
-    this->speEnd = other.speEnd;
-    this->geneOrigin = other.geneOrigin;
-    this->geneEnd = other.geneEnd;
-    this->xOrigin = other.xOrigin;
-    this->xEnd = other.xEnd;
-    this->yOrigin = other.yOrigin;
-    this->yEnd = other.yEnd;
-    this->mode = other.mode;
+    speOrigin = other.speOrigin;
+    speEnd = other.speEnd;
+    geneOrigin = other.geneOrigin;
+    geneEnd = other.geneEnd;
+    xOrigin = other.xOrigin;
+    xEnd = other.xEnd;
+    yOrigin = other.yOrigin;
+    yEnd = other.yEnd;
+    mode = other.mode;
 }
 
 Edge::~Edge()
@@ -62,16 +62,15 @@ Edge::~Edge()
 
 Edge& Edge::operator=(const Edge& other)
 {
-    this->speOrigin = other.speOrigin;
-    this->speEnd = other.speEnd;
-    this->geneOrigin = other.geneOrigin;
-    this->geneEnd = other.geneEnd;
-    this->xOrigin = other.xOrigin;
-    this->xEnd = other.xEnd;
-    this->yOrigin = other.yOrigin;
-    this->yEnd = other.yEnd;
-    this->mode = other.mode;
-    
+    speOrigin = other.speOrigin;
+    speEnd = other.speEnd;
+    geneOrigin = other.geneOrigin;
+    geneEnd = other.geneEnd;
+    xOrigin = other.xOrigin;
+    xEnd = other.xEnd;
+    yOrigin = other.yOrigin;
+    yEnd = other.yEnd;
+    mode = other.mode;
     return *this;
 }
 
@@ -89,90 +88,90 @@ bool Edge::operator==(const Edge& other) const
 
 const Node *Edge::getSpeOrigin() const
 {
-    return this->speOrigin;
+    return speOrigin;
 }
 
 const Node *Edge::getSpeEnd() const
 {
-    return this->speEnd;
+    return speEnd;
 }
 
 const Node *Edge::getGeneOrigin() const
 {
-    return this->geneOrigin;
+    return geneOrigin;
 }
 
 const Node *Edge::getGeneEnd() const
 {
-    return this->geneEnd;
+    return geneEnd;
 }
 
 double Edge::getXorigin() const
 {
-    return this->xOrigin;
+    return xOrigin;
 }
 
 double Edge::getYorigin() const
 {
-    return this->yOrigin;
+    return yOrigin;
 }
 
 double Edge::getXend() const
 {
-    return this->xEnd;
+    return xEnd;
 }
 
 double Edge::getYend() const
 {	
-    return this->yEnd;
+    return yEnd;
 }
 
 Edge::category Edge::getMode() const
 {
-    return this->mode;
+    return mode;
 }
 
 void Edge::setSpeOrigin(const Node &n)
 {
-    this->speOrigin = &n;
+    speOrigin = &n;
 }
 
 void Edge::setSpeEnd(const Node &n)
 {
-    this->speEnd = &n;
+    speEnd = &n;
 }
 
 void Edge::setGeneOrigin(const Node &n)
 {
-    this->geneOrigin = &n;
+    geneOrigin = &n;
 }
 
 void Edge::setGeneEnd(const Node &n)
 {
-    this->geneEnd = &n;
+    geneEnd = &n;
 }
 
 void Edge::setXorigin(double x)
 {
-    this->xOrigin = x;
+    xOrigin = x;
 }
 
 void Edge::setYorigin(double y)
 {
-    this->yOrigin = y;
+    yOrigin = y;
 }
 
 void Edge::setXend(double x)
 {
-    this->xEnd = x;
+    xEnd = x;
 }
 
 void Edge::setYend(double y)
 {
-    this->yEnd = y;
+    yEnd = y;
 }
 
 void Edge::setMode(category c)
 {
-    this->mode = c;
+    mode = c;
 }

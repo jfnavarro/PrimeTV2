@@ -22,6 +22,7 @@ message( STATUS )
 
 # Initialise the project
 initialise_project()
+
 #location of some files needed by primetv
 set(HEADER_LOCATION "${CMAKE_INSTALL_PREFIX}/share/primetv/header.png")
 add_definitions(-DHAS_HEADER="${HEADER_LOCATION}")
@@ -164,10 +165,13 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set(CMAKE_BINARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+
 # Find includes in corresponding build directories
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
 # Instruct CMake to run moc automatically when needed.
 set(CMAKE_AUTOMOC ON)
+
 # location of home made cmake macros
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/cmake" )
 set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} "${PROJECT_SOURCE_DIR}/cmake" )
@@ -184,9 +188,11 @@ set(Boost_USE_MULTITHREADED OFF)
 set(Boost_USE_STATIC_RUNTIME ON)
 find_package(Boost REQUIRED COMPONENTS system program_options)  
 include_directories(${Boost_INCLUDE_DIRS})
+
 #find bison flex and cairo
 find_package(BISON REQUIRED)
 find_package(FLEX REQUIRED)
+
 find_package(Cairo REQUIRED)
 include_directories(${CAIRO_INCLUDE_DIR})
 
@@ -207,7 +213,8 @@ flex_target(MyScanner "${PROJECT_SOURCE_DIR}/src/parser/NHX.l"
 add_flex_bison_dependency(MyScanner MyParser)
 
 #QT5 DIRECTIVES
-set(FORMS "${PROJECT_SOURCE_DIR}/resources/ui/primetv.ui" 
+set(FORMS
+          "${PROJECT_SOURCE_DIR}/resources/ui/primetv.ui"
           "${PROJECT_SOURCE_DIR}/resources/ui/parameters.ui")
           
 set(RESOURCES "${PROJECT_SOURCE_DIR}/resources/application.qrc")
@@ -246,7 +253,7 @@ endif(APPLE)
 enable_testing()
 add_subdirectory(test)
 
-##################################################################INSTALLATION###########################################################################
+######################################INSTALLATION##############################
 
 # PACKAGING OPTIONS: GENERAL
 set(CPACK_PACKAGE_VERSION_MAJOR "${PROJECT_VERSION_MAJOR}")

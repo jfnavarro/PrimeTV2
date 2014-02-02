@@ -36,8 +36,13 @@ LayoutTrees::LayoutTrees(TreeExtended *r,
                          Parameters *p,
                          const GammaMapEx *gm,
                          const LambdaMapEx *l)
-    :species(r),gene(g),parameters(p),gamma(gm),lambda(l),
-      bv(r->getNumberOfNodes()),Adress(g->getNumberOfNodes())
+    :species(r),
+      gene(g),
+      parameters(p),
+      gamma(gm),
+      lambda(l),
+      bv(r->getNumberOfNodes()),
+      Adress(g->getNumberOfNodes())
 {
 
 
@@ -224,8 +229,8 @@ void LayoutTrees::CountSpeciesCoordinates(Node *n, unsigned depth)
 
         const double sumyleft = getRightMostCoordinate(left);
         const double sumyright = getLeftMostCoordinate(right);
-        double yposition = (sumyleft + sumyright) / 2;
-        double time = n->getNodeTime();
+        const double yposition = (sumyleft + sumyright) / 2;
+        const double time = n->getNodeTime();
         double xposition;
 
         if(nodetime && !equal)

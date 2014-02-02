@@ -52,7 +52,14 @@ using namespace std;
 //Constructor
 
 DrawTreeCairo::DrawTreeCairo()
-    :config(0),surface(0),surfaceBackground(0),cr(0),nDupl(0),nTrans(0),image(false)
+    :
+      config(0),
+      surface(0),
+      surfaceBackground(0),
+      cr(0),
+      nDupl(0),
+      nTrans(0),
+      image(false)
 {
 
 
